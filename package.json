@@ -10,7 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@deemlol/next-icons": "^0.1.9",
     "@tailwindcss/vite": "^4.0.14",
+    "@tanstack/react-query": "^5.68.0",
+    "@tanstack/react-router": "^1.114.23",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwindcss": "^4.0.14"
