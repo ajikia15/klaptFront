@@ -44,14 +44,14 @@ export default function Navbar() {
       </div>
 
       <div className="flex items-center gap-6">
-        <button className="text-white hover:text-blue-400 relative cursor-pointer">
+        <button className="text-white hover:text-blue-400 relative cursor-pointer transition-colors">
           <ShoppingCart size={24} />
           <span className="absolute -top-2 -right-2 bg-blue-500 text-xs text-white rounded-full h-5 w-5 flex items-center justify-center ">
             0
           </span>
         </button>
-        <button className="text-white hover:text-blue-400 cursor-pointer">
-          <User size={24} className="stroke-blue-400 " />
+        <button className="text-white hover:text-blue-400 cursor-pointer transition-colors">
+          <User size={24} />
         </button>
       </div>
     </nav>
