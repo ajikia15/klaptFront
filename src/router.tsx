@@ -8,6 +8,7 @@ import App from "./App";
 import HomePage from "./pages/HomePage";
 import LaptopDetailPage from "./pages/LaptopDetailPage";
 import SearchPage from "./pages/SearchPage";
+import AuthPage from "./pages/AuthPage";
 
 // Define search params for the search route
 interface SearchRouteSearchParams {
@@ -46,8 +47,20 @@ const searchRoute = createRoute({
   },
 });
 
+// Add auth route
+const authRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/auth",
+  component: AuthPage,
+});
+
 // Create the route tree using your routes
-const routeTree = rootRoute.addChildren([indexRoute, laptopRoute, searchRoute]);
+const routeTree = rootRoute.addChildren([
+  indexRoute,
+  laptopRoute,
+  searchRoute,
+  authRoute,
+]);
 
 // Create the router using the route tree
 const router = createRouter({

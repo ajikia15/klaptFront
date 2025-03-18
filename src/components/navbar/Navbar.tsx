@@ -50,9 +50,12 @@ export default function Navbar() {
             0
           </span>
         </button>
-        <button className="text-white hover:text-blue-400 cursor-pointer transition-colors">
+        <Link
+          to="/auth"
+          className="text-white hover:text-blue-400 cursor-pointer transition-colors"
+        >
           <User size={24} />
-        </button>
+        </Link>
       </div>
     </nav>
   );

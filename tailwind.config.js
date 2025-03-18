@@ -38,6 +38,32 @@ export default {
           900: "#151225",
         },
       },
+      animation: {
+        flip: "flip 0.8s ease-in-out",
+      },
+      keyframes: {
+        flip: {
+          "0%": { transform: "rotateY(0)" },
+          "100%": { transform: "rotateY(180deg)" },
+        },
+      },
+      rotate: {
+        "y-180": "rotateY(180deg)",
+        "y-0": "rotateY(0deg)",
+      },
+      transitionDuration: {
+        800: "800ms",
+      },
+      backfaceVisibility: {
+        hidden: "hidden",
+        visible: "visible",
+      },
+      transformStyle: {
+        "preserve-3d": "preserve-3d",
+      },
+      perspective: {
+        1000: "1000px",
+      },
     },
   },
   plugins: [],
