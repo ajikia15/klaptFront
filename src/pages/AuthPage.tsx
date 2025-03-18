@@ -1,13 +1,24 @@
 import { useState } from "react";
 import RegistrationForm from "../components/auth/RegistrationForm";
 import LoginForm from "../components/auth/LoginForm";
+import { useRedirectIfAuthenticated } from "../hooks/useRequireAuth";
 
 export default function AuthPage() {
   const [isFlipped, setIsFlipped] = useState(false);
+  const { isLoading } = useRedirectIfAuthenticated("/");
 
   const handleFormSwitch = (shouldFlip: boolean) => {
     setIsFlipped(shouldFlip);
   };
+
+  // Show loading state while checking auth status
+  if (isLoading) {
+    return (
+      <div className="w-full flex items-center justify-center min-h-screen bg-neutral-900">
+        <div className="text-primary-400 text-2xl">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full items-center justify-center min-h-screen bg-neutral-900 p-4 flex flex-col lg:grid grid-cols-2">

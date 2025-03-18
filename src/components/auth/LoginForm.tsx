@@ -1,5 +1,7 @@
 import { useForm } from "@tanstack/react-form";
 import { useState } from "react";
+import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "@tanstack/react-router";
 
 interface LoginFormProps {
   onRegisterClick: () => void;
@@ -10,6 +12,8 @@ export const LoginForm = ({ onRegisterClick }: LoginFormProps) => {
     "idle" | "submitting" | "success" | "error"
   >("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const form = useForm({
     defaultValues: {
@@ -20,13 +24,19 @@ export const LoginForm = ({ onRegisterClick }: LoginFormProps) => {
       try {
         setFormStatus("submitting");
 
-        // Here you would typically make an API call to login the user
-        console.log("Login form submitted with values:", value);
-
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        // Use our custom login hook from AuthContext
+        await login({
+          email: value.email,
+          password: value.password,
+        });
 
         setFormStatus("success");
+
+        // Redirect to home page after successful login
+        // Short delay to allow user to see success message
+        setTimeout(() => {
+          navigate({ to: "/" });
+        }, 1000);
       } catch (error) {
         setFormStatus("error");
         setErrorMessage(
@@ -56,7 +66,7 @@ export const LoginForm = ({ onRegisterClick }: LoginFormProps) => {
 
         {formStatus === "success" && (
           <div className="p-3 bg-green-900/50 text-green-200 rounded-md">
-            Login successful!
+            Login successful! Redirecting...
           </div>
         )}
 
@@ -158,27 +168,6 @@ export const LoginForm = ({ onRegisterClick }: LoginFormProps) => {
           >
             {formStatus === "submitting" ? "Logging in..." : "Login"}
           </button>
-        </div>
-
-        <div className="mt-6 text-center">
-          <p className="text-neutral-400 mb-4">Or log in with</p>
-          <div className="flex justify-center">
-            <button
-              type="button"
-              className="p-3 bg-blue-600 hover:bg-blue-700 text-white rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
-              aria-label="Log in with Facebook"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                width="24"
-                height="24"
-                className="fill-current text-white"
-              >
-                <path d="M20.3,4.2H3.7c-0.9,0-1.7,0.8-1.7,1.7v12.3c0,0.9,0.8,1.7,1.7,1.7h16.6c0.9,0,1.7-0.8,1.7-1.7V5.9 C22,5,21.2,4.2,20.3,4.2z M19.5,10.5h-1.6c-1.3,0-1.7,0.7-1.7,1.9v1.9h3l-0.4,3h-2.6V22h-3.1v-4.7h-2.4v-3h2.4v-2 c0-2.4,1.4-3.7,3.6-3.7c1,0,1.9,0.1,2.1,0.1V10.5z" />
-              </svg>
-            </button>
-          </div>
         </div>
 
         <div className="mt-8 text-center border-t border-neutral-700 pt-6">

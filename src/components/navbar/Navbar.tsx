@@ -1,10 +1,12 @@
-import { Search, ShoppingCart, User } from "@deemlol/next-icons";
+import { Search, ShoppingCart, User, LogOut } from "@deemlol/next-icons";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
+import { useAuth } from "../../context/AuthContext";
 
 export default function Navbar() {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
+  const { isAuthenticated, user, logout } = useAuth();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -14,6 +16,15 @@ export default function Navbar() {
         search: { term: searchTerm },
       });
       setSearchTerm("");
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate({ to: "/" });
+    } catch (error) {
+      console.error("Logout failed:", error);
     }
   };
 
@@ -50,12 +61,28 @@ export default function Navbar() {
             0
           </span>
         </button>
-        <Link
-          to="/auth"
-          className="text-white hover:text-blue-400 cursor-pointer transition-colors"
-        >
-          <User size={24} />
-        </Link>
+
+        {isAuthenticated ? (
+          <div className="flex items-center gap-4">
+            <div className="text-white">
+              <span className="text-sm mr-2">{user?.email}</span>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="text-white hover:text-blue-400 cursor-pointer transition-colors"
+              aria-label="Logout"
+            >
+              <LogOut size={24} />
+            </button>
+          </div>
+        ) : (
+          <Link
+            to="/auth"
+            className="text-white hover:text-blue-400 cursor-pointer transition-colors"
+          >
+            <User size={24} />
+          </Link>
+        )}
       </div>
     </nav>
   );
