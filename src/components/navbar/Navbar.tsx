@@ -1,14 +1,14 @@
 import { Search, ShoppingCart, User, LogOut } from "@deemlol/next-icons";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useQuery } from "@tanstack/react-query";
+import { useTypingEffect } from "../../hooks/useTypingEffect";
 
 export default function Navbar() {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const { isAuthenticated, user, logout } = useAuth();
-  const [placeholder, setPlaceholder] = useState("");
 
   const { data: randomLaptopName } = useQuery({
     queryKey: ["randomLaptop"],
@@ -22,54 +22,11 @@ export default function Navbar() {
     },
   });
 
-  useEffect(() => {
-    let currentPhase: "typing" | "waiting" | "deleting" | "final-typing" =
-      "typing";
-    let currentIndex = 0;
-    let typingInterval: number;
-    const initialText = "Search...";
-
-    const animate = () => {
-      switch (currentPhase) {
-        case "typing":
-          if (currentIndex <= initialText.length) {
-            setPlaceholder(initialText.slice(0, currentIndex));
-            currentIndex++;
-          } else {
-            currentPhase = "waiting";
-            setTimeout(() => {
-              currentPhase = "deleting";
-            }, 1500); // Wait 1.5s before starting to delete
-          }
-          break;
-
-        case "deleting":
-          if (currentIndex > 0) {
-            currentIndex--;
-            setPlaceholder(initialText.slice(0, currentIndex));
-          } else {
-            currentPhase = "final-typing";
-            currentIndex = 0;
-          }
-          break;
-
-        case "final-typing":
-          if (randomLaptopName && currentIndex <= randomLaptopName.length) {
-            setPlaceholder(randomLaptopName.slice(0, currentIndex));
-            currentIndex++;
-          } else {
-            clearInterval(typingInterval);
-          }
-          break;
-      }
-    };
-
-    typingInterval = setInterval(animate, 150);
-
-    return () => {
-      clearInterval(typingInterval);
-    };
-  }, [randomLaptopName]);
+  const placeholder = useTypingEffect("Search...", randomLaptopName, {
+    typingSpeed: 150,
+    deletingSpeed: 100,
+    delayBeforeDeleting: 2000,
+  });
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
