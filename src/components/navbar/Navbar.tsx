@@ -1,12 +1,75 @@
 import { Search, ShoppingCart, User, LogOut } from "@deemlol/next-icons";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Navbar() {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const { isAuthenticated, user, logout } = useAuth();
+  const [placeholder, setPlaceholder] = useState("");
+
+  const { data: randomLaptopName } = useQuery({
+    queryKey: ["randomLaptop"],
+    queryFn: async () => {
+      const response = await fetch("http://localhost:3000/laptops/random");
+      if (!response.ok) {
+        throw new Error("Failed to fetch random laptop");
+      }
+      const data = await response.json();
+      return data.title;
+    },
+  });
+
+  useEffect(() => {
+    let currentPhase: "typing" | "waiting" | "deleting" | "final-typing" =
+      "typing";
+    let currentIndex = 0;
+    let typingInterval: number;
+    const initialText = "Search...";
+
+    const animate = () => {
+      switch (currentPhase) {
+        case "typing":
+          if (currentIndex <= initialText.length) {
+            setPlaceholder(initialText.slice(0, currentIndex));
+            currentIndex++;
+          } else {
+            currentPhase = "waiting";
+            setTimeout(() => {
+              currentPhase = "deleting";
+            }, 1500); // Wait 1.5s before starting to delete
+          }
+          break;
+
+        case "deleting":
+          if (currentIndex > 0) {
+            currentIndex--;
+            setPlaceholder(initialText.slice(0, currentIndex));
+          } else {
+            currentPhase = "final-typing";
+            currentIndex = 0;
+          }
+          break;
+
+        case "final-typing":
+          if (randomLaptopName && currentIndex <= randomLaptopName.length) {
+            setPlaceholder(randomLaptopName.slice(0, currentIndex));
+            currentIndex++;
+          } else {
+            clearInterval(typingInterval);
+          }
+          break;
+      }
+    };
+
+    typingInterval = setInterval(animate, 150);
+
+    return () => {
+      clearInterval(typingInterval);
+    };
+  }, [randomLaptopName]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,7 +103,7 @@ export default function Navbar() {
         <form onSubmit={handleSearch} className="relative">
           <input
             type="text"
-            placeholder="Search..."
+            placeholder={placeholder}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-64 py-2 px-4 pr-10 bg-neutral-800 text-white rounded-md border-none focus:outline-none focus:ring-2 focus:ring-blue-500"
