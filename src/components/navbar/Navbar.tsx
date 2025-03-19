@@ -8,6 +8,7 @@ import { useTypingEffect } from "../../hooks/useTypingEffect";
 export default function Navbar() {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
   const { isAuthenticated, user, logout } = useAuth();
 
   const { data: randomLaptopName } = useQuery({
@@ -56,14 +57,16 @@ export default function Navbar() {
         </Link>
       </div>
 
-      <div className="flex items-center">
-        <form onSubmit={handleSearch} className="relative">
+      <div className="flex items-center w-full justify-center">
+        <form onSubmit={handleSearch} className="relative w-3/5">
           <input
             type="text"
-            placeholder={placeholder}
+            placeholder={isFocused ? "" : placeholder}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-64 py-2 px-4 pr-10 bg-neutral-800 text-white rounded-md border-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            className="w-full py-2 px-4 pr-10 bg-neutral-800 text-white rounded-md border-none focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <button
             type="submit"
