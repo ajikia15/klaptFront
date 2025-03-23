@@ -3,13 +3,12 @@ import useEmblaCarousel from "embla-carousel-react";
 import FlashSection from "./FlashSection";
 
 export default function Landing() {
-  // Initialize Embla Carousel with smoother/slower animation options
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: true,
-    duration: 50, // Slower animation duration (default is 20)
-    dragFree: false,
+    duration: 20,
     skipSnaps: false,
     align: "center",
+    watchDrag: false,
   });
 
   const autoplayIntervalRef = useRef<ReturnType<typeof setInterval>>(undefined);
