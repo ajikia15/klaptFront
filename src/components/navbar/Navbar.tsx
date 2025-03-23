@@ -1,4 +1,4 @@
-import { Search, ShoppingCart, User, LogOut } from "@deemlol/next-icons";
+import { Search, ShoppingCart, User, LogOut, Heart } from "@deemlol/next-icons";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
@@ -79,8 +79,8 @@ export default function Navbar() {
 
       <div className="flex items-center gap-6">
         <button className="text-white hover:text-blue-400 relative cursor-pointer transition-colors">
-          <ShoppingCart size={24} />
-          <span className="absolute -top-2 -right-2 bg-blue-500 text-xs text-white rounded-full h-5 w-5 flex items-center justify-center ">
+          <Heart size={24} />
+          <span className="absolute -top-3 -right-3 bg-secondary-400 text-xs text-white rounded-full h-5 w-5 flex items-center justify-center ">
             0
           </span>
         </button>

@@ -4,6 +4,7 @@ export type LaptopT = {
   price: number;
   brand: string;
   model: string;
+  shortDesc: string;
   gpuBrand: string;
   gpuModel: string;
   vram: string;

@@ -48,6 +48,7 @@ export default function HomePage() {
             key={laptop.id}
             id={laptop.id}
             title={laptop.title}
+            shortDesc={laptop.shortDesc}
             price={laptop.price}
             image={laptop.images[0]}
           />

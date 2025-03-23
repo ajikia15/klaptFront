@@ -44,20 +44,20 @@ export default function LaptopDetailPage() {
   const getStockStatusColor = (status: string) => {
     switch (status) {
       case "in stock":
-        return "bg-green-500/20 text-green-400";
+        return "bg-green-500 bg-opacity-20 text-green-400";
       case "reserved":
-        return "bg-yellow-500/20 text-yellow-400";
+        return "bg-yellow-500 bg-opacity-20 text-yellow-400";
       default:
-        return "bg-red-500/20 text-red-400";
+        return "bg-red-500 bg-opacity-20 text-red-400";
     }
   };
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="bg-neutral-800 rounded-2xl overflow-hidden shadow-xl border border-neutral-700">
+      <div className="bg-neutral-800 bg-opacity-100 rounded-2xl overflow-hidden shadow-xl border border-neutral-700">
         <div className="md:grid md:grid-cols-2 gap-8">
           {/* Image Section */}
-          <div className="p-8 bg-neutral-900 flex items-center justify-center">
+          <div className="p-8 bg-neutral-900 bg-opacity-100 flex items-center justify-center">
             <div className="relative group">
               <img
                 src={laptop.images[0]}
@@ -65,7 +65,7 @@ export default function LaptopDetailPage() {
                 className="w-full h-auto object-contain max-h-[400px] rounded-lg transition-transform duration-300 group-hover:scale-105"
               />
               {laptop.stockStatus === "in stock" && (
-                <div className="absolute top-4 right-4 bg-green-500/20 text-green-400 px-3 py-1 rounded-full text-sm font-medium">
+                <div className="absolute top-4 right-4 bg-green-500 bg-opacity-20 text-green-400 px-3 py-1 rounded-full text-sm font-medium">
                   In Stock
                 </div>
               )}
@@ -105,7 +105,7 @@ export default function LaptopDetailPage() {
                 className={`w-full flex items-center justify-center gap-2 py-3 px-6 rounded-lg font-semibold transition-all duration-300 ${
                   laptop.stockStatus === "in stock"
                     ? "bg-purple-600 hover:bg-purple-700 text-white"
-                    : "bg-neutral-700 text-neutral-400 cursor-not-allowed"
+                    : "bg-neutral-700 bg-opacity-100 text-neutral-400 cursor-not-allowed"
                 }`}
                 disabled={laptop.stockStatus !== "in stock"}
               >
@@ -123,7 +123,7 @@ export default function LaptopDetailPage() {
           <h2 className="text-2xl font-bold text-white mb-6">Specifications</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Processor */}
-            <div className="bg-neutral-900 p-6 rounded-xl">
+            <div className="bg-neutral-900 bg-opacity-100 p-6 rounded-xl">
               <h3 className="text-lg font-semibold text-purple-400 mb-3">
                 Processor
               </h3>
@@ -138,7 +138,7 @@ export default function LaptopDetailPage() {
             </div>
 
             {/* Graphics */}
-            <div className="bg-neutral-900 p-6 rounded-xl">
+            <div className="bg-neutral-900 bg-opacity-100 p-6 rounded-xl">
               <h3 className="text-lg font-semibold text-purple-400 mb-3">
                 Graphics
               </h3>
@@ -151,7 +151,7 @@ export default function LaptopDetailPage() {
             </div>
 
             {/* Memory */}
-            <div className="bg-neutral-900 p-6 rounded-xl">
+            <div className="bg-neutral-900 bg-opacity-100 p-6 rounded-xl">
               <h3 className="text-lg font-semibold text-purple-400 mb-3">
                 Memory
               </h3>
@@ -163,7 +163,7 @@ export default function LaptopDetailPage() {
             </div>
 
             {/* Storage */}
-            <div className="bg-neutral-900 p-6 rounded-xl">
+            <div className="bg-neutral-900 bg-opacity-100 p-6 rounded-xl">
               <h3 className="text-lg font-semibold text-purple-400 mb-3">
                 Storage
               </h3>
@@ -175,7 +175,7 @@ export default function LaptopDetailPage() {
             </div>
 
             {/* Display */}
-            <div className="bg-neutral-900 p-6 rounded-xl">
+            <div className="bg-neutral-900 bg-opacity-100 p-6 rounded-xl">
               <h3 className="text-lg font-semibold text-purple-400 mb-3">
                 Display
               </h3>
@@ -190,7 +190,7 @@ export default function LaptopDetailPage() {
             </div>
 
             {/* Additional Info */}
-            <div className="bg-neutral-900 p-6 rounded-xl">
+            <div className="bg-neutral-900 bg-opacity-100 p-6 rounded-xl">
               <h3 className="text-lg font-semibold text-purple-400 mb-3">
                 Additional Info
               </h3>

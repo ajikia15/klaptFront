@@ -1,6 +1,6 @@
-import { ArrowRight } from "@deemlol/next-icons";
 import { useCallback, useEffect, useRef, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
+import FlashSection from "./FlashSection";
 
 export default function Landing() {
   // Initialize Embla Carousel with smoother/slower animation options
@@ -108,8 +108,9 @@ export default function Landing() {
   );
 
   return (
-    <section className="grid grid-cols-4 w-full gap-4">
-      <div className="col-span-1 bg-neutral-800 rounded-lg p-4 box-border border-neutral-700 border">
+    <section className="w-full">
+      {/* Sidebar DISABLED grid-cols-4 col-span-3 */}
+      {/* <div className="col-span-1 bg-neutral-800 rounded-lg p-4 box-border border-neutral-700 border">
         <ul className="flex flex-col gap-4">
           <li className="flex justify-between items-center">
             <span>Asus</span>
@@ -136,8 +137,8 @@ export default function Landing() {
             <ArrowRight size={18} />
           </li>
         </ul>
-      </div>
-      <div className="col-span-3 relative overflow-hidden rounded-lg">
+      </div> */}
+      <div className=" relative overflow-hidden rounded-lg">
         {/* Embla Carousel Container */}
         <div className="overflow-hidden" ref={emblaRef}>
           <div className="flex transition-transform">
@@ -173,21 +174,24 @@ export default function Landing() {
         </div>
 
         {/* Dots Navigation */}
-        <div className="flex justify-center gap-2 mt-4 absolute bottom-4 left-0 right-0">
-          {slides.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => scrollTo(index)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                index === selectedIndex
-                  ? "bg-white w-6" // Make active dot wider for better visual indication
-                  : "bg-white/50 hover:bg-white/70"
-              }`}
-              aria-label={`Go to slide ${index + 1}`}
-            />
-          ))}
+        <div className="flex justify-center mt-4 absolute bottom-4 left-0 right-0 items-center">
+          <div className="flex items-center justify-center gap-2 p-2 bg-neutral-700/20 rounded-xl backdrop-blur-xl">
+            {slides.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => scrollTo(index)}
+                className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  index === selectedIndex
+                    ? "bg-white w-6"
+                    : "bg-white/50 hover:bg-white/70"
+                }`}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
+          </div>
         </div>
       </div>
+      <FlashSection />
     </section>
   );
 }
