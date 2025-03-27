@@ -10,7 +10,7 @@ export default function AuthPage() {
   const handleFormSwitch = (shouldFlip: boolean) => {
     setIsFlipped(shouldFlip);
   };
-
+  // could go with Tabs from shadcn instead
   // Show loading state while checking auth status
   if (isLoading) {
     return (

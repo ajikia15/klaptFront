@@ -121,7 +121,7 @@ export default function SearchPage() {
                 id={laptop.id}
                 title={laptop.title}
                 price={laptop.price}
-                description={laptop.description}
+                shortDesc={laptop.shortDesc}
                 image={laptop.images[0]}
               />
             ))}
