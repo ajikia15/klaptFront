@@ -90,9 +90,13 @@ export default function Navbar() {
 
         {isAuthenticated ? (
           <div className="flex items-center gap-4">
-            <div className="text-white">
-              <span className="text-sm mr-2">{user?.email}</span>
-            </div>
+            <Link
+              to="/profile"
+              className="text-white hover:text-blue-400 cursor-pointer transition-colors"
+              aria-label="Profile"
+            >
+              <User size={24} />
+            </Link>
             <button
               onClick={handleLogout}
               className="text-white hover:text-blue-400 cursor-pointer transition-colors"

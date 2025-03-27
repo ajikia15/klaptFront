@@ -61,6 +61,13 @@ const favoritesRoute = createRoute({
   component: FavoritesPage,
 });
 
+// Add profile route
+const profileRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/profile",
+  component: () => <div>Profile Page - Under Construction</div>,
+});
+
 // Create the route tree using your routes
 const routeTree = rootRoute.addChildren([
   indexRoute,
@@ -68,6 +75,7 @@ const routeTree = rootRoute.addChildren([
   searchRoute,
   authRoute,
   favoritesRoute,
+  profileRoute,
 ]);
 
 // Create the router using the route tree
