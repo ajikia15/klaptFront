@@ -1,7 +1,9 @@
 import { FC } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight } from "@deemlol/next-icons";
+import { ArrowRight, Heart } from "@deemlol/next-icons";
 import { Maximize2 } from "@deemlol/next-icons";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { FavoriteT } from "@/interfaces/favoriteT";
 
 interface LaptopCardProps {
   id: number;
@@ -18,6 +20,73 @@ export const LaptopCard: FC<LaptopCardProps> = ({
   shortDesc,
   image,
 }) => {
+  const queryClient = useQueryClient();
+
+  const { data } = useQuery<FavoriteT | null>({
+    queryKey: ["favorites", id],
+    queryFn: async () => {
+      const response = await fetch(
+        `http://localhost:3000/favorites/${encodeURIComponent(id)}`,
+        { credentials: "include" }
+      );
+      if (!response.ok) {
+        if (response.status === 404) {
+          return null;
+        }
+        throw new Error("Failed to fetch favorites");
+      }
+
+      const text = await response.text();
+      if (!text) {
+        return null;
+      }
+
+      return JSON.parse(text);
+    },
+  });
+
+  const addToFavorites = useMutation({
+    mutationFn: async () => {
+      const response = await fetch(`http://localhost:3000/favorites`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ laptopId: id }), // Send laptopId in the body
+      });
+      if (!response.ok) {
+        throw new Error("Failed to add to favorites");
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["favorites", id],
+      });
+    },
+  });
+
+  const removeFromFavorites = useMutation({
+    mutationFn: async () => {
+      const response = await fetch(`http://localhost:3000/favorites`, {
+        method: "DELETE",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ laptopId: id }), // Send laptopId in the body
+      });
+      if (!response.ok) {
+        throw new Error("Failed to remove from favorites");
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["favorites", id],
+      });
+    },
+  });
+
   return (
     <div className="relative bg-neutral-900 overflow-hidden hover:shadow-xl transition-all duration-300  rounded-xl border border-neutral-700">
       {/* Image Container */}
@@ -29,10 +98,25 @@ export const LaptopCard: FC<LaptopCardProps> = ({
             <span className="text-neutral-400">No image available</span>
           </div>
         )}
-        <div className="absolute inset-0 bg-black/0 hover:bg-black/50 transition-all duration-300 group">
-          <button className="absolute top-1/2 left-1/2 -translate-x-1/2 bg-black/70 -translate-y-1/2 p-2 rounded-lg cursor-pointer opacity-0 hover:opacity-100 transition-all group-hover:opacity-50">
+        <div className="absolute inset-0 gap-2 bg-black/0 hover:bg-black/50 transition-all duration-300 group flex items-center justify-center ">
+          <button className=" bg-black/70 p-2 rounded-lg cursor-pointer opacity-0 hover:opacity-100 transition-all group-hover:opacity-50">
             <Maximize2 size={24} />
           </button>
+          {data !== null ? (
+            <button
+              className=" bg-black/70 p-2 rounded-lg cursor-pointer opacity-0 hover:opacity-100 transition-all group-hover:opacity-50"
+              onClick={() => removeFromFavorites.mutate()}
+            >
+              <Heart size={32} />
+            </button>
+          ) : (
+            <button
+              className=" bg-black/70 p-2 rounded-lg cursor-pointer opacity-0 hover:opacity-100 transition-all group-hover:opacity-50"
+              onClick={() => addToFavorites.mutate()}
+            >
+              <Heart size={24} />
+            </button>
+          )}
         </div>
       </div>
 

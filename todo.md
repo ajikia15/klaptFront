@@ -7,6 +7,7 @@
 - [ ] Card design improvements
 - [ ] carousel improvements
 - [ ] line art for the registration/login page
+- [ ] loading spinners/ skeletons
 
 - [ ] Kaido verified
 - [ ] Move away from sqlite
