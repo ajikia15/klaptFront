@@ -9,6 +9,7 @@ import HomePage from "./pages/HomePage";
 import LaptopDetailPage from "./pages/LaptopDetailPage";
 import SearchPage from "./pages/SearchPage";
 import AuthPage from "./pages/AuthPage";
+import FavoritesPage from "./pages/FavoritesPage";
 
 // Define search params for the search route
 interface SearchRouteSearchParams {
@@ -54,12 +55,19 @@ const authRoute = createRoute({
   component: AuthPage,
 });
 
+const favoritesRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/favorites",
+  component: FavoritesPage,
+});
+
 // Create the route tree using your routes
 const routeTree = rootRoute.addChildren([
   indexRoute,
   laptopRoute,
   searchRoute,
   authRoute,
+  favoritesRoute,
 ]);
 
 // Create the router using the route tree

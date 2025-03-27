@@ -1,9 +1,12 @@
-- [ ] Card design improvements
-- [ ] Shopping cart??
+- [ ] Favorites
+  - [x] Backend
+  - [ ] Frontend
+- [ ] Laptop types (gaming, rendering, etc)
 - [ ] Filtering
-- [ ] carousel improvements
 - [ ] individual listing improvements (carousel)
+- [ ] Card design improvements
+- [ ] carousel improvements
 - [ ] line art for the registration/login page
-- [ ] shopping cart to heart
 
 - [ ] Kaido verified
+- [ ] Move away from sqlite
