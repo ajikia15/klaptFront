@@ -10,6 +10,16 @@ import LaptopDetailPage from "./pages/LaptopDetailPage";
 import SearchPage from "./pages/SearchPage";
 import AuthPage from "./pages/AuthPage";
 import FavoritesPage from "./pages/FavoritesPage";
+import ProfilePage from "./pages/ProfilePage";
+import { useRequireAuth } from "./hooks/useRequireAuth";
+import { ReactNode } from "react";
+
+// Protected route wrapper component
+function ProtectedRoute({ children }: { children: ReactNode }) {
+  // This hook will redirect to /auth if not authenticated
+  useRequireAuth();
+  return <>{children}</>;
+}
 
 // Define search params for the search route
 interface SearchRouteSearchParams {
@@ -58,14 +68,22 @@ const authRoute = createRoute({
 const favoritesRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/favorites",
-  component: FavoritesPage,
+  component: () => (
+    <ProtectedRoute>
+      <FavoritesPage />
+    </ProtectedRoute>
+  ),
 });
 
 // Add profile route
 const profileRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/profile",
-  component: () => <div>Profile Page - Under Construction</div>,
+  component: () => (
+    <ProtectedRoute>
+      <ProfilePage />
+    </ProtectedRoute>
+  ),
 });
 
 // Create the route tree using your routes
