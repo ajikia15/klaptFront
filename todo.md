@@ -11,3 +11,6 @@
 
 - [ ] Kaido verified
 - [ ] Move away from sqlite
+
+- [ ] Get distinct parts
+- [ ] Get amount of favorited items by user

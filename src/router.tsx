@@ -2,7 +2,6 @@ import {
   createRootRoute,
   createRoute,
   createRouter,
-  RouterProvider,
 } from "@tanstack/react-router";
 import App from "./App";
 import HomePage from "./pages/HomePage";
