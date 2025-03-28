@@ -53,7 +53,7 @@ export const LaptopCard: FC<LaptopCardProps> = ({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ laptopId: id }), // Send laptopId in the body
+        body: JSON.stringify({ laptopId: id }),
       });
       if (!response.ok) {
         throw new Error("Failed to add to favorites");
@@ -61,28 +61,27 @@ export const LaptopCard: FC<LaptopCardProps> = ({
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["favorites", id],
+        queryKey: ["favorites"],
       });
     },
   });
 
   const removeFromFavorites = useMutation({
     mutationFn: async () => {
-      const response = await fetch(`http://localhost:3000/favorites`, {
-        method: "DELETE",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ laptopId: id }), // Send laptopId in the body
-      });
+      const response = await fetch(
+        `http://localhost:3000/favorites/${encodeURIComponent(id)}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
+      );
       if (!response.ok) {
         throw new Error("Failed to remove from favorites");
       }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["favorites", id],
+        queryKey: ["favorites"],
       });
     },
   });
@@ -104,14 +103,14 @@ export const LaptopCard: FC<LaptopCardProps> = ({
           </button>
           {data !== null ? (
             <button
-              className=" bg-black/70 p-2 rounded-lg cursor-pointer opacity-0 hover:opacity-100 transition-all group-hover:opacity-50"
+              className=" bg-black/70  text-red-400 p-2 rounded-lg cursor-pointer opacity-0 hover:opacity-100 transition-all group-hover:opacity-50"
               onClick={() => removeFromFavorites.mutate()}
             >
-              <Heart size={32} />
+              <Heart size={24} />
             </button>
           ) : (
             <button
-              className=" bg-black/70 p-2 rounded-lg cursor-pointer opacity-0 hover:opacity-100 transition-all group-hover:opacity-50"
+              className=" bg-black/70  p-2 rounded-lg cursor-pointer opacity-0 hover:opacity-100 transition-all group-hover:opacity-50"
               onClick={() => addToFavorites.mutate()}
             >
               <Heart size={24} />
