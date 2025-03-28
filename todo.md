@@ -14,3 +14,5 @@
 
 - [ ] Get distinct parts
 - [ ] Get amount of favorited items by user
+
+- [ ] Chart for price ranges shadcn https://ui.shadcn.com/docs/components/chart
