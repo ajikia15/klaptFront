@@ -2,11 +2,7 @@ import { FC } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Heart } from "@deemlol/next-icons";
 import { Maximize2 } from "@deemlol/next-icons";
-import {
-  useAddToFavorites,
-  useFavoriteStatus,
-  useRemoveFromFavorites,
-} from "@/hooks/useFavorites";
+
 import HeartBtn from "./HeartBtn";
 
 interface LaptopCardProps {

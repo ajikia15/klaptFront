@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useQuery } from "@tanstack/react-query";
 import { useTypingEffect } from "../../hooks/useTypingEffect";
+import { useListFavorites } from "@/hooks/useFavorites";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -49,6 +50,8 @@ export default function Navbar() {
     }
   };
 
+  const { data: favorites, isLoading } = useListFavorites();
+
   return (
     <nav className="sticky bg-neutral-900 top-0 z-50 flex justify-between items-center px-8 py-4  shadow-lg">
       <div className="flex items-center">
@@ -84,7 +87,7 @@ export default function Navbar() {
         >
           <Heart size={24} />
           <span className="absolute -top-3 -right-3 bg-secondary-400 text-xs text-white rounded-full h-5 w-5 flex items-center justify-center ">
-            0
+            {isLoading ? "asdf" : favorites?.length ?? 0}
           </span>
         </Link>
 
