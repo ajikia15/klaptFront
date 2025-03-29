@@ -7,6 +7,7 @@ import {
   useFavoriteStatus,
   useRemoveFromFavorites,
 } from "@/hooks/useFavorites";
+import HeartBtn from "./HeartBtn";
 
 interface LaptopCardProps {
   id: number;
@@ -23,10 +24,6 @@ export const LaptopCard: FC<LaptopCardProps> = ({
   shortDesc,
   image,
 }) => {
-  const { data } = useFavoriteStatus(id);
-  const addToFavorites = useAddToFavorites();
-  const removeFromFavorites = useRemoveFromFavorites();
-
   return (
     <div className="relative bg-neutral-900 overflow-hidden hover:shadow-xl transition-all duration-300  rounded-xl border border-neutral-700">
       {/* Image Container */}
@@ -42,21 +39,12 @@ export const LaptopCard: FC<LaptopCardProps> = ({
           <button className=" bg-black/70 p-2 rounded-lg cursor-pointer opacity-0 hover:opacity-100 transition-all group-hover:opacity-50">
             <Maximize2 size={24} />
           </button>
-          {data !== null ? (
-            <button
-              className=" bg-black/70  text-red-400 p-2 rounded-lg cursor-pointer opacity-0 hover:opacity-100 transition-all group-hover:opacity-50"
-              onClick={() => removeFromFavorites.mutate(id)}
-            >
-              <Heart size={24} />
-            </button>
-          ) : (
-            <button
-              className=" bg-black/70  p-2 rounded-lg cursor-pointer opacity-0 hover:opacity-100 transition-all group-hover:opacity-50"
-              onClick={() => addToFavorites.mutate(id)}
-            >
-              <Heart size={24} />
-            </button>
-          )}
+          <HeartBtn
+            laptopId={id}
+            className={
+              "bg-black/70 p-2 rounded-lg cursor-pointer opacity-0 hover:opacity-100 transition-all group-hover:opacity-50"
+            }
+          />
         </div>
       </div>
 
