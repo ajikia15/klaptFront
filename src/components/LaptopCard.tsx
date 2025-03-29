@@ -2,8 +2,11 @@ import { FC } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Heart } from "@deemlol/next-icons";
 import { Maximize2 } from "@deemlol/next-icons";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { FavoriteT } from "@/interfaces/favoriteT";
+import {
+  useAddToFavorites,
+  useFavoriteStatus,
+  useRemoveFromFavorites,
+} from "@/hooks/useFavorites";
 
 interface LaptopCardProps {
   id: number;
@@ -20,71 +23,9 @@ export const LaptopCard: FC<LaptopCardProps> = ({
   shortDesc,
   image,
 }) => {
-  const queryClient = useQueryClient();
-
-  const { data } = useQuery<FavoriteT | null>({
-    queryKey: ["favorites", id],
-    queryFn: async () => {
-      const response = await fetch(
-        `http://localhost:3000/favorites/${encodeURIComponent(id)}`,
-        { credentials: "include" }
-      );
-      if (!response.ok) {
-        if (response.status === 404) {
-          return null;
-        }
-        throw new Error("Failed to fetch favorites");
-      }
-
-      const text = await response.text();
-      if (!text) {
-        return null;
-      }
-
-      return JSON.parse(text);
-    },
-  });
-
-  const addToFavorites = useMutation({
-    mutationFn: async () => {
-      const response = await fetch(`http://localhost:3000/favorites`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ laptopId: id }),
-      });
-      if (!response.ok) {
-        throw new Error("Failed to add to favorites");
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["favorites"],
-      });
-    },
-  });
-
-  const removeFromFavorites = useMutation({
-    mutationFn: async () => {
-      const response = await fetch(
-        `http://localhost:3000/favorites/${encodeURIComponent(id)}`,
-        {
-          method: "DELETE",
-          credentials: "include",
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Failed to remove from favorites");
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["favorites"],
-      });
-    },
-  });
+  const { data } = useFavoriteStatus(id);
+  const addToFavorites = useAddToFavorites();
+  const removeFromFavorites = useRemoveFromFavorites();
 
   return (
     <div className="relative bg-neutral-900 overflow-hidden hover:shadow-xl transition-all duration-300  rounded-xl border border-neutral-700">
@@ -104,14 +45,14 @@ export const LaptopCard: FC<LaptopCardProps> = ({
           {data !== null ? (
             <button
               className=" bg-black/70  text-red-400 p-2 rounded-lg cursor-pointer opacity-0 hover:opacity-100 transition-all group-hover:opacity-50"
-              onClick={() => removeFromFavorites.mutate()}
+              onClick={() => removeFromFavorites.mutate(id)}
             >
               <Heart size={24} />
             </button>
           ) : (
             <button
               className=" bg-black/70  p-2 rounded-lg cursor-pointer opacity-0 hover:opacity-100 transition-all group-hover:opacity-50"
-              onClick={() => addToFavorites.mutate()}
+              onClick={() => addToFavorites.mutate(id)}
             >
               <Heart size={24} />
             </button>

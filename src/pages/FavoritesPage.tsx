@@ -1,24 +1,7 @@
-import { FavoriteT } from "@/interfaces/favoriteT";
-import { useQuery } from "@tanstack/react-query";
+import { useListFavorites } from "@/hooks/useFavorites";
 
 export default function FavoritesPage() {
-  const {
-    data: favorites,
-    isLoading,
-    error,
-    refetch,
-  } = useQuery<FavoriteT[]>({
-    queryKey: ["favorites"],
-    queryFn: async () => {
-      const response = await fetch(`http://localhost:3000/favorites`, {
-        credentials: "include",
-      });
-      if (!response.ok) {
-        throw new Error("Failed to fetch favorites");
-      }
-      return response.json();
-    },
-  });
+  const { data: favorites, isLoading, error, refetch } = useListFavorites();
 
   if (isLoading) {
     return <div>Loading...</div>;
