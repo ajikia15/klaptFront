@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, Heart } from "@deemlol/next-icons";
+import { ArrowRight } from "@deemlol/next-icons";
 import { Maximize2 } from "@deemlol/next-icons";
 
 import HeartBtn from "./HeartBtn";
@@ -21,7 +21,7 @@ export const LaptopCard: FC<LaptopCardProps> = ({
   image,
 }) => {
   return (
-    <div className="relative bg-neutral-900 overflow-hidden hover:shadow-xl transition-all duration-300  rounded-xl border border-neutral-700">
+    <div className="relative max-h-84 bg-neutral-900 overflow-hidden hover:shadow-xl transition-all duration-300  rounded-xl border border-neutral-700">
       {/* Image Container */}
       <div className="h-40 p-2 flex items-center justify-center relative">
         {image ? (

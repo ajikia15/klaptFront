@@ -3,10 +3,12 @@ import { useSearch } from "@tanstack/react-router";
 import { LaptopCard } from "../components/LaptopCard";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useSearchLaptops } from "../hooks/useSearch";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 export default function SearchPage() {
   const search = useSearch({ from: "/search" });
   const navigate = useNavigate();
+  const [parent] = useAutoAnimate({ duration: 300 });
 
   const {
     searchTerm,
@@ -55,18 +57,31 @@ export default function SearchPage() {
                   <h3 className="mb-2 font-medium">Brands</h3>
                   <div className="mb-3 border-b border-neutral-700"></div>
                   <div className="max-h-[150px] space-y-2 overflow-y-auto">
-                    {filterOptions.brands?.map((brand) => (
-                      <div key={brand} className="flex items-center space-x-2">
+                    {filterOptions.brands?.map((option) => (
+                      <div
+                        key={option.value}
+                        className="flex items-center space-x-2"
+                      >
                         <Checkbox
-                          id={`brand-${brand}`}
-                          checked={selectedFilters.brand.includes(brand)}
-                          onCheckedChange={() => toggleFilter("brand", brand)}
+                          id={`brand-${option.value}`}
+                          checked={selectedFilters.brand.includes(option.value)}
+                          onCheckedChange={() =>
+                            toggleFilter("brand", option.value)
+                          }
+                          disabled={option.disabled}
+                          className={
+                            option.disabled
+                              ? "opacity-50 cursor-not-allowed"
+                              : ""
+                          }
                         />
                         <label
-                          htmlFor={`brand-${brand}`}
-                          className="text-sm font-medium leading-none"
+                          htmlFor={`brand-${option.value}`}
+                          className={`text-sm font-medium leading-none ${
+                            option.disabled ? "text-neutral-500" : ""
+                          }`}
                         >
-                          {brand}
+                          {option.value}
                         </label>
                       </div>
                     ))}
@@ -78,22 +93,33 @@ export default function SearchPage() {
                   <h3 className="mb-2 font-medium">Processors</h3>
                   <div className="mb-3 border-b border-neutral-700"></div>
                   <div className="max-h-[150px] space-y-2 overflow-y-auto">
-                    {filterOptions.processorModels?.map((model) => (
-                      <div key={model} className="flex items-center space-x-2">
+                    {filterOptions.processorModels?.map((option) => (
+                      <div
+                        key={option.value}
+                        className="flex items-center space-x-2"
+                      >
                         <Checkbox
-                          id={`processor-${model}`}
+                          id={`processor-${option.value}`}
                           checked={selectedFilters.processorModel.includes(
-                            model
+                            option.value
                           )}
                           onCheckedChange={() =>
-                            toggleFilter("processorModel", model)
+                            toggleFilter("processorModel", option.value)
+                          }
+                          disabled={option.disabled}
+                          className={
+                            option.disabled
+                              ? "opacity-50 cursor-not-allowed"
+                              : ""
                           }
                         />
                         <label
-                          htmlFor={`processor-${model}`}
-                          className="text-sm font-medium leading-none"
+                          htmlFor={`processor-${option.value}`}
+                          className={`text-sm font-medium leading-none ${
+                            option.disabled ? "text-neutral-500" : ""
+                          }`}
                         >
-                          {model}
+                          {option.value}
                         </label>
                       </div>
                     ))}
@@ -105,20 +131,33 @@ export default function SearchPage() {
                   <h3 className="mb-2 font-medium">Graphics Cards</h3>
                   <div className="mb-3 border-b border-neutral-700"></div>
                   <div className="max-h-[150px] space-y-2 overflow-y-auto">
-                    {filterOptions.gpuModels?.map((model) => (
-                      <div key={model} className="flex items-center space-x-2">
+                    {filterOptions.gpuModels?.map((option) => (
+                      <div
+                        key={option.value}
+                        className="flex items-center space-x-2"
+                      >
                         <Checkbox
-                          id={`gpu-${model}`}
-                          checked={selectedFilters.gpuModel.includes(model)}
+                          id={`gpu-${option.value}`}
+                          checked={selectedFilters.gpuModel.includes(
+                            option.value
+                          )}
                           onCheckedChange={() =>
-                            toggleFilter("gpuModel", model)
+                            toggleFilter("gpuModel", option.value)
+                          }
+                          disabled={option.disabled}
+                          className={
+                            option.disabled
+                              ? "opacity-50 cursor-not-allowed"
+                              : ""
                           }
                         />
                         <label
-                          htmlFor={`gpu-${model}`}
-                          className="text-sm font-medium leading-none"
+                          htmlFor={`gpu-${option.value}`}
+                          className={`text-sm font-medium leading-none ${
+                            option.disabled ? "text-neutral-500" : ""
+                          }`}
                         >
-                          {model}
+                          {option.value}
                         </label>
                       </div>
                     ))}
@@ -130,18 +169,31 @@ export default function SearchPage() {
                   <h3 className="mb-2 font-medium">RAM Size</h3>
                   <div className="mb-3 border-b border-neutral-700"></div>
                   <div className="space-y-2">
-                    {filterOptions.ram?.map((size) => (
-                      <div key={size} className="flex items-center space-x-2">
+                    {filterOptions.ram?.map((option) => (
+                      <div
+                        key={option.value}
+                        className="flex items-center space-x-2"
+                      >
                         <Checkbox
-                          id={`ram-${size}`}
-                          checked={selectedFilters.ram.includes(size)}
-                          onCheckedChange={() => toggleFilter("ram", size)}
+                          id={`ram-${option.value}`}
+                          checked={selectedFilters.ram.includes(option.value)}
+                          onCheckedChange={() =>
+                            toggleFilter("ram", option.value)
+                          }
+                          disabled={option.disabled}
+                          className={
+                            option.disabled
+                              ? "opacity-50 cursor-not-allowed"
+                              : ""
+                          }
                         />
                         <label
-                          htmlFor={`ram-${size}`}
-                          className="text-sm font-medium leading-none"
+                          htmlFor={`ram-${option.value}`}
+                          className={`text-sm font-medium leading-none ${
+                            option.disabled ? "text-neutral-500" : ""
+                          }`}
                         >
-                          {size}
+                          {option.value}
                         </label>
                       </div>
                     ))}
@@ -153,20 +205,33 @@ export default function SearchPage() {
                   <h3 className="mb-2 font-medium">Storage Type</h3>
                   <div className="mb-3 border-b border-neutral-700"></div>
                   <div className="space-y-2">
-                    {filterOptions.storageTypes?.map((type) => (
-                      <div key={type} className="flex items-center space-x-2">
+                    {filterOptions.storageTypes?.map((option) => (
+                      <div
+                        key={option.value}
+                        className="flex items-center space-x-2"
+                      >
                         <Checkbox
-                          id={`storage-${type}`}
-                          checked={selectedFilters.storageType.includes(type)}
+                          id={`storage-${option.value}`}
+                          checked={selectedFilters.storageType.includes(
+                            option.value
+                          )}
                           onCheckedChange={() =>
-                            toggleFilter("storageType", type)
+                            toggleFilter("storageType", option.value)
+                          }
+                          disabled={option.disabled}
+                          className={
+                            option.disabled
+                              ? "opacity-50 cursor-not-allowed"
+                              : ""
                           }
                         />
                         <label
-                          htmlFor={`storage-${type}`}
-                          className="text-sm font-medium leading-none"
+                          htmlFor={`storage-${option.value}`}
+                          className={`text-sm font-medium leading-none ${
+                            option.disabled ? "text-neutral-500" : ""
+                          }`}
                         >
-                          {type}
+                          {option.value}
                         </label>
                       </div>
                     ))}
@@ -238,7 +303,10 @@ export default function SearchPage() {
                 {laptops.length} result{laptops.length !== 1 ? "s" : ""} found
               </h2>
 
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+              <div
+                ref={parent}
+                className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
+              >
                 {laptops.map((laptop) => (
                   <LaptopCard
                     key={laptop.id}

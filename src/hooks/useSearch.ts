@@ -2,17 +2,23 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { LaptopT } from "../interfaces/laptopT";
 
+// Updated interfaces to match the new backend response
+interface FilterOption {
+  value: string;
+  disabled: boolean;
+}
+
 interface FilterOptions {
-  brands: string[];
-  gpuModels: string[];
-  processorModels: string[];
-  ramTypes: string[];
-  ram: string[];
-  storageTypes: string[];
-  storageCapacity: string[];
-  stockStatuses: string[];
-  screenSizes: string[];
-  screenResolutions: string[];
+  brands: FilterOption[];
+  gpuModels: FilterOption[];
+  processorModels: FilterOption[];
+  ramTypes: FilterOption[];
+  ram: FilterOption[];
+  storageTypes: FilterOption[];
+  storageCapacity: FilterOption[];
+  stockStatuses: FilterOption[];
+  screenSizes: FilterOption[];
+  screenResolutions: FilterOption[];
   priceRange: {
     min: number;
     max: number;
@@ -51,15 +57,31 @@ export function useSearchLaptops(initialTerm: string = "") {
 
   const queryClient = useQueryClient();
 
-  // Filter fetching query
+  // Updated filter fetching query to include selected filters
   const {
     data: filterOptions,
     isLoading: isLoadingFilters,
     error: filterError,
+    refetch: refetchFilters,
   } = useQuery<FilterOptions>({
-    queryKey: ["filterOptions"],
+    queryKey: ["filterOptions", JSON.stringify(selectedFilters)],
     queryFn: async () => {
-      const response = await fetch("http://localhost:3000/laptops/filters");
+      // Build query params for the filters endpoint
+      const params = new URLSearchParams();
+
+      // Add selected filters to query params
+      Object.entries(selectedFilters).forEach(([key, values]) => {
+        (values as string[]).forEach((value) => {
+          params.append(key, value);
+        });
+      });
+
+      console.log("Fetching filter options with params:", params.toString());
+
+      const response = await fetch(
+        `http://localhost:3000/laptops/filters?${params.toString()}`
+      );
+
       if (!response.ok) {
         throw new Error("Failed to fetch filter options");
       }
@@ -87,7 +109,7 @@ export function useSearchLaptops(initialTerm: string = "") {
         });
       });
 
-      console.log("Fetching with params:", params.toString());
+      console.log("Fetching laptops with params:", params.toString());
 
       const response = await fetch(
         `http://localhost:3000/laptops/search?${params.toString()}`
@@ -95,14 +117,12 @@ export function useSearchLaptops(initialTerm: string = "") {
       if (!response.ok) {
         throw new Error("Failed to search laptops");
       }
-      const data = await response.json();
-      console.log("Fetched data:", data);
-      return data;
+      return response.json();
     },
     refetchOnWindowFocus: false,
-    staleTime: 0,
   });
 
+  // Toggle filter and refetch both data and filter options
   const toggleFilter = (category: keyof SelectedFilters, value: string) => {
     setSelectedFilters((prev) => {
       const currentFilters = [...prev[category]];
@@ -114,21 +134,19 @@ export function useSearchLaptops(initialTerm: string = "") {
         currentFilters.splice(index, 1);
       }
 
-      const newFilters = {
+      return {
         ...prev,
         [category]: currentFilters,
       };
-
-      return newFilters;
     });
   };
 
-  // Refetch when filters change
+  // Refetch everything when filters change
   useEffect(() => {
-    console.log("Filters changed, refetching...");
-    queryClient.invalidateQueries({ queryKey: ["laptopSearch"] });
+    console.log("Filters changed, refetching data...");
     refetch();
-  }, [selectedFilters, refetch, queryClient]);
+    refetchFilters();
+  }, [selectedFilters, refetch, refetchFilters]);
 
   // Update search term from external source if needed
   useEffect(() => {
@@ -138,22 +156,15 @@ export function useSearchLaptops(initialTerm: string = "") {
   }, [initialTerm]);
 
   return {
-    // States
     searchTerm,
     setSearchTerm,
     selectedFilters,
-
-    // Data
     filterOptions,
     laptops,
-
-    // Loading and error states
     isLoadingFilters,
     filterError,
     isLoading,
     error,
-
-    // Actions
     toggleFilter,
     refetch,
   };
