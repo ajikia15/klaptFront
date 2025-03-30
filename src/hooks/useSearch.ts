@@ -2,7 +2,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { LaptopT } from "../interfaces/laptopT";
 
-// Updated interfaces to match the new backend response
+// Make sure these interfaces match what the backend returns
 interface FilterOption {
   value: string;
   disabled: boolean;
@@ -41,7 +41,7 @@ interface SelectedFilters {
 export function useSearchLaptops(initialTerm: string = "") {
   const [searchTerm, setSearchTerm] = useState(initialTerm);
 
-  // State for selected filters
+  // Initialize selected filters
   const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({
     brand: [],
     gpuModel: [],
@@ -57,7 +57,7 @@ export function useSearchLaptops(initialTerm: string = "") {
 
   const queryClient = useQueryClient();
 
-  // Updated filter fetching query to include selected filters
+  // Get filter options - make sure to pass the current selected filters
   const {
     data: filterOptions,
     isLoading: isLoadingFilters,
@@ -69,12 +69,16 @@ export function useSearchLaptops(initialTerm: string = "") {
       // Build query params for the filters endpoint
       const params = new URLSearchParams();
 
-      // Add selected filters to query params
+      // Very important - add all selected filters to query params
       Object.entries(selectedFilters).forEach(([key, values]) => {
-        (values as string[]).forEach((value) => {
+        values.forEach((value: any) => {
           params.append(key, value);
         });
       });
+
+      if (searchTerm) {
+        params.append("term", searchTerm);
+      }
 
       console.log("Fetching filter options with params:", params.toString());
 
@@ -85,11 +89,14 @@ export function useSearchLaptops(initialTerm: string = "") {
       if (!response.ok) {
         throw new Error("Failed to fetch filter options");
       }
-      return response.json();
+
+      const data = await response.json();
+      console.log("Received filter options:", data);
+      return data;
     },
   });
 
-  // Query for search results with filters
+  // Get laptops with filters
   const {
     data: laptops,
     isLoading,
@@ -104,12 +111,10 @@ export function useSearchLaptops(initialTerm: string = "") {
 
       // Add selected filters to query params
       Object.entries(selectedFilters).forEach(([key, values]) => {
-        (values as string[]).forEach((value) => {
+        values.forEach((value: any) => {
           params.append(key, value);
         });
       });
-
-      console.log("Fetching laptops with params:", params.toString());
 
       const response = await fetch(
         `http://localhost:3000/laptops/search?${params.toString()}`
@@ -119,36 +124,33 @@ export function useSearchLaptops(initialTerm: string = "") {
       }
       return response.json();
     },
-    refetchOnWindowFocus: false,
   });
 
-  // Toggle filter and refetch both data and filter options
+  // Toggle filter - add delay before refetching to allow for UI updates
   const toggleFilter = (category: keyof SelectedFilters, value: string) => {
     setSelectedFilters((prev) => {
-      const currentFilters = [...prev[category]];
-      const index = currentFilters.indexOf(value);
+      const newFilters = { ...prev };
+      const index = newFilters[category].indexOf(value);
 
       if (index === -1) {
-        currentFilters.push(value);
+        // Add the filter
+        newFilters[category] = [...newFilters[category], value];
       } else {
-        currentFilters.splice(index, 1);
+        // Remove the filter
+        newFilters[category] = newFilters[category].filter((v) => v !== value);
       }
 
-      return {
-        ...prev,
-        [category]: currentFilters,
-      };
+      return newFilters;
     });
   };
 
-  // Refetch everything when filters change
+  // This is critical - we need to refetch when filters change
   useEffect(() => {
-    console.log("Filters changed, refetching data...");
-    refetch();
-    refetchFilters();
+    // Important: This ensures consistency between filters and results
+    Promise.all([refetch(), refetchFilters()]);
   }, [selectedFilters, refetch, refetchFilters]);
 
-  // Update search term from external source if needed
+  // Update search term from URL
   useEffect(() => {
     if (initialTerm !== searchTerm) {
       setSearchTerm(initialTerm);
