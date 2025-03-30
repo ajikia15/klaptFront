@@ -123,3 +123,23 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite linear;
+  background: linear-gradient(
+    to right,
+    rgb(38, 38, 38) 4%,
+    rgb(64, 64, 64) 25%,
+    rgb(38, 38, 38) 36%
+  );
+  background-size: 1000px 100%;
+}

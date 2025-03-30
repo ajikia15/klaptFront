@@ -3,12 +3,15 @@ import { useSearch } from "@tanstack/react-router";
 import { LaptopCard } from "../components/LaptopCard";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useSearchLaptops } from "../hooks/useSearch";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { SkeletonCard } from "../components/SkeletonCard";
+import { useState, useEffect } from "react";
+import { debounce } from "lodash";
 
 export default function SearchPage() {
   const search = useSearch({ from: "/search" });
   const navigate = useNavigate();
-  const [parent] = useAutoAnimate({ duration: 300 });
+
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const {
     searchTerm,
@@ -24,9 +27,16 @@ export default function SearchPage() {
     refetch,
   } = useSearchLaptops(search.term || "");
 
+  const debouncedRefetch = debounce(() => {
+    setIsTransitioning(true);
+    refetch().finally(() => {
+      setTimeout(() => setIsTransitioning(false), 300);
+    });
+  }, 300);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    refetch();
+    debouncedRefetch();
     navigate({
       to: "/search",
       search: { term: searchTerm },
@@ -34,12 +44,27 @@ export default function SearchPage() {
     });
   };
 
+  useEffect(() => {
+    if (!isLoading) {
+      setTimeout(() => setIsTransitioning(false), 100);
+    } else {
+      setIsTransitioning(true);
+    }
+  }, [isLoading]);
+
+  useEffect(() => {
+    return () => {
+      debouncedRefetch.cancel();
+    };
+  }, []);
+
+  const showSkeletons = isLoading || isTransitioning;
+
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="mb-6 text-3xl font-bold">Search Laptops</h1>
 
       <div className="flex flex-col gap-6 md:flex-row">
-        {/* Filters Panel */}
         <div className="w-full md:w-1/4">
           <div className="mb-4 rounded-md bg-neutral-900 p-4">
             <h2 className="mb-4 text-xl font-semibold">Filters</h2>
@@ -52,7 +77,6 @@ export default function SearchPage() {
               </p>
             ) : filterOptions ? (
               <div className="space-y-6">
-                {/* Brand Filters */}
                 <div>
                   <h3 className="mb-2 font-medium">Brands</h3>
                   <div className="mb-3 border-b border-neutral-700"></div>
@@ -88,7 +112,6 @@ export default function SearchPage() {
                   </div>
                 </div>
 
-                {/* Processor Filters */}
                 <div>
                   <h3 className="mb-2 font-medium">Processors</h3>
                   <div className="mb-3 border-b border-neutral-700"></div>
@@ -126,7 +149,6 @@ export default function SearchPage() {
                   </div>
                 </div>
 
-                {/* GPU Filters */}
                 <div>
                   <h3 className="mb-2 font-medium">Graphics Cards</h3>
                   <div className="mb-3 border-b border-neutral-700"></div>
@@ -164,7 +186,6 @@ export default function SearchPage() {
                   </div>
                 </div>
 
-                {/* RAM Filters */}
                 <div>
                   <h3 className="mb-2 font-medium">RAM Size</h3>
                   <div className="mb-3 border-b border-neutral-700"></div>
@@ -200,7 +221,6 @@ export default function SearchPage() {
                   </div>
                 </div>
 
-                {/* Storage Type Filters */}
                 <div>
                   <h3 className="mb-2 font-medium">Storage Type</h3>
                   <div className="mb-3 border-b border-neutral-700"></div>
@@ -242,9 +262,7 @@ export default function SearchPage() {
           </div>
         </div>
 
-        {/* Main Content */}
         <div className="w-full md:w-3/4">
-          {/* Search Form */}
           <form onSubmit={handleSubmit} className="mb-8">
             <div className="mx-auto flex w-full max-w-2xl">
               <input
@@ -263,27 +281,51 @@ export default function SearchPage() {
             </div>
           </form>
 
-          {/* Loading State */}
-          {isLoading && (
-            <div className="flex h-64 items-center justify-center">
-              <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-t-2 border-blue-500"></div>
-            </div>
+          {!isLoading && laptops && laptops.length > 0 && (
+            <h2 className="mb-4 text-xl font-semibold text-white">
+              {laptops.length} result{laptops.length !== 1 ? "s" : ""} found
+            </h2>
           )}
 
-          {/* Error State */}
           {error && (
-            <div className="p-4 text-center text-red-500">
+            <div className="mb-4 p-4 text-center text-red-500">
               Error searching laptops: {error.toString()}
             </div>
           )}
 
-          {/* No Results */}
-          {!isLoading &&
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 min-h-[200px]">
+            {showSkeletons &&
+              Array(6)
+                .fill(0)
+                .map((_, index) => <SkeletonCard key={`skeleton-${index}`} />)}
+
+            {!showSkeletons &&
+              laptops &&
+              laptops.length > 0 &&
+              laptops.map((laptop) => (
+                <LaptopCard
+                  key={`laptop-${laptop.id}`}
+                  id={laptop.id}
+                  title={laptop.title}
+                  price={laptop.price}
+                  shortDesc={laptop.shortDesc}
+                  image={laptop.images[0]}
+                />
+              ))}
+
+            <div
+              className="opacity-0 pointer-events-none h-0 md:col-span-2 lg:col-span-3"
+              aria-hidden="true"
+              key="ghost-element"
+            />
+          </div>
+
+          {!showSkeletons &&
             laptops &&
             laptops.length === 0 &&
             (searchTerm ||
               Object.values(selectedFilters).some((arr) => arr.length > 0)) && (
-              <div className="rounded-lg bg-neutral-800 p-8 text-center">
+              <div className="mt-6 rounded-lg bg-neutral-800 p-8 text-center">
                 <h2 className="mb-2 text-xl font-semibold text-white">
                   No results found
                 </h2>
@@ -295,31 +337,6 @@ export default function SearchPage() {
                 </p>
               </div>
             )}
-
-          {/* Search Results */}
-          {laptops && laptops.length > 0 && (
-            <>
-              <h2 className="mb-4 text-xl font-semibold text-white">
-                {laptops.length} result{laptops.length !== 1 ? "s" : ""} found
-              </h2>
-
-              <div
-                ref={parent}
-                className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
-              >
-                {laptops.map((laptop) => (
-                  <LaptopCard
-                    key={laptop.id}
-                    id={laptop.id}
-                    title={laptop.title}
-                    price={laptop.price}
-                    shortDesc={laptop.shortDesc}
-                    image={laptop.images[0]}
-                  />
-                ))}
-              </div>
-            </>
-          )}
         </div>
       </div>
     </div>
