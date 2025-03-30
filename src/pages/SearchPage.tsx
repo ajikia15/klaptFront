@@ -1,116 +1,27 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useSearch, useNavigate } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
-import { LaptopT } from "../interfaces/laptopT";
+import { useNavigate } from "@tanstack/react-router";
+import { useSearch } from "@tanstack/react-router";
 import { LaptopCard } from "../components/LaptopCard";
 import { Checkbox } from "@/components/ui/checkbox";
-
-// Update FilterOptions interface to match the backend response
-interface FilterOptions {
-  brands: string[];
-  gpuModels: string[];
-  processorModels: string[];
-  ramTypes: string[];
-  ram: string[];
-  storageTypes: string[];
-  storageCapacity: string[];
-  stockStatuses: string[];
-  screenSizes: string[];
-  screenResolutions: string[];
-  priceRange: {
-    min: number;
-    max: number;
-  };
-}
-
-// Define selected filters interface
-interface SelectedFilters {
-  brand: string[];
-  gpuModel: string[];
-  processorModel: string[];
-  ramType: string[];
-  ram: string[];
-  storageType: string[];
-  storageCapacity: string[];
-  stockStatus: string[];
-  screenSize: string[];
-  screenResolution: string[];
-}
+import { useSearchLaptops } from "../hooks/useSearch";
 
 export default function SearchPage() {
-  // Same state and hooks as before
   const search = useSearch({ from: "/search" });
-  const [searchTerm, setSearchTerm] = useState(search.term || "");
+  const navigate = useNavigate();
 
-  // State for selected filters
-  const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({
-    brand: [],
-    gpuModel: [],
-    processorModel: [],
-    ramType: [],
-    ram: [],
-    storageType: [],
-    storageCapacity: [],
-    stockStatus: [],
-    screenSize: [],
-    screenResolution: [],
-  });
-
-  const queryClient = useQueryClient();
-
-  // Filter fetching query
   const {
-    data: filterOptions,
-    isLoading: isLoadingFilters,
-    error: filterError,
-  } = useQuery<FilterOptions>({
-    queryKey: ["filterOptions"],
-    queryFn: async () => {
-      const response = await fetch("http://localhost:3000/laptops/filters");
-      if (!response.ok) {
-        throw new Error("Failed to fetch filter options");
-      }
-      return response.json();
-    },
-  });
-
-  // Query for search results with filters
-  const {
-    data: laptops,
+    searchTerm,
+    setSearchTerm,
+    selectedFilters,
+    filterOptions,
+    laptops,
+    isLoadingFilters,
+    filterError,
     isLoading,
     error,
+    toggleFilter,
     refetch,
-  } = useQuery<LaptopT[], Error>({
-    queryKey: ["laptopSearch", searchTerm, JSON.stringify(selectedFilters)], // Stringify the filters object
-    queryFn: async (): Promise<LaptopT[]> => {
-      // Build query params
-      const params = new URLSearchParams();
-      if (searchTerm) params.append("term", searchTerm);
+  } = useSearchLaptops(search.term || "");
 
-      // Add selected filters to query params
-      Object.entries(selectedFilters).forEach(([key, values]) => {
-        (values as string[]).forEach((value) => {
-          params.append(key, value);
-        });
-      });
-
-      console.log("Fetching with params:", params.toString()); // Debug log
-
-      const response = await fetch(
-        `http://localhost:3000/laptops/search?${params.toString()}`
-      );
-      if (!response.ok) {
-        throw new Error("Failed to search laptops");
-      }
-      const data = await response.json();
-      console.log("Fetched data:", data); // Debug log
-      return data;
-    },
-    refetchOnWindowFocus: false, // Prevent unwanted refetches
-    staleTime: 0, // Consider data immediately stale
-  });
-
-  // Same handlers as before
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     refetch();
@@ -121,54 +32,12 @@ export default function SearchPage() {
     });
   };
 
-  useEffect(() => {
-    if (search.term) {
-      setSearchTerm(search.term);
-    }
-  }, [search.term]);
-
-  const toggleFilter = (category: keyof SelectedFilters, value: string) => {
-    setSelectedFilters((prev) => {
-      const currentFilters = [...prev[category]];
-      const index = currentFilters.indexOf(value);
-
-      if (index === -1) {
-        currentFilters.push(value);
-      } else {
-        currentFilters.splice(index, 1);
-      }
-
-      const newFilters = {
-        ...prev,
-        [category]: currentFilters,
-      };
-
-      // Schedule a refetch after state update is complete
-      setTimeout(() => {
-        queryClient.invalidateQueries({ queryKey: ["laptopSearch"] });
-      }, 0);
-
-      return newFilters;
-    });
-  };
-
-  // Add this useEffect to refetch when filters change
-  useEffect(() => {
-    console.log("Filters changed, refetching...");
-
-    // Forcefully invalidate and refetch
-    queryClient.invalidateQueries({ queryKey: ["laptopSearch"] });
-    refetch();
-  }, [selectedFilters, refetch, queryClient]);
-
-  const navigate = useNavigate();
-
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="mb-6 text-3xl font-bold">Search Laptops</h1>
 
       <div className="flex flex-col gap-6 md:flex-row">
-        {/* Filters Panel - Simplified with only shadcn checkboxes */}
+        {/* Filters Panel */}
         <div className="w-full md:w-1/4">
           <div className="mb-4 rounded-md bg-neutral-900 p-4">
             <h2 className="mb-4 text-xl font-semibold">Filters</h2>
@@ -308,7 +177,7 @@ export default function SearchPage() {
           </div>
         </div>
 
-        {/* Main Content - Same as before */}
+        {/* Main Content */}
         <div className="w-full md:w-3/4">
           {/* Search Form */}
           <form onSubmit={handleSubmit} className="mb-8">
