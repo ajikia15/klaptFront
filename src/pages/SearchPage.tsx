@@ -1,11 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSearch, useNavigate } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { LaptopT } from "../interfaces/laptopT";
 import { LaptopCard } from "../components/LaptopCard";
 import { Checkbox } from "@/components/ui/checkbox";
 
-// Define FilterOptions interface
+// Update FilterOptions interface to match the backend response
 interface FilterOptions {
   brands: string[];
   gpuModels: string[];
@@ -25,16 +25,16 @@ interface FilterOptions {
 
 // Define selected filters interface
 interface SelectedFilters {
-  brands: string[];
-  gpuModels: string[];
-  processorModels: string[];
-  ramTypes: string[];
+  brand: string[];
+  gpuModel: string[];
+  processorModel: string[];
+  ramType: string[];
   ram: string[];
-  storageTypes: string[];
+  storageType: string[];
   storageCapacity: string[];
-  stockStatuses: string[];
-  screenSizes: string[];
-  screenResolutions: string[];
+  stockStatus: string[];
+  screenSize: string[];
+  screenResolution: string[];
 }
 
 export default function SearchPage() {
@@ -44,17 +44,19 @@ export default function SearchPage() {
 
   // State for selected filters
   const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({
-    brands: [],
-    gpuModels: [],
-    processorModels: [],
-    ramTypes: [],
+    brand: [],
+    gpuModel: [],
+    processorModel: [],
+    ramType: [],
     ram: [],
-    storageTypes: [],
+    storageType: [],
     storageCapacity: [],
-    stockStatuses: [],
-    screenSizes: [],
-    screenResolutions: [],
+    stockStatus: [],
+    screenSize: [],
+    screenResolution: [],
   });
+
+  const queryClient = useQueryClient();
 
   // Filter fetching query
   const {
@@ -72,14 +74,14 @@ export default function SearchPage() {
     },
   });
 
-  // Query for search results with filters - same as before
+  // Query for search results with filters
   const {
     data: laptops,
     isLoading,
     error,
     refetch,
   } = useQuery<LaptopT[], Error>({
-    queryKey: ["laptopSearch", searchTerm, selectedFilters],
+    queryKey: ["laptopSearch", searchTerm, JSON.stringify(selectedFilters)], // Stringify the filters object
     queryFn: async (): Promise<LaptopT[]> => {
       // Build query params
       const params = new URLSearchParams();
@@ -92,15 +94,20 @@ export default function SearchPage() {
         });
       });
 
+      console.log("Fetching with params:", params.toString()); // Debug log
+
       const response = await fetch(
         `http://localhost:3000/laptops/search?${params.toString()}`
       );
       if (!response.ok) {
         throw new Error("Failed to search laptops");
       }
-      return response.json();
+      const data = await response.json();
+      console.log("Fetched data:", data); // Debug log
+      return data;
     },
-    enabled: true,
+    refetchOnWindowFocus: false, // Prevent unwanted refetches
+    staleTime: 0, // Consider data immediately stale
   });
 
   // Same handlers as before
@@ -131,12 +138,28 @@ export default function SearchPage() {
         currentFilters.splice(index, 1);
       }
 
-      return {
+      const newFilters = {
         ...prev,
         [category]: currentFilters,
       };
+
+      // Schedule a refetch after state update is complete
+      setTimeout(() => {
+        queryClient.invalidateQueries({ queryKey: ["laptopSearch"] });
+      }, 0);
+
+      return newFilters;
     });
   };
+
+  // Add this useEffect to refetch when filters change
+  useEffect(() => {
+    console.log("Filters changed, refetching...");
+
+    // Forcefully invalidate and refetch
+    queryClient.invalidateQueries({ queryKey: ["laptopSearch"] });
+    refetch();
+  }, [selectedFilters, refetch, queryClient]);
 
   const navigate = useNavigate();
 
@@ -167,8 +190,8 @@ export default function SearchPage() {
                       <div key={brand} className="flex items-center space-x-2">
                         <Checkbox
                           id={`brand-${brand}`}
-                          checked={selectedFilters.brands.includes(brand)}
-                          onCheckedChange={() => toggleFilter("brands", brand)}
+                          checked={selectedFilters.brand.includes(brand)}
+                          onCheckedChange={() => toggleFilter("brand", brand)}
                         />
                         <label
                           htmlFor={`brand-${brand}`}
@@ -190,11 +213,11 @@ export default function SearchPage() {
                       <div key={model} className="flex items-center space-x-2">
                         <Checkbox
                           id={`processor-${model}`}
-                          checked={selectedFilters.processorModels.includes(
+                          checked={selectedFilters.processorModel.includes(
                             model
                           )}
                           onCheckedChange={() =>
-                            toggleFilter("processorModels", model)
+                            toggleFilter("processorModel", model)
                           }
                         />
                         <label
@@ -217,9 +240,9 @@ export default function SearchPage() {
                       <div key={model} className="flex items-center space-x-2">
                         <Checkbox
                           id={`gpu-${model}`}
-                          checked={selectedFilters.gpuModels.includes(model)}
+                          checked={selectedFilters.gpuModel.includes(model)}
                           onCheckedChange={() =>
-                            toggleFilter("gpuModels", model)
+                            toggleFilter("gpuModel", model)
                           }
                         />
                         <label
@@ -265,9 +288,9 @@ export default function SearchPage() {
                       <div key={type} className="flex items-center space-x-2">
                         <Checkbox
                           id={`storage-${type}`}
-                          checked={selectedFilters.storageTypes.includes(type)}
+                          checked={selectedFilters.storageType.includes(type)}
                           onCheckedChange={() =>
-                            toggleFilter("storageTypes", type)
+                            toggleFilter("storageType", type)
                           }
                         />
                         <label
