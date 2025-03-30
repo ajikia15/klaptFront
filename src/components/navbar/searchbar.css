@@ -1,6 +1,16 @@
+:root {
+  --input-height: 56px;
+  --input-width: 100%;
+  --border-radius: 10px;
+}
+
+body {
+  background-color: black;
+}
+
 .grid {
-  height: 1200px;
-  width: 1200px;
+  height: 100%;
+  width: 100%;
   background-image: linear-gradient(to right, #0f0f10 1px, transparent 1px),
     linear-gradient(to bottom, #0f0f10 1px, transparent 1px);
   background-size: 1rem 1rem;
@@ -9,37 +19,40 @@
   z-index: -1;
   filter: blur(1px);
 }
+
 .white,
 .border,
 .darkBorderBg,
 .glow {
-  max-height: 70px;
-  max-width: 314px;
   height: 100%;
   width: 100%;
   position: absolute;
   overflow: hidden;
   z-index: -1;
-  /* Border Radius */
-  border-radius: 12px;
+  border-radius: var(--border-radius);
   filter: blur(3px);
 }
+
 .input {
   background-color: #010201;
   border: none;
-  /* padding:7px; */
-  width: 301px;
-  height: 56px;
-  border-radius: 10px;
+  width: 100%;
+  height: var(--input-height);
+  border-radius: var(--border-radius);
   color: white;
   padding-inline: 59px;
   font-size: 18px;
 }
+
 #poda {
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  width: 100%;
+  max-width: 500px; /* Adjust based on your needs */
 }
+
 .input::placeholder {
   color: #c0b9c0;
 }
@@ -48,41 +61,46 @@
   outline: none;
 }
 
+#main {
+  position: relative;
+  width: 100%;
+}
+
 #main:focus-within > #input-mask {
   display: none;
 }
 
 #input-mask {
   pointer-events: none;
-  width: 100px;
-  height: 20px;
+  width: 30%;
+  height: 36%;
   position: absolute;
   background: linear-gradient(90deg, transparent, black);
-  top: 18px;
-  left: 70px;
+  top: 32%;
+  left: 23%;
 }
+
 #pink-mask {
   pointer-events: none;
   width: 30px;
   height: 20px;
   position: absolute;
   background: #cf30aa;
-  top: 10px;
-  left: 5px;
+  top: 18%;
+  left: 1.5%;
   filter: blur(20px);
   opacity: 0.8;
   animation: leftright 4s ease-in infinite;
   transition: all 2s;
 }
+
 #main:hover > #pink-mask {
   animation: rotate 4s linear infinite;
   opacity: 0;
 }
 
 .white {
-  max-height: 63px;
-  max-width: 307px;
-  border-radius: 10px;
+  border-radius: calc(var(--border-radius) - 2px);
   filter: blur(2px);
 }
 
@@ -110,12 +128,12 @@
   animation: rotate 4s linear infinite;
   transition: all 2s;
 }
+
 .border {
-  max-height: 59px;
-  max-width: 303px;
-  border-radius: 11px;
+  border-radius: calc(var(--border-radius) + 1px);
   filter: blur(0.5px);
 }
+
 .border::before {
   content: "";
   z-index: -2;
@@ -140,10 +158,12 @@
   animation: rotate 4s 0.1s linear infinite;
   transition: all 2s;
 }
+
 .darkBorderBg {
   max-height: 65px;
   max-width: 312px;
 }
+
 .darkBorderBg::before {
   content: "";
   z-index: -2;
@@ -166,15 +186,19 @@
   );
   transition: all 2s;
 }
+
 #poda:hover > .darkBorderBg::before {
   transform: translate(-50%, -50%) rotate(262deg);
 }
+
 #poda:hover > .glow::before {
   transform: translate(-50%, -50%) rotate(240deg);
 }
+
 #poda:hover > .white::before {
   transform: translate(-50%, -50%) rotate(263deg);
 }
+
 #poda:hover > .border::before {
   transform: translate(-50%, -50%) rotate(250deg);
 }
@@ -182,12 +206,15 @@
 #poda:hover > .darkBorderBg::before {
   transform: translate(-50%, -50%) rotate(-98deg);
 }
+
 #poda:hover > .glow::before {
   transform: translate(-50%, -50%) rotate(-120deg);
 }
+
 #poda:hover > .white::before {
   transform: translate(-50%, -50%) rotate(-97deg);
 }
+
 #poda:hover > .border::before {
   transform: translate(-50%, -50%) rotate(-110deg);
 }
@@ -196,14 +223,17 @@
   transform: translate(-50%, -50%) rotate(442deg);
   transition: all 4s;
 }
+
 #poda:focus-within > .glow::before {
   transform: translate(-50%, -50%) rotate(420deg);
   transition: all 4s;
 }
+
 #poda:focus-within > .white::before {
   transform: translate(-50%, -50%) rotate(443deg);
   transition: all 4s;
 }
+
 #poda:focus-within > .border::before {
   transform: translate(-50%, -50%) rotate(430deg);
   transition: all 4s;
@@ -216,6 +246,7 @@
   max-height: 130px;
   max-width: 354px;
 }
+
 .glow:before {
   content: "";
   z-index: -2;
@@ -247,6 +278,7 @@
     transform: translate(-50%, -50%) rotate(450deg);
   }
 }
+
 @keyframes leftright {
   0% {
     transform: translate(0px, 0px);
@@ -257,12 +289,12 @@
     transform: translate(250px, 0px);
     opacity: 0;
   }
+
   80% {
     transform: translate(-40px, 0px);
     opacity: 0;
   }
-
-  100% {
+  zx 100% {
     transform: translate(0px, 0px);
     opacity: 1;
   }
@@ -270,37 +302,35 @@
 
 #filter-icon {
   position: absolute;
-  top: 8px;
+  top: 50%;
   right: 8px;
+  transform: translateY(-50%);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 2;
-  max-height: 40px;
-  max-width: 38px;
-  height: 100%;
-  width: 100%;
-
+  height: calc(var(--input-height) - 16px);
+  width: 38px;
   isolation: isolate;
   overflow: hidden;
-  /* Border Radius */
-  border-radius: 10px;
+  border-radius: var(--border-radius);
   background: linear-gradient(180deg, #161329, black, #1d1b4b);
   border: 1px solid transparent;
 }
+
 .filterBorder {
-  height: 42px;
+  height: calc(var(--input-height) - 14px);
   width: 40px;
   position: absolute;
   overflow: hidden;
-  top: 7px;
+  top: 50%;
   right: 7px;
-  border-radius: 10px;
+  transform: translateY(-50%);
+  border-radius: var(--border-radius);
 }
 
 .filterBorder::before {
   content: "";
-
   text-align: center;
   top: 50%;
   left: 50%;
@@ -321,11 +351,10 @@
   );
   animation: rotate 4s linear infinite;
 }
-#main {
-  position: relative;
-}
+
 #search-icon {
   position: absolute;
   left: 20px;
-  top: 15px;
+  top: 50%;
+  transform: translateY(-50%);
 }

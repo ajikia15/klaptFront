@@ -81,13 +81,6 @@ export default function SearchPage() {
   } = useQuery<LaptopT[], Error>({
     queryKey: ["laptopSearch", searchTerm, selectedFilters],
     queryFn: async (): Promise<LaptopT[]> => {
-      if (
-        !searchTerm &&
-        Object.values(selectedFilters).every((arr) => arr.length === 0)
-      ) {
-        return [];
-      }
-
       // Build query params
       const params = new URLSearchParams();
       if (searchTerm) params.append("term", searchTerm);
@@ -107,9 +100,7 @@ export default function SearchPage() {
       }
       return response.json();
     },
-    enabled:
-      !!searchTerm ||
-      Object.values(selectedFilters).some((arr) => arr.length > 0),
+    enabled: true,
   });
 
   // Same handlers as before
@@ -151,13 +142,13 @@ export default function SearchPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">Search Laptops</h1>
+      <h1 className="mb-6 text-3xl font-bold">Search Laptops</h1>
 
-      <div className="flex flex-col md:flex-row gap-6">
+      <div className="flex flex-col gap-6 md:flex-row">
         {/* Filters Panel - Simplified with only shadcn checkboxes */}
         <div className="w-full md:w-1/4">
-          <div className="bg-neutral-900 p-4 rounded-md mb-4">
-            <h2 className="text-xl font-semibold mb-4">Filters</h2>
+          <div className="mb-4 rounded-md bg-neutral-900 p-4">
+            <h2 className="mb-4 text-xl font-semibold">Filters</h2>
 
             {isLoadingFilters ? (
               <p>Loading filters...</p>
@@ -169,9 +160,9 @@ export default function SearchPage() {
               <div className="space-y-6">
                 {/* Brand Filters */}
                 <div>
-                  <h3 className="font-medium mb-2">Brands</h3>
+                  <h3 className="mb-2 font-medium">Brands</h3>
                   <div className="mb-3 border-b border-neutral-700"></div>
-                  <div className="space-y-2 max-h-[150px] overflow-y-auto">
+                  <div className="max-h-[150px] space-y-2 overflow-y-auto">
                     {filterOptions.brands?.map((brand) => (
                       <div key={brand} className="flex items-center space-x-2">
                         <Checkbox
@@ -192,9 +183,9 @@ export default function SearchPage() {
 
                 {/* Processor Filters */}
                 <div>
-                  <h3 className="font-medium mb-2">Processors</h3>
+                  <h3 className="mb-2 font-medium">Processors</h3>
                   <div className="mb-3 border-b border-neutral-700"></div>
-                  <div className="space-y-2 max-h-[150px] overflow-y-auto">
+                  <div className="max-h-[150px] space-y-2 overflow-y-auto">
                     {filterOptions.processorModels?.map((model) => (
                       <div key={model} className="flex items-center space-x-2">
                         <Checkbox
@@ -219,9 +210,9 @@ export default function SearchPage() {
 
                 {/* GPU Filters */}
                 <div>
-                  <h3 className="font-medium mb-2">Graphics Cards</h3>
+                  <h3 className="mb-2 font-medium">Graphics Cards</h3>
                   <div className="mb-3 border-b border-neutral-700"></div>
-                  <div className="space-y-2 max-h-[150px] overflow-y-auto">
+                  <div className="max-h-[150px] space-y-2 overflow-y-auto">
                     {filterOptions.gpuModels?.map((model) => (
                       <div key={model} className="flex items-center space-x-2">
                         <Checkbox
@@ -244,7 +235,7 @@ export default function SearchPage() {
 
                 {/* RAM Filters */}
                 <div>
-                  <h3 className="font-medium mb-2">RAM Size</h3>
+                  <h3 className="mb-2 font-medium">RAM Size</h3>
                   <div className="mb-3 border-b border-neutral-700"></div>
                   <div className="space-y-2">
                     {filterOptions.ram?.map((size) => (
@@ -267,7 +258,7 @@ export default function SearchPage() {
 
                 {/* Storage Type Filters */}
                 <div>
-                  <h3 className="font-medium mb-2">Storage Type</h3>
+                  <h3 className="mb-2 font-medium">Storage Type</h3>
                   <div className="mb-3 border-b border-neutral-700"></div>
                   <div className="space-y-2">
                     {filterOptions.storageTypes?.map((type) => (
@@ -298,17 +289,17 @@ export default function SearchPage() {
         <div className="w-full md:w-3/4">
           {/* Search Form */}
           <form onSubmit={handleSubmit} className="mb-8">
-            <div className="flex w-full max-w-2xl mx-auto">
+            <div className="mx-auto flex w-full max-w-2xl">
               <input
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Search for laptops by brand, model, or specs..."
-                className="flex-grow px-4 py-2 bg-neutral-800 text-white rounded-l-md border-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex-grow rounded-l-md border-none bg-neutral-800 px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               <button
                 type="submit"
-                className="bg-blue-500 text-white px-6 py-2 rounded-r-md hover:bg-blue-600 transition-colors duration-300"
+                className="rounded-r-md bg-blue-500 px-6 py-2 text-white transition-colors duration-300 hover:bg-blue-600"
               >
                 Search
               </button>
@@ -317,14 +308,14 @@ export default function SearchPage() {
 
           {/* Loading State */}
           {isLoading && (
-            <div className="flex justify-center items-center h-64">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+            <div className="flex h-64 items-center justify-center">
+              <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-t-2 border-blue-500"></div>
             </div>
           )}
 
           {/* Error State */}
           {error && (
-            <div className="text-red-500 text-center p-4">
+            <div className="p-4 text-center text-red-500">
               Error searching laptops: {error.toString()}
             </div>
           )}
@@ -335,14 +326,14 @@ export default function SearchPage() {
             laptops.length === 0 &&
             (searchTerm ||
               Object.values(selectedFilters).some((arr) => arr.length > 0)) && (
-              <div className="text-center p-8 bg-neutral-800 rounded-lg">
-                <h2 className="text-xl font-semibold mb-2 text-white">
+              <div className="rounded-lg bg-neutral-800 p-8 text-center">
+                <h2 className="mb-2 text-xl font-semibold text-white">
                   No results found
                 </h2>
                 <p className="text-neutral-400">
                   We couldn't find any laptops matching your criteria.
                 </p>
-                <p className="text-neutral-400 mt-2">
+                <p className="mt-2 text-neutral-400">
                   Try adjusting your filters or search term.
                 </p>
               </div>
@@ -351,11 +342,11 @@ export default function SearchPage() {
           {/* Search Results */}
           {laptops && laptops.length > 0 && (
             <>
-              <h2 className="text-xl font-semibold mb-4 text-white">
+              <h2 className="mb-4 text-xl font-semibold text-white">
                 {laptops.length} result{laptops.length !== 1 ? "s" : ""} found
               </h2>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {laptops.map((laptop) => (
                   <LaptopCard
                     key={laptop.id}

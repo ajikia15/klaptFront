@@ -29,13 +29,11 @@ export default function Searchbar() {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    if (searchTerm.trim()) {
-      navigate({
-        to: "/search",
-        search: { term: searchTerm },
-      });
-      setSearchTerm("");
-    }
+    navigate({
+      to: "/search",
+      search: { term: searchTerm },
+    });
+    setSearchTerm("");
   };
 
   return (
@@ -47,11 +45,11 @@ export default function Searchbar() {
         onChange={(e) => setSearchTerm(e.target.value)}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
-        className="w-full py-2 px-4 pr-10 bg-neutral-800 text-white rounded-md border-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full rounded-md border-none bg-neutral-800 px-4 py-2 pr-10 text-white focus:border-neutral-600 focus:outline-none focus:ring-2 focus:ring-neutral-700"
       />
       <button
         type="submit"
-        className="absolute cursor-pointer right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+        className="absolute right-2 top-1/2 -translate-y-1/2 transform cursor-pointer text-gray-400 hover:text-white"
       >
         <Search size={24} />
       </button>
@@ -59,20 +57,5 @@ export default function Searchbar() {
   );
 }
 /* 
-<div class="grid"></div>
-<div id="poda">
-  <div class="glow"></div>
-  <div class="darkBorderBg"></div>
-  <div class="darkBorderBg"></div>
-  <div class="darkBorderBg"></div>
-  <div class="white"></div>
-  <div class="border"></div>
-  <div id="main">
-    <input placeholder="Search..." type="text" name="text" class="input" />
-    <div id="input-mask"></div>
-    <div id="pink-mask"></div>
-
-  </div>
-</div>
 
 */
