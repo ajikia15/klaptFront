@@ -4,8 +4,9 @@ import { LaptopCard } from "../components/LaptopCard";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useSearchLaptops } from "../hooks/useSearch";
 import { SkeletonCard } from "../components/SkeletonCard";
-import { useState, useEffect } from "react";
-import { debounce } from "lodash";
+import { useState, useEffect, useDeferredValue, useRef } from "react";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import autoAnimate from "@formkit/auto-animate";
 
 export default function SearchPage() {
   const search = useSearch({ from: "/search" });
@@ -27,22 +28,26 @@ export default function SearchPage() {
     refetch,
   } = useSearchLaptops(search.term || "");
 
-  const debouncedRefetch = debounce(() => {
+  const deferredSearchTerm = useDeferredValue(searchTerm);
+
+  useEffect(() => {
     setIsTransitioning(true);
     refetch().finally(() => {
       setTimeout(() => setIsTransitioning(false), 300);
     });
-  }, 300);
+  }, [deferredSearchTerm, selectedFilters]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    debouncedRefetch();
+
     navigate({
       to: "/search",
       search: { term: searchTerm },
       replace: true,
     });
   };
+
+  const isPending = searchTerm !== deferredSearchTerm;
 
   useEffect(() => {
     if (!isLoading) {
@@ -52,13 +57,13 @@ export default function SearchPage() {
     }
   }, [isLoading]);
 
-  useEffect(() => {
-    return () => {
-      debouncedRefetch.cancel();
-    };
-  }, []);
+  const parent = useRef(null);
 
-  const showSkeletons = isLoading || isTransitioning;
+  useEffect(() => {
+    parent.current && autoAnimate(parent.current);
+  }, [parent]);
+
+  const showSkeletons = isLoading || isTransitioning || isPending;
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -220,7 +225,42 @@ export default function SearchPage() {
                     ))}
                   </div>
                 </div>
-
+                <div>
+                  <h3 className="mb-2 font-medium">Screen Size</h3>
+                  <div className="mb-3 border-b border-neutral-700"></div>
+                  <ScrollArea className="h-18" ref={parent}>
+                    {filterOptions.screenSizes?.map((option) => (
+                      <div
+                        key={option.value}
+                        className="flex items-center space-x-2 py-1"
+                      >
+                        <Checkbox
+                          id={`storage-${option.value}`}
+                          checked={selectedFilters.screenSize.includes(
+                            option.value
+                          )}
+                          onCheckedChange={() =>
+                            toggleFilter("screenSize", option.value)
+                          }
+                          disabled={option.disabled}
+                          className={
+                            option.disabled
+                              ? "opacity-50 cursor-not-allowed"
+                              : ""
+                          }
+                        />
+                        <label
+                          htmlFor={`storage-${option.value}`}
+                          className={`text-sm font-medium leading-none ${
+                            option.disabled ? "text-neutral-500" : ""
+                          }`}
+                        >
+                          {option.value}
+                        </label>
+                      </div>
+                    ))}
+                  </ScrollArea>
+                </div>
                 <div>
                   <h3 className="mb-2 font-medium">Storage Type</h3>
                   <div className="mb-3 border-b border-neutral-700"></div>

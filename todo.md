@@ -1,8 +1,4 @@
-- [ ] Favorites
-  - [x] Backend
-  - [ ] Frontend
 - [ ] Laptop types (gaming, rendering, etc)
-- [ ] Filtering
 - [ ] individual listing improvements (carousel)
 - [ ] Card design improvements
 - [ ] carousel improvements
@@ -16,3 +12,8 @@
 - [ ] Get amount of favorited items by user
 
 - [ ] Chart for price ranges shadcn https://ui.shadcn.com/docs/components/chart
+
+- [x] Filtering
+- [x] Favorites
+  - [x] Backend
+  - [x] Frontend
