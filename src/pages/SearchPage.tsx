@@ -4,15 +4,8 @@ import { LaptopCard } from "../components/LaptopCard";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useSearchLaptops } from "../hooks/useSearch";
 import { SkeletonCard } from "../components/SkeletonCard";
-import {
-  useState,
-  useEffect,
-  useDeferredValue,
-  useRef,
-  useCallback,
-} from "react";
+import { useState, useEffect, useDeferredValue, useRef } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import autoAnimate from "@formkit/auto-animate";
 import { RefreshSVG } from "@/assets/RefreshSVG";
 import { SpinnerSVG } from "@/assets/SpinnerSVG";
 
@@ -95,11 +88,6 @@ export default function SearchPage() {
 
   const isPending = searchTerm !== deferredSearchTerm;
 
-  // Create a callback ref to handle multiple elements with auto-animate
-  const animateRef = useCallback((element: HTMLElement | null) => {
-    if (element) autoAnimate(element);
-  }, []);
-
   const showSkeletons = isLoading || isTransitioning || isPending;
 
   // Type-safe filter configuration
@@ -175,7 +163,7 @@ export default function SearchPage() {
                   <h3 className="mb-2 font-medium">{title}</h3>
                   <div className="mb-3 border-b border-neutral-700"></div>
                   <ScrollArea className="h-18">
-                    <div ref={animateRef}>
+                    <div>
                       {filterError ? (
                         <p className="text-red-500">
                           Error loading filters: {filterError.toString()}
