@@ -4,7 +4,13 @@ import { LaptopCard } from "../components/LaptopCard";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useSearchLaptops } from "../hooks/useSearch";
 import { SkeletonCard } from "../components/SkeletonCard";
-import { useState, useEffect, useDeferredValue, useRef } from "react";
+import {
+  useState,
+  useEffect,
+  useDeferredValue,
+  useRef,
+  useCallback,
+} from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import autoAnimate from "@formkit/auto-animate";
 import { RefreshSVG } from "@/assets/RefreshSVG";
@@ -29,13 +35,6 @@ interface FilterOptionsType {
   stockStatus?: FilterOption[];
   priceRange?: { min: number; max: number };
 }
-
-const SkeletonCheckbox = () => (
-  <div className="flex items-center space-x-2 py-1">
-    <Checkbox disabled className="opacity-50 cursor-not-allowed" />
-    <div className="h-4 w-24 rounded bg-neutral-700 animate-pulse" />
-  </div>
-);
 
 export default function SearchPage() {
   const search = useSearch({ from: "/search" });
@@ -96,21 +95,49 @@ export default function SearchPage() {
 
   const isPending = searchTerm !== deferredSearchTerm;
 
-  useEffect(() => {
-    if (!isLoading) {
-      setTimeout(() => setIsTransitioning(false), 100);
-    } else {
-      setIsTransitioning(true);
-    }
-  }, [isLoading]);
-
-  const parent = useRef(null);
-
-  useEffect(() => {
-    parent.current && autoAnimate(parent.current);
-  }, [parent]);
+  // Create a callback ref to handle multiple elements with auto-animate
+  const animateRef = useCallback((element: HTMLElement | null) => {
+    if (element) autoAnimate(element);
+  }, []);
 
   const showSkeletons = isLoading || isTransitioning || isPending;
+
+  // Type-safe filter configuration
+  type FilterKey = keyof typeof selectedFilters;
+  type OptionsKey = keyof typeof displayFilters;
+
+  const filterSections = [
+    {
+      title: "Brands",
+      filterKey: "brand" as FilterKey,
+      optionsKey: "brands" as OptionsKey,
+    },
+    {
+      title: "Processors",
+      filterKey: "processorModel" as FilterKey,
+      optionsKey: "processorModels" as OptionsKey,
+    },
+    {
+      title: "Graphics Cards",
+      filterKey: "gpuModel" as FilterKey,
+      optionsKey: "gpuModels" as OptionsKey,
+    },
+    {
+      title: "RAM Size",
+      filterKey: "ram" as FilterKey,
+      optionsKey: "ram" as OptionsKey,
+    },
+    {
+      title: "Screen Size",
+      filterKey: "screenSize" as FilterKey,
+      optionsKey: "screenSizes" as OptionsKey,
+    },
+    {
+      title: "Storage Type",
+      filterKey: "storageType" as FilterKey,
+      optionsKey: "storageTypes" as OptionsKey,
+    },
+  ];
 
   return (
     <div className="container mx-auto py-8">
@@ -143,255 +170,56 @@ export default function SearchPage() {
               </div>
             </div>
             <div className="space-y-6">
-              <div>
-                <h3 className="mb-2 font-medium">Brands</h3>
-                <div className="mb-3 border-b border-neutral-700"></div>
-                <div className="relative">
-                  <ScrollArea className="h-18" ref={parent}>
-                    {filterError ? (
-                      <p className="text-red-500">
-                        Error loading filters: {filterError.toString()}
-                      </p>
-                    ) : displayFilters?.brands ? (
-                      displayFilters.brands.map((option) => (
-                        <div
-                          key={option.value}
-                          className="flex items-center space-x-2 py-1"
-                        >
-                          <Checkbox
-                            id={`brand-${option.value}`}
-                            checked={selectedFilters.brand.includes(
-                              option.value
-                            )}
-                            onCheckedChange={() =>
-                              toggleFilter("brand", option.value)
-                            }
-                            disabled={option.disabled}
-                            className={
-                              option.disabled
-                                ? "opacity-50 cursor-not-allowed"
-                                : ""
-                            }
-                          />
-                          <label
-                            htmlFor={`brand-${option.value}`}
-                            className={`text-sm font-medium leading-none ${
-                              option.disabled ? "text-neutral-500" : ""
-                            }`}
-                          >
-                            {option.value}
-                          </label>
-                        </div>
-                      ))
-                    ) : null}
+              {filterSections.map(({ title, filterKey, optionsKey }) => (
+                <div key={filterKey}>
+                  <h3 className="mb-2 font-medium">{title}</h3>
+                  <div className="mb-3 border-b border-neutral-700"></div>
+                  <ScrollArea className="h-18">
+                    <div ref={animateRef}>
+                      {filterError ? (
+                        <p className="text-red-500">
+                          Error loading filters: {filterError.toString()}
+                        </p>
+                      ) : displayFilters &&
+                        optionsKey in displayFilters &&
+                        displayFilters[optionsKey] ? (
+                        (displayFilters[optionsKey] as FilterOption[]).map(
+                          (option) => (
+                            <div
+                              key={option.value}
+                              className="flex items-center space-x-2 py-1"
+                            >
+                              <Checkbox
+                                id={`${filterKey}-${option.value}`}
+                                checked={selectedFilters[filterKey].includes(
+                                  option.value
+                                )}
+                                onCheckedChange={() =>
+                                  toggleFilter(filterKey, option.value)
+                                }
+                                disabled={option.disabled}
+                                className={
+                                  option.disabled
+                                    ? "opacity-50 cursor-not-allowed"
+                                    : ""
+                                }
+                              />
+                              <label
+                                htmlFor={`${filterKey}-${option.value}`}
+                                className={`text-sm font-medium leading-none ${
+                                  option.disabled ? "text-neutral-500" : ""
+                                }`}
+                              >
+                                {option.value}
+                              </label>
+                            </div>
+                          )
+                        )
+                      ) : null}
+                    </div>
                   </ScrollArea>
                 </div>
-              </div>
-
-              <div>
-                <h3 className="mb-2 font-medium">Processors</h3>
-                <div className="mb-3 border-b border-neutral-700"></div>
-                <ScrollArea className="h-18" ref={parent}>
-                  {displayFilters?.processorModels?.map((option) => (
-                    <div
-                      key={option.value}
-                      className="flex items-center space-x-2 py-1"
-                    >
-                      <Checkbox
-                        id={`processor-${option.value}`}
-                        checked={selectedFilters.processorModel.includes(
-                          option.value
-                        )}
-                        onCheckedChange={() =>
-                          toggleFilter("processorModel", option.value)
-                        }
-                        disabled={option.disabled}
-                        className={
-                          option.disabled ? "opacity-50 cursor-not-allowed" : ""
-                        }
-                      />
-                      <label
-                        htmlFor={`processor-${option.value}`}
-                        className={`text-sm font-medium leading-none ${
-                          option.disabled ? "text-neutral-500" : ""
-                        }`}
-                      >
-                        {option.value}
-                      </label>
-                    </div>
-                  ))}
-                </ScrollArea>
-              </div>
-
-              <div>
-                <h3 className="mb-2 font-medium">Graphics Cards</h3>
-                <div className="mb-3 border-b border-neutral-700"></div>
-                <ScrollArea className="h-18" ref={parent}>
-                  {filterError ? (
-                    <p className="text-red-500">
-                      Error loading filters: {filterError.toString()}
-                    </p>
-                  ) : displayFilters?.gpuModels ? (
-                    displayFilters.gpuModels.map((option) => (
-                      <div
-                        key={option.value}
-                        className="flex items-center space-x-2 py-1"
-                      >
-                        <Checkbox
-                          id={`gpu-${option.value}`}
-                          checked={selectedFilters.gpuModel.includes(
-                            option.value
-                          )}
-                          onCheckedChange={() =>
-                            toggleFilter("gpuModel", option.value)
-                          }
-                          disabled={option.disabled}
-                          className={
-                            option.disabled
-                              ? "opacity-50 cursor-not-allowed"
-                              : ""
-                          }
-                        />
-                        <label
-                          htmlFor={`gpu-${option.value}`}
-                          className={`text-sm font-medium leading-none ${
-                            option.disabled ? "text-neutral-500" : ""
-                          }`}
-                        >
-                          {option.value}
-                        </label>
-                      </div>
-                    ))
-                  ) : null}
-                </ScrollArea>
-              </div>
-
-              <div>
-                <h3 className="mb-2 font-medium">RAM Size</h3>
-                <div className="mb-3 border-b border-neutral-700"></div>
-                <ScrollArea className="h-18" ref={parent}>
-                  {filterError ? (
-                    <p className="text-red-500">
-                      Error loading filters: {filterError.toString()}
-                    </p>
-                  ) : displayFilters?.ram ? (
-                    displayFilters.ram.map((option) => (
-                      <div
-                        key={option.value}
-                        className="flex items-center space-x-2 py-1"
-                      >
-                        <Checkbox
-                          id={`ram-${option.value}`}
-                          checked={selectedFilters.ram.includes(option.value)}
-                          onCheckedChange={() =>
-                            toggleFilter("ram", option.value)
-                          }
-                          disabled={option.disabled}
-                          className={
-                            option.disabled
-                              ? "opacity-50 cursor-not-allowed"
-                              : ""
-                          }
-                        />
-                        <label
-                          htmlFor={`ram-${option.value}`}
-                          className={`text-sm font-medium leading-none ${
-                            option.disabled ? "text-neutral-500" : ""
-                          }`}
-                        >
-                          {option.value}
-                        </label>
-                      </div>
-                    ))
-                  ) : null}
-                </ScrollArea>
-              </div>
-
-              <div>
-                <h3 className="mb-2 font-medium">Screen Size</h3>
-                <div className="mb-3 border-b border-neutral-700"></div>
-                <ScrollArea className="h-18" ref={parent}>
-                  {filterError ? (
-                    <p className="text-red-500">
-                      Error loading filters: {filterError.toString()}
-                    </p>
-                  ) : displayFilters?.screenSizes ? (
-                    displayFilters.screenSizes.map((option) => (
-                      <div
-                        key={option.value}
-                        className="flex items-center space-x-2 py-1"
-                      >
-                        <Checkbox
-                          id={`screen-${option.value}`}
-                          checked={selectedFilters.screenSize.includes(
-                            option.value
-                          )}
-                          onCheckedChange={() =>
-                            toggleFilter("screenSize", option.value)
-                          }
-                          disabled={option.disabled}
-                          className={
-                            option.disabled
-                              ? "opacity-50 cursor-not-allowed"
-                              : ""
-                          }
-                        />
-                        <label
-                          htmlFor={`screen-${option.value}`}
-                          className={`text-sm font-medium leading-none ${
-                            option.disabled ? "text-neutral-500" : ""
-                          }`}
-                        >
-                          {option.value}
-                        </label>
-                      </div>
-                    ))
-                  ) : null}
-                </ScrollArea>
-              </div>
-
-              <div>
-                <h3 className="mb-2 font-medium">Storage Type</h3>
-                <div className="mb-3 border-b border-neutral-700"></div>
-                <ScrollArea className="h-18" ref={parent}>
-                  {filterError ? (
-                    <p className="text-red-500">
-                      Error loading filters: {filterError.toString()}
-                    </p>
-                  ) : displayFilters?.storageTypes ? (
-                    displayFilters.storageTypes.map((option) => (
-                      <div
-                        key={option.value}
-                        className="flex items-center space-x-2 py-1"
-                      >
-                        <Checkbox
-                          id={`storage-${option.value}`}
-                          checked={selectedFilters.storageType.includes(
-                            option.value
-                          )}
-                          onCheckedChange={() =>
-                            toggleFilter("storageType", option.value)
-                          }
-                          disabled={option.disabled}
-                          className={
-                            option.disabled
-                              ? "opacity-50 cursor-not-allowed"
-                              : ""
-                          }
-                        />
-                        <label
-                          htmlFor={`storage-${option.value}`}
-                          className={`text-sm font-medium leading-none ${
-                            option.disabled ? "text-neutral-500" : ""
-                          }`}
-                        >
-                          {option.value}
-                        </label>
-                      </div>
-                    ))
-                  ) : null}
-                </ScrollArea>
-              </div>
+              ))}
             </div>
           </div>
         </div>
