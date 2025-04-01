@@ -2,6 +2,14 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { LaptopT } from "../interfaces/laptopT";
 
+// Helper function to compare arrays
+function areArraysEqual<T>(arr1: T[], arr2: T[]): boolean {
+  if (arr1.length !== arr2.length) return false;
+  return arr1.every(
+    (item, index) => JSON.stringify(item) === JSON.stringify(arr2[index])
+  );
+}
+
 // Make sure these interfaces match what the backend returns
 interface FilterOption {
   value: string;
@@ -55,21 +63,21 @@ export function useSearchLaptops(initialTerm: string = "") {
     screenResolution: [],
   });
 
-  const queryClient = useQueryClient();
-
   // Get filter options - make sure to pass the current selected filters
   const {
     data: filterOptions,
     isLoading: isLoadingFilters,
     error: filterError,
     refetch: refetchFilters,
-  } = useQuery<FilterOptions>({
+    isFetched: isFilterFetched,
+    isPending: isFilterPending,
+    isRefetching: isFilterRefetching,
+  } = useQuery<any, Error, FilterOptions>({
     queryKey: ["filterOptions", JSON.stringify(selectedFilters)],
     queryFn: async () => {
       // Build query params for the filters endpoint
       const params = new URLSearchParams();
 
-      // Very important - add all selected filters to query params
       Object.entries(selectedFilters).forEach(([key, values]) => {
         values.forEach((value: any) => {
           params.append(key, value);
@@ -94,6 +102,10 @@ export function useSearchLaptops(initialTerm: string = "") {
       console.log("Received filter options:", data);
       return data;
     },
+    select: (data: FilterOptions): FilterOptions => {
+      return data;
+    },
+    notifyOnChangeProps: ["data", "error", "isLoading"],
   });
 
   // Get laptops with filters
@@ -102,6 +114,9 @@ export function useSearchLaptops(initialTerm: string = "") {
     isLoading,
     error,
     refetch,
+    isFetched, // Add this
+    isPending, // Add this
+    isRefetching, // Add this
   } = useQuery<LaptopT[], Error>({
     queryKey: ["laptopSearch", searchTerm, JSON.stringify(selectedFilters)],
     queryFn: async (): Promise<LaptopT[]> => {
@@ -124,6 +139,7 @@ export function useSearchLaptops(initialTerm: string = "") {
       }
       return response.json();
     },
+    notifyOnChangeProps: ["data", "error", "isLoading"],
   });
 
   // Toggle filter - add delay before refetching to allow for UI updates
@@ -169,5 +185,11 @@ export function useSearchLaptops(initialTerm: string = "") {
     error,
     toggleFilter,
     refetch,
+    isFilterFetched,
+    isFilterPending,
+    isFilterRefetching,
+    isFetched, // from the laptops query
+    isPending, // from the laptops query
+    isRefetching, // from the laptops query
   };
 }

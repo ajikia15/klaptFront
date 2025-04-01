@@ -8,6 +8,26 @@ import { useState, useEffect, useDeferredValue, useRef } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import autoAnimate from "@formkit/auto-animate";
 
+interface FilterOption {
+  value: string;
+  disabled?: boolean;
+  count?: number;
+}
+
+interface FilterOptionsType {
+  brands?: FilterOption[];
+  processorModels?: FilterOption[];
+  gpuModels?: FilterOption[];
+  ram?: FilterOption[];
+  screenSizes?: FilterOption[];
+  storageTypes?: FilterOption[];
+  storageCapacity?: FilterOption[];
+  ramType?: FilterOption[];
+  screenResolution?: FilterOption[];
+  stockStatus?: FilterOption[];
+  priceRange?: { min: number; max: number };
+}
+
 const SkeletonCheckbox = () => (
   <div className="flex items-center space-x-2 py-1">
     <Checkbox disabled className="opacity-50 cursor-not-allowed" />
@@ -33,9 +53,26 @@ export default function SearchPage() {
     error,
     toggleFilter,
     refetch,
+    isFilterFetched,
+    isFilterPending,
+    isFilterRefetching,
+    isFetched,
+    isRefetching,
   } = useSearchLaptops(search.term || "");
 
   const deferredSearchTerm = useDeferredValue(searchTerm);
+
+  const [cachedFilters, setCachedFilters] = useState<FilterOptionsType | null>(
+    null
+  );
+
+  useEffect(() => {
+    if (filterOptions) {
+      setCachedFilters(filterOptions);
+    }
+  }, [filterOptions]);
+
+  const displayFilters = filterOptions || cachedFilters;
 
   useEffect(() => {
     setIsTransitioning(true);
@@ -77,94 +114,92 @@ export default function SearchPage() {
       <h1 className="mb-6 text-3xl font-bold">Search Laptops</h1>
       <div className="flex flex-col gap-6 md:flex-row">
         <div className="w-full md:w-1/4">
-          <div className="mb-4 rounded-md bg-neutral-900 p-4">
+          <div className="mb-4 rounded-md bg-neutral-900 p-4 relative">
             <h2 className="mb-4 text-xl font-semibold">Filters</h2>
             <div className="space-y-6">
               <div>
                 <h3 className="mb-2 font-medium">Brands</h3>
                 <div className="mb-3 border-b border-neutral-700"></div>
-                <ScrollArea className="h-18" ref={parent}>
-                  {isLoadingFilters ? (
-                    <p>Loading filters...</p>
-                  ) : filterError ? (
-                    <p className="text-red-500">
-                      Error loading filters: {filterError.toString()}
-                    </p>
-                  ) : filterOptions ? (
-                    filterOptions.brands?.map((option) => (
-                      <div
-                        key={option.value}
-                        className="flex items-center space-x-2 py-1"
-                      >
-                        <Checkbox
-                          id={`brand-${option.value}`}
-                          checked={selectedFilters.brand.includes(option.value)}
-                          onCheckedChange={() =>
-                            toggleFilter("brand", option.value)
-                          }
-                          disabled={option.disabled}
-                          className={
-                            option.disabled
-                              ? "opacity-50 cursor-not-allowed"
-                              : ""
-                          }
-                        />
-                        <label
-                          htmlFor={`brand-${option.value}`}
-                          className={`text-sm font-medium leading-none ${
-                            option.disabled ? "text-neutral-500" : ""
-                          }`}
+                <div className="relative">
+                  <ScrollArea className="h-18" ref={parent}>
+                    {filterError ? (
+                      <p className="text-red-500">
+                        Error loading filters: {filterError.toString()}
+                      </p>
+                    ) : displayFilters?.brands ? (
+                      displayFilters.brands.map((option) => (
+                        <div
+                          key={option.value}
+                          className="flex items-center space-x-2 py-1"
                         >
-                          {option.value}
-                        </label>
-                      </div>
-                    ))
-                  ) : null}
-                </ScrollArea>
+                          <Checkbox
+                            id={`brand-${option.value}`}
+                            checked={selectedFilters.brand.includes(
+                              option.value
+                            )}
+                            onCheckedChange={() =>
+                              toggleFilter("brand", option.value)
+                            }
+                            disabled={option.disabled || isFilterRefetching}
+                            className={
+                              option.disabled || isFilterRefetching
+                                ? "opacity-50 cursor-not-allowed"
+                                : ""
+                            }
+                          />
+                          <label
+                            htmlFor={`brand-${option.value}`}
+                            className={`text-sm font-medium leading-none ${
+                              option.disabled || isFilterRefetching
+                                ? "text-neutral-500"
+                                : ""
+                            }`}
+                          >
+                            {option.value}
+                          </label>
+                        </div>
+                      ))
+                    ) : null}
+                  </ScrollArea>
+                </div>
               </div>
 
               <div>
                 <h3 className="mb-2 font-medium">Processors</h3>
                 <div className="mb-3 border-b border-neutral-700"></div>
                 <ScrollArea className="h-18" ref={parent}>
-                  {isLoadingFilters ? (
-                    <p>Loading filters...</p>
-                  ) : filterError ? (
-                    <p className="text-red-500">
-                      Error loading filters: {filterError.toString()}
-                    </p>
-                  ) : filterOptions ? (
-                    filterOptions.processorModels?.map((option) => (
-                      <div
-                        key={option.value}
-                        className="flex items-center space-x-2 py-1"
+                  {displayFilters?.processorModels?.map((option) => (
+                    <div
+                      key={option.value}
+                      className="flex items-center space-x-2 py-1"
+                    >
+                      <Checkbox
+                        id={`processor-${option.value}`}
+                        checked={selectedFilters.processorModel.includes(
+                          option.value
+                        )}
+                        onCheckedChange={() =>
+                          toggleFilter("processorModel", option.value)
+                        }
+                        disabled={option.disabled || isFilterRefetching}
+                        className={
+                          option.disabled || isFilterRefetching
+                            ? "opacity-50 cursor-not-allowed"
+                            : ""
+                        }
+                      />
+                      <label
+                        htmlFor={`processor-${option.value}`}
+                        className={`text-sm font-medium leading-none ${
+                          option.disabled || isFilterRefetching
+                            ? "text-neutral-500"
+                            : ""
+                        }`}
                       >
-                        <Checkbox
-                          id={`processor-${option.value}`}
-                          checked={selectedFilters.processorModel.includes(
-                            option.value
-                          )}
-                          onCheckedChange={() =>
-                            toggleFilter("processorModel", option.value)
-                          }
-                          disabled={option.disabled}
-                          className={
-                            option.disabled
-                              ? "opacity-50 cursor-not-allowed"
-                              : ""
-                          }
-                        />
-                        <label
-                          htmlFor={`processor-${option.value}`}
-                          className={`text-sm font-medium leading-none ${
-                            option.disabled ? "text-neutral-500" : ""
-                          }`}
-                        >
-                          {option.value}
-                        </label>
-                      </div>
-                    ))
-                  ) : null}
+                        {option.value}
+                      </label>
+                    </div>
+                  ))}
                 </ScrollArea>
               </div>
 
@@ -172,14 +207,12 @@ export default function SearchPage() {
                 <h3 className="mb-2 font-medium">Graphics Cards</h3>
                 <div className="mb-3 border-b border-neutral-700"></div>
                 <ScrollArea className="h-18" ref={parent}>
-                  {isLoadingFilters ? (
-                    <p>Loading filters...</p>
-                  ) : filterError ? (
+                  {filterError ? (
                     <p className="text-red-500">
                       Error loading filters: {filterError.toString()}
                     </p>
-                  ) : filterOptions ? (
-                    filterOptions.gpuModels?.map((option) => (
+                  ) : displayFilters?.gpuModels ? (
+                    displayFilters.gpuModels.map((option) => (
                       <div
                         key={option.value}
                         className="flex items-center space-x-2 py-1"
@@ -192,9 +225,9 @@ export default function SearchPage() {
                           onCheckedChange={() =>
                             toggleFilter("gpuModel", option.value)
                           }
-                          disabled={option.disabled}
+                          disabled={option.disabled || isFilterRefetching}
                           className={
-                            option.disabled
+                            option.disabled || isFilterRefetching
                               ? "opacity-50 cursor-not-allowed"
                               : ""
                           }
@@ -202,7 +235,9 @@ export default function SearchPage() {
                         <label
                           htmlFor={`gpu-${option.value}`}
                           className={`text-sm font-medium leading-none ${
-                            option.disabled ? "text-neutral-500" : ""
+                            option.disabled || isFilterRefetching
+                              ? "text-neutral-500"
+                              : ""
                           }`}
                         >
                           {option.value}
@@ -217,14 +252,12 @@ export default function SearchPage() {
                 <h3 className="mb-2 font-medium">RAM Size</h3>
                 <div className="mb-3 border-b border-neutral-700"></div>
                 <ScrollArea className="h-18" ref={parent}>
-                  {isLoadingFilters ? (
-                    <p>Loading filters...</p>
-                  ) : filterError ? (
+                  {filterError ? (
                     <p className="text-red-500">
                       Error loading filters: {filterError.toString()}
                     </p>
-                  ) : filterOptions ? (
-                    filterOptions.ram?.map((option) => (
+                  ) : displayFilters?.ram ? (
+                    displayFilters.ram.map((option) => (
                       <div
                         key={option.value}
                         className="flex items-center space-x-2 py-1"
@@ -235,9 +268,9 @@ export default function SearchPage() {
                           onCheckedChange={() =>
                             toggleFilter("ram", option.value)
                           }
-                          disabled={option.disabled}
+                          disabled={option.disabled || isFilterRefetching}
                           className={
-                            option.disabled
+                            option.disabled || isFilterRefetching
                               ? "opacity-50 cursor-not-allowed"
                               : ""
                           }
@@ -245,7 +278,9 @@ export default function SearchPage() {
                         <label
                           htmlFor={`ram-${option.value}`}
                           className={`text-sm font-medium leading-none ${
-                            option.disabled ? "text-neutral-500" : ""
+                            option.disabled || isFilterRefetching
+                              ? "text-neutral-500"
+                              : ""
                           }`}
                         >
                           {option.value}
@@ -260,20 +295,12 @@ export default function SearchPage() {
                 <h3 className="mb-2 font-medium">Screen Size</h3>
                 <div className="mb-3 border-b border-neutral-700"></div>
                 <ScrollArea className="h-18" ref={parent}>
-                  {isLoadingFilters ? (
-                    <>
-                      {Array(4)
-                        .fill(0)
-                        .map((_, i) => (
-                          <SkeletonCheckbox key={`brand-skeleton-${i}`} />
-                        ))}
-                    </>
-                  ) : filterError ? (
+                  {filterError ? (
                     <p className="text-red-500">
                       Error loading filters: {filterError.toString()}
                     </p>
-                  ) : filterOptions ? (
-                    filterOptions.screenSizes?.map((option) => (
+                  ) : displayFilters?.screenSizes ? (
+                    displayFilters.screenSizes.map((option) => (
                       <div
                         key={option.value}
                         className="flex items-center space-x-2 py-1"
@@ -286,9 +313,9 @@ export default function SearchPage() {
                           onCheckedChange={() =>
                             toggleFilter("screenSize", option.value)
                           }
-                          disabled={option.disabled}
+                          disabled={option.disabled || isFilterRefetching}
                           className={
-                            option.disabled
+                            option.disabled || isFilterRefetching
                               ? "opacity-50 cursor-not-allowed"
                               : ""
                           }
@@ -296,7 +323,9 @@ export default function SearchPage() {
                         <label
                           htmlFor={`screen-${option.value}`}
                           className={`text-sm font-medium leading-none ${
-                            option.disabled ? "text-neutral-500" : ""
+                            option.disabled || isFilterRefetching
+                              ? "text-neutral-500"
+                              : ""
                           }`}
                         >
                           {option.value}
@@ -311,14 +340,12 @@ export default function SearchPage() {
                 <h3 className="mb-2 font-medium">Storage Type</h3>
                 <div className="mb-3 border-b border-neutral-700"></div>
                 <ScrollArea className="h-18" ref={parent}>
-                  {isLoadingFilters ? (
-                    <p>Loading filters...</p>
-                  ) : filterError ? (
+                  {filterError ? (
                     <p className="text-red-500">
                       Error loading filters: {filterError.toString()}
                     </p>
-                  ) : filterOptions ? (
-                    filterOptions.storageTypes?.map((option) => (
+                  ) : displayFilters?.storageTypes ? (
+                    displayFilters.storageTypes.map((option) => (
                       <div
                         key={option.value}
                         className="flex items-center space-x-2 py-1"
@@ -331,9 +358,9 @@ export default function SearchPage() {
                           onCheckedChange={() =>
                             toggleFilter("storageType", option.value)
                           }
-                          disabled={option.disabled}
+                          disabled={option.disabled || isFilterRefetching}
                           className={
-                            option.disabled
+                            option.disabled || isFilterRefetching
                               ? "opacity-50 cursor-not-allowed"
                               : ""
                           }
@@ -341,7 +368,9 @@ export default function SearchPage() {
                         <label
                           htmlFor={`storage-${option.value}`}
                           className={`text-sm font-medium leading-none ${
-                            option.disabled ? "text-neutral-500" : ""
+                            option.disabled || isFilterRefetching
+                              ? "text-neutral-500"
+                              : ""
                           }`}
                         >
                           {option.value}
