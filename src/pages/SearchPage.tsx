@@ -8,6 +8,13 @@ import { useState, useEffect, useDeferredValue, useRef } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import autoAnimate from "@formkit/auto-animate";
 
+const SkeletonCheckbox = () => (
+  <div className="flex items-center space-x-2 py-1">
+    <Checkbox disabled className="opacity-50 cursor-not-allowed" />
+    <div className="h-4 w-24 rounded bg-neutral-700 animate-pulse" />
+  </div>
+);
+
 export default function SearchPage() {
   const search = useSearch({ from: "/search" });
   const navigate = useNavigate();
@@ -68,28 +75,26 @@ export default function SearchPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="mb-6 text-3xl font-bold">Search Laptops</h1>
-
       <div className="flex flex-col gap-6 md:flex-row">
         <div className="w-full md:w-1/4">
           <div className="mb-4 rounded-md bg-neutral-900 p-4">
             <h2 className="mb-4 text-xl font-semibold">Filters</h2>
-
-            {isLoadingFilters ? (
-              <p>Loading filters...</p>
-            ) : filterError ? (
-              <p className="text-red-500">
-                Error loading filters: {filterError.toString()}
-              </p>
-            ) : filterOptions ? (
-              <div className="space-y-6">
-                <div>
-                  <h3 className="mb-2 font-medium">Brands</h3>
-                  <div className="mb-3 border-b border-neutral-700"></div>
-                  <div className="max-h-[150px] space-y-2 overflow-y-auto">
-                    {filterOptions.brands?.map((option) => (
+            <div className="space-y-6">
+              <div>
+                <h3 className="mb-2 font-medium">Brands</h3>
+                <div className="mb-3 border-b border-neutral-700"></div>
+                <ScrollArea className="h-18" ref={parent}>
+                  {isLoadingFilters ? (
+                    <p>Loading filters...</p>
+                  ) : filterError ? (
+                    <p className="text-red-500">
+                      Error loading filters: {filterError.toString()}
+                    </p>
+                  ) : filterOptions ? (
+                    filterOptions.brands?.map((option) => (
                       <div
                         key={option.value}
-                        className="flex items-center space-x-2"
+                        className="flex items-center space-x-2 py-1"
                       >
                         <Checkbox
                           id={`brand-${option.value}`}
@@ -113,18 +118,26 @@ export default function SearchPage() {
                           {option.value}
                         </label>
                       </div>
-                    ))}
-                  </div>
-                </div>
+                    ))
+                  ) : null}
+                </ScrollArea>
+              </div>
 
-                <div>
-                  <h3 className="mb-2 font-medium">Processors</h3>
-                  <div className="mb-3 border-b border-neutral-700"></div>
-                  <div className="max-h-[150px] space-y-2 overflow-y-auto">
-                    {filterOptions.processorModels?.map((option) => (
+              <div>
+                <h3 className="mb-2 font-medium">Processors</h3>
+                <div className="mb-3 border-b border-neutral-700"></div>
+                <ScrollArea className="h-18" ref={parent}>
+                  {isLoadingFilters ? (
+                    <p>Loading filters...</p>
+                  ) : filterError ? (
+                    <p className="text-red-500">
+                      Error loading filters: {filterError.toString()}
+                    </p>
+                  ) : filterOptions ? (
+                    filterOptions.processorModels?.map((option) => (
                       <div
                         key={option.value}
-                        className="flex items-center space-x-2"
+                        className="flex items-center space-x-2 py-1"
                       >
                         <Checkbox
                           id={`processor-${option.value}`}
@@ -150,18 +163,26 @@ export default function SearchPage() {
                           {option.value}
                         </label>
                       </div>
-                    ))}
-                  </div>
-                </div>
+                    ))
+                  ) : null}
+                </ScrollArea>
+              </div>
 
-                <div>
-                  <h3 className="mb-2 font-medium">Graphics Cards</h3>
-                  <div className="mb-3 border-b border-neutral-700"></div>
-                  <div className="max-h-[150px] space-y-2 overflow-y-auto">
-                    {filterOptions.gpuModels?.map((option) => (
+              <div>
+                <h3 className="mb-2 font-medium">Graphics Cards</h3>
+                <div className="mb-3 border-b border-neutral-700"></div>
+                <ScrollArea className="h-18" ref={parent}>
+                  {isLoadingFilters ? (
+                    <p>Loading filters...</p>
+                  ) : filterError ? (
+                    <p className="text-red-500">
+                      Error loading filters: {filterError.toString()}
+                    </p>
+                  ) : filterOptions ? (
+                    filterOptions.gpuModels?.map((option) => (
                       <div
                         key={option.value}
-                        className="flex items-center space-x-2"
+                        className="flex items-center space-x-2 py-1"
                       >
                         <Checkbox
                           id={`gpu-${option.value}`}
@@ -187,18 +208,26 @@ export default function SearchPage() {
                           {option.value}
                         </label>
                       </div>
-                    ))}
-                  </div>
-                </div>
+                    ))
+                  ) : null}
+                </ScrollArea>
+              </div>
 
-                <div>
-                  <h3 className="mb-2 font-medium">RAM Size</h3>
-                  <div className="mb-3 border-b border-neutral-700"></div>
-                  <div className="space-y-2">
-                    {filterOptions.ram?.map((option) => (
+              <div>
+                <h3 className="mb-2 font-medium">RAM Size</h3>
+                <div className="mb-3 border-b border-neutral-700"></div>
+                <ScrollArea className="h-18" ref={parent}>
+                  {isLoadingFilters ? (
+                    <p>Loading filters...</p>
+                  ) : filterError ? (
+                    <p className="text-red-500">
+                      Error loading filters: {filterError.toString()}
+                    </p>
+                  ) : filterOptions ? (
+                    filterOptions.ram?.map((option) => (
                       <div
                         key={option.value}
-                        className="flex items-center space-x-2"
+                        className="flex items-center space-x-2 py-1"
                       >
                         <Checkbox
                           id={`ram-${option.value}`}
@@ -222,20 +251,35 @@ export default function SearchPage() {
                           {option.value}
                         </label>
                       </div>
-                    ))}
-                  </div>
-                </div>
-                <div>
-                  <h3 className="mb-2 font-medium">Screen Size</h3>
-                  <div className="mb-3 border-b border-neutral-700"></div>
-                  <ScrollArea className="h-18" ref={parent}>
-                    {filterOptions.screenSizes?.map((option) => (
+                    ))
+                  ) : null}
+                </ScrollArea>
+              </div>
+
+              <div>
+                <h3 className="mb-2 font-medium">Screen Size</h3>
+                <div className="mb-3 border-b border-neutral-700"></div>
+                <ScrollArea className="h-18" ref={parent}>
+                  {isLoadingFilters ? (
+                    <>
+                      {Array(4)
+                        .fill(0)
+                        .map((_, i) => (
+                          <SkeletonCheckbox key={`brand-skeleton-${i}`} />
+                        ))}
+                    </>
+                  ) : filterError ? (
+                    <p className="text-red-500">
+                      Error loading filters: {filterError.toString()}
+                    </p>
+                  ) : filterOptions ? (
+                    filterOptions.screenSizes?.map((option) => (
                       <div
                         key={option.value}
                         className="flex items-center space-x-2 py-1"
                       >
                         <Checkbox
-                          id={`storage-${option.value}`}
+                          id={`screen-${option.value}`}
                           checked={selectedFilters.screenSize.includes(
                             option.value
                           )}
@@ -250,7 +294,7 @@ export default function SearchPage() {
                           }
                         />
                         <label
-                          htmlFor={`storage-${option.value}`}
+                          htmlFor={`screen-${option.value}`}
                           className={`text-sm font-medium leading-none ${
                             option.disabled ? "text-neutral-500" : ""
                           }`}
@@ -258,17 +302,26 @@ export default function SearchPage() {
                           {option.value}
                         </label>
                       </div>
-                    ))}
-                  </ScrollArea>
-                </div>
-                <div>
-                  <h3 className="mb-2 font-medium">Storage Type</h3>
-                  <div className="mb-3 border-b border-neutral-700"></div>
-                  <div className="space-y-2">
-                    {filterOptions.storageTypes?.map((option) => (
+                    ))
+                  ) : null}
+                </ScrollArea>
+              </div>
+
+              <div>
+                <h3 className="mb-2 font-medium">Storage Type</h3>
+                <div className="mb-3 border-b border-neutral-700"></div>
+                <ScrollArea className="h-18" ref={parent}>
+                  {isLoadingFilters ? (
+                    <p>Loading filters...</p>
+                  ) : filterError ? (
+                    <p className="text-red-500">
+                      Error loading filters: {filterError.toString()}
+                    </p>
+                  ) : filterOptions ? (
+                    filterOptions.storageTypes?.map((option) => (
                       <div
                         key={option.value}
-                        className="flex items-center space-x-2"
+                        className="flex items-center space-x-2 py-1"
                       >
                         <Checkbox
                           id={`storage-${option.value}`}
@@ -294,11 +347,11 @@ export default function SearchPage() {
                           {option.value}
                         </label>
                       </div>
-                    ))}
-                  </div>
-                </div>
+                    ))
+                  ) : null}
+                </ScrollArea>
               </div>
-            ) : null}
+            </div>
           </div>
         </div>
 
