@@ -160,6 +160,22 @@ export function useSearchLaptops(initialTerm: string = "") {
     });
   };
 
+  const resetFilters = () => {
+    setSelectedFilters({
+      brand: [],
+      gpuModel: [],
+      processorModel: [],
+      ramType: [],
+      ram: [],
+      storageType: [],
+      storageCapacity: [],
+      stockStatus: [],
+      screenSize: [],
+      screenResolution: [],
+    });
+    setSearchTerm("");
+  };
+
   // This is critical - we need to refetch when filters change
   useEffect(() => {
     // Important: This ensures consistency between filters and results
@@ -191,5 +207,6 @@ export function useSearchLaptops(initialTerm: string = "") {
     isFetched, // from the laptops query
     isPending, // from the laptops query
     isRefetching, // from the laptops query
+    resetFilters,
   };
 }
