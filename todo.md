@@ -20,3 +20,8 @@
 
 Bug:
 userid is being returned as id in laptops. its injected somewhere and i dont know where
+
+"vram must be a string",
+"backlightType must be a string",
+"processorBrand must be one of the following values: ",
+"ram must be a string"

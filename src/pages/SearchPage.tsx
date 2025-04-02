@@ -33,6 +33,42 @@ interface FilterOptionsType {
 export default function SearchPage() {
   const search = useSearch({ from: "/search" });
   const navigate = useNavigate();
+  // Type-safe filter configuration
+  type FilterKey = keyof typeof selectedFilters;
+  type OptionsKey = keyof typeof displayFilters;
+
+  const filterSections = [
+    {
+      title: "Brands",
+      filterKey: "brand" as FilterKey,
+      optionsKey: "brands" as OptionsKey,
+    },
+    {
+      title: "Processors",
+      filterKey: "processorModel" as FilterKey,
+      optionsKey: "processorModels" as OptionsKey,
+    },
+    {
+      title: "Graphics Cards",
+      filterKey: "gpuModel" as FilterKey,
+      optionsKey: "gpuModels" as OptionsKey,
+    },
+    {
+      title: "RAM Size",
+      filterKey: "ram" as FilterKey,
+      optionsKey: "ram" as OptionsKey,
+    },
+    {
+      title: "Screen Size",
+      filterKey: "screenSize" as FilterKey,
+      optionsKey: "screenSizes" as OptionsKey,
+    },
+    {
+      title: "Storage Type",
+      filterKey: "storageType" as FilterKey,
+      optionsKey: "storageTypes" as OptionsKey,
+    },
+  ];
 
   const [isTransitioning, setIsTransitioning] = useState(false);
 
@@ -90,43 +126,6 @@ export default function SearchPage() {
   const isPending = searchTerm !== deferredSearchTerm;
 
   const showSkeletons = isLoading || isTransitioning || isPending;
-
-  // Type-safe filter configuration
-  type FilterKey = keyof typeof selectedFilters;
-  type OptionsKey = keyof typeof displayFilters;
-
-  const filterSections = [
-    {
-      title: "Brands",
-      filterKey: "brand" as FilterKey,
-      optionsKey: "brands" as OptionsKey,
-    },
-    {
-      title: "Processors",
-      filterKey: "processorModel" as FilterKey,
-      optionsKey: "processorModels" as OptionsKey,
-    },
-    {
-      title: "Graphics Cards",
-      filterKey: "gpuModel" as FilterKey,
-      optionsKey: "gpuModels" as OptionsKey,
-    },
-    {
-      title: "RAM Size",
-      filterKey: "ram" as FilterKey,
-      optionsKey: "ram" as OptionsKey,
-    },
-    {
-      title: "Screen Size",
-      filterKey: "screenSize" as FilterKey,
-      optionsKey: "screenSizes" as OptionsKey,
-    },
-    {
-      title: "Storage Type",
-      filterKey: "storageType" as FilterKey,
-      optionsKey: "storageTypes" as OptionsKey,
-    },
-  ];
 
   const { isAuthenticated } = useAuth();
   return (

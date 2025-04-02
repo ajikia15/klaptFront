@@ -30,146 +30,54 @@ const RAM_TYPES = ["DDR4", "DDR5", "LPDDR4X", "LPDDR5", "DDR3", "Unified"];
 const STORAGE_TYPES = ["SSD", "NVMe", "HDD", "eMMC", "Hybrid"];
 const STOCK_STATUSES = ["in stock", "out of stock", "reserved", "pre-order"];
 
+const vramOptions = [
+  "2GB",
+  "3GB",
+  "4GB",
+  "6GB",
+  "8GB",
+  "10GB",
+  "12GB",
+  "16GB",
+  "24GB",
+  "48GB",
+];
+
+const backlightTypeOptions = [
+  "LED",
+  "Mini-LED",
+  "RGB",
+  "Per-Key RGB",
+  "White",
+  "None",
+];
+
+const processorBrandOptions = ["Intel", "AMD", "Apple", "Qualcomm", "MediaTek"];
+
+const ramOptions = [
+  "4GB",
+  "8GB",
+  "12GB",
+  "16GB",
+  "24GB",
+  "32GB",
+  "64GB",
+  "96GB",
+  "128GB",
+];
+
 export default function AddListing() {
   const [formStatus, setFormStatus] = useState<
     "idle" | "submitting" | "success" | "error"
   >("idle");
   const [errorMessage, setErrorMessage] = useState("");
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
+  const [uploadingImages, setUploadingImages] = useState<boolean>(false);
   const navigate = useNavigate();
   const { user } = useAuth();
 
   // Redirect if not authenticated
   const { isLoading: authLoading } = useRequireAuth();
-
-  // Function to generate random test data
-  const fillWithTestData = () => {
-    const getRandomElement = (array: any[]) =>
-      array[Math.floor(Math.random() * array.length)];
-    const getRandomInt = (min: number, max: number) =>
-      Math.floor(Math.random() * (max - min + 1)) + min;
-
-    const laptopBrand = getRandomElement(LAPTOP_BRANDS);
-    const processorBrand = getRandomElement(PROCESSOR_BRANDS);
-    const gpuBrand = getRandomElement(GPU_BRANDS);
-
-    // Generate model names based on brands
-    let processorModel = "";
-    if (processorBrand === "Intel") {
-      const series = getRandomElement(["Core i5", "Core i7", "Core i9"]);
-      processorModel = `${series}-${getRandomInt(10, 13)}${getRandomInt(
-        100,
-        999
-      )}H`;
-    } else if (processorBrand === "AMD") {
-      const series = getRandomElement(["Ryzen 5", "Ryzen 7", "Ryzen 9"]);
-      processorModel = `${series} ${getRandomInt(5, 7)}${getRandomInt(
-        600,
-        900
-      )}H`;
-    } else if (processorBrand === "Apple") {
-      processorModel = `M${getRandomInt(1, 3)} ${getRandomElement([
-        "Pro",
-        "Max",
-        "Ultra",
-      ])}`;
-    }
-
-    let gpuModel = "";
-    if (gpuBrand === "NVIDIA") {
-      gpuModel = `RTX ${getRandomElement([
-        "3050",
-        "3060",
-        "3070",
-        "3080",
-        "4060",
-        "4070",
-        "4080",
-      ])}`;
-    } else if (gpuBrand === "AMD") {
-      gpuModel = `Radeon RX ${getRandomElement([
-        "6600M",
-        "6700M",
-        "6800M",
-        "7600M",
-        "7700M",
-      ])}`;
-    } else if (gpuBrand === "Intel") {
-      gpuModel = `Iris Xe Graphics ${getRandomInt(64, 128)}`;
-    } else if (gpuBrand === "Apple") {
-      gpuModel = `Integrated ${getRandomInt(8, 32)}-core GPU`;
-    }
-
-    const ramType = getRandomElement(RAM_TYPES);
-    const storageType = getRandomElement(STORAGE_TYPES);
-    const screenSizes = ["13.3", "14", "15.6", "16", "17.3"];
-    const resolutions = [
-      "1920x1080",
-      "2560x1440",
-      "3840x2160",
-      "3024x1964",
-      "2880x1800",
-    ];
-    const refreshRates = [60, 90, 120, 144, 165, 240, 360];
-
-    const laptopModel = `${getRandomElement([
-      "Pro",
-      "Air",
-      "Legion",
-      "Zephyrus",
-      "Omen",
-      "Victus",
-      "XPS",
-      "ROG",
-      "Predator",
-      "TUF",
-    ])} ${getRandomElement(["G15", "G14", "X13", "15", "14", "13", "17"])}`;
-
-    // Populate the form
-    form.setFieldValue("title", `${laptopBrand} ${laptopModel} Gaming Laptop`);
-    form.setFieldValue("brand", laptopBrand);
-    form.setFieldValue("model", laptopModel);
-    form.setFieldValue("price", (getRandomInt(799, 3499) + 0.99).toString());
-    form.setFieldValue(
-      "description",
-      `Powerful ${laptopBrand} ${laptopModel} featuring ${processorBrand} ${processorModel} processor and ${gpuBrand} ${gpuModel} graphics. Perfect for gaming, content creation, and professional work. Delivers exceptional performance and stunning visuals.`
-    );
-    form.setFieldValue(
-      "shortDesc",
-      `${processorBrand} ${processorModel}, ${getRandomInt(
-        16,
-        64
-      )}GB RAM, ${gpuBrand} ${gpuModel}`
-    );
-    form.setFieldValue("processorBrand", processorBrand);
-    form.setFieldValue("processorModel", processorModel);
-    form.setFieldValue("cores", getRandomInt(4, 24).toString());
-    form.setFieldValue("threads", getRandomInt(8, 32).toString());
-    form.setFieldValue("gpuBrand", gpuBrand);
-    form.setFieldValue("gpuModel", gpuModel);
-    form.setFieldValue(
-      "vram",
-      gpuBrand !== "Intel" && gpuBrand !== "Apple"
-        ? getRandomInt(4, 16).toString()
-        : ""
-    );
-    form.setFieldValue("ram", getRandomInt(8, 64).toString());
-    form.setFieldValue("ramType", ramType);
-    form.setFieldValue("storageType", storageType);
-    form.setFieldValue(
-      "storageCapacity",
-      `${getRandomElement([256, 512, 1024, 2048])}GB`
-    );
-    form.setFieldValue("screenSize", getRandomElement(screenSizes));
-    form.setFieldValue("screenResolution", getRandomElement(resolutions));
-    form.setFieldValue(
-      "refreshRate",
-      getRandomElement(refreshRates).toString()
-    );
-    form.setFieldValue("weight", `${(getRandomInt(10, 40) / 10).toFixed(1)}kg`);
-    form.setFieldValue("stockStatus", getRandomElement(STOCK_STATUSES));
-    form.setFieldValue("year", getRandomInt(2020, 2023).toString());
-  };
 
   const form = useForm({
     defaultValues: {
@@ -196,6 +104,7 @@ export default function AddListing() {
       weight: "",
       stockStatus: "in stock",
       year: new Date().getFullYear().toString(),
+      backlightType: "",
     },
     onSubmit: async ({ value }) => {
       try {
@@ -248,24 +157,115 @@ export default function AddListing() {
     },
   });
 
-  // Image upload handler (mock implementation - would need actual upload logic)
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Function to generate random test data
+  const fillWithTestData = () => {
+    form.update({
+      defaultValues: {
+        title: "ASUS ROG Strix G15 Gaming Laptop",
+        brand: "ASUS",
+        model: "ROG Strix G15",
+        price: "1599.99",
+        description:
+          "The ROG Strix G15 gaming laptop delivers powerful performance for gaming and content creation. Featuring an advanced cooling system, immersive audio, and a high refresh rate display for competitive gaming. The laptop's sleek design includes customizable RGB lighting that extends from the keyboard to the light bar.",
+        shortDesc: "AMD Ryzen 9, 16GB RAM, RTX 3070, 1TB SSD",
+        processorBrand: "AMD",
+        processorModel: "Ryzen 9 5900HX",
+        cores: "8",
+        threads: "16",
+        gpuBrand: "NVIDIA",
+        gpuModel: "GeForce RTX 3070",
+        vram: "8GB",
+        ram: "16GB",
+        ramType: "DDR4",
+        storageType: "NVMe",
+        storageCapacity: "1TB",
+        screenSize: "15.6",
+        screenResolution: "2560x1440",
+        refreshRate: "165",
+        weight: "2.3kg",
+        stockStatus: "in stock",
+        year: "2023",
+        backlightType: "RGB",
+      },
+    });
+  };
+
+  // Image upload handler
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
-    // For demo purposes, just create placeholders
-    // In a real app, you would upload these files to your server/cloud storage
-    const newImages = Array.from(files).map(
-      (_, index) =>
-        `https://placehold.co/800x600/111827/444?text=Image+${
-          uploadedImages.length + index + 1
-        }`
-    );
+    // Show loading state
+    setUploadingImages(true);
 
-    setUploadedImages([...uploadedImages, ...newImages]);
+    try {
+      // Create temporary object URLs for immediate display
+      const tempPreviews = Array.from(files).map((file) =>
+        URL.createObjectURL(file)
+      );
+      setUploadedImages((prev) => [...prev, ...tempPreviews]);
+
+      // Upload each file to imgBB
+      const uploadPromises = Array.from(files).map(async (file, fileIndex) => {
+        const formData = new FormData();
+        formData.append("image", file);
+
+        const response = await fetch(
+          `https://api.imgbb.com/1/upload?key=${
+            import.meta.env.VITE_IMGBB_API_KEY
+          }`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`Failed to upload image: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+
+        // Replace this specific temporary preview with the actual URL
+        setUploadedImages((prev) => {
+          const tempIndex = prev.indexOf(tempPreviews[fileIndex]);
+          if (tempIndex !== -1) {
+            const newUrls = [...prev];
+            newUrls[tempIndex] = data.data.url;
+            return newUrls;
+          }
+          return prev;
+        });
+
+        // Revoke the corresponding object URL
+        URL.revokeObjectURL(tempPreviews[fileIndex]);
+
+        return data.data.url;
+      });
+
+      // Wait for all uploads to complete
+      await Promise.all(uploadPromises);
+    } catch (error) {
+      console.error("Error uploading images:", error);
+      alert("Failed to upload one or more images. Please try again.");
+
+      // Remove any remaining blob URLs
+      setUploadedImages((prev) =>
+        prev.filter((url) => !url.startsWith("blob:"))
+      );
+    } finally {
+      setUploadingImages(false);
+    }
   };
 
   const removeImage = (index: number) => {
+    const imageUrl = uploadedImages[index];
+
+    // Revoke object URL if it's a temporary preview
+    if (imageUrl.startsWith("blob:")) {
+      URL.revokeObjectURL(imageUrl);
+    }
+
     setUploadedImages(uploadedImages.filter((_, i) => i !== index));
   };
 
@@ -623,370 +623,245 @@ export default function AddListing() {
                   </form.Field>
                 </div>
 
-                {/* Performance Section */}
+                {/* Processor Section */}
                 <div className="md:col-span-2 mt-4">
                   <h2 className="text-xl font-semibold text-white mb-4 pb-2 border-b border-neutral-700">
-                    Performance Specifications
+                    Processor
                   </h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Processor Brand field */}
+                    <div>
+                      <form.Field
+                        name="processorBrand"
+                        validators={{
+                          onChange: ({ value }) => {
+                            if (!value) return "Processor brand is required";
+                            return undefined;
+                          },
+                        }}
+                      >
+                        {(field) => (
+                          <>
+                            <label
+                              htmlFor="processorBrand"
+                              className="block text-sm font-medium text-neutral-200 mb-1"
+                            >
+                              Processor Brand
+                            </label>
+                            <select
+                              id="processorBrand"
+                              className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                              value={field.state.value || ""}
+                              onChange={(e) =>
+                                field.handleChange(e.target.value)
+                              }
+                              disabled={formStatus === "submitting"}
+                            >
+                              <option value="" disabled>
+                                Select Processor Brand
+                              </option>
+                              {processorBrandOptions.map((option) => (
+                                <option key={option} value={option}>
+                                  {option}
+                                </option>
+                              ))}
+                            </select>
+                            {field.state.meta.errors ? (
+                              <div className="text-red-300 text-sm mt-1">
+                                {field.state.meta.errors.join(", ")}
+                              </div>
+                            ) : null}
+                          </>
+                        )}
+                      </form.Field>
+                    </div>
+
+                    {/* Processor Model field */}
+                    <div>
+                      <form.Field
+                        name="processorModel"
+                        validators={{
+                          onChange: ({ value }) => {
+                            if (!value) return "Processor model is required";
+                            return undefined;
+                          },
+                        }}
+                      >
+                        {(field) => (
+                          <>
+                            <label
+                              htmlFor="processorModel"
+                              className="block text-sm font-medium text-neutral-200 mb-1"
+                            >
+                              Processor Model
+                            </label>
+                            <input
+                              id="processorModel"
+                              placeholder="e.g., Core i7-12700H, Ryzen 7 5800H"
+                              className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                              value={field.state.value}
+                              onChange={(e) =>
+                                field.handleChange(e.target.value)
+                              }
+                              disabled={formStatus === "submitting"}
+                            />
+                            {field.state.meta.errors ? (
+                              <div className="text-red-300 text-sm mt-1">
+                                {field.state.meta.errors.join(", ")}
+                              </div>
+                            ) : null}
+                          </>
+                        )}
+                      </form.Field>
+                    </div>
+                  </div>
                 </div>
 
-                <div>
-                  <form.Field
-                    name="processorBrand"
-                    validators={{
-                      onChange: ({ value }) => {
-                        if (!value) return "Processor brand is required";
-                        return undefined;
-                      },
-                    }}
-                  >
-                    {(field) => (
-                      <>
-                        <label
-                          htmlFor="processorBrand"
-                          className="block text-sm font-medium text-neutral-200 mb-1"
-                        >
-                          Processor Brand
-                        </label>
-                        <select
-                          id="processorBrand"
-                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
-                          value={field.state.value}
-                          onChange={(e) => field.handleChange(e.target.value)}
-                          disabled={formStatus === "submitting"}
-                        >
-                          <option value="">Select Processor Brand</option>
-                          {PROCESSOR_BRANDS.map((brand) => (
-                            <option key={brand} value={brand}>
-                              {brand}
-                            </option>
-                          ))}
-                        </select>
-                        {field.state.meta.errors ? (
-                          <div className="text-red-300 text-sm mt-1">
-                            {field.state.meta.errors.join(", ")}
-                          </div>
-                        ) : null}
-                      </>
-                    )}
-                  </form.Field>
-                </div>
+                {/* Graphics & Memory Section */}
+                <div className="md:col-span-2 mt-4">
+                  <h2 className="text-xl font-semibold text-white mb-4 pb-2 border-b border-neutral-700">
+                    Graphics & Memory
+                  </h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* GPU field */}
+                    <div>
+                      <form.Field
+                        name="gpuBrand"
+                        validators={{
+                          onChange: ({ value }) => {
+                            if (!value) return "GPU brand is required";
+                            return undefined;
+                          },
+                        }}
+                      >
+                        {(field) => (
+                          <>
+                            <label
+                              htmlFor="gpuBrand"
+                              className="block text-sm font-medium text-neutral-200 mb-1"
+                            >
+                              GPU Brand
+                            </label>
+                            <select
+                              id="gpuBrand"
+                              className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                              value={field.state.value}
+                              onChange={(e) =>
+                                field.handleChange(e.target.value)
+                              }
+                              disabled={formStatus === "submitting"}
+                            >
+                              <option value="">Select GPU Brand</option>
+                              {GPU_BRANDS.map((brand) => (
+                                <option key={brand} value={brand}>
+                                  {brand}
+                                </option>
+                              ))}
+                            </select>
+                            {field.state.meta.errors ? (
+                              <div className="text-red-300 text-sm mt-1">
+                                {field.state.meta.errors.join(", ")}
+                              </div>
+                            ) : null}
+                          </>
+                        )}
+                      </form.Field>
+                    </div>
 
-                <div>
-                  <form.Field
-                    name="processorModel"
-                    validators={{
-                      onChange: ({ value }) => {
-                        if (!value) return "Processor model is required";
-                        return undefined;
-                      },
-                    }}
-                  >
-                    {(field) => (
-                      <>
-                        <label
-                          htmlFor="processorModel"
-                          className="block text-sm font-medium text-neutral-200 mb-1"
-                        >
-                          Processor Model
-                        </label>
-                        <input
-                          id="processorModel"
-                          placeholder="e.g., Core i7-12700H, Ryzen 7 5800H"
-                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
-                          value={field.state.value}
-                          onChange={(e) => field.handleChange(e.target.value)}
-                          disabled={formStatus === "submitting"}
-                        />
-                        {field.state.meta.errors ? (
-                          <div className="text-red-300 text-sm mt-1">
-                            {field.state.meta.errors.join(", ")}
-                          </div>
-                        ) : null}
-                      </>
-                    )}
-                  </form.Field>
-                </div>
+                    {/* VRAM field */}
+                    <div>
+                      <form.Field
+                        name="vram"
+                        validators={{
+                          onChange: ({ value }) => {
+                            if (!value) return "VRAM is required";
+                            return undefined;
+                          },
+                        }}
+                      >
+                        {(field) => (
+                          <>
+                            <label
+                              htmlFor="vram"
+                              className="block text-sm font-medium text-neutral-200 mb-1"
+                            >
+                              VRAM
+                            </label>
+                            <select
+                              id="vram"
+                              className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                              value={field.state.value || ""}
+                              onChange={(e) =>
+                                field.handleChange(e.target.value)
+                              }
+                              disabled={formStatus === "submitting"}
+                            >
+                              <option value="" disabled>
+                                Select VRAM
+                              </option>
+                              {vramOptions.map((option) => (
+                                <option key={option} value={option}>
+                                  {option}
+                                </option>
+                              ))}
+                            </select>
+                            {field.state.meta.errors ? (
+                              <div className="text-red-300 text-sm mt-1">
+                                {field.state.meta.errors.join(", ")}
+                              </div>
+                            ) : null}
+                          </>
+                        )}
+                      </form.Field>
+                    </div>
 
-                <div>
-                  <form.Field
-                    name="cores"
-                    validators={{
-                      onChange: ({ value }) => {
-                        if (!value) return "Number of cores is required";
-                        if (isNaN(Number(value))) return "Must be a number";
-                        if (Number(value) <= 0)
-                          return "Must be greater than zero";
-                        return undefined;
-                      },
-                    }}
-                  >
-                    {(field) => (
-                      <>
-                        <label
-                          htmlFor="cores"
-                          className="block text-sm font-medium text-neutral-200 mb-1"
-                        >
-                          CPU Cores
-                        </label>
-                        <input
-                          id="cores"
-                          type="number"
-                          placeholder="e.g., 8"
-                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
-                          value={field.state.value}
-                          onChange={(e) => field.handleChange(e.target.value)}
-                          disabled={formStatus === "submitting"}
-                        />
-                        {field.state.meta.errors ? (
-                          <div className="text-red-300 text-sm mt-1">
-                            {field.state.meta.errors.join(", ")}
-                          </div>
-                        ) : null}
-                      </>
-                    )}
-                  </form.Field>
-                </div>
-
-                <div>
-                  <form.Field
-                    name="threads"
-                    validators={{
-                      onChange: ({ value }) => {
-                        if (!value) return "Number of threads is required";
-                        if (isNaN(Number(value))) return "Must be a number";
-                        if (Number(value) <= 0)
-                          return "Must be greater than zero";
-                        return undefined;
-                      },
-                    }}
-                  >
-                    {(field) => (
-                      <>
-                        <label
-                          htmlFor="threads"
-                          className="block text-sm font-medium text-neutral-200 mb-1"
-                        >
-                          CPU Threads
-                        </label>
-                        <input
-                          id="threads"
-                          type="number"
-                          placeholder="e.g., 16"
-                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
-                          value={field.state.value}
-                          onChange={(e) => field.handleChange(e.target.value)}
-                          disabled={formStatus === "submitting"}
-                        />
-                        {field.state.meta.errors ? (
-                          <div className="text-red-300 text-sm mt-1">
-                            {field.state.meta.errors.join(", ")}
-                          </div>
-                        ) : null}
-                      </>
-                    )}
-                  </form.Field>
-                </div>
-
-                <div>
-                  <form.Field
-                    name="gpuBrand"
-                    validators={{
-                      onChange: ({ value }) => {
-                        if (!value) return "GPU brand is required";
-                        return undefined;
-                      },
-                    }}
-                  >
-                    {(field) => (
-                      <>
-                        <label
-                          htmlFor="gpuBrand"
-                          className="block text-sm font-medium text-neutral-200 mb-1"
-                        >
-                          GPU Brand
-                        </label>
-                        <select
-                          id="gpuBrand"
-                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
-                          value={field.state.value}
-                          onChange={(e) => field.handleChange(e.target.value)}
-                          disabled={formStatus === "submitting"}
-                        >
-                          <option value="">Select GPU Brand</option>
-                          {GPU_BRANDS.map((brand) => (
-                            <option key={brand} value={brand}>
-                              {brand}
-                            </option>
-                          ))}
-                        </select>
-                        {field.state.meta.errors ? (
-                          <div className="text-red-300 text-sm mt-1">
-                            {field.state.meta.errors.join(", ")}
-                          </div>
-                        ) : null}
-                      </>
-                    )}
-                  </form.Field>
-                </div>
-
-                <div>
-                  <form.Field
-                    name="gpuModel"
-                    validators={{
-                      onChange: ({ value }) => {
-                        if (!value) return "GPU model is required";
-                        return undefined;
-                      },
-                    }}
-                  >
-                    {(field) => (
-                      <>
-                        <label
-                          htmlFor="gpuModel"
-                          className="block text-sm font-medium text-neutral-200 mb-1"
-                        >
-                          GPU Model
-                        </label>
-                        <input
-                          id="gpuModel"
-                          placeholder="e.g., RTX 3070, Radeon RX 6700M"
-                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
-                          value={field.state.value}
-                          onChange={(e) => field.handleChange(e.target.value)}
-                          disabled={formStatus === "submitting"}
-                        />
-                        {field.state.meta.errors ? (
-                          <div className="text-red-300 text-sm mt-1">
-                            {field.state.meta.errors.join(", ")}
-                          </div>
-                        ) : null}
-                      </>
-                    )}
-                  </form.Field>
-                </div>
-
-                <div>
-                  <form.Field
-                    name="vram"
-                    validators={{
-                      onChange: ({ value }) => {
-                        if (value && isNaN(Number(value)))
-                          return "VRAM must be a number";
-                        return undefined;
-                      },
-                    }}
-                  >
-                    {(field) => (
-                      <>
-                        <label
-                          htmlFor="vram"
-                          className="block text-sm font-medium text-neutral-200 mb-1"
-                        >
-                          VRAM (GB){" "}
-                          <span className="text-neutral-400 text-xs">
-                            (optional)
-                          </span>
-                        </label>
-                        <input
-                          id="vram"
-                          type="number"
-                          placeholder="e.g., 8"
-                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
-                          value={field.state.value}
-                          onChange={(e) => field.handleChange(e.target.value)}
-                          disabled={formStatus === "submitting"}
-                        />
-                        {field.state.meta.errors ? (
-                          <div className="text-red-300 text-sm mt-1">
-                            {field.state.meta.errors.join(", ")}
-                          </div>
-                        ) : null}
-                      </>
-                    )}
-                  </form.Field>
-                </div>
-
-                <div>
-                  <form.Field
-                    name="ram"
-                    validators={{
-                      onChange: ({ value }) => {
-                        if (!value) return "RAM amount is required";
-                        if (isNaN(Number(value))) return "RAM must be a number";
-                        if (Number(value) <= 0)
-                          return "RAM must be greater than zero";
-                        return undefined;
-                      },
-                    }}
-                  >
-                    {(field) => (
-                      <>
-                        <label
-                          htmlFor="ram"
-                          className="block text-sm font-medium text-neutral-200 mb-1"
-                        >
-                          RAM (GB)
-                        </label>
-                        <input
-                          id="ram"
-                          type="number"
-                          placeholder="e.g., 16"
-                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
-                          value={field.state.value}
-                          onChange={(e) => field.handleChange(e.target.value)}
-                          disabled={formStatus === "submitting"}
-                        />
-                        {field.state.meta.errors ? (
-                          <div className="text-red-300 text-sm mt-1">
-                            {field.state.meta.errors.join(", ")}
-                          </div>
-                        ) : null}
-                      </>
-                    )}
-                  </form.Field>
-                </div>
-
-                <div>
-                  <form.Field
-                    name="ramType"
-                    validators={{
-                      onChange: ({ value }) => {
-                        if (!value) return "RAM type is required";
-                        return undefined;
-                      },
-                    }}
-                  >
-                    {(field) => (
-                      <>
-                        <label
-                          htmlFor="ramType"
-                          className="block text-sm font-medium text-neutral-200 mb-1"
-                        >
-                          RAM Type
-                        </label>
-                        <select
-                          id="ramType"
-                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
-                          value={field.state.value}
-                          onChange={(e) => field.handleChange(e.target.value)}
-                          disabled={formStatus === "submitting"}
-                        >
-                          <option value="">Select RAM Type</option>
-                          {RAM_TYPES.map((type) => (
-                            <option key={type} value={type}>
-                              {type}
-                            </option>
-                          ))}
-                        </select>
-                        {field.state.meta.errors ? (
-                          <div className="text-red-300 text-sm mt-1">
-                            {field.state.meta.errors.join(", ")}
-                          </div>
-                        ) : null}
-                      </>
-                    )}
-                  </form.Field>
+                    {/* RAM field */}
+                    <div>
+                      <form.Field
+                        name="ram"
+                        validators={{
+                          onChange: ({ value }) => {
+                            if (!value) return "RAM is required";
+                            return undefined;
+                          },
+                        }}
+                      >
+                        {(field) => (
+                          <>
+                            <label
+                              htmlFor="ram"
+                              className="block text-sm font-medium text-neutral-200 mb-1"
+                            >
+                              RAM
+                            </label>
+                            <select
+                              id="ram"
+                              className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                              value={field.state.value || ""}
+                              onChange={(e) =>
+                                field.handleChange(e.target.value)
+                              }
+                              disabled={formStatus === "submitting"}
+                            >
+                              <option value="" disabled>
+                                Select RAM
+                              </option>
+                              {ramOptions.map((option) => (
+                                <option key={option} value={option}>
+                                  {option}
+                                </option>
+                              ))}
+                            </select>
+                            {field.state.meta.errors ? (
+                              <div className="text-red-300 text-sm mt-1">
+                                {field.state.meta.errors.join(", ")}
+                              </div>
+                            ) : null}
+                          </>
+                        )}
+                      </form.Field>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Storage & Display Section */}
@@ -1223,6 +1098,50 @@ export default function AddListing() {
                   </form.Field>
                 </div>
 
+                <div>
+                  <form.Field
+                    name="backlightType"
+                    validators={{
+                      onChange: ({ value }) => {
+                        if (!value) return "Backlight type is required";
+                        return undefined;
+                      },
+                    }}
+                  >
+                    {(field) => (
+                      <>
+                        <label
+                          htmlFor="backlightType"
+                          className="block text-sm font-medium text-neutral-200 mb-1"
+                        >
+                          Keyboard Backlight Type
+                        </label>
+                        <select
+                          id="backlightType"
+                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                          value={field.state.value || ""}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          disabled={formStatus === "submitting"}
+                        >
+                          <option value="" disabled>
+                            Select Backlight Type
+                          </option>
+                          {backlightTypeOptions.map((option) => (
+                            <option key={option} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                        </select>
+                        {field.state.meta.errors ? (
+                          <div className="text-red-300 text-sm mt-1">
+                            {field.state.meta.errors.join(", ")}
+                          </div>
+                        ) : null}
+                      </>
+                    )}
+                  </form.Field>
+                </div>
+
                 {/* Images Section */}
                 <div className="md:col-span-2 mt-4">
                   <h2 className="text-xl font-semibold text-white mb-4 pb-2 border-b border-neutral-700">
@@ -1231,9 +1150,59 @@ export default function AddListing() {
                   <div className="mb-6">
                     <label className="block text-sm font-medium text-neutral-200 mb-2">
                       Upload Images
+                      <span className="text-neutral-400 text-xs ml-2">
+                        (Multiple files supported)
+                      </span>
                     </label>
                     <div className="flex flex-col space-y-4">
-                      <div className="flex justify-center w-full h-32 px-4 transition bg-neutral-700 border-2 border-neutral-600 border-dashed rounded-md appearance-none cursor-pointer hover:border-secondary-500 focus:outline-none">
+                      <div
+                        className="flex justify-center w-full h-32 px-4 transition bg-neutral-700 border-2 border-neutral-600 border-dashed rounded-md appearance-none cursor-pointer hover:border-secondary-500 focus:outline-none"
+                        onClick={() => {
+                          // Find the file input and trigger a click on it
+                          const fileInput = document.querySelector(
+                            'input[name="file_upload"]'
+                          );
+                          if (fileInput) {
+                            (fileInput as HTMLInputElement).click();
+                          }
+                        }}
+                        onDragOver={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          e.currentTarget.classList.add("border-secondary-500");
+                        }}
+                        onDragLeave={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          e.currentTarget.classList.remove(
+                            "border-secondary-500"
+                          );
+                        }}
+                        onDrop={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          e.currentTarget.classList.remove(
+                            "border-secondary-500"
+                          );
+
+                          if (
+                            e.dataTransfer.files &&
+                            e.dataTransfer.files.length > 0 &&
+                            formStatus !== "submitting"
+                          ) {
+                            // Create a synthetic event object with the dropped files
+                            const fileList = e.dataTransfer.files;
+                            const event = {
+                              target: {
+                                files: fileList,
+                              },
+                            } as React.ChangeEvent<HTMLInputElement>;
+
+                            // Call the upload handler with our synthetic event
+                            handleImageUpload(event);
+                          }
+                        }}
+                      >
                         <span className="flex items-center space-x-2">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -1268,37 +1237,56 @@ export default function AddListing() {
                       </div>
 
                       {uploadedImages.length > 0 && (
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4">
-                          {uploadedImages.map((image, index) => (
-                            <div key={index} className="relative group">
-                              <img
-                                src={image}
-                                alt={`Preview ${index + 1}`}
-                                className="h-24 w-full object-cover rounded-md"
-                              />
-                              <button
-                                type="button"
-                                onClick={() => removeImage(index)}
-                                className="absolute top-1 right-1 bg-red-600 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                                aria-label="Remove image"
+                        <div>
+                          <div className="flex justify-between items-center mb-2">
+                            <p className="text-sm text-neutral-400">
+                              {uploadedImages.length} image
+                              {uploadedImages.length !== 1 ? "s" : ""} uploaded
+                            </p>
+                            <button
+                              type="button"
+                              onClick={() => setUploadedImages([])}
+                              className="text-sm text-red-400 hover:text-red-300"
+                            >
+                              Clear all
+                            </button>
+                          </div>
+                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                            {uploadedImages.map((image, index) => (
+                              <div
+                                key={index}
+                                className="relative group border border-neutral-700 rounded-md overflow-hidden"
                               >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  className="h-4 w-4"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  stroke="currentColor"
+                                <img
+                                  src={image}
+                                  alt={`Preview ${index + 1}`}
+                                  className="h-24 w-full object-cover"
+                                />
+                                <button
+                                  type="button"
+                                  onClick={() => removeImage(index)}
+                                  className="absolute top-1 right-1 bg-red-600/90 hover:bg-red-700 text-white p-1 rounded-full shadow-md opacity-80 hover:opacity-100 transition-opacity"
+                                  aria-label="Remove image"
+                                  title="Remove image"
                                 >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M6 18L18 6M6 6l12 12"
-                                  />
-                                </svg>
-                              </button>
-                            </div>
-                          ))}
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-4 w-4"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M6 18L18 6M6 6l12 12"
+                                    />
+                                  </svg>
+                                </button>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       )}
                     </div>
