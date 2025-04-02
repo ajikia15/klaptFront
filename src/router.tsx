@@ -8,6 +8,8 @@ import HomePage from "./pages/HomePage";
 import LaptopDetailPage from "./pages/LaptopDetailPage";
 import SearchPage from "./pages/SearchPage";
 import AuthPage from "./pages/AuthPage";
+import LoginPage from "./pages/LoginPage";
+import RegistrationPage from "./pages/RegistrationPage";
 import FavoritesPage from "./pages/FavoritesPage";
 import ProfilePage from "./pages/ProfilePage";
 import { useRequireAuth } from "./hooks/useRequireAuth";
@@ -15,8 +17,8 @@ import { ReactNode } from "react";
 
 // Protected route wrapper component
 function ProtectedRoute({ children }: { children: ReactNode }) {
-  // This hook will redirect to /auth if not authenticated
-  useRequireAuth();
+  // Update to redirect to /login instead of /auth
+  useRequireAuth("/login");
   return <>{children}</>;
 }
 
@@ -57,11 +59,25 @@ const searchRoute = createRoute({
   },
 });
 
-// Add auth route
+// Keep auth route for backward compatibility
 const authRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/auth",
   component: AuthPage,
+});
+
+// Add login route
+const loginRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/login",
+  component: LoginPage,
+});
+
+// Add registration route
+const registerRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/register",
+  component: RegistrationPage,
 });
 
 const favoritesRoute = createRoute({
@@ -91,6 +107,8 @@ const routeTree = rootRoute.addChildren([
   laptopRoute,
   searchRoute,
   authRoute,
+  loginRoute,
+  registerRoute,
   favoritesRoute,
   profileRoute,
 ]);

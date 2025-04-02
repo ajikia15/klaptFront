@@ -1,4 +1,4 @@
-import { User, LogOut, Heart } from "@deemlol/next-icons";
+import { User, LogOut, Heart, Lock } from "@deemlol/next-icons";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useAuth } from "../../context/AuthContext";
 import { useListFavorites } from "@/hooks/useFavorites";
@@ -12,11 +12,9 @@ export default function Navbar() {
   const handleLogout = async () => {
     try {
       await logout();
-      // After successful logout, you might want to navigate to home or login page
       navigate({ to: "/" });
     } catch (error) {
       console.error("Logout failed:", error);
-      // You might want to show an error toast here
     }
   };
 
@@ -24,57 +22,100 @@ export default function Navbar() {
 
   return (
     <nav className="sticky bg-neutral-900 top-0 z-50 w-full shadow-lg">
-      <div className="container mx-auto py-4 flex justify-between items-center">
-        <div className="flex items-center">
-          <Link to="/" className="text-2xl font-bold text-white">
-            Kaido
-          </Link>
-        </div>
+      <div className="container mx-auto px-4 py-3 flex items-center">
+        {/* Logo */}
+        <Link
+          to="/"
+          className="text-2xl font-bold text-white mr-4 flex-shrink-0"
+        >
+          Kaido
+        </Link>
 
-        <div className="flex items-center w-full justify-center">
+        {/* Search - Center of navbar */}
+        <div className="flex-grow max-w-md mx-auto">
           <Searchbar />
         </div>
 
-        <div className="flex items-center gap-6">
-          <Link
-            to="/favorites"
-            className="text-white hover:text-blue-400 relative cursor-pointer transition-colors"
-          >
-            <Heart size={24} />
-            {isAuthenticated && favorites && favorites.length > 0 && (
-              <span className="absolute -top-3 -right-3 bg-secondary-400 text-xs text-white rounded-full h-5 w-5 flex items-center justify-center ">
-                {isLoading ? <SpinnerSVG /> : favorites?.length ?? 0}
-              </span>
-            )}
-          </Link>
+        {/* Right side icons and actions */}
+        <div className="flex items-center ml-4 md:ml-6 flex-shrink-0">
+          {/* Create Post Button - Same icon for both states, less prominent */}
+          <div className="mr-2">
+            <Link
+              to={isAuthenticated ? "/" : "/login"}
+              className="flex items-center justify-center w-9 h-9 rounded-full bg-neutral-800 hover:bg-neutral-700 text-neutral-100 transition-all"
+              aria-label={
+                isAuthenticated ? "Create Post" : "Login to create a post"
+              }
+              title={isAuthenticated ? "Create Post" : "Login to create a post"}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            </Link>
+          </div>
 
+          {isAuthenticated && (
+            <Link
+              to="/favorites"
+              className="text-neutral-100 hover:text-secondary-400 grid place-items-center relative cursor-pointer transition-colors mx-2 bg-neutral-800 hover:bg-neutral-700 rounded-full p-1.5"
+              title="Favorites"
+            >
+              <Heart size={24} />
+              {favorites && favorites.length > 0 && (
+                <span className="absolute -top-1 -right-1 bg-secondary-400 text-xs text-neutral-100 rounded-full h-4 w-4 flex items-center justify-center">
+                  {isLoading ? <SpinnerSVG /> : favorites?.length ?? 0}
+                </span>
+              )}
+            </Link>
+          )}
+
+          {/* User Account Section */}
           {isAuthenticated ? (
-            <div className="flex items-center gap-4">
-              <div className="text-white">
-                <span className="text-sm mr-2">{user?.email}</span>
+            <div className="flex items-center space-x-3">
+              <div className="text-white hidden md:block">
+                <span className="text-sm">{user?.email}</span>
               </div>
               <Link
                 to="/profile"
-                className="text-white hover:text-blue-400 cursor-pointer transition-colors"
+                className="text-white hover:text-secondary-400 cursor-pointer transition-colors p-1"
                 aria-label="Profile"
               >
                 <User size={24} />
               </Link>
               <button
                 onClick={handleLogout}
-                className="text-white hover:text-blue-400 cursor-pointer transition-colors"
+                className="text-white hover:text-secondary-400 cursor-pointer transition-colors p-1"
                 aria-label="Logout"
               >
                 <LogOut size={24} />
               </button>
             </div>
           ) : (
-            <Link
-              to="/auth"
-              className="text-white hover:text-blue-400 cursor-pointer transition-colors"
-            >
-              <User size={24} />
-            </Link>
+            <div className="flex items-center space-x-3">
+              <Link
+                to="/login"
+                className="text-white hover:text-secondary-300 px-4 py-2 text-sm font-medium transition-colors"
+              >
+                Sign In
+              </Link>
+              <Link
+                to="/register"
+                className="text-white px-4 py-2.5 text-sm font-medium rounded-lg shadow-md transition-all transform hover:scale-[1.02] hover:shadow-lg bg-gradient-to-r from-purple-600 to-primary-600 hover:from-purple-700 hover:to-primary-700"
+              >
+                Create Account
+              </Link>
+            </div>
           )}
         </div>
       </div>

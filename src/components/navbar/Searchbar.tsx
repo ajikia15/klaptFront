@@ -37,7 +37,7 @@ export default function Searchbar() {
   };
 
   return (
-    <form onSubmit={handleSearch} className="relative w-3/5">
+    <form onSubmit={handleSearch} className="relative w-full">
       <input
         type="text"
         placeholder={isFocused ? "" : placeholder}
