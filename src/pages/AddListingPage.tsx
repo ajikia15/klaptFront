@@ -5,29 +5,30 @@ import { useAuth } from "../context/AuthContext";
 import { useRequireAuth } from "../hooks/useRequireAuth";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { SpinnerSVG } from "@/assets/SpinnerSVG";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
+
+// Add predefined options for select fields
+const LAPTOP_BRANDS = [
+  "ASUS",
+  "Dell",
+  "HP",
+  "Lenovo",
+  "Apple",
+  "Acer",
+  "MSI",
+  "Razer",
+  "Alienware",
+  "Microsoft",
+  "Samsung",
+  "LG",
+  "Gigabyte",
+  "EVGA",
+  "Toshiba",
+];
+const PROCESSOR_BRANDS = ["Intel", "AMD", "Apple", "Qualcomm", "MediaTek"];
+const GPU_BRANDS = ["NVIDIA", "AMD", "Intel", "Apple"];
+const RAM_TYPES = ["DDR4", "DDR5", "LPDDR4X", "LPDDR5", "DDR3", "Unified"];
+const STORAGE_TYPES = ["SSD", "NVMe", "HDD", "eMMC", "Hybrid"];
+const STOCK_STATUSES = ["in stock", "out of stock", "reserved", "pre-order"];
 
 export default function AddListing() {
   const [formStatus, setFormStatus] = useState<
@@ -41,12 +42,134 @@ export default function AddListing() {
   // Redirect if not authenticated
   const { isLoading: authLoading } = useRequireAuth();
 
-  // Define constants for select options
-  const CPU_BRANDS = ["Intel", "AMD", "Apple", "Qualcomm", "Other"];
-  const GPU_BRANDS = ["NVIDIA", "AMD", "Intel", "Apple", "Other"];
-  const RAM_TYPES = ["DDR4", "DDR5", "LPDDR4", "LPDDR4X", "LPDDR5", "Other"];
-  const STORAGE_TYPES = ["SSD", "NVMe SSD", "HDD", "eMMC", "Other"];
-  const STOCK_STATUSES = ["in stock", "low stock", "out of stock", "reserved"];
+  // Function to generate random test data
+  const fillWithTestData = () => {
+    const getRandomElement = (array: any[]) =>
+      array[Math.floor(Math.random() * array.length)];
+    const getRandomInt = (min: number, max: number) =>
+      Math.floor(Math.random() * (max - min + 1)) + min;
+
+    const laptopBrand = getRandomElement(LAPTOP_BRANDS);
+    const processorBrand = getRandomElement(PROCESSOR_BRANDS);
+    const gpuBrand = getRandomElement(GPU_BRANDS);
+
+    // Generate model names based on brands
+    let processorModel = "";
+    if (processorBrand === "Intel") {
+      const series = getRandomElement(["Core i5", "Core i7", "Core i9"]);
+      processorModel = `${series}-${getRandomInt(10, 13)}${getRandomInt(
+        100,
+        999
+      )}H`;
+    } else if (processorBrand === "AMD") {
+      const series = getRandomElement(["Ryzen 5", "Ryzen 7", "Ryzen 9"]);
+      processorModel = `${series} ${getRandomInt(5, 7)}${getRandomInt(
+        600,
+        900
+      )}H`;
+    } else if (processorBrand === "Apple") {
+      processorModel = `M${getRandomInt(1, 3)} ${getRandomElement([
+        "Pro",
+        "Max",
+        "Ultra",
+      ])}`;
+    }
+
+    let gpuModel = "";
+    if (gpuBrand === "NVIDIA") {
+      gpuModel = `RTX ${getRandomElement([
+        "3050",
+        "3060",
+        "3070",
+        "3080",
+        "4060",
+        "4070",
+        "4080",
+      ])}`;
+    } else if (gpuBrand === "AMD") {
+      gpuModel = `Radeon RX ${getRandomElement([
+        "6600M",
+        "6700M",
+        "6800M",
+        "7600M",
+        "7700M",
+      ])}`;
+    } else if (gpuBrand === "Intel") {
+      gpuModel = `Iris Xe Graphics ${getRandomInt(64, 128)}`;
+    } else if (gpuBrand === "Apple") {
+      gpuModel = `Integrated ${getRandomInt(8, 32)}-core GPU`;
+    }
+
+    const ramType = getRandomElement(RAM_TYPES);
+    const storageType = getRandomElement(STORAGE_TYPES);
+    const screenSizes = ["13.3", "14", "15.6", "16", "17.3"];
+    const resolutions = [
+      "1920x1080",
+      "2560x1440",
+      "3840x2160",
+      "3024x1964",
+      "2880x1800",
+    ];
+    const refreshRates = [60, 90, 120, 144, 165, 240, 360];
+
+    const laptopModel = `${getRandomElement([
+      "Pro",
+      "Air",
+      "Legion",
+      "Zephyrus",
+      "Omen",
+      "Victus",
+      "XPS",
+      "ROG",
+      "Predator",
+      "TUF",
+    ])} ${getRandomElement(["G15", "G14", "X13", "15", "14", "13", "17"])}`;
+
+    // Populate the form
+    form.setFieldValue("title", `${laptopBrand} ${laptopModel} Gaming Laptop`);
+    form.setFieldValue("brand", laptopBrand);
+    form.setFieldValue("model", laptopModel);
+    form.setFieldValue("price", (getRandomInt(799, 3499) + 0.99).toString());
+    form.setFieldValue(
+      "description",
+      `Powerful ${laptopBrand} ${laptopModel} featuring ${processorBrand} ${processorModel} processor and ${gpuBrand} ${gpuModel} graphics. Perfect for gaming, content creation, and professional work. Delivers exceptional performance and stunning visuals.`
+    );
+    form.setFieldValue(
+      "shortDesc",
+      `${processorBrand} ${processorModel}, ${getRandomInt(
+        16,
+        64
+      )}GB RAM, ${gpuBrand} ${gpuModel}`
+    );
+    form.setFieldValue("processorBrand", processorBrand);
+    form.setFieldValue("processorModel", processorModel);
+    form.setFieldValue("cores", getRandomInt(4, 24).toString());
+    form.setFieldValue("threads", getRandomInt(8, 32).toString());
+    form.setFieldValue("gpuBrand", gpuBrand);
+    form.setFieldValue("gpuModel", gpuModel);
+    form.setFieldValue(
+      "vram",
+      gpuBrand !== "Intel" && gpuBrand !== "Apple"
+        ? getRandomInt(4, 16).toString()
+        : ""
+    );
+    form.setFieldValue("ram", getRandomInt(8, 64).toString());
+    form.setFieldValue("ramType", ramType);
+    form.setFieldValue("storageType", storageType);
+    form.setFieldValue(
+      "storageCapacity",
+      `${getRandomElement([256, 512, 1024, 2048])}GB`
+    );
+    form.setFieldValue("screenSize", getRandomElement(screenSizes));
+    form.setFieldValue("screenResolution", getRandomElement(resolutions));
+    form.setFieldValue(
+      "refreshRate",
+      getRandomElement(refreshRates).toString()
+    );
+    form.setFieldValue("weight", `${(getRandomInt(10, 40) / 10).toFixed(1)}kg`);
+    form.setFieldValue("stockStatus", getRandomElement(STOCK_STATUSES));
+    form.setFieldValue("year", getRandomInt(2020, 2023).toString());
+  };
 
   const form = useForm({
     defaultValues: {
@@ -146,126 +269,6 @@ export default function AddListing() {
     setUploadedImages(uploadedImages.filter((_, i) => i !== index));
   };
 
-  // Function to inject random laptop data
-  const injectRandomLaptop = () => {
-    // Array of sample laptops
-    const sampleLaptops = [
-      {
-        title: "ASUS ROG Strix G15 Gaming Laptop",
-        brand: "ASUS",
-        model: "ROG Strix G15",
-        price: "1499.99",
-        description:
-          "Powerful gaming laptop with RGB lighting and excellent thermal performance. Features high refresh rate display ideal for competitive gaming and content creation.",
-        shortDesc: "i7, RTX 3070, 16GB RAM, 1TB SSD",
-        processorBrand: "Intel",
-        processorModel: "Core i7-12700H",
-        cores: "14",
-        threads: "20",
-        gpuBrand: "NVIDIA",
-        gpuModel: "GeForce RTX 3070",
-        vram: "8",
-        ram: "16",
-        ramType: "DDR5",
-        storageType: "NVMe SSD",
-        storageCapacity: "1TB",
-        screenSize: "15.6",
-        screenResolution: "2560x1440",
-        refreshRate: "165",
-        weight: "2.3kg",
-        stockStatus: "in stock",
-        year: "2022",
-      },
-      {
-        title: "Dell XPS 15 Ultrabook",
-        brand: "Dell",
-        model: "XPS 15",
-        price: "1899.99",
-        description:
-          "Premium ultrabook with gorgeous 4K OLED display and excellent build quality. Perfect for professionals and content creators requiring color accuracy and performance.",
-        shortDesc: "i9, RTX 3050 Ti, 32GB RAM, 1TB SSD",
-        processorBrand: "Intel",
-        processorModel: "Core i9-12900HK",
-        cores: "14",
-        threads: "20",
-        gpuBrand: "NVIDIA",
-        gpuModel: "GeForce RTX 3050 Ti",
-        vram: "4",
-        ram: "32",
-        ramType: "DDR5",
-        storageType: "NVMe SSD",
-        storageCapacity: "1TB",
-        screenSize: "15.6",
-        screenResolution: "3840x2160",
-        refreshRate: "60",
-        weight: "1.8kg",
-        stockStatus: "in stock",
-        year: "2022",
-      },
-      {
-        title: "MacBook Pro 16 with M2 Max",
-        brand: "Apple",
-        model: "MacBook Pro 16",
-        price: "3299.99",
-        description:
-          "Apple's flagship laptop with incredible performance and battery life. Features the best display on any laptop and an excellent keyboard and trackpad experience.",
-        shortDesc: "M2 Max, 32GB RAM, 1TB SSD",
-        processorBrand: "Apple",
-        processorModel: "M2 Max",
-        cores: "12",
-        threads: "12",
-        gpuBrand: "Apple",
-        gpuModel: "M2 Max 38-core GPU",
-        vram: "",
-        ram: "32",
-        ramType: "LPDDR5",
-        storageType: "SSD",
-        storageCapacity: "1TB",
-        screenSize: "16.2",
-        screenResolution: "3456x2234",
-        refreshRate: "120",
-        weight: "2.2kg",
-        stockStatus: "low stock",
-        year: "2023",
-      },
-      {
-        title: "Lenovo Legion Pro 7i Gaming Laptop",
-        brand: "Lenovo",
-        model: "Legion Pro 7i",
-        price: "2199.99",
-        description:
-          "Powerful gaming machine with exceptional cooling and performance. Features customizable RGB lighting and a full-sized keyboard with numpad.",
-        shortDesc: "i9, RTX 4080, 32GB RAM, 2TB SSD",
-        processorBrand: "Intel",
-        processorModel: "Core i9-13900HX",
-        cores: "24",
-        threads: "32",
-        gpuBrand: "NVIDIA",
-        gpuModel: "GeForce RTX 4080",
-        vram: "12",
-        ram: "32",
-        ramType: "DDR5",
-        storageType: "NVMe SSD",
-        storageCapacity: "2TB",
-        screenSize: "16",
-        screenResolution: "2560x1600",
-        refreshRate: "240",
-        weight: "2.5kg",
-        stockStatus: "in stock",
-        year: "2023",
-      },
-    ];
-
-    // Select a random laptop from the sample data
-    const randomLaptop =
-      sampleLaptops[Math.floor(Math.random() * sampleLaptops.length)];
-
-    // Update all form fields with the random laptop data
-    Object.entries(randomLaptop).forEach(([key, value]) => {
-      form.setFieldValue(key as never, value as never);
-    });
-  };
-
   if (authLoading) {
     return (
       <div className="w-full flex items-center justify-center min-h-screen bg-neutral-900">
@@ -277,27 +280,18 @@ export default function AddListing() {
   return (
     <div className="min-h-screen bg-neutral-900 text-neutral-200 py-10">
       <div className="container mx-auto px-4">
-        <div className="mb-8 flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl md:text-4xl font-bold text-white">
-              Add New Laptop Listing
-            </h1>
-            <p className="text-neutral-400 mt-2">
-              Fill out the details below to create a new laptop listing
-            </p>
-          </div>
-          <Button
-            variant="secondary"
-            onClick={injectRandomLaptop}
-            className="bg-violet-600 hover:bg-violet-700 text-white"
-          >
-            Inject Random Laptop
-          </Button>
+        <div className="mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold text-white">
+            Add New Laptop Listing
+          </h1>
+          <p className="text-neutral-400 mt-2">
+            Fill out the details below to create a new laptop listing
+          </p>
         </div>
 
-        <Card className="bg-gradient-to-br from-neutral-800/70 to-neutral-900/90 border-neutral-700/50 relative overflow-hidden">
+        <div className="bg-gradient-to-br from-neutral-800/70 to-neutral-900/90 rounded-2xl border border-neutral-700/50 p-8 mb-6 relative overflow-hidden">
           <div className="absolute inset-0 opacity-5 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
-          <CardContent className="relative z-10 p-8">
+          <div className="relative z-10">
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -336,24 +330,27 @@ export default function AddListing() {
                     }}
                   >
                     {(field) => (
-                      <FormItem>
-                        <FormLabel htmlFor="title">Title</FormLabel>
-                        <FormControl>
-                          <Input
-                            id="title"
-                            placeholder="e.g., ASUS ROG Strix G15 Gaming Laptop"
-                            className="bg-neutral-700 border-neutral-600 text-white"
-                            value={field.state.value}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            disabled={formStatus === "submitting"}
-                          />
-                        </FormControl>
-                        {field.state.meta.errors && (
-                          <FormMessage>
+                      <>
+                        <label
+                          htmlFor="title"
+                          className="block text-sm font-medium text-neutral-200 mb-1"
+                        >
+                          Title
+                        </label>
+                        <input
+                          id="title"
+                          placeholder="e.g., ASUS ROG Strix G15 Gaming Laptop"
+                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                          value={field.state.value}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          disabled={formStatus === "submitting"}
+                        />
+                        {field.state.meta.errors ? (
+                          <div className="text-red-300 text-sm mt-1">
                             {field.state.meta.errors.join(", ")}
-                          </FormMessage>
-                        )}
-                      </FormItem>
+                          </div>
+                        ) : null}
+                      </>
                     )}
                   </form.Field>
                 </div>
@@ -373,25 +370,28 @@ export default function AddListing() {
                     }}
                   >
                     {(field) => (
-                      <FormItem>
-                        <FormLabel htmlFor="price">Price ($)</FormLabel>
-                        <FormControl>
-                          <Input
-                            id="price"
-                            type="number"
-                            placeholder="e.g., 1299.99"
-                            className="bg-neutral-700 border-neutral-600 text-white"
-                            value={field.state.value}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            disabled={formStatus === "submitting"}
-                          />
-                        </FormControl>
-                        {field.state.meta.errors && (
-                          <FormMessage>
+                      <>
+                        <label
+                          htmlFor="price"
+                          className="block text-sm font-medium text-neutral-200 mb-1"
+                        >
+                          Price ($)
+                        </label>
+                        <input
+                          id="price"
+                          type="number"
+                          placeholder="e.g., 1299.99"
+                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                          value={field.state.value}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          disabled={formStatus === "submitting"}
+                        />
+                        {field.state.meta.errors ? (
+                          <div className="text-red-300 text-sm mt-1">
                             {field.state.meta.errors.join(", ")}
-                          </FormMessage>
-                        )}
-                      </FormItem>
+                          </div>
+                        ) : null}
+                      </>
                     )}
                   </form.Field>
                 </div>
@@ -407,24 +407,33 @@ export default function AddListing() {
                     }}
                   >
                     {(field) => (
-                      <FormItem>
-                        <FormLabel htmlFor="brand">Brand</FormLabel>
-                        <FormControl>
-                          <Input
-                            id="brand"
-                            placeholder="e.g., ASUS, Dell, HP"
-                            className="bg-neutral-700 border-neutral-600 text-white"
-                            value={field.state.value}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            disabled={formStatus === "submitting"}
-                          />
-                        </FormControl>
-                        {field.state.meta.errors && (
-                          <FormMessage>
+                      <>
+                        <label
+                          htmlFor="brand"
+                          className="block text-sm font-medium text-neutral-200 mb-1"
+                        >
+                          Brand
+                        </label>
+                        <select
+                          id="brand"
+                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                          value={field.state.value}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          disabled={formStatus === "submitting"}
+                        >
+                          <option value="">Select Brand</option>
+                          {LAPTOP_BRANDS.map((brand) => (
+                            <option key={brand} value={brand}>
+                              {brand}
+                            </option>
+                          ))}
+                        </select>
+                        {field.state.meta.errors ? (
+                          <div className="text-red-300 text-sm mt-1">
                             {field.state.meta.errors.join(", ")}
-                          </FormMessage>
-                        )}
-                      </FormItem>
+                          </div>
+                        ) : null}
+                      </>
                     )}
                   </form.Field>
                 </div>
@@ -440,24 +449,27 @@ export default function AddListing() {
                     }}
                   >
                     {(field) => (
-                      <FormItem>
-                        <FormLabel htmlFor="model">Model</FormLabel>
-                        <FormControl>
-                          <Input
-                            id="model"
-                            placeholder="e.g., ROG Strix G15, XPS 15"
-                            className="bg-neutral-700 border-neutral-600 text-white"
-                            value={field.state.value}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            disabled={formStatus === "submitting"}
-                          />
-                        </FormControl>
-                        {field.state.meta.errors && (
-                          <FormMessage>
+                      <>
+                        <label
+                          htmlFor="model"
+                          className="block text-sm font-medium text-neutral-200 mb-1"
+                        >
+                          Model
+                        </label>
+                        <input
+                          id="model"
+                          placeholder="e.g., ROG Strix G15, XPS 15"
+                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                          value={field.state.value}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          disabled={formStatus === "submitting"}
+                        />
+                        {field.state.meta.errors ? (
+                          <div className="text-red-300 text-sm mt-1">
                             {field.state.meta.errors.join(", ")}
-                          </FormMessage>
-                        )}
-                      </FormItem>
+                          </div>
+                        ) : null}
+                      </>
                     )}
                   </form.Field>
                 </div>
@@ -475,30 +487,28 @@ export default function AddListing() {
                     }}
                   >
                     {(field) => (
-                      <FormItem>
-                        <FormLabel htmlFor="shortDesc">
+                      <>
+                        <label
+                          htmlFor="shortDesc"
+                          className="block text-sm font-medium text-neutral-200 mb-1"
+                        >
                           Short Description
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            id="shortDesc"
-                            placeholder="Brief specs summary, e.g., 'i7, 16GB RAM, RTX 3070, 1TB SSD'"
-                            className="bg-neutral-700 border-neutral-600 text-white"
-                            value={field.state.value}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            disabled={formStatus === "submitting"}
-                            maxLength={100}
-                          />
-                        </FormControl>
-                        <FormDescription className="text-neutral-400">
-                          A brief summary of key specs (max 100 characters)
-                        </FormDescription>
-                        {field.state.meta.errors && (
-                          <FormMessage>
+                        </label>
+                        <input
+                          id="shortDesc"
+                          placeholder="Brief specs summary, e.g., 'i7, 16GB RAM, RTX 3070, 1TB SSD'"
+                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                          value={field.state.value}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          disabled={formStatus === "submitting"}
+                          maxLength={100}
+                        />
+                        {field.state.meta.errors ? (
+                          <div className="text-red-300 text-sm mt-1">
                             {field.state.meta.errors.join(", ")}
-                          </FormMessage>
-                        )}
-                      </FormItem>
+                          </div>
+                        ) : null}
+                      </>
                     )}
                   </form.Field>
                 </div>
@@ -514,27 +524,28 @@ export default function AddListing() {
                     }}
                   >
                     {(field) => (
-                      <FormItem>
-                        <FormLabel htmlFor="description">
+                      <>
+                        <label
+                          htmlFor="description"
+                          className="block text-sm font-medium text-neutral-200 mb-1"
+                        >
                           Full Description
-                        </FormLabel>
-                        <FormControl>
-                          <Textarea
-                            id="description"
-                            rows={4}
-                            placeholder="Detailed description of the laptop..."
-                            className="bg-neutral-700 border-neutral-600 text-white"
-                            value={field.state.value}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            disabled={formStatus === "submitting"}
-                          />
-                        </FormControl>
-                        {field.state.meta.errors && (
-                          <FormMessage>
+                        </label>
+                        <textarea
+                          id="description"
+                          rows={4}
+                          placeholder="Detailed description of the laptop..."
+                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                          value={field.state.value}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          disabled={formStatus === "submitting"}
+                        />
+                        {field.state.meta.errors ? (
+                          <div className="text-red-300 text-sm mt-1">
                             {field.state.meta.errors.join(", ")}
-                          </FormMessage>
-                        )}
-                      </FormItem>
+                          </div>
+                        ) : null}
+                      </>
                     )}
                   </form.Field>
                 </div>
@@ -556,27 +567,30 @@ export default function AddListing() {
                     }}
                   >
                     {(field) => (
-                      <FormItem>
-                        <FormLabel htmlFor="year">Year</FormLabel>
-                        <FormControl>
-                          <Input
-                            id="year"
-                            type="number"
-                            placeholder={new Date().getFullYear().toString()}
-                            className="bg-neutral-700 border-neutral-600 text-white"
-                            value={field.state.value}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            disabled={formStatus === "submitting"}
-                            min={2000}
-                            max={new Date().getFullYear() + 1}
-                          />
-                        </FormControl>
-                        {field.state.meta.errors && (
-                          <FormMessage>
+                      <>
+                        <label
+                          htmlFor="year"
+                          className="block text-sm font-medium text-neutral-200 mb-1"
+                        >
+                          Year
+                        </label>
+                        <input
+                          id="year"
+                          type="number"
+                          placeholder={new Date().getFullYear().toString()}
+                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                          value={field.state.value}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          disabled={formStatus === "submitting"}
+                          min={2000}
+                          max={new Date().getFullYear() + 1}
+                        />
+                        {field.state.meta.errors ? (
+                          <div className="text-red-300 text-sm mt-1">
                             {field.state.meta.errors.join(", ")}
-                          </FormMessage>
-                        )}
-                      </FormItem>
+                          </div>
+                        ) : null}
+                      </>
                     )}
                   </form.Field>
                 </div>
@@ -584,37 +598,33 @@ export default function AddListing() {
                 <div>
                   <form.Field name="stockStatus">
                     {(field) => (
-                      <FormItem>
-                        <FormLabel htmlFor="stockStatus">
+                      <>
+                        <label
+                          htmlFor="stockStatus"
+                          className="block text-sm font-medium text-neutral-200 mb-1"
+                        >
                           Stock Status
-                        </FormLabel>
-                        <Select
+                        </label>
+                        <select
+                          id="stockStatus"
+                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
                           value={field.state.value}
-                          onValueChange={field.handleChange}
+                          onChange={(e) => field.handleChange(e.target.value)}
                           disabled={formStatus === "submitting"}
                         >
-                          <FormControl>
-                            <SelectTrigger className="bg-neutral-700 border-neutral-600 text-white">
-                              <SelectValue placeholder="Select stock status" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent className="bg-neutral-800 border-neutral-600 text-white">
-                            {STOCK_STATUSES.map((status) => (
-                              <SelectItem key={status} value={status}>
-                                {status.charAt(0).toUpperCase() +
-                                  status.slice(1)}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </FormItem>
+                          {STOCK_STATUSES.map((status) => (
+                            <option key={status} value={status}>
+                              {status.charAt(0).toUpperCase() + status.slice(1)}
+                            </option>
+                          ))}
+                        </select>
+                      </>
                     )}
                   </form.Field>
                 </div>
 
                 {/* Performance Section */}
                 <div className="md:col-span-2 mt-4">
-                  <Separator className="my-4" />
                   <h2 className="text-xl font-semibold text-white mb-4 pb-2 border-b border-neutral-700">
                     Performance Specifications
                   </h2>
@@ -631,34 +641,33 @@ export default function AddListing() {
                     }}
                   >
                     {(field) => (
-                      <FormItem>
-                        <FormLabel htmlFor="processorBrand">
+                      <>
+                        <label
+                          htmlFor="processorBrand"
+                          className="block text-sm font-medium text-neutral-200 mb-1"
+                        >
                           Processor Brand
-                        </FormLabel>
-                        <Select
+                        </label>
+                        <select
+                          id="processorBrand"
+                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
                           value={field.state.value}
-                          onValueChange={field.handleChange}
+                          onChange={(e) => field.handleChange(e.target.value)}
                           disabled={formStatus === "submitting"}
                         >
-                          <FormControl>
-                            <SelectTrigger className="bg-neutral-700 border-neutral-600 text-white">
-                              <SelectValue placeholder="Select CPU brand" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent className="bg-neutral-800 border-neutral-600 text-white">
-                            {CPU_BRANDS.map((brand) => (
-                              <SelectItem key={brand} value={brand}>
-                                {brand}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        {field.state.meta.errors && (
-                          <FormMessage>
+                          <option value="">Select Processor Brand</option>
+                          {PROCESSOR_BRANDS.map((brand) => (
+                            <option key={brand} value={brand}>
+                              {brand}
+                            </option>
+                          ))}
+                        </select>
+                        {field.state.meta.errors ? (
+                          <div className="text-red-300 text-sm mt-1">
                             {field.state.meta.errors.join(", ")}
-                          </FormMessage>
-                        )}
-                      </FormItem>
+                          </div>
+                        ) : null}
+                      </>
                     )}
                   </form.Field>
                 </div>
@@ -674,26 +683,27 @@ export default function AddListing() {
                     }}
                   >
                     {(field) => (
-                      <FormItem>
-                        <FormLabel htmlFor="processorModel">
+                      <>
+                        <label
+                          htmlFor="processorModel"
+                          className="block text-sm font-medium text-neutral-200 mb-1"
+                        >
                           Processor Model
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            id="processorModel"
-                            placeholder="e.g., Core i7-12700H, Ryzen 7 5800H"
-                            className="bg-neutral-700 border-neutral-600 text-white"
-                            value={field.state.value}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            disabled={formStatus === "submitting"}
-                          />
-                        </FormControl>
-                        {field.state.meta.errors && (
-                          <FormMessage>
+                        </label>
+                        <input
+                          id="processorModel"
+                          placeholder="e.g., Core i7-12700H, Ryzen 7 5800H"
+                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                          value={field.state.value}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          disabled={formStatus === "submitting"}
+                        />
+                        {field.state.meta.errors ? (
+                          <div className="text-red-300 text-sm mt-1">
                             {field.state.meta.errors.join(", ")}
-                          </FormMessage>
-                        )}
-                      </FormItem>
+                          </div>
+                        ) : null}
+                      </>
                     )}
                   </form.Field>
                 </div>
@@ -712,25 +722,28 @@ export default function AddListing() {
                     }}
                   >
                     {(field) => (
-                      <FormItem>
-                        <FormLabel htmlFor="cores">CPU Cores</FormLabel>
-                        <FormControl>
-                          <Input
-                            id="cores"
-                            type="number"
-                            placeholder="e.g., 8"
-                            className="bg-neutral-700 border-neutral-600 text-white"
-                            value={field.state.value}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            disabled={formStatus === "submitting"}
-                          />
-                        </FormControl>
-                        {field.state.meta.errors && (
-                          <FormMessage>
+                      <>
+                        <label
+                          htmlFor="cores"
+                          className="block text-sm font-medium text-neutral-200 mb-1"
+                        >
+                          CPU Cores
+                        </label>
+                        <input
+                          id="cores"
+                          type="number"
+                          placeholder="e.g., 8"
+                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                          value={field.state.value}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          disabled={formStatus === "submitting"}
+                        />
+                        {field.state.meta.errors ? (
+                          <div className="text-red-300 text-sm mt-1">
                             {field.state.meta.errors.join(", ")}
-                          </FormMessage>
-                        )}
-                      </FormItem>
+                          </div>
+                        ) : null}
+                      </>
                     )}
                   </form.Field>
                 </div>
@@ -749,25 +762,28 @@ export default function AddListing() {
                     }}
                   >
                     {(field) => (
-                      <FormItem>
-                        <FormLabel htmlFor="threads">CPU Threads</FormLabel>
-                        <FormControl>
-                          <Input
-                            id="threads"
-                            type="number"
-                            placeholder="e.g., 16"
-                            className="bg-neutral-700 border-neutral-600 text-white"
-                            value={field.state.value}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            disabled={formStatus === "submitting"}
-                          />
-                        </FormControl>
-                        {field.state.meta.errors && (
-                          <FormMessage>
+                      <>
+                        <label
+                          htmlFor="threads"
+                          className="block text-sm font-medium text-neutral-200 mb-1"
+                        >
+                          CPU Threads
+                        </label>
+                        <input
+                          id="threads"
+                          type="number"
+                          placeholder="e.g., 16"
+                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                          value={field.state.value}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          disabled={formStatus === "submitting"}
+                        />
+                        {field.state.meta.errors ? (
+                          <div className="text-red-300 text-sm mt-1">
                             {field.state.meta.errors.join(", ")}
-                          </FormMessage>
-                        )}
-                      </FormItem>
+                          </div>
+                        ) : null}
+                      </>
                     )}
                   </form.Field>
                 </div>
@@ -783,32 +799,33 @@ export default function AddListing() {
                     }}
                   >
                     {(field) => (
-                      <FormItem>
-                        <FormLabel htmlFor="gpuBrand">GPU Brand</FormLabel>
-                        <Select
+                      <>
+                        <label
+                          htmlFor="gpuBrand"
+                          className="block text-sm font-medium text-neutral-200 mb-1"
+                        >
+                          GPU Brand
+                        </label>
+                        <select
+                          id="gpuBrand"
+                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
                           value={field.state.value}
-                          onValueChange={field.handleChange}
+                          onChange={(e) => field.handleChange(e.target.value)}
                           disabled={formStatus === "submitting"}
                         >
-                          <FormControl>
-                            <SelectTrigger className="bg-neutral-700 border-neutral-600 text-white">
-                              <SelectValue placeholder="Select GPU brand" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent className="bg-neutral-800 border-neutral-600 text-white">
-                            {GPU_BRANDS.map((brand) => (
-                              <SelectItem key={brand} value={brand}>
-                                {brand}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        {field.state.meta.errors && (
-                          <FormMessage>
+                          <option value="">Select GPU Brand</option>
+                          {GPU_BRANDS.map((brand) => (
+                            <option key={brand} value={brand}>
+                              {brand}
+                            </option>
+                          ))}
+                        </select>
+                        {field.state.meta.errors ? (
+                          <div className="text-red-300 text-sm mt-1">
                             {field.state.meta.errors.join(", ")}
-                          </FormMessage>
-                        )}
-                      </FormItem>
+                          </div>
+                        ) : null}
+                      </>
                     )}
                   </form.Field>
                 </div>
@@ -824,24 +841,27 @@ export default function AddListing() {
                     }}
                   >
                     {(field) => (
-                      <FormItem>
-                        <FormLabel htmlFor="gpuModel">GPU Model</FormLabel>
-                        <FormControl>
-                          <Input
-                            id="gpuModel"
-                            placeholder="e.g., RTX 3070, Radeon RX 6700M"
-                            className="bg-neutral-700 border-neutral-600 text-white"
-                            value={field.state.value}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            disabled={formStatus === "submitting"}
-                          />
-                        </FormControl>
-                        {field.state.meta.errors && (
-                          <FormMessage>
+                      <>
+                        <label
+                          htmlFor="gpuModel"
+                          className="block text-sm font-medium text-neutral-200 mb-1"
+                        >
+                          GPU Model
+                        </label>
+                        <input
+                          id="gpuModel"
+                          placeholder="e.g., RTX 3070, Radeon RX 6700M"
+                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                          value={field.state.value}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          disabled={formStatus === "submitting"}
+                        />
+                        {field.state.meta.errors ? (
+                          <div className="text-red-300 text-sm mt-1">
                             {field.state.meta.errors.join(", ")}
-                          </FormMessage>
-                        )}
-                      </FormItem>
+                          </div>
+                        ) : null}
+                      </>
                     )}
                   </form.Field>
                 </div>
@@ -858,30 +878,31 @@ export default function AddListing() {
                     }}
                   >
                     {(field) => (
-                      <FormItem>
-                        <FormLabel htmlFor="vram">
+                      <>
+                        <label
+                          htmlFor="vram"
+                          className="block text-sm font-medium text-neutral-200 mb-1"
+                        >
                           VRAM (GB){" "}
-                          <Badge variant="outline" className="ml-2 text-xs">
-                            Optional
-                          </Badge>
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            id="vram"
-                            type="number"
-                            placeholder="e.g., 8"
-                            className="bg-neutral-700 border-neutral-600 text-white"
-                            value={field.state.value}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            disabled={formStatus === "submitting"}
-                          />
-                        </FormControl>
-                        {field.state.meta.errors && (
-                          <FormMessage>
+                          <span className="text-neutral-400 text-xs">
+                            (optional)
+                          </span>
+                        </label>
+                        <input
+                          id="vram"
+                          type="number"
+                          placeholder="e.g., 8"
+                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                          value={field.state.value}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          disabled={formStatus === "submitting"}
+                        />
+                        {field.state.meta.errors ? (
+                          <div className="text-red-300 text-sm mt-1">
                             {field.state.meta.errors.join(", ")}
-                          </FormMessage>
-                        )}
-                      </FormItem>
+                          </div>
+                        ) : null}
+                      </>
                     )}
                   </form.Field>
                 </div>
@@ -900,25 +921,28 @@ export default function AddListing() {
                     }}
                   >
                     {(field) => (
-                      <FormItem>
-                        <FormLabel htmlFor="ram">RAM (GB)</FormLabel>
-                        <FormControl>
-                          <Input
-                            id="ram"
-                            type="number"
-                            placeholder="e.g., 16"
-                            className="bg-neutral-700 border-neutral-600 text-white"
-                            value={field.state.value}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            disabled={formStatus === "submitting"}
-                          />
-                        </FormControl>
-                        {field.state.meta.errors && (
-                          <FormMessage>
+                      <>
+                        <label
+                          htmlFor="ram"
+                          className="block text-sm font-medium text-neutral-200 mb-1"
+                        >
+                          RAM (GB)
+                        </label>
+                        <input
+                          id="ram"
+                          type="number"
+                          placeholder="e.g., 16"
+                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                          value={field.state.value}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          disabled={formStatus === "submitting"}
+                        />
+                        {field.state.meta.errors ? (
+                          <div className="text-red-300 text-sm mt-1">
                             {field.state.meta.errors.join(", ")}
-                          </FormMessage>
-                        )}
-                      </FormItem>
+                          </div>
+                        ) : null}
+                      </>
                     )}
                   </form.Field>
                 </div>
@@ -934,39 +958,39 @@ export default function AddListing() {
                     }}
                   >
                     {(field) => (
-                      <FormItem>
-                        <FormLabel htmlFor="ramType">RAM Type</FormLabel>
-                        <Select
+                      <>
+                        <label
+                          htmlFor="ramType"
+                          className="block text-sm font-medium text-neutral-200 mb-1"
+                        >
+                          RAM Type
+                        </label>
+                        <select
+                          id="ramType"
+                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
                           value={field.state.value}
-                          onValueChange={field.handleChange}
+                          onChange={(e) => field.handleChange(e.target.value)}
                           disabled={formStatus === "submitting"}
                         >
-                          <FormControl>
-                            <SelectTrigger className="bg-neutral-700 border-neutral-600 text-white">
-                              <SelectValue placeholder="Select RAM type" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent className="bg-neutral-800 border-neutral-600 text-white">
-                            {RAM_TYPES.map((type) => (
-                              <SelectItem key={type} value={type}>
-                                {type}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        {field.state.meta.errors && (
-                          <FormMessage>
+                          <option value="">Select RAM Type</option>
+                          {RAM_TYPES.map((type) => (
+                            <option key={type} value={type}>
+                              {type}
+                            </option>
+                          ))}
+                        </select>
+                        {field.state.meta.errors ? (
+                          <div className="text-red-300 text-sm mt-1">
                             {field.state.meta.errors.join(", ")}
-                          </FormMessage>
-                        )}
-                      </FormItem>
+                          </div>
+                        ) : null}
+                      </>
                     )}
                   </form.Field>
                 </div>
 
                 {/* Storage & Display Section */}
                 <div className="md:col-span-2 mt-4">
-                  <Separator className="my-4" />
                   <h2 className="text-xl font-semibold text-white mb-4 pb-2 border-b border-neutral-700">
                     Storage & Display
                   </h2>
@@ -983,34 +1007,33 @@ export default function AddListing() {
                     }}
                   >
                     {(field) => (
-                      <FormItem>
-                        <FormLabel htmlFor="storageType">
+                      <>
+                        <label
+                          htmlFor="storageType"
+                          className="block text-sm font-medium text-neutral-200 mb-1"
+                        >
                           Storage Type
-                        </FormLabel>
-                        <Select
+                        </label>
+                        <select
+                          id="storageType"
+                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
                           value={field.state.value}
-                          onValueChange={field.handleChange}
+                          onChange={(e) => field.handleChange(e.target.value)}
                           disabled={formStatus === "submitting"}
                         >
-                          <FormControl>
-                            <SelectTrigger className="bg-neutral-700 border-neutral-600 text-white">
-                              <SelectValue placeholder="Select storage type" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent className="bg-neutral-800 border-neutral-600 text-white">
-                            {STORAGE_TYPES.map((type) => (
-                              <SelectItem key={type} value={type}>
-                                {type}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        {field.state.meta.errors && (
-                          <FormMessage>
+                          <option value="">Select Storage Type</option>
+                          {STORAGE_TYPES.map((type) => (
+                            <option key={type} value={type}>
+                              {type}
+                            </option>
+                          ))}
+                        </select>
+                        {field.state.meta.errors ? (
+                          <div className="text-red-300 text-sm mt-1">
                             {field.state.meta.errors.join(", ")}
-                          </FormMessage>
-                        )}
-                      </FormItem>
+                          </div>
+                        ) : null}
+                      </>
                     )}
                   </form.Field>
                 </div>
@@ -1026,26 +1049,27 @@ export default function AddListing() {
                     }}
                   >
                     {(field) => (
-                      <FormItem>
-                        <FormLabel htmlFor="storageCapacity">
+                      <>
+                        <label
+                          htmlFor="storageCapacity"
+                          className="block text-sm font-medium text-neutral-200 mb-1"
+                        >
                           Storage Capacity
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            id="storageCapacity"
-                            placeholder="e.g., 512GB, 1TB"
-                            className="bg-neutral-700 border-neutral-600 text-white"
-                            value={field.state.value}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            disabled={formStatus === "submitting"}
-                          />
-                        </FormControl>
-                        {field.state.meta.errors && (
-                          <FormMessage>
+                        </label>
+                        <input
+                          id="storageCapacity"
+                          placeholder="e.g., 512GB, 1TB"
+                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                          value={field.state.value}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          disabled={formStatus === "submitting"}
+                        />
+                        {field.state.meta.errors ? (
+                          <div className="text-red-300 text-sm mt-1">
                             {field.state.meta.errors.join(", ")}
-                          </FormMessage>
-                        )}
-                      </FormItem>
+                          </div>
+                        ) : null}
+                      </>
                     )}
                   </form.Field>
                 </div>
@@ -1061,26 +1085,27 @@ export default function AddListing() {
                     }}
                   >
                     {(field) => (
-                      <FormItem>
-                        <FormLabel htmlFor="screenSize">
+                      <>
+                        <label
+                          htmlFor="screenSize"
+                          className="block text-sm font-medium text-neutral-200 mb-1"
+                        >
                           Screen Size (inches)
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            id="screenSize"
-                            placeholder="e.g., 15.6"
-                            className="bg-neutral-700 border-neutral-600 text-white"
-                            value={field.state.value}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            disabled={formStatus === "submitting"}
-                          />
-                        </FormControl>
-                        {field.state.meta.errors && (
-                          <FormMessage>
+                        </label>
+                        <input
+                          id="screenSize"
+                          placeholder="e.g., 15.6"
+                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                          value={field.state.value}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          disabled={formStatus === "submitting"}
+                        />
+                        {field.state.meta.errors ? (
+                          <div className="text-red-300 text-sm mt-1">
                             {field.state.meta.errors.join(", ")}
-                          </FormMessage>
-                        )}
-                      </FormItem>
+                          </div>
+                        ) : null}
+                      </>
                     )}
                   </form.Field>
                 </div>
@@ -1096,26 +1121,27 @@ export default function AddListing() {
                     }}
                   >
                     {(field) => (
-                      <FormItem>
-                        <FormLabel htmlFor="screenResolution">
+                      <>
+                        <label
+                          htmlFor="screenResolution"
+                          className="block text-sm font-medium text-neutral-200 mb-1"
+                        >
                           Screen Resolution
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            id="screenResolution"
-                            placeholder="e.g., 1920x1080, 2560x1440"
-                            className="bg-neutral-700 border-neutral-600 text-white"
-                            value={field.state.value}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            disabled={formStatus === "submitting"}
-                          />
-                        </FormControl>
-                        {field.state.meta.errors && (
-                          <FormMessage>
+                        </label>
+                        <input
+                          id="screenResolution"
+                          placeholder="e.g., 1920x1080, 2560x1440"
+                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                          value={field.state.value}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          disabled={formStatus === "submitting"}
+                        />
+                        {field.state.meta.errors ? (
+                          <div className="text-red-300 text-sm mt-1">
                             {field.state.meta.errors.join(", ")}
-                          </FormMessage>
-                        )}
-                      </FormItem>
+                          </div>
+                        ) : null}
+                      </>
                     )}
                   </form.Field>
                 </div>
@@ -1135,27 +1161,28 @@ export default function AddListing() {
                     }}
                   >
                     {(field) => (
-                      <FormItem>
-                        <FormLabel htmlFor="refreshRate">
+                      <>
+                        <label
+                          htmlFor="refreshRate"
+                          className="block text-sm font-medium text-neutral-200 mb-1"
+                        >
                           Refresh Rate (Hz)
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            id="refreshRate"
-                            type="number"
-                            placeholder="e.g., 60, 144, 240"
-                            className="bg-neutral-700 border-neutral-600 text-white"
-                            value={field.state.value}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            disabled={formStatus === "submitting"}
-                          />
-                        </FormControl>
-                        {field.state.meta.errors && (
-                          <FormMessage>
+                        </label>
+                        <input
+                          id="refreshRate"
+                          type="number"
+                          placeholder="e.g., 60, 144, 240"
+                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                          value={field.state.value}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          disabled={formStatus === "submitting"}
+                        />
+                        {field.state.meta.errors ? (
+                          <div className="text-red-300 text-sm mt-1">
                             {field.state.meta.errors.join(", ")}
-                          </FormMessage>
-                        )}
-                      </FormItem>
+                          </div>
+                        ) : null}
+                      </>
                     )}
                   </form.Field>
                 </div>
@@ -1171,40 +1198,42 @@ export default function AddListing() {
                     }}
                   >
                     {(field) => (
-                      <FormItem>
-                        <FormLabel htmlFor="weight">Weight</FormLabel>
-                        <FormControl>
-                          <Input
-                            id="weight"
-                            placeholder="e.g., 2.3kg, 5.1 lbs"
-                            className="bg-neutral-700 border-neutral-600 text-white"
-                            value={field.state.value}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                            disabled={formStatus === "submitting"}
-                          />
-                        </FormControl>
-                        {field.state.meta.errors && (
-                          <FormMessage>
+                      <>
+                        <label
+                          htmlFor="weight"
+                          className="block text-sm font-medium text-neutral-200 mb-1"
+                        >
+                          Weight
+                        </label>
+                        <input
+                          id="weight"
+                          placeholder="e.g., 2.3kg, 5.1 lbs"
+                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                          value={field.state.value}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          disabled={formStatus === "submitting"}
+                        />
+                        {field.state.meta.errors ? (
+                          <div className="text-red-300 text-sm mt-1">
                             {field.state.meta.errors.join(", ")}
-                          </FormMessage>
-                        )}
-                      </FormItem>
+                          </div>
+                        ) : null}
+                      </>
                     )}
                   </form.Field>
                 </div>
 
                 {/* Images Section */}
                 <div className="md:col-span-2 mt-4">
-                  <Separator className="my-4" />
                   <h2 className="text-xl font-semibold text-white mb-4 pb-2 border-b border-neutral-700">
                     Images
                   </h2>
                   <div className="mb-6">
-                    <Label className="block text-sm font-medium text-neutral-200 mb-2">
+                    <label className="block text-sm font-medium text-neutral-200 mb-2">
                       Upload Images
-                    </Label>
+                    </label>
                     <div className="flex flex-col space-y-4">
-                      <label className="flex justify-center w-full h-32 px-4 transition bg-neutral-700 border-2 border-neutral-600 border-dashed rounded-md appearance-none cursor-pointer hover:border-secondary-500 focus:outline-none">
+                      <div className="flex justify-center w-full h-32 px-4 transition bg-neutral-700 border-2 border-neutral-600 border-dashed rounded-md appearance-none cursor-pointer hover:border-secondary-500 focus:outline-none">
                         <span className="flex items-center space-x-2">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -1236,53 +1265,72 @@ export default function AddListing() {
                           onChange={handleImageUpload}
                           disabled={formStatus === "submitting"}
                         />
-                      </label>
+                      </div>
 
                       {uploadedImages.length > 0 && (
-                        <ScrollArea className="h-48 w-full rounded-md">
-                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4">
-                            {uploadedImages.map((image, index) => (
-                              <div key={index} className="relative group">
-                                <img
-                                  src={image}
-                                  alt={`Preview ${index + 1}`}
-                                  className="h-24 w-full object-cover rounded-md"
-                                />
-                                <Button
-                                  type="button"
-                                  variant="destructive"
-                                  size="icon"
-                                  onClick={() => removeImage(index)}
-                                  className="absolute top-1 right-1 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
-                                  aria-label="Remove image"
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4">
+                          {uploadedImages.map((image, index) => (
+                            <div key={index} className="relative group">
+                              <img
+                                src={image}
+                                alt={`Preview ${index + 1}`}
+                                className="h-24 w-full object-cover rounded-md"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => removeImage(index)}
+                                className="absolute top-1 right-1 bg-red-600 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                                aria-label="Remove image"
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-4 w-4"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
                                 >
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="h-4 w-4"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                  >
-                                    <path
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      strokeWidth={2}
-                                      d="M6 18L18 6M6 6l12 12"
-                                    />
-                                  </svg>
-                                </Button>
-                              </div>
-                            ))}
-                          </div>
-                        </ScrollArea>
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M6 18L18 6M6 6l12 12"
+                                  />
+                                </svg>
+                              </button>
+                            </div>
+                          ))}
+                        </div>
                       )}
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-8 flex justify-end">
-                <Button
+              <div className="mt-8 flex justify-between">
+                {/* Test Data Button */}
+                <button
+                  type="button"
+                  onClick={fillWithTestData}
+                  disabled={formStatus === "submitting"}
+                  className="py-3 px-8 flex items-center justify-center gap-3 text-white font-semibold rounded-lg shadow-lg transition-transform duration-300 bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-700 hover:to-amber-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+                  </svg>
+                  <span>Fill with Test Data</span>
+                </button>
+
+                <button
                   type="submit"
                   disabled={formStatus === "submitting"}
                   className="py-3 px-8 flex items-center justify-center gap-3 text-white font-semibold rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-[1.02] focus:ring-2 focus:ring-secondary-500 focus:ring-opacity-50 bg-gradient-to-r from-purple-600 to-primary-600 hover:from-purple-700 hover:to-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -1310,11 +1358,11 @@ export default function AddListing() {
                       <span>Create Listing</span>
                     </>
                   )}
-                </Button>
+                </button>
               </div>
             </form>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
     </div>
   );

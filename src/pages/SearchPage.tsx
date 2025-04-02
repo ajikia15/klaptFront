@@ -8,6 +8,7 @@ import { useState, useEffect, useDeferredValue, useRef } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { RefreshSVG } from "@/assets/RefreshSVG";
 import { SpinnerSVG } from "@/assets/SpinnerSVG";
+import { useAuth } from "@/context/AuthContext";
 
 interface FilterOption {
   value: string;
@@ -127,6 +128,7 @@ export default function SearchPage() {
     },
   ];
 
+  const { isAuthenticated } = useAuth();
   return (
     <div className="container mx-auto py-8">
       <h1 className="mb-6 text-3xl font-bold">Search Laptops</h1>
@@ -260,6 +262,7 @@ export default function SearchPage() {
                   price={laptop.price}
                   shortDesc={laptop.shortDesc}
                   image={laptop.images[0]}
+                  isAuthenticated={isAuthenticated}
                 />
               ))}
 

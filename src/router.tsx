@@ -12,9 +12,9 @@ import LoginPage from "./pages/LoginPage";
 import RegistrationPage from "./pages/RegistrationPage";
 import FavoritesPage from "./pages/FavoritesPage";
 import ProfilePage from "./pages/ProfilePage";
-import AddListing from "./pages/AddListing"; // Add this import
 import { useRequireAuth } from "./hooks/useRequireAuth";
 import { ReactNode } from "react";
+import AddListingPage from "./pages/AddListingPage";
 
 // Protected route wrapper component
 function ProtectedRoute({ children }: { children: ReactNode }) {
@@ -96,7 +96,7 @@ const addLaptopRoute = createRoute({
   path: "/add-listing",
   component: () => (
     <ProtectedRoute>
-      <AddListing />
+      <AddListingPage />
     </ProtectedRoute>
   ),
 });
