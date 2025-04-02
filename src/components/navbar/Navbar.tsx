@@ -41,8 +41,8 @@ export default function Navbar() {
           {/* Create Post Button - Same icon for both states, less prominent */}
           <div className="mr-2">
             <Link
-              to={isAuthenticated ? "/" : "/login"}
-              className="flex items-center justify-center w-9 h-9 rounded-full bg-neutral-800 hover:bg-neutral-700 text-neutral-100 transition-all"
+              to={isAuthenticated ? "/add-listing" : "/login"}
+              className="flex items-center justify-center px-4  h-9 rounded-full bg-neutral-800 hover:bg-neutral-700 text-neutral-100 transition-all"
               aria-label={
                 isAuthenticated ? "Create Post" : "Login to create a post"
               }
@@ -62,6 +62,7 @@ export default function Navbar() {
                 <line x1="12" y1="5" x2="12" y2="19"></line>
                 <line x1="5" y1="12" x2="19" y2="12"></line>
               </svg>
+              <span className="pl-2">Create post</span>
             </Link>
           </div>
 

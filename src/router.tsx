@@ -12,6 +12,7 @@ import LoginPage from "./pages/LoginPage";
 import RegistrationPage from "./pages/RegistrationPage";
 import FavoritesPage from "./pages/FavoritesPage";
 import ProfilePage from "./pages/ProfilePage";
+import AddListing from "./pages/AddListing"; // Add this import
 import { useRequireAuth } from "./hooks/useRequireAuth";
 import { ReactNode } from "react";
 
@@ -90,6 +91,16 @@ const favoritesRoute = createRoute({
   ),
 });
 
+const addLaptopRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/add-listing",
+  component: () => (
+    <ProtectedRoute>
+      <AddListing />
+    </ProtectedRoute>
+  ),
+});
+
 // Add profile route
 const profileRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -111,6 +122,7 @@ const routeTree = rootRoute.addChildren([
   registerRoute,
   favoritesRoute,
   profileRoute,
+  addLaptopRoute,
 ]);
 
 // Create the router using the route tree

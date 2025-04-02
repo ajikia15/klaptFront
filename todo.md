@@ -17,3 +17,6 @@
 - [x] Favorites
   - [x] Backend
   - [x] Frontend
+
+Bug:
+userid is being returned as id in laptops. its injected somewhere and i dont know where
