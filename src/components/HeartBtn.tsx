@@ -6,7 +6,7 @@ import {
   useFavoriteStatus,
 } from "@/hooks/useFavorites";
 import { HeartIcon } from "@/assets/Icons";
-import { Link } from "@tanstack/react-router";
+import { useToasts } from "@/assets/Toasts";
 
 interface HeartBtnProps {
   laptopId?: number;
@@ -14,16 +14,17 @@ interface HeartBtnProps {
 }
 
 const HeartBtn: FC<HeartBtnProps> = ({ laptopId, className = "" }) => {
+  const { unauthorizedToast } = useToasts();
   if (!laptopId) {
     return (
-      <Link to="/auth" className={className}>
+      <div className={className} onClick={unauthorizedToast}>
         <label className="heart">
           <input type="checkbox" disabled />
           <div className="checkmark">
             <HeartIcon />
           </div>
         </label>
-      </Link>
+      </div>
     );
   }
   const { data: isFavorite } = useFavoriteStatus(laptopId);
