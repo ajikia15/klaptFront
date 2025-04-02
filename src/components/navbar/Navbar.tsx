@@ -3,6 +3,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { useAuth } from "../../context/AuthContext";
 import { useListFavorites } from "@/hooks/useFavorites";
 import Searchbar from "./Searchbar";
+import { SpinnerSVG } from "@/assets/SpinnerSVG";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -38,9 +39,11 @@ export default function Navbar() {
             className="text-white hover:text-blue-400 relative cursor-pointer transition-colors"
           >
             <Heart size={24} />
-            <span className="absolute -top-3 -right-3 bg-secondary-400 text-xs text-white rounded-full h-5 w-5 flex items-center justify-center ">
-              {isLoading ? "asdf" : favorites?.length ?? 0}
-            </span>
+            {isAuthenticated && (
+              <span className="absolute -top-3 -right-3 bg-secondary-400 text-xs text-white rounded-full h-5 w-5 flex items-center justify-center ">
+                {isLoading ? <SpinnerSVG /> : favorites?.length ?? 0}
+              </span>
+            )}
           </Link>
 
           {isAuthenticated ? (

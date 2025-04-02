@@ -11,6 +11,7 @@ interface LaptopCardProps {
   price: number;
   shortDesc: string;
   image: string;
+  isAuthenticated: boolean;
 }
 
 export const LaptopCard: FC<LaptopCardProps> = ({
@@ -19,6 +20,7 @@ export const LaptopCard: FC<LaptopCardProps> = ({
   price,
   shortDesc,
   image,
+  isAuthenticated,
 }) => {
   return (
     <div className="relative max-h-84 bg-neutral-900 overflow-hidden hover:shadow-xl transition-all duration-300  rounded-xl border border-neutral-700">
@@ -35,12 +37,20 @@ export const LaptopCard: FC<LaptopCardProps> = ({
           <button className=" bg-black/70 p-2 rounded-lg cursor-pointer opacity-0 hover:opacity-100 transition-all group-hover:opacity-50">
             <Maximize2 size={24} />
           </button>
-          <HeartBtn
-            laptopId={id}
-            className={
-              "bg-black/70 p-2 rounded-lg cursor-pointer opacity-0 hover:opacity-100 transition-all group-hover:opacity-50"
-            }
-          />
+          {isAuthenticated ? (
+            <HeartBtn
+              laptopId={id}
+              className={
+                "bg-black/70 p-2 rounded-lg cursor-pointer opacity-0 hover:opacity-100 transition-all group-hover:opacity-50"
+              }
+            />
+          ) : (
+            <HeartBtn
+              className={
+                "bg-black/70 p-2 rounded-lg cursor-pointer opacity-0 hover:opacity-100 transition-all group-hover:opacity-50"
+              }
+            />
+          )}
         </div>
       </div>
 

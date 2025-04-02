@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { LaptopCard } from "../components/LaptopCard";
 import { LaptopT } from "../interfaces/laptopT";
 import Landing from "../components/Landing";
+import { useAuth } from "@/context/AuthContext";
 
 export default function HomePage() {
   const {
@@ -18,6 +19,8 @@ export default function HomePage() {
       return response.json();
     },
   });
+
+  const { isAuthenticated } = useAuth();
 
   if (isLoading) {
     return (
@@ -51,6 +54,7 @@ export default function HomePage() {
             shortDesc={laptop.shortDesc}
             price={laptop.price}
             image={laptop.images[0]}
+            isAuthenticated={isAuthenticated}
           />
         ))}
       </div>

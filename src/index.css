@@ -143,3 +143,24 @@ body {
   );
   background-size: 1000px 100%;
 }
+.animated-gradient {
+  background-size: 300% 100%;
+  animation: gradient-shift-horizontal 18s linear infinite;
+  background-image: linear-gradient(
+    90deg,
+    #9333ea 0%,
+    #7e22ce 25%,
+    #6d28d9 50%,
+    #7e22ce 75%,
+    #9333ea 100%
+  );
+}
+
+@keyframes gradient-shift-horizontal {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 300% 50%;
+  }
+}
