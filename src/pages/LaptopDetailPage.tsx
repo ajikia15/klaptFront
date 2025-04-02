@@ -143,8 +143,8 @@ export default function LaptopDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-900 text-neutral-200 pt-6 pb-16 px-4 md:px-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-neutral-900 text-neutral-200 pt-6 pb-16">
+      <div className="container mx-auto">
         <Breadcrumb className="mb-8">
           <BreadcrumbList>
             <BreadcrumbItem>
