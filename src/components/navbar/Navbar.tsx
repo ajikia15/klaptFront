@@ -12,9 +12,11 @@ export default function Navbar() {
   const handleLogout = async () => {
     try {
       await logout();
+      // After successful logout, you might want to navigate to home or login page
       navigate({ to: "/" });
     } catch (error) {
       console.error("Logout failed:", error);
+      // You might want to show an error toast here
     }
   };
 
@@ -39,7 +41,7 @@ export default function Navbar() {
             className="text-white hover:text-blue-400 relative cursor-pointer transition-colors"
           >
             <Heart size={24} />
-            {isAuthenticated && (
+            {isAuthenticated && favorites && favorites.length > 0 && (
               <span className="absolute -top-3 -right-3 bg-secondary-400 text-xs text-white rounded-full h-5 w-5 flex items-center justify-center ">
                 {isLoading ? <SpinnerSVG /> : favorites?.length ?? 0}
               </span>

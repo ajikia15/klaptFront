@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { FavoriteT } from "@/interfaces/favoriteT";
+import { useAuth } from "@/context/AuthContext";
 
 export function useFavoriteStatus(laptopId: number) {
   return useQuery<FavoriteT | null>({
@@ -27,6 +28,8 @@ export function useFavoriteStatus(laptopId: number) {
 }
 
 export function useListFavorites() {
+  const { isAuthenticated } = useAuth();
+
   return useQuery<FavoriteT[]>({
     queryKey: ["favorites"],
     queryFn: async () => {
@@ -38,6 +41,7 @@ export function useListFavorites() {
       }
       return response.json();
     },
+    enabled: isAuthenticated,
   });
 }
 

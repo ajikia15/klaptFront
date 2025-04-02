@@ -100,6 +100,7 @@ const router = createRouter({
   routeTree,
   defaultPreload: "intent",
   scrollRestoration: true,
+  defaultViewTransition: true,
 });
 
 // Register your router for maximum type safety

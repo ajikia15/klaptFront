@@ -11,27 +11,33 @@ import { useToasts } from "@/assets/Toasts";
 interface HeartBtnProps {
   laptopId?: number;
   className?: string;
+  isAuthenticated: boolean;
 }
 
-const HeartBtn: FC<HeartBtnProps> = ({ laptopId, className = "" }) => {
+const HeartBtn: FC<HeartBtnProps> = ({
+  laptopId,
+  className = "",
+  isAuthenticated,
+}) => {
   const { unauthorizedToast } = useToasts();
-  if (!laptopId) {
-    return (
-      <div className={className} onClick={unauthorizedToast}>
-        <label className="heart">
-          <input type="checkbox" disabled />
-          <div className="checkmark">
-            <HeartIcon />
-          </div>
-        </label>
-      </div>
-    );
-  }
-  const { data: isFavorite } = useFavoriteStatus(laptopId);
+  const { data: isFavorite, isLoading: isCheckingFavorite } = useFavoriteStatus(
+    laptopId || 0
+  );
   const addToFavorites = useAddToFavorites();
   const removeFromFavorites = useRemoveFromFavorites();
 
+  const isLoading =
+    isCheckingFavorite ||
+    addToFavorites.isPending ||
+    removeFromFavorites.isPending;
+  const isDisabled = !laptopId || isLoading;
+
   const handleToggleFavorite = () => {
+    if (!laptopId || !isAuthenticated) {
+      unauthorizedToast();
+      return;
+    }
+
     if (isFavorite) {
       removeFromFavorites.mutate(laptopId);
     } else {
@@ -44,10 +50,16 @@ const HeartBtn: FC<HeartBtnProps> = ({ laptopId, className = "" }) => {
       <label className="heart">
         <input
           type="checkbox"
-          checked={isFavorite !== null}
+          checked={!!isFavorite}
           onChange={handleToggleFavorite}
+          disabled={isDisabled}
+          aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
         />
-        <div className="checkmark">
+        <div
+          className={`checkmark ${isLoading ? "loading" : ""} ${
+            isDisabled ? "disabled" : ""
+          }`}
+        >
           <HeartIcon />
         </div>
       </label>

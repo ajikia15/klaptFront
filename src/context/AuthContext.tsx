@@ -51,7 +51,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const logout = async () => {
-    await logoutMutation.mutateAsync();
+    try {
+      await logoutMutation.mutateAsync();
+    } catch (error) {
+      console.error("Logout failed:", error);
+      throw error;
+    }
   };
 
   // Context value

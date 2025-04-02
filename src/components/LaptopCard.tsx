@@ -37,20 +37,13 @@ export const LaptopCard: FC<LaptopCardProps> = ({
           <button className=" bg-black/70 p-2 rounded-lg cursor-pointer opacity-0 hover:opacity-100 transition-all group-hover:opacity-50">
             <Maximize2 size={24} />
           </button>
-          {isAuthenticated ? (
-            <HeartBtn
-              laptopId={id}
-              className={
-                "bg-black/70 p-2 rounded-lg cursor-pointer opacity-0 hover:opacity-100 transition-all group-hover:opacity-50"
-              }
-            />
-          ) : (
-            <HeartBtn
-              className={
-                "bg-black/70 p-2 rounded-lg cursor-pointer opacity-0 hover:opacity-100 transition-all group-hover:opacity-50"
-              }
-            />
-          )}
+          <HeartBtn
+            laptopId={id}
+            className={
+              "bg-black/70 p-2 rounded-lg cursor-pointer opacity-0 hover:opacity-100 transition-all group-hover:opacity-50"
+            }
+            isAuthenticated={isAuthenticated}
+          />
         </div>
       </div>
 
