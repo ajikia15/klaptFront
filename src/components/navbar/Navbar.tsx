@@ -1,9 +1,16 @@
-import { User, LogOut, Heart, Lock } from "@deemlol/next-icons";
+import { Heart } from "@deemlol/next-icons";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useAuth } from "../../context/AuthContext";
 import { useListFavorites } from "@/hooks/useFavorites";
 import Searchbar from "./Searchbar";
 import { SpinnerSVG } from "@/assets/SpinnerSVG";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -17,7 +24,6 @@ export default function Navbar() {
       console.error("Logout failed:", error);
     }
   };
-
   const { data: favorites, isLoading } = useListFavorites();
 
   return (
@@ -84,23 +90,36 @@ export default function Navbar() {
           {/* User Account Section */}
           {isAuthenticated ? (
             <div className="flex items-center space-x-3">
-              <div className="text-white hidden md:block">
-                <span className="text-sm">{user?.email}</span>
-              </div>
-              <Link
-                to="/profile"
-                className="text-white hover:text-secondary-400 cursor-pointer transition-colors p-1"
-                aria-label="Profile"
-              >
-                <User size={24} />
-              </Link>
-              <button
-                onClick={handleLogout}
-                className="text-white hover:text-secondary-400 cursor-pointer transition-colors p-1"
-                aria-label="Logout"
-              >
-                <LogOut size={24} />
-              </button>
+              <DropdownMenu>
+                <DropdownMenuTrigger className="focus:outline-none">
+                  <div
+                    className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-600 to-primary-600 flex items-center justify-center text-white font-medium cursor-pointer transition-transform hover:scale-105"
+                    title={user?.email}
+                  >
+                    {user?.email ? user.email[0].toUpperCase() : "?"}
+                  </div>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="min-w-[200px] bg-neutral-800 border-neutral-700 text-white">
+                  <div className="px-2 py-1.5 text-sm text-neutral-400">
+                    {user?.email}
+                  </div>
+                  <DropdownMenuSeparator className="bg-neutral-700" />
+                  <DropdownMenuItem
+                    asChild
+                    className="cursor-pointer focus:bg-neutral-700 focus:text-white"
+                  >
+                    <Link to="/profile" className="w-full">
+                      Profile
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={handleLogout}
+                    className="cursor-pointer focus:bg-neutral-700 focus:text-white"
+                  >
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           ) : (
             <div className="flex items-center space-x-3">

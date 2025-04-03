@@ -29,11 +29,32 @@ const STORAGE_TYPES = ["SSD", "HDD", "HDD + SSD"];
 const STOCK_STATUSES = ["in stock", "out of stock", "reserved", "pre-order"];
 const GRAPHICS_TYPES = ["Dedicated", "Integrated"];
 
-const vramOptions = ["2", "3", "4", "6", "8", "10", "12", "16", "24", "48"];
+const vramOptions = [
+  "2GB",
+  "3GB",
+  "4GB",
+  "6GB",
+  "8GB",
+  "10GB",
+  "12GB",
+  "16GB",
+  "24GB",
+  "48GB",
+];
 
 const backlightTypeOptions = ["RGB", "Single-color", "None"];
 
-const ramOptions = ["4", "8", "12", "16", "24", "32", "64", "96", "128"];
+const ramOptions = [
+  "4GB",
+  "8GB",
+  "12GB",
+  "16GB",
+  "24GB",
+  "32GB",
+  "64GB",
+  "96GB",
+  "128GB",
+];
 
 export default function AddListing() {
   const [formStatus, setFormStatus] = useState<
@@ -44,7 +65,6 @@ export default function AddListing() {
   const [uploadingImages, setUploadingImages] = useState<boolean>(false);
   const [graphicsType, setGraphicsType] = useState<string>("");
   const navigate = useNavigate();
-  const { user } = useAuth();
 
   // Redirect if not authenticated
   const { isLoading: authLoading } = useRequireAuth();
