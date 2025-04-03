@@ -19,52 +19,21 @@ const LAPTOP_BRANDS = [
   "Alienware",
   "Microsoft",
   "Samsung",
-  "LG",
   "Gigabyte",
-  "EVGA",
-  "Toshiba",
+  "Other",
 ];
-const PROCESSOR_BRANDS = ["Intel", "AMD", "Apple", "Qualcomm", "MediaTek"];
+const PROCESSOR_BRANDS = ["Intel", "AMD", "Apple"];
 const GPU_BRANDS = ["NVIDIA", "AMD", "Intel", "Apple"];
-const RAM_TYPES = ["DDR4", "DDR5", "LPDDR4X", "LPDDR5", "DDR3", "Unified"];
-const STORAGE_TYPES = ["SSD", "NVMe", "HDD", "eMMC", "Hybrid"];
+const RAM_TYPES = ["DDR3", "DDR4", "DDR5"];
+const STORAGE_TYPES = ["SSD", "HDD", "HDD + SSD"];
 const STOCK_STATUSES = ["in stock", "out of stock", "reserved", "pre-order"];
+const GRAPHICS_TYPES = ["dedicated", "integrated"];
 
-const vramOptions = [
-  "2GB",
-  "3GB",
-  "4GB",
-  "6GB",
-  "8GB",
-  "10GB",
-  "12GB",
-  "16GB",
-  "24GB",
-  "48GB",
-];
+const vramOptions = ["2", "3", "4", "6", "8", "10", "12", "16", "24", "48"];
 
-const backlightTypeOptions = [
-  "LED",
-  "Mini-LED",
-  "RGB",
-  "Per-Key RGB",
-  "White",
-  "None",
-];
+const backlightTypeOptions = ["RGB", "Single-color", "None"];
 
-const processorBrandOptions = ["Intel", "AMD", "Apple", "Qualcomm", "MediaTek"];
-
-const ramOptions = [
-  "4GB",
-  "8GB",
-  "12GB",
-  "16GB",
-  "24GB",
-  "32GB",
-  "64GB",
-  "96GB",
-  "128GB",
-];
+const ramOptions = ["4", "8", "12", "16", "24", "32", "64", "96", "128"];
 
 export default function AddListing() {
   const [formStatus, setFormStatus] = useState<
@@ -73,6 +42,7 @@ export default function AddListing() {
   const [errorMessage, setErrorMessage] = useState("");
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
   const [uploadingImages, setUploadingImages] = useState<boolean>(false);
+  const [graphicsType, setGraphicsType] = useState<string>("");
   const navigate = useNavigate();
   const { user } = useAuth();
 
@@ -91,6 +61,7 @@ export default function AddListing() {
       processorModel: "",
       cores: "",
       threads: "",
+      graphicsType: "",
       gpuBrand: "",
       gpuModel: "",
       vram: "",
@@ -116,7 +87,13 @@ export default function AddListing() {
           price: parseFloat(value.price),
           cores: parseInt(value.cores),
           threads: parseInt(value.threads),
-          vram: value.vram ? parseInt(value.vram) : null,
+          // Handle GPU fields based on graphics type
+          gpuBrand: value.graphicsType === "dedicated" ? value.gpuBrand : null,
+          gpuModel: value.graphicsType === "dedicated" ? value.gpuModel : null,
+          vram:
+            value.graphicsType === "dedicated" && value.vram
+              ? parseInt(value.vram)
+              : null,
           ram: parseInt(value.ram),
           refreshRate: parseInt(value.refreshRate),
           year: parseInt(value.year),
@@ -124,7 +101,6 @@ export default function AddListing() {
             uploadedImages.length > 0
               ? uploadedImages
               : ["https://placehold.co/800x600/111827/444?text=No+Image"],
-          userId: user?.id, // Make sure this is available from your auth context
         };
 
         // Send to API
@@ -157,7 +133,6 @@ export default function AddListing() {
     },
   });
 
-  // Function to generate random test data
   const fillWithTestData = () => {
     form.update({
       defaultValues: {
@@ -167,17 +142,18 @@ export default function AddListing() {
         price: "1599.99",
         description:
           "The ROG Strix G15 gaming laptop delivers powerful performance for gaming and content creation. Featuring an advanced cooling system, immersive audio, and a high refresh rate display for competitive gaming. The laptop's sleek design includes customizable RGB lighting that extends from the keyboard to the light bar.",
-        shortDesc: "AMD Ryzen 9, 16GB RAM, RTX 3070, 1TB SSD",
+        shortDesc: "AMD Ryzen 9, 16 RAM, RTX 3070, 1TB SSD",
         processorBrand: "AMD",
         processorModel: "Ryzen 9 5900HX",
         cores: "8",
         threads: "16",
+        graphicsType: "dedicated",
         gpuBrand: "NVIDIA",
         gpuModel: "GeForce RTX 3070",
-        vram: "8GB",
-        ram: "16GB",
+        vram: "8",
+        ram: "16",
         ramType: "DDR4",
-        storageType: "NVMe",
+        storageType: "SSD",
         storageCapacity: "1TB",
         screenSize: "15.6",
         screenResolution: "2560x1440",
@@ -212,7 +188,7 @@ export default function AddListing() {
 
         const response = await fetch(
           `https://api.imgbb.com/1/upload?key=${
-            import.meta.env.VITE_IMGBB_API_KEY
+            import.meta.env.VITE_IMB_API_KEY
           }`,
           {
             method: "POST",
@@ -496,7 +472,7 @@ export default function AddListing() {
                         </label>
                         <input
                           id="shortDesc"
-                          placeholder="Brief specs summary, e.g., 'i7, 16GB RAM, RTX 3070, 1TB SSD'"
+                          placeholder="Brief specs summary, e.g., 'i7, 16 RAM, RTX 3070, 1TB SSD'"
                           className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
                           value={field.state.value}
                           onChange={(e) => field.handleChange(e.target.value)}
@@ -660,7 +636,7 @@ export default function AddListing() {
                               <option value="" disabled>
                                 Select Processor Brand
                               </option>
-                              {processorBrandOptions.map((option) => (
+                              {PROCESSOR_BRANDS.map((option) => (
                                 <option key={option} value={option}>
                                   {option}
                                 </option>
@@ -723,13 +699,62 @@ export default function AddListing() {
                     Graphics & Memory
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* GPU field */}
+                    {/* Graphics Type field */}
+                    <div>
+                      <form.Field
+                        name="graphicsType"
+                        validators={{
+                          onChange: ({ value }) => {
+                            if (!value) return "Graphics type is required";
+                            return undefined;
+                          },
+                        }}
+                      >
+                        {(field) => (
+                          <>
+                            <label
+                              htmlFor="graphicsType"
+                              className="block text-sm font-medium text-neutral-200 mb-1"
+                            >
+                              Graphics Type
+                            </label>
+                            <select
+                              id="graphicsType"
+                              className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                              value={field.state.value}
+                              onChange={(e) => {
+                                field.handleChange(e.target.value);
+                                setGraphicsType(e.target.value);
+                              }}
+                              disabled={formStatus === "submitting"}
+                            >
+                              <option value="">Select Graphics Type</option>
+                              {GRAPHICS_TYPES.map((type) => (
+                                <option key={type} value={type}>
+                                  {type.charAt(0).toUpperCase() + type.slice(1)}
+                                </option>
+                              ))}
+                            </select>
+                            {field.state.meta.errors ? (
+                              <div className="text-red-300 text-sm mt-1">
+                                {field.state.meta.errors.join(", ")}
+                              </div>
+                            ) : null}
+                          </>
+                        )}
+                      </form.Field>
+                    </div>
+
+                    {/* GPU brand field */}
                     <div>
                       <form.Field
                         name="gpuBrand"
                         validators={{
                           onChange: ({ value }) => {
-                            if (!value) return "GPU brand is required";
+                            const graphicsType =
+                              form.getFieldValue("graphicsType");
+                            if (graphicsType === "dedicated" && !value)
+                              return "GPU brand is required";
                             return undefined;
                           },
                         }}
@@ -749,7 +774,10 @@ export default function AddListing() {
                               onChange={(e) =>
                                 field.handleChange(e.target.value)
                               }
-                              disabled={formStatus === "submitting"}
+                              disabled={
+                                formStatus === "submitting" ||
+                                graphicsType !== "dedicated"
+                              }
                             >
                               <option value="">Select GPU Brand</option>
                               {GPU_BRANDS.map((brand) => (
@@ -768,13 +796,61 @@ export default function AddListing() {
                       </form.Field>
                     </div>
 
+                    {/* GPU Model field */}
+                    <div>
+                      <form.Field
+                        name="gpuModel"
+                        validators={{
+                          onChange: ({ value }) => {
+                            const graphicsType =
+                              form.getFieldValue("graphicsType");
+                            if (graphicsType === "dedicated" && !value)
+                              return "GPU model is required";
+                            return undefined;
+                          },
+                        }}
+                      >
+                        {(field) => (
+                          <>
+                            <label
+                              htmlFor="gpuModel"
+                              className="block text-sm font-medium text-neutral-200 mb-1"
+                            >
+                              GPU Model
+                            </label>
+                            <input
+                              id="gpuModel"
+                              placeholder="e.g., GeForce RTX 3070, Radeon RX 6800M"
+                              className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                              value={field.state.value}
+                              onChange={(e) =>
+                                field.handleChange(e.target.value)
+                              }
+                              disabled={
+                                formStatus === "submitting" ||
+                                graphicsType !== "dedicated"
+                              }
+                            />
+                            {field.state.meta.errors ? (
+                              <div className="text-red-300 text-sm mt-1">
+                                {field.state.meta.errors.join(", ")}
+                              </div>
+                            ) : null}
+                          </>
+                        )}
+                      </form.Field>
+                    </div>
+
                     {/* VRAM field */}
                     <div>
                       <form.Field
                         name="vram"
                         validators={{
                           onChange: ({ value }) => {
-                            if (!value) return "VRAM is required";
+                            const graphicsType =
+                              form.getFieldValue("graphicsType");
+                            if (graphicsType === "dedicated" && !value)
+                              return "VRAM is required";
                             return undefined;
                           },
                         }}
@@ -794,7 +870,10 @@ export default function AddListing() {
                               onChange={(e) =>
                                 field.handleChange(e.target.value)
                               }
-                              disabled={formStatus === "submitting"}
+                              disabled={
+                                formStatus === "submitting" ||
+                                graphicsType !== "dedicated"
+                              }
                             >
                               <option value="" disabled>
                                 Select VRAM
@@ -849,6 +928,53 @@ export default function AddListing() {
                               {ramOptions.map((option) => (
                                 <option key={option} value={option}>
                                   {option}
+                                </option>
+                              ))}
+                            </select>
+                            {field.state.meta.errors ? (
+                              <div className="text-red-300 text-sm mt-1">
+                                {field.state.meta.errors.join(", ")}
+                              </div>
+                            ) : null}
+                          </>
+                        )}
+                      </form.Field>
+                    </div>
+
+                    {/* RAM Type field */}
+                    <div>
+                      <form.Field
+                        name="ramType"
+                        validators={{
+                          onChange: ({ value }) => {
+                            if (!value) return "RAM type is required";
+                            return undefined;
+                          },
+                        }}
+                      >
+                        {(field) => (
+                          <>
+                            <label
+                              htmlFor="ramType"
+                              className="block text-sm font-medium text-neutral-200 mb-1"
+                            >
+                              RAM Type
+                            </label>
+                            <select
+                              id="ramType"
+                              className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                              value={field.state.value || ""}
+                              onChange={(e) =>
+                                field.handleChange(e.target.value)
+                              }
+                              disabled={formStatus === "submitting"}
+                            >
+                              <option value="" disabled>
+                                Select RAM Type
+                              </option>
+                              {RAM_TYPES.map((type) => (
+                                <option key={type} value={type}>
+                                  {type}
                                 </option>
                               ))}
                             </select>
@@ -933,7 +1059,7 @@ export default function AddListing() {
                         </label>
                         <input
                           id="storageCapacity"
-                          placeholder="e.g., 512GB, 1TB"
+                          placeholder="e.g., 512, 1TB"
                           className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
                           value={field.state.value}
                           onChange={(e) => field.handleChange(e.target.value)}

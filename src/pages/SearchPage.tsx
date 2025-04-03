@@ -28,6 +28,14 @@ interface FilterOptionsType {
   screenResolution?: FilterOption[];
   stockStatus?: FilterOption[];
   priceRange?: { min: number; max: number };
+  gpuBrands?: FilterOption[];
+  processorBrands?: FilterOption[];
+  graphicsTypes?: FilterOption[];
+  backlightTypes?: FilterOption[];
+  refreshRates?: FilterOption[];
+  vram?: FilterOption[];
+  years?: FilterOption[];
+  models?: FilterOption[];
 }
 
 export default function SearchPage() {
@@ -49,9 +57,24 @@ export default function SearchPage() {
       optionsKey: "processorModels" as OptionsKey,
     },
     {
+      title: "Processor Brands",
+      filterKey: "processorBrand" as FilterKey,
+      optionsKey: "processorBrands" as OptionsKey,
+    },
+    {
       title: "Graphics Cards",
       filterKey: "gpuModel" as FilterKey,
       optionsKey: "gpuModels" as OptionsKey,
+    },
+    {
+      title: "GPU Brands",
+      filterKey: "gpuBrand" as FilterKey,
+      optionsKey: "gpuBrands" as OptionsKey,
+    },
+    {
+      title: "Graphics Type",
+      filterKey: "graphicsType" as FilterKey,
+      optionsKey: "graphicsTypes" as OptionsKey,
     },
     {
       title: "RAM Size",
@@ -59,14 +82,54 @@ export default function SearchPage() {
       optionsKey: "ram" as OptionsKey,
     },
     {
+      title: "RAM Type",
+      filterKey: "ramType" as FilterKey,
+      optionsKey: "ramTypes" as OptionsKey,
+    },
+    {
+      title: "VRAM",
+      filterKey: "vram" as FilterKey,
+      optionsKey: "vram" as OptionsKey,
+    },
+    {
       title: "Screen Size",
       filterKey: "screenSize" as FilterKey,
       optionsKey: "screenSizes" as OptionsKey,
     },
     {
+      title: "Screen Resolution",
+      filterKey: "screenResolution" as FilterKey,
+      optionsKey: "screenResolutions" as OptionsKey,
+    },
+    {
       title: "Storage Type",
       filterKey: "storageType" as FilterKey,
       optionsKey: "storageTypes" as OptionsKey,
+    },
+    {
+      title: "Storage Capacity",
+      filterKey: "storageCapacity" as FilterKey,
+      optionsKey: "storageCapacity" as OptionsKey,
+    },
+    {
+      title: "Refresh Rate",
+      filterKey: "refreshRate" as FilterKey,
+      optionsKey: "refreshRates" as OptionsKey,
+    },
+    {
+      title: "Backlight Type",
+      filterKey: "backlightType" as FilterKey,
+      optionsKey: "backlightTypes" as OptionsKey,
+    },
+    {
+      title: "Year",
+      filterKey: "year" as FilterKey,
+      optionsKey: "years" as OptionsKey,
+    },
+    {
+      title: "Stock Status",
+      filterKey: "stockStatus" as FilterKey,
+      optionsKey: "stockStatuses" as OptionsKey, // Change to match useSearch.ts
     },
   ];
 

@@ -27,6 +27,15 @@ interface FilterOptions {
   stockStatuses: FilterOption[];
   screenSizes: FilterOption[];
   screenResolutions: FilterOption[];
+  // Add missing filters
+  processorBrands: FilterOption[];
+  gpuBrands: FilterOption[];
+  graphicsTypes: FilterOption[];
+  backlightTypes: FilterOption[];
+  refreshRates: FilterOption[];
+  vram: FilterOption[];
+  years: FilterOption[];
+  models: FilterOption[];
   priceRange: {
     min: number;
     max: number;
@@ -44,6 +53,16 @@ interface SelectedFilters {
   stockStatus: string[];
   screenSize: string[];
   screenResolution: string[];
+  // Add missing filters
+  processorBrand: string[];
+  gpuBrand: string[];
+  graphicsType: string[];
+  backlightType: string[];
+  refreshRate: string[];
+  vram: string[];
+  year: string[];
+  model: string[];
+  shortDesc: string[];
 }
 
 export function useSearchLaptops(initialTerm: string = "") {
@@ -61,6 +80,16 @@ export function useSearchLaptops(initialTerm: string = "") {
     stockStatus: [],
     screenSize: [],
     screenResolution: [],
+    // Initialize new filters
+    processorBrand: [],
+    gpuBrand: [],
+    graphicsType: [],
+    backlightType: [],
+    refreshRate: [],
+    vram: [],
+    year: [],
+    model: [],
+    shortDesc: [],
   });
 
   // Get filter options - make sure to pass the current selected filters
@@ -172,6 +201,16 @@ export function useSearchLaptops(initialTerm: string = "") {
       stockStatus: [],
       screenSize: [],
       screenResolution: [],
+      // Reset new filters
+      processorBrand: [],
+      gpuBrand: [],
+      graphicsType: [],
+      backlightType: [],
+      refreshRate: [],
+      vram: [],
+      year: [],
+      model: [],
+      shortDesc: [],
     });
     setSearchTerm("");
   };
