@@ -83,43 +83,91 @@ export default function LaptopDetailPage() {
 
   const specGroups = [
     {
-      title: "Performance",
+      title: "Processor",
       items: [
         {
-          label: "Processor",
-          value: `${laptop.processorBrand} ${laptop.processorModel}`,
-          details: `${laptop.cores} Cores, ${laptop.threads} Threads`,
+          label: "CPU Brand",
+          value: laptop.processorBrand,
           Icon: CpuIcon,
         },
         {
-          label: "Graphics",
-          value: `${laptop.gpuBrand} ${laptop.gpuModel}`,
-          details: laptop.vram ? `${laptop.vram} VRAM` : null,
-          Icon: GpuIcon,
+          label: "CPU Model",
+          value: laptop.processorModel,
+          Icon: CpuIcon,
         },
         {
-          label: "Memory",
-          value: `${laptop.ram} ${laptop.ramType}`,
-          Icon: RamIcon,
+          label: "Cores",
+          value: laptop.cores,
+          Icon: CpuIcon,
+        },
+        {
+          label: "Threads",
+          value: laptop.threads,
+          Icon: CpuIcon,
         },
       ],
     },
     {
-      title: "Storage & Display",
+      title: "Graphics",
       items: [
         {
-          label: "Storage",
-          value: `${laptop.storageCapacity} ${laptop.storageType}`,
+          label: "GPU Type",
+          value: laptop.graphicsType,
+          Icon: GpuIcon,
+        },
+        {
+          label: "GPU Brand",
+          value: laptop.gpuBrand,
+          Icon: GpuIcon,
+        },
+        {
+          label: "GPU Model",
+          value: laptop.gpuModel,
+          Icon: GpuIcon,
+        },
+        {
+          label: "VRAM",
+          value: laptop.vram ? `${laptop.vram} GB` : "N/A",
+          Icon: GpuIcon,
+        },
+      ],
+    },
+    {
+      title: "Memory & Storage",
+      items: [
+        {
+          label: "RAM",
+          value: `${laptop.ram} GB`,
+          Icon: RamIcon,
+        },
+        {
+          label: "RAM Type",
+          value: laptop.ramType,
+          Icon: RamIcon,
+        },
+        {
+          label: "Storage Type",
+          value: laptop.storageType,
           Icon: StorageIcon,
         },
         {
-          label: "Display Size",
+          label: "Storage Capacity",
+          value: laptop.storageCapacity,
+          Icon: StorageIcon,
+        },
+      ],
+    },
+    {
+      title: "Display",
+      items: [
+        {
+          label: "Screen Size",
           value: `${laptop.screenSize}"`,
           Icon: DisplayIcon,
         },
         {
           label: "Resolution",
-          value: `${laptop.screenResolution}`,
+          value: laptop.screenResolution,
           Icon: DisplayIcon,
         },
         {
@@ -127,7 +175,62 @@ export default function LaptopDetailPage() {
           value: `${laptop.refreshRate} Hz`,
           Icon: DisplayIcon,
         },
+        {
+          label: "Backlight Type",
+          value: laptop.backlightType || "N/A",
+          Icon: DisplayIcon,
+        },
       ],
+    },
+    {
+      title: "Physical",
+      items: [
+        {
+          label: "Weight",
+          value: laptop.weight || "N/A",
+          Icon: InfoIcon,
+        },
+        {
+          label: "Year",
+          value: laptop.year.toString(),
+          Icon: InfoIcon,
+        },
+      ],
+    },
+  ];
+
+  const keySpecs = [
+    {
+      title: "Processor",
+      value: `${laptop.processorBrand} ${laptop.processorModel}`,
+      details: `${laptop.cores} Cores, ${laptop.threads} Threads`,
+      Icon: CpuIcon,
+    },
+    {
+      title: "Graphics",
+      value: `${laptop.gpuBrand} ${laptop.gpuModel}`,
+      details: laptop.vram
+        ? `${laptop.graphicsType}, ${laptop.vram}GB VRAM`
+        : laptop.graphicsType,
+      Icon: GpuIcon,
+    },
+    {
+      title: "Memory",
+      value: `${laptop.ram}GB ${laptop.ramType}`,
+      details: null,
+      Icon: RamIcon,
+    },
+    {
+      title: "Storage",
+      value: laptop.storageCapacity,
+      details: laptop.storageType,
+      Icon: StorageIcon,
+    },
+    {
+      title: "Display",
+      value: `${laptop.screenSize}" ${laptop.screenResolution}`,
+      details: `${laptop.refreshRate}Hz Refresh Rate`,
+      Icon: DisplayIcon,
     },
   ];
 
@@ -313,9 +416,36 @@ export default function LaptopDetailPage() {
 
         <div className="mb-16">
           <h2 className="text-2xl md:text-3xl font-bold text-white mb-8">
-            Specifications
+            Key Specifications
           </h2>
 
+          {/* Key Specs Summary Section */}
+          <div className="bg-gradient-to-br from-neutral-800/70 to-neutral-900/90 rounded-2xl p-6 border border-neutral-700/50 mb-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+              {keySpecs.map((spec, index) => (
+                <div key={index} className="flex flex-col">
+                  <div className="flex items-center gap-2 mb-2">
+                    <spec.Icon size={18} className="text-secondary-400" />
+                    <h3 className="text-sm font-medium text-neutral-400 uppercase tracking-wider">
+                      {spec.title}
+                    </h3>
+                  </div>
+                  <p className="text-white font-medium">{spec.value}</p>
+                  {spec.details && (
+                    <p className="text-sm text-neutral-400 mt-1">
+                      {spec.details}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <h2 className="text-2xl md:text-3xl font-bold text-white mb-8">
+            Detailed Specifications
+          </h2>
+
+          {/* Detailed Specs Section - Traditional List Format */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {specGroups.map((group, groupIndex) => (
               <div
@@ -330,26 +460,12 @@ export default function LaptopDetailPage() {
 
                 <div className="divide-y divide-neutral-700/30">
                   {group.items.map((spec, specIndex) => (
-                    <div
-                      key={specIndex}
-                      className="px-6 py-5 flex items-center gap-5"
-                    >
-                      <div className="bg-neutral-800 p-2.5 rounded-lg text-secondary-400 flex-shrink-0">
-                        <spec.Icon size={22} />
+                    <div key={specIndex} className="px-6 py-3 grid grid-cols-2">
+                      <div className="text-neutral-400 text-sm">
+                        {spec.label}
                       </div>
-
-                      <div>
-                        <h4 className="text-sm uppercase tracking-wider text-neutral-500 mb-1">
-                          {spec.label}
-                        </h4>
-                        <div className="text-neutral-200 font-medium">
-                          {spec.value}
-                        </div>
-                        {spec.details && (
-                          <div className="text-sm text-neutral-400 mt-1">
-                            {spec.details}
-                          </div>
-                        )}
+                      <div className="text-neutral-200 font-medium">
+                        {spec.value}
                       </div>
                     </div>
                   ))}
@@ -375,50 +491,23 @@ export default function LaptopDetailPage() {
               </div>
             )}
 
-            {/* {laptop.battery && (
+            {laptop.backlightType && (
               <div>
                 <h4 className="text-sm uppercase tracking-wider text-neutral-500 mb-1">
-                  Battery
+                  Keyboard Backlight
                 </h4>
-                <div className="text-neutral-200">{laptop.battery}</div>
+                <div className="text-neutral-200">{laptop.backlightType}</div>
               </div>
             )}
 
-            {laptop.os && (
+            {laptop.year && (
               <div>
                 <h4 className="text-sm uppercase tracking-wider text-neutral-500 mb-1">
-                  Operating System
+                  Release Year
                 </h4>
-                <div className="text-neutral-200">{laptop.os}</div>
+                <div className="text-neutral-200">{laptop.year}</div>
               </div>
             )}
-
-            {laptop.ports && (
-              <div>
-                <h4 className="text-sm uppercase tracking-wider text-neutral-500 mb-1">
-                  Ports
-                </h4>
-                <div className="text-neutral-200">{laptop.ports}</div>
-              </div>
-            )}
-
-            {laptop.dimensions && (
-              <div>
-                <h4 className="text-sm uppercase tracking-wider text-neutral-500 mb-1">
-                  Dimensions
-                </h4>
-                <div className="text-neutral-200">{laptop.dimensions}</div>
-              </div>
-            )}
-
-            {laptop.warranty && (
-              <div>
-                <h4 className="text-sm uppercase tracking-wider text-neutral-500 mb-1">
-                  Warranty
-                </h4>
-                <div className="text-neutral-200">{laptop.warranty}</div>
-              </div>
-            )} */}
           </div>
         </div>
       </div>
