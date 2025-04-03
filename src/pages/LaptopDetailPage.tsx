@@ -419,23 +419,42 @@ export default function LaptopDetailPage() {
             Key Specifications
           </h2>
 
-          {/* Key Specs Summary Section */}
-          <div className="bg-gradient-to-br from-neutral-800/70 to-neutral-900/90 rounded-2xl p-6 border border-neutral-700/50 mb-10">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+          {/* Key Specs Summary Section with WOW factor */}
+          <div className="relative overflow-hidden bg-neutral-900 rounded-2xl border border-neutral-700/50 mb-10">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(103,58,183,0.15),transparent_70%)]"></div>
+            <div className="absolute inset-0 opacity-5 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+
+            <div className="grid grid-cols-1 md:grid-cols-5 relative z-10">
               {keySpecs.map((spec, index) => (
-                <div key={index} className="flex flex-col">
-                  <div className="flex items-center gap-2 mb-2">
-                    <spec.Icon size={18} className="text-secondary-400" />
-                    <h3 className="text-sm font-medium text-neutral-400 uppercase tracking-wider">
+                <div
+                  key={index}
+                  className="group relative p-6 md:p-8 transition-all duration-300 hover:bg-neutral-800/30 border-b md:border-b-0 md:border-r border-neutral-700/30 last:border-r-0 last:border-b-0"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-b from-secondary-500/0 to-secondary-500/0 opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-full bg-neutral-800 border border-neutral-700 flex items-center justify-center group-hover:border-secondary-400 transition-colors duration-300 group-hover:bg-neutral-800/80">
+                      <spec.Icon
+                        size={20}
+                        className="text-secondary-400 group-hover:text-secondary-300 transition-colors duration-300"
+                      />
+                    </div>
+                    <h3 className="text-sm font-medium text-neutral-400 uppercase tracking-wider group-hover:text-secondary-300 transition-colors duration-300">
                       {spec.title}
                     </h3>
                   </div>
-                  <p className="text-white font-medium">{spec.value}</p>
+
+                  <p className="text-white font-medium text-lg md:text-xl mb-1">
+                    {spec.value}
+                  </p>
+
                   {spec.details && (
-                    <p className="text-sm text-neutral-400 mt-1">
+                    <p className="text-sm text-neutral-400 group-hover:text-neutral-300 transition-colors duration-300">
                       {spec.details}
                     </p>
                   )}
+
+                  <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-secondary-500/80 to-purple-500/80 group-hover:w-full transition-all duration-500 ease-out"></div>
                 </div>
               ))}
             </div>
@@ -445,14 +464,23 @@ export default function LaptopDetailPage() {
             Detailed Specifications
           </h2>
 
-          {/* Detailed Specs Section - Traditional List Format */}
+          {/* Detailed Specs Section - with fixed padding */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {specGroups.map((group, groupIndex) => (
               <div
                 key={groupIndex}
-                className="bg-gradient-to-br from-neutral-800/70 to-neutral-900/90 rounded-2xl overflow-hidden border border-neutral-700/50"
+                className="bg-gradient-to-br from-neutral-800/70 to-neutral-900/90 rounded-2xl overflow-hidden border border-neutral-700/50 transition-all duration-300 hover:shadow-[0_4px_20px_rgba(79,38,144,0.15)]"
               >
-                <div className="px-6 py-4 border-b border-neutral-700/50 bg-neutral-800/50">
+                <div className="px-6 py-4 border-b border-neutral-700/50 bg-neutral-800/50 flex items-center">
+                  {group.items.length > 0 &&
+                    (() => {
+                      const IconComponent = group.items[0].Icon;
+                      return (
+                        <span className="text-secondary-400 mr-3">
+                          <IconComponent size={18} />
+                        </span>
+                      );
+                    })()}
                   <h3 className="text-lg font-semibold text-white">
                     {group.title}
                   </h3>
@@ -460,11 +488,18 @@ export default function LaptopDetailPage() {
 
                 <div className="divide-y divide-neutral-700/30">
                   {group.items.map((spec, specIndex) => (
-                    <div key={specIndex} className="px-6 py-3 grid grid-cols-2">
-                      <div className="text-neutral-400 text-sm">
+                    <div
+                      key={specIndex}
+                      className="px-6 py-2 grid grid-cols-2 transition-all duration-200 hover:bg-neutral-800/30 relative overflow-hidden group"
+                    >
+                      {/* Hover effect */}
+                      <div className="absolute inset-y-0 left-0 w-1 bg-secondary-500/0 transition-all duration-300 group-hover:bg-secondary-500/50"></div>
+
+                      <div className="text-neutral-400 text-sm flex items-center">
                         {spec.label}
                       </div>
-                      <div className="text-neutral-200 font-medium">
+
+                      <div className="text-neutral-200 font-medium flex items-center">
                         {spec.value}
                       </div>
                     </div>

@@ -11,10 +11,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useToasts } from "@/assets/Toasts";
 
 export default function Navbar() {
   const navigate = useNavigate();
   const { isAuthenticated, user, logout } = useAuth();
+  const { unauthorizedToast } = useToasts();
 
   const handleLogout = async () => {
     try {
@@ -46,7 +48,8 @@ export default function Navbar() {
           {/* Create Post Button - Same icon for both states, less prominent */}
           <div className="mr-2">
             <Link
-              to={isAuthenticated ? "/add-listing" : "/login"}
+              to={isAuthenticated ? "/add-listing" : "/"}
+              onClick={isAuthenticated ? undefined : () => unauthorizedToast()}
               className="flex items-center justify-center px-4  h-9 rounded-full bg-neutral-800 hover:bg-neutral-700 text-neutral-100 transition-all"
               aria-label={
                 isAuthenticated ? "Create Post" : "Login to create a post"

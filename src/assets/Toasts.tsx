@@ -24,6 +24,7 @@ export const useToasts = () => {
           label: "Login",
           onClick: () => navigate({ to: "/auth" }),
         },
+        position: "top-right",
         classNames: commonClassNames,
       });
     },
@@ -32,6 +33,7 @@ export const useToasts = () => {
     loginSuccessToast: () => {
       toast.success("Login successful", {
         description: "Welcome back to KLaptop.",
+        position: "top-right",
         classNames: commonClassNames,
       });
     },
@@ -39,6 +41,7 @@ export const useToasts = () => {
     registerSuccessToast: () => {
       toast.success("Account created successfully!", {
         description: "Welcome to KLaptop.",
+        position: "top-right",
         classNames: commonClassNames,
       });
     },
@@ -47,12 +50,14 @@ export const useToasts = () => {
     copyToClipboardToast: (text: string) => {
       navigator.clipboard.writeText(text);
       toast.success("Copied to clipboard!", {
+        position: "top-right",
         classNames: commonClassNames,
       });
     },
 
     actionCompletedToast: (message: string) => {
       toast.success(message, {
+        position: "top-right",
         classNames: commonClassNames,
       });
     },
@@ -61,6 +66,7 @@ export const useToasts = () => {
     errorToast: (message: string) => {
       toast.error("Error", {
         description: message,
+        position: "top-right",
         classNames: commonClassNames,
       });
     },
@@ -72,6 +78,7 @@ export const staticToasts = {
   networkErrorToast: () => {
     toast.error("Network Error", {
       description: "Please check your internet connection and try again.",
+      position: "top-right",
       classNames: {
         toast:
           "!bg-neutral-800 !rounded-lg !border !border-neutral-700 !shadow-md",
@@ -85,6 +92,7 @@ export const staticToasts = {
   formErrorToast: (message: string) => {
     toast.error("Form Error", {
       description: message,
+      position: "top-right",
       classNames: {
         toast:
           "!bg-neutral-800 !rounded-lg !border !border-neutral-700 !shadow-md",
