@@ -19,6 +19,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { PhoneIcon } from "lucide-react";
+import KeySpecsCard from "./LaptopDetailPageCard";
 
 export default function LaptopDetailPage() {
   const { laptopId } = useParams({ from: "/laptop/$laptopId" });
@@ -419,65 +420,8 @@ export default function LaptopDetailPage() {
             Key Specifications
           </h2>
 
-          {/* Ultra-WOW Key Specs Summary Section */}
-          <div className="relative overflow-hidden bg-neutral-900 rounded-2xl border border-neutral-700/50 mb-10">
-            {/* Enhanced background effects */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(103,58,183,0.15),transparent_70%)]"></div>
-            <div className="absolute inset-0 opacity-5 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
-            <div className="absolute w-full h-full bg-[conic-gradient(at_bottom_left,transparent_240deg,rgba(103,58,183,0.03)_270deg,transparent_300deg)] opacity-60"></div>
-
-            <div className="grid grid-cols-1 md:grid-cols-5 relative z-10">
-              {keySpecs.map((spec, index) => (
-                <div
-                  key={index}
-                  className="group relative p-6 md:p-8 transition-all duration-300 hover:bg-neutral-800/30 border-b md:border-b-0 md:border-r border-neutral-700/30 last:border-r-0 last:border-b-0 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_-6px_rgba(103,58,183,0.5)] overflow-hidden"
-                >
-                  {/* Enhanced hover background effect */}
-                  <div className="absolute inset-0 bg-gradient-to-b from-secondary-500/0 via-secondary-500/0 to-secondary-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-20 bg-[radial-gradient(circle_at_center,rgba(103,58,183,0.3),transparent_70%)] transition-opacity duration-300"></div>
-
-                  {/* Animated corner accent */}
-                  <div className="absolute -top-10 -right-10 w-20 h-20 bg-secondary-500/10 rotate-45 transform translate-x-8 translate-y-8 opacity-0 group-hover:opacity-100 group-hover:translate-x-4 group-hover:translate-y-4 transition-all duration-700"></div>
-
-                  <div className="flex items-center gap-3 mb-4 relative">
-                    {/* Enhanced animated icon container */}
-                    <div className="w-12 h-12 rounded-full bg-neutral-800 border border-neutral-700 flex items-center justify-center group-hover:border-secondary-400 transition-all duration-500 group-hover:bg-neutral-800/80 group-hover:shadow-[0_0_15px_rgba(103,58,183,0.3)] relative">
-                      {/* Pulsing background effect */}
-                      <div className="absolute inset-0 rounded-full bg-secondary-500/10 animate-ping opacity-0 group-hover:opacity-100"></div>
-                      {/* Floating animation for icon */}
-                      <div className="animate-float">
-                        <spec.Icon
-                          size={22}
-                          className="text-secondary-400 group-hover:text-secondary-300 transition-colors duration-300"
-                        />
-                      </div>
-                    </div>
-                    <h3 className="text-sm font-medium text-neutral-400 uppercase tracking-wider group-hover:text-secondary-300 transition-all duration-300 transform group-hover:translate-x-1">
-                      {spec.title}
-                    </h3>
-                  </div>
-
-                  {/* Staggered animation for text elements */}
-                  <div className="relative overflow-hidden">
-                    <p className="text-white font-medium text-lg md:text-xl mb-2 transition-all duration-500 transform group-hover:translate-y-0 group-hover:text-secondary-100">
-                      {spec.value}
-                    </p>
-
-                    {spec.details && (
-                      <p className="text-sm text-neutral-400 group-hover:text-neutral-300 transition-all duration-500 delay-75 transform group-hover:translate-y-0">
-                        {spec.details}
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Enhanced underline effect with glow */}
-                  <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-secondary-500 via-purple-400 to-secondary-300 group-hover:w-full transition-all duration-700 ease-out group-hover:shadow-[0_0_8px_rgba(103,58,183,0.5)]"></div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Add required CSS for animations */}
+          {/* Replace the inline implementation with the imported component */}
+          <KeySpecsCard laptop={laptop} keySpecs={keySpecs} />
 
           <h2 className="text-2xl md:text-3xl font-bold text-white mb-8">
             Detailed Specifications
