@@ -10,6 +10,7 @@ import { StorageIcon } from "../assets/Icons";
 import { DisplayIcon } from "../assets/Icons";
 import { InfoIcon } from "../assets/Icons";
 import { MailIcon } from "../assets/Icons";
+import "./laptopDetailPage.css";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -329,87 +330,112 @@ export default function LaptopDetailPage() {
           </div>
 
           <div className="order-1 lg:order-2">
-            <div className="bg-gradient-to-br from-neutral-800/70 to-neutral-900/90 rounded-2xl p-8 border border-neutral-700/50 h-full flex flex-col">
-              <div className="flex gap-3 mb-6">
-                <span
-                  className={`px-3 py-1 text-xs font-medium rounded-full border ${getStockStatusColor(
-                    laptop.stockStatus
-                  )}`}
-                >
-                  {laptop.stockStatus.charAt(0).toUpperCase() +
-                    laptop.stockStatus.slice(1)}
-                </span>
+            <div className="bg-neutral-800/90 backdrop-blur-sm rounded-2xl p-8 border border-neutral-700/50 h-full flex flex-col shadow-lg relative overflow-hidden">
+              {/* Subtle background elements */}
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(124,58,237,0.07),transparent_70%)]"></div>
+              <div className="absolute inset-0 opacity-5 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
 
-                {laptop.year && (
-                  <span className="px-3 py-1 text-xs font-medium rounded-full border border-neutral-700 text-neutral-400 bg-neutral-800/50">
-                    {laptop.year}
+              {/* Content with improved visual hierarchy */}
+              <div className="relative z-10">
+                {/* Status badges */}
+                <div className="flex flex-wrap gap-3 mb-6">
+                  <span
+                    className={`px-3 py-1 text-xs font-medium rounded-full border ${getStockStatusColor(
+                      laptop.stockStatus
+                    )}`}
+                  >
+                    {laptop.stockStatus.charAt(0).toUpperCase() +
+                      laptop.stockStatus.slice(1)}
                   </span>
-                )}
-              </div>
 
-              <div className="mb-2">
-                <span className="text-sm font-medium text-secondary-400 uppercase tracking-wider">
-                  {laptop.brand} {laptop.model}
-                </span>
-              </div>
-
-              <h1 className="text-3xl md:text-4xl font-bold text-white mb-6 leading-tight">
-                {laptop.title}
-              </h1>
-
-              <div className="mb-6">
-                <span className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-secondary-300">
-                  $
-                  {laptop.price.toLocaleString("en-US", {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
-                </span>
-              </div>
-
-              <div className="prose prose-invert prose-sm max-w-none mb-8">
-                <p className="text-neutral-300 leading-relaxed">
-                  {laptop.description}
-                </p>
-              </div>
-
-              <div className="mb-8">
-                <h3 className="text-lg font-semibold text-white mb-4">
-                  Key Highlights
-                </h3>
-                <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
-                  <li className="flex items-start gap-2 text-neutral-300">
-                    <span className="text-secondary-500 mt-0.5">•</span>
-                    <span>
-                      {laptop.processorBrand} {laptop.processorModel}
+                  {laptop.year && (
+                    <span className="px-3 py-1 text-xs font-medium rounded-full border border-neutral-700 text-neutral-300 bg-neutral-800/50">
+                      {laptop.year}
                     </span>
-                  </li>
-                  <li className="flex items-start gap-2 text-neutral-300">
-                    <span className="text-secondary-500 mt-0.5">•</span>
-                    <span>
-                      {laptop.ram} {laptop.ramType} RAM
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2 text-neutral-300">
-                    <span className="text-secondary-500 mt-0.5">•</span>
-                    <span>
-                      {laptop.gpuBrand} {laptop.gpuModel}
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2 text-neutral-300">
-                    <span className="text-secondary-500 mt-0.5">•</span>
-                    <span>
-                      {laptop.screenSize}" {laptop.refreshRate}Hz Display
-                    </span>
-                  </li>
-                </ul>
-              </div>
+                  )}
+                </div>
 
-              <div className="mt-auto">
-                <button className="w-full py-4 cursor-pointer px-6 flex items-center justify-center gap-3 text-white font-semibold rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-[1.02] focus:ring-2 focus:ring-secondary-500 focus:ring-opacity-50 animated-gradient">
-                  <PhoneIcon size={24} />
-                  <span>Contact Us</span>
-                </button>
+                {/* Brand & Model */}
+                <div className="mb-2">
+                  <span className="text-sm font-medium text-secondary-400 uppercase tracking-wider">
+                    {laptop.brand} {laptop.model}
+                  </span>
+                </div>
+
+                {/* Title */}
+                <h1 className="text-3xl md:text-4xl font-bold text-white mb-6 leading-tight">
+                  {laptop.title}
+                </h1>
+
+                {/* Price */}
+                <div className="mb-6">
+                  <div className="inline-block rounded-md bg-neutral-800/80 px-3 py-2 border border-neutral-700/30">
+                    <span className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-secondary-300">
+                      $
+                      {laptop.price.toLocaleString("en-US", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Description */}
+                <div className="prose prose-invert prose-sm max-w-none mb-8">
+                  <p className="text-neutral-300 leading-relaxed">
+                    {laptop.description}
+                  </p>
+                </div>
+
+                {/* Key Highlights */}
+                <div className="mb-8">
+                  <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                    <div className="h-1 w-5 bg-secondary-500 rounded-full"></div>
+                    Key Highlights
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="bg-neutral-700/20 rounded-lg p-3 border border-neutral-700/30">
+                      <div className="flex items-center gap-2">
+                        <CpuIcon size={18} className="text-secondary-400" />
+                        <span className="text-neutral-200">
+                          {laptop.processorBrand} {laptop.processorModel}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="bg-neutral-700/20 rounded-lg p-3 border border-neutral-700/30">
+                      <div className="flex items-center gap-2">
+                        <RamIcon size={18} className="text-secondary-400" />
+                        <span className="text-neutral-200">
+                          {laptop.ram} {laptop.ramType} RAM
+                        </span>
+                      </div>
+                    </div>
+                    <div className="bg-neutral-700/20 rounded-lg p-3 border border-neutral-700/30">
+                      <div className="flex items-center gap-2">
+                        <GpuIcon size={18} className="text-secondary-400" />
+                        <span className="text-neutral-200">
+                          {laptop.gpuBrand} {laptop.gpuModel}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="bg-neutral-700/20 rounded-lg p-3 border border-neutral-700/30">
+                      <div className="flex items-center gap-2">
+                        <DisplayIcon size={18} className="text-secondary-400" />
+                        <span className="text-neutral-200">
+                          {laptop.screenSize}" {laptop.refreshRate}Hz Display
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Contact Button */}
+                <div className="mt-auto">
+                  <button className="w-full py-4 px-6 bg-secondary-600 hover:bg-secondary-700 text-white font-semibold rounded-lg shadow-md transition-all duration-300 flex items-center justify-center gap-3">
+                    <PhoneIcon size={22} />
+                    <span>Contact Us</span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
