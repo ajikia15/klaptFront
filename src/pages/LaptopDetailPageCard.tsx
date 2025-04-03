@@ -49,7 +49,7 @@ const KeySpecsCard = ({ laptop, keySpecs }: KeySpecsCardProps) => {
         {keySpecs.map((spec, index) => (
           <div
             key={index}
-            className={`group relative p-6 md:p-8 transition-all duration-300 border-b md:border-b-0 md:border-r border-neutral-700/30 last:border-r-0 last:border-b-0 hover:bg-neutral-800/30 hover:-translate-y-0.5 ${getBrandClasses(
+            className={`spec-card group relative p-6 md:p-8 transition-all duration-300 border-b md:border-b-0 md:border-r border-neutral-700/30 last:border-r-0 last:border-b-0 hover:bg-neutral-800/30 hover:-translate-y-0.5 ${getBrandClasses(
               spec.title
             )}`}
           >
@@ -73,7 +73,7 @@ const KeySpecsCard = ({ laptop, keySpecs }: KeySpecsCardProps) => {
             </div>
 
             <div className="relative overflow-hidden">
-              <p className="text-white font-medium text-lg md:text-xl mb-2 transition-colors duration-300 group-hover:text-neutral-50">
+              <p className="text-white font-medium text-lg md:text-xl mb-2 transition-colors duration-300 group-hover:text-neutral-50 spec-value">
                 {spec.value}
               </p>
 
