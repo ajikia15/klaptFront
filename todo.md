@@ -1,5 +1,6 @@
 - [ ] Laptop tags (gaming, rendering, etc)
 - [ ] loading spinners/ skeletons
+- [ ] Key highlights in accordion, opened on mobile, closed on pc?
 
 - [ ] Kaido verified
 - [ ] Move away from sqlite
