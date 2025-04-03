@@ -27,7 +27,7 @@ const GPU_BRANDS = ["NVIDIA", "AMD", "Intel", "Apple"];
 const RAM_TYPES = ["DDR3", "DDR4", "DDR5"];
 const STORAGE_TYPES = ["SSD", "HDD", "HDD + SSD"];
 const STOCK_STATUSES = ["in stock", "out of stock", "reserved", "pre-order"];
-const GRAPHICS_TYPES = ["dedicated", "integrated"];
+const GRAPHICS_TYPES = ["Dedicated", "Integrated"];
 
 const vramOptions = ["2", "3", "4", "6", "8", "10", "12", "16", "24", "48"];
 
@@ -87,11 +87,12 @@ export default function AddListing() {
           price: parseFloat(value.price),
           cores: parseInt(value.cores),
           threads: parseInt(value.threads),
+          graphicsType: value.graphicsType, // Add this line to include graphics type
           // Handle GPU fields based on graphics type
-          gpuBrand: value.graphicsType === "dedicated" ? value.gpuBrand : null,
-          gpuModel: value.graphicsType === "dedicated" ? value.gpuModel : null,
+          gpuBrand: value.graphicsType === "Dedicated" ? value.gpuBrand : null,
+          gpuModel: value.graphicsType === "Dedicated" ? value.gpuModel : null,
           vram:
-            value.graphicsType === "dedicated" && value.vram
+            value.graphicsType === "Dedicated" && value.vram
               ? parseInt(value.vram)
               : null,
           ram: parseInt(value.ram),
@@ -147,7 +148,7 @@ export default function AddListing() {
         processorModel: "Ryzen 9 5900HX",
         cores: "8",
         threads: "16",
-        graphicsType: "dedicated",
+        graphicsType: "Dedicated",
         gpuBrand: "NVIDIA",
         gpuModel: "GeForce RTX 3070",
         vram: "8",
@@ -188,7 +189,7 @@ export default function AddListing() {
 
         const response = await fetch(
           `https://api.imgbb.com/1/upload?key=${
-            import.meta.env.VITE_IMB_API_KEY
+            import.meta.env.VITE_IMGBB_API_KEY
           }`,
           {
             method: "POST",
@@ -753,7 +754,7 @@ export default function AddListing() {
                           onChange: ({ value }) => {
                             const graphicsType =
                               form.getFieldValue("graphicsType");
-                            if (graphicsType === "dedicated" && !value)
+                            if (graphicsType === "Dedicated" && !value)
                               return "GPU brand is required";
                             return undefined;
                           },
@@ -776,7 +777,7 @@ export default function AddListing() {
                               }
                               disabled={
                                 formStatus === "submitting" ||
-                                graphicsType !== "dedicated"
+                                graphicsType !== "Dedicated"
                               }
                             >
                               <option value="">Select GPU Brand</option>
@@ -804,7 +805,7 @@ export default function AddListing() {
                           onChange: ({ value }) => {
                             const graphicsType =
                               form.getFieldValue("graphicsType");
-                            if (graphicsType === "dedicated" && !value)
+                            if (graphicsType === "Dedicated" && !value)
                               return "GPU model is required";
                             return undefined;
                           },
@@ -828,7 +829,7 @@ export default function AddListing() {
                               }
                               disabled={
                                 formStatus === "submitting" ||
-                                graphicsType !== "dedicated"
+                                graphicsType !== "Dedicated"
                               }
                             />
                             {field.state.meta.errors ? (
@@ -849,7 +850,7 @@ export default function AddListing() {
                           onChange: ({ value }) => {
                             const graphicsType =
                               form.getFieldValue("graphicsType");
-                            if (graphicsType === "dedicated" && !value)
+                            if (graphicsType === "Dedicated" && !value)
                               return "VRAM is required";
                             return undefined;
                           },
@@ -872,7 +873,7 @@ export default function AddListing() {
                               }
                               disabled={
                                 formStatus === "submitting" ||
-                                graphicsType !== "dedicated"
+                                graphicsType !== "Dedicated"
                               }
                             >
                               <option value="" disabled>

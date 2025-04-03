@@ -148,8 +148,8 @@ export default function LaptopDetailPage() {
         <Breadcrumb className="mb-8">
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink className="hover:text-secondary-500">
-                <Link to="/"> Home</Link>
+              <BreadcrumbLink asChild>
+                <Link to="/">Home</Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
