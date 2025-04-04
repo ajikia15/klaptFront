@@ -37,25 +37,38 @@ export default function Searchbar() {
   };
 
   return (
-    <form onSubmit={handleSearch} className="relative w-full">
-      <input
-        type="text"
-        placeholder={isFocused ? "" : placeholder}
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
-        className="w-full rounded-md border-none bg-neutral-800 px-4 py-2 pr-10 text-white focus:border-neutral-600 focus:outline-none focus:ring-2 focus:ring-neutral-700"
-      />
-      <button
-        type="submit"
-        className="absolute right-2 top-1/2 -translate-y-1/2 transform cursor-pointer text-gray-400 hover:text-white"
-      >
-        <Search size={24} />
-      </button>
+    <form onSubmit={handleSearch} className="relative w-full group">
+      <div
+        className={`absolute inset-0 bg-gradient-to-r from-purple-500/30 via-primary-500/30 to-pink-500/30 rounded-full blur-md transition-opacity duration-300 ${
+          isFocused ? "opacity-100" : "opacity-0"
+        }`}
+      ></div>
+      <div className="relative">
+        <input
+          type="text"
+          placeholder={isFocused ? "" : placeholder}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          className="w-full rounded-full border-[1.5px] border-neutral-700/80 bg-neutral-800/90 px-5 py-2.5 pr-12 text-white placeholder-neutral-400 transition-all duration-300 focus:border-primary-500/70 focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:bg-neutral-800"
+        />
+        <button
+          type="submit"
+          className={`absolute right-3 top-1/2 -translate-y-1/2 transform cursor-pointer transition-all duration-300 rounded-full h-8 w-8 flex items-center justify-center ${
+            isFocused
+              ? "bg-primary-500 text-white"
+              : "text-neutral-400 hover:text-white"
+          }`}
+        >
+          <Search
+            size={18}
+            className={`transition-transform duration-300 ${
+              isFocused ? "scale-90" : ""
+            }`}
+          />
+        </button>
+      </div>
     </form>
   );
 }
-/* 
-
-*/
