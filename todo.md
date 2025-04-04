@@ -23,4 +23,7 @@ today:
 - delete all laptop entries command
 - turn key highlihgts into accordion
 - [x] IsAdmin
-- Dashboard
+- Profile page
+
+- [ ] usable admin dashboard
+- [ ] view count

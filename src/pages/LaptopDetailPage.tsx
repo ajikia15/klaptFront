@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link, useParams } from "@tanstack/react-router";
 import { LaptopT } from "../interfaces/laptopT";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { CpuIcon } from "../assets/Icons";
 import { GpuIcon } from "../assets/Icons";
@@ -21,11 +21,32 @@ import {
 } from "@/components/ui/breadcrumb";
 import { PhoneIcon } from "lucide-react";
 import KeySpecsCard from "./LaptopDetailPageCard";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+} from "@/components/ui/accordion";
+import * as AccordionPrimitive from "@radix-ui/react-accordion";
 
 export default function LaptopDetailPage() {
   const { laptopId } = useParams({ from: "/laptop/$laptopId" });
   const [animationParent] = useAutoAnimate();
   const [selectedImage, setSelectedImage] = useState(0);
+  const [isMobile, setIsMobile] = useState(false); // TODO
+
+  // // Check if device is mobile
+  // useEffect(() => {
+  //   const checkMobile = () => {
+  //     setIsMobile(window.innerWidth < 768);
+  //   };
+
+  //   checkMobile();
+  //   window.addEventListener("resize", checkMobile);
+
+  //   return () => {
+  //     window.removeEventListener("resize", checkMobile);
+  //   };
+  // }, []);
 
   const {
     data: laptop,
@@ -382,46 +403,75 @@ export default function LaptopDetailPage() {
                   </p>
                 </div>
 
-                {/* Key Highlights */}
+                {/* Key Highlights as Accordion */}
                 <div className="mb-8">
-                  <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                    <div className="h-1 w-5 bg-secondary-500 rounded-full"></div>
-                    Key Highlights
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="bg-neutral-700/20 rounded-lg p-3 border border-neutral-700/30">
-                      <div className="flex items-center gap-2">
-                        <CpuIcon size={18} className="text-secondary-400" />
-                        <span className="text-neutral-200">
-                          {laptop.processorBrand} {laptop.processorModel}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="bg-neutral-700/20 rounded-lg p-3 border border-neutral-700/30">
-                      <div className="flex items-center gap-2">
-                        <RamIcon size={18} className="text-secondary-400" />
-                        <span className="text-neutral-200">
-                          {laptop.ram} {laptop.ramType} RAM
-                        </span>
-                      </div>
-                    </div>
-                    <div className="bg-neutral-700/20 rounded-lg p-3 border border-neutral-700/30">
-                      <div className="flex items-center gap-2">
-                        <GpuIcon size={18} className="text-secondary-400" />
-                        <span className="text-neutral-200">
-                          {laptop.gpuBrand} {laptop.gpuModel}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="bg-neutral-700/20 rounded-lg p-3 border border-neutral-700/30">
-                      <div className="flex items-center gap-2">
-                        <DisplayIcon size={18} className="text-secondary-400" />
-                        <span className="text-neutral-200">
-                          {laptop.screenSize}" {laptop.refreshRate}Hz Display
-                        </span>
-                      </div>
-                    </div>
-                  </div>
+                  <Accordion
+                    type="single"
+                    defaultValue={isMobile ? "key-highlights" : undefined}
+                    collapsible
+                    className="bg-transparent"
+                  >
+                    <AccordionItem
+                      value="key-highlights"
+                      className="border-none"
+                    >
+                      <AccordionPrimitive.Trigger className="flex w-full items-center py-2 px-0 text-lg font-semibold text-white hover:no-underline">
+                        <div className="flex items-center gap-2">
+                          <div className="h-1 w-5 bg-secondary-500 rounded-full"></div>
+                          <span>Key Highlights</span>
+                        </div>
+                      </AccordionPrimitive.Trigger>
+                      <AccordionContent className="pt-4 pl-7">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="bg-neutral-700/20 rounded-lg p-3 border border-neutral-700/30">
+                            <div className="flex items-center gap-2">
+                              <CpuIcon
+                                size={18}
+                                className="text-secondary-400"
+                              />
+                              <span className="text-neutral-200">
+                                {laptop.processorBrand} {laptop.processorModel}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="bg-neutral-700/20 rounded-lg p-3 border border-neutral-700/30">
+                            <div className="flex items-center gap-2">
+                              <RamIcon
+                                size={18}
+                                className="text-secondary-400"
+                              />
+                              <span className="text-neutral-200">
+                                {laptop.ram} {laptop.ramType} RAM
+                              </span>
+                            </div>
+                          </div>
+                          <div className="bg-neutral-700/20 rounded-lg p-3 border border-neutral-700/30">
+                            <div className="flex items-center gap-2">
+                              <GpuIcon
+                                size={18}
+                                className="text-secondary-400"
+                              />
+                              <span className="text-neutral-200">
+                                {laptop.gpuBrand} {laptop.gpuModel}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="bg-neutral-700/20 rounded-lg p-3 border border-neutral-700/30">
+                            <div className="flex items-center gap-2">
+                              <DisplayIcon
+                                size={18}
+                                className="text-secondary-400"
+                              />
+                              <span className="text-neutral-200">
+                                {laptop.screenSize}" {laptop.refreshRate}Hz
+                                Display
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
                 </div>
 
                 <div className="mt-auto">

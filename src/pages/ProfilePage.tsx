@@ -56,58 +56,141 @@ export default function ProfilePage() {
                 )}
               </div>
 
-              {/* Navigation */}
+              {/* Navigation - improved tab styling */}
               <div className="p-4">
-                <nav className="space-y-2">
+                <nav className="space-y-2.5 relative">
+                  {/* Profile Tab */}
                   <button
                     onClick={() => setActiveTab("profile")}
-                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 relative overflow-hidden group
+                    ${
                       activeTab === "profile"
-                        ? "bg-purple-900/30 text-purple-200 border-l-2 border-purple-500"
-                        : "text-neutral-400 hover:bg-neutral-800/50 hover:text-neutral-200"
+                        ? "bg-gradient-to-r from-purple-900/40 to-purple-800/20 text-white"
+                        : "text-neutral-400 hover:bg-neutral-800/70 hover:text-neutral-200"
                     }`}
                   >
-                    <User size={18} />
-                    <span>Profile</span>
+                    {activeTab === "profile" && (
+                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-purple-500 rounded-full"></div>
+                    )}
+                    <User
+                      size={18}
+                      className={`transition-transform duration-300 ${
+                        activeTab === "profile"
+                          ? "text-purple-300"
+                          : "group-hover:scale-110"
+                      }`}
+                    />
+                    <span
+                      className={`relative ${
+                        activeTab === "profile" ? "font-medium" : ""
+                      }`}
+                    >
+                      Profile
+                      {activeTab === "profile" && (
+                        <span className="absolute -bottom-0.5 left-0 w-full h-0.5 bg-gradient-to-r from-purple-500/80 to-transparent"></span>
+                      )}
+                    </span>
                   </button>
 
+                  {/* Posts Tab */}
                   <button
                     onClick={() => setActiveTab("posts")}
-                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 relative overflow-hidden group
+                    ${
                       activeTab === "posts"
-                        ? "bg-purple-900/30 text-purple-200 border-l-2 border-purple-500"
-                        : "text-neutral-400 hover:bg-neutral-800/50 hover:text-neutral-200"
+                        ? "bg-gradient-to-r from-purple-900/40 to-purple-800/20 text-white"
+                        : "text-neutral-400 hover:bg-neutral-800/70 hover:text-neutral-200"
                     }`}
                   >
-                    <Cpu size={18} />
-                    <span>Your Posts</span>
+                    {activeTab === "posts" && (
+                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-purple-500 rounded-full"></div>
+                    )}
+                    <Cpu
+                      size={18}
+                      className={`transition-transform duration-300 ${
+                        activeTab === "posts"
+                          ? "text-purple-300"
+                          : "group-hover:scale-110"
+                      }`}
+                    />
+                    <span
+                      className={`relative ${
+                        activeTab === "posts" ? "font-medium" : ""
+                      }`}
+                    >
+                      Your Posts
+                      {activeTab === "posts" && (
+                        <span className="absolute -bottom-0.5 left-0 w-full h-0.5 bg-gradient-to-r from-purple-500/80 to-transparent"></span>
+                      )}
+                    </span>
                   </button>
 
                   {/* Admin dashboard button - only visible to admins */}
                   {isAdmin && (
                     <button
                       onClick={() => setActiveTab("admin")}
-                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
+                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 relative overflow-hidden group
+                      ${
                         activeTab === "admin"
-                          ? "bg-amber-900/30 text-amber-200 border-l-2 border-amber-500"
-                          : "text-neutral-400 hover:bg-neutral-800/50 hover:text-neutral-200"
+                          ? "bg-gradient-to-r from-amber-900/40 to-amber-800/20 text-white"
+                          : "text-neutral-400 hover:bg-neutral-800/70 hover:text-neutral-200"
                       }`}
                     >
-                      <Crown size={18} />
-                      <span>Admin Dashboard</span>
+                      {activeTab === "admin" && (
+                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-amber-500 rounded-full"></div>
+                      )}
+                      <Crown
+                        size={18}
+                        className={`transition-transform duration-300 ${
+                          activeTab === "admin"
+                            ? "text-amber-300"
+                            : "group-hover:scale-110"
+                        }`}
+                      />
+                      <span
+                        className={`relative ${
+                          activeTab === "admin" ? "font-medium" : ""
+                        }`}
+                      >
+                        Admin Dashboard
+                        {activeTab === "admin" && (
+                          <span className="absolute -bottom-0.5 left-0 w-full h-0.5 bg-gradient-to-r from-amber-500/80 to-transparent"></span>
+                        )}
+                      </span>
                     </button>
                   )}
 
+                  {/* Settings Tab */}
                   <button
                     onClick={() => setActiveTab("settings")}
-                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 relative overflow-hidden group
+                    ${
                       activeTab === "settings"
-                        ? "bg-purple-900/30 text-purple-200 border-l-2 border-purple-500"
-                        : "text-neutral-400 hover:bg-neutral-800/50 hover:text-neutral-200"
+                        ? "bg-gradient-to-r from-purple-900/40 to-purple-800/20 text-white"
+                        : "text-neutral-400 hover:bg-neutral-800/70 hover:text-neutral-200"
                     }`}
                   >
-                    <Settings size={18} />
-                    <span>Settings</span>
+                    {activeTab === "settings" && (
+                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-purple-500 rounded-full"></div>
+                    )}
+                    <Settings
+                      size={18}
+                      className={`transition-transform duration-300 ${
+                        activeTab === "settings"
+                          ? "text-purple-300"
+                          : "group-hover:scale-110"
+                      }`}
+                    />
+                    <span
+                      className={`relative ${
+                        activeTab === "settings" ? "font-medium" : ""
+                      }`}
+                    >
+                      Settings
+                      {activeTab === "settings" && (
+                        <span className="absolute -bottom-0.5 left-0 w-full h-0.5 bg-gradient-to-r from-purple-500/80 to-transparent"></span>
+                      )}
+                    </span>
                   </button>
                 </nav>
               </div>

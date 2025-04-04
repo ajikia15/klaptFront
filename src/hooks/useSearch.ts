@@ -76,7 +76,6 @@ export function useSearchLaptops(initialTerm: string = "", userId?: number) {
     stockStatus: [],
     screenSize: [],
     screenResolution: [],
-    // Initialize new filters
     processorBrand: [],
     gpuBrand: [],
     graphicsType: [],
@@ -88,7 +87,6 @@ export function useSearchLaptops(initialTerm: string = "", userId?: number) {
     shortDesc: [],
   });
 
-  // Get filter options - make sure to pass the current selected filters
   const {
     data: filterOptions,
     isLoading: isLoadingFilters,
@@ -100,7 +98,6 @@ export function useSearchLaptops(initialTerm: string = "", userId?: number) {
   } = useQuery<any, Error, FilterOptions>({
     queryKey: ["filterOptions", JSON.stringify(selectedFilters), userId],
     queryFn: async () => {
-      // Build query params for the filters endpoint
       const params = new URLSearchParams();
 
       Object.entries(selectedFilters).forEach(([key, values]) => {
@@ -136,15 +133,14 @@ export function useSearchLaptops(initialTerm: string = "", userId?: number) {
     notifyOnChangeProps: ["data", "error", "isLoading"],
   });
 
-  // Get laptops with filters
   const {
     data: laptops,
     isLoading,
     error,
     refetch,
-    isFetched, // Add this
-    isPending, // Add this
-    isRefetching, // Add this
+    isFetched,
+    isPending,
+    isRefetching,
   } = useQuery<LaptopT[], Error>({
     queryKey: [
       "laptopSearch",
@@ -153,18 +149,15 @@ export function useSearchLaptops(initialTerm: string = "", userId?: number) {
       userId,
     ],
     queryFn: async (): Promise<LaptopT[]> => {
-      // Build query params
       const params = new URLSearchParams();
       if (searchTerm) params.append("term", searchTerm);
 
-      // Add selected filters to query params
       Object.entries(selectedFilters).forEach(([key, values]) => {
         values.forEach((value: any) => {
           params.append(key, value);
         });
       });
 
-      // Only append userId if it's defined
       if (userId !== undefined) {
         params.append("userId", userId.toString());
       }
@@ -210,7 +203,6 @@ export function useSearchLaptops(initialTerm: string = "", userId?: number) {
       stockStatus: [],
       screenSize: [],
       screenResolution: [],
-      // Reset new filters
       processorBrand: [],
       gpuBrand: [],
       graphicsType: [],
