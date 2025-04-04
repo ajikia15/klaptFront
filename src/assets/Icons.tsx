@@ -1,3 +1,5 @@
+import { SVGProps } from "react";
+
 // Icons
 export const CpuIcon = ({ size = 20, className = "" }) => (
   <svg
@@ -26,28 +28,6 @@ export const CpuIcon = ({ size = 20, className = "" }) => (
     <path d="M15 9h-1" />
     <path d="M9 15h-1" />
     <path d="M9 9h-1" />
-  </svg>
-);
-
-export const GpuIcon = ({ size = 20, className = "" }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={`lucide lucide-gpu-card ${className}`}
-  >
-    <rect width="18" height="12" x="3" y="4" rx="2" />
-    <path d="M7 16h4" />
-    <path d="M13 16h4" />
-    <path d="M3 10h18" />
-    <circle cx="8" cy="10" r="1" />
-    <circle cx="16" cy="10" r="1" />
   </svg>
 );
 
@@ -133,23 +113,23 @@ export const InfoIcon = ({ size = 20, className = "" }) => (
   </svg>
 );
 
-export const MailIcon = ({ size = 20, className = "" }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={`lucide lucide-mail ${className}`}
-  >
-    <rect width="20" height="16" x="2" y="4" rx="2" />
-    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-  </svg>
-);
+export function GpuIcon({ size = 20, className = "" }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={size}
+      height={size}
+      className={className}
+      viewBox="0 0 16 16"
+    >
+      <g fill="currentColor">
+        <path d="M4 8a1.5 1.5 0 1 1 3 0a1.5 1.5 0 0 1-3 0m7.5-1.5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3"></path>
+        <path d="M0 1.5A.5.5 0 0 1 .5 1h1a.5.5 0 0 1 .5.5V4h13.5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5H2v2.5a.5.5 0 0 1-1 0V2H.5a.5.5 0 0 1-.5-.5m5.5 4a2.5 2.5 0 1 0 0 5a2.5 2.5 0 0 0 0-5M9 8a2.5 2.5 0 1 0 5 0a2.5 2.5 0 0 0-5 0"></path>
+        <path d="M3 12.5h3.5v1a.5.5 0 0 1-.5.5H3.5a.5.5 0 0 1-.5-.5zm4 1v-1h4v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5"></path>
+      </g>
+    </svg>
+  );
+}
 
 export const HeartIcon = ({ size = 24, className = "" }) => (
   <svg viewBox="0 0 256 256" width={size} height={size}>

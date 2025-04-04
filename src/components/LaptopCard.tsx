@@ -23,7 +23,6 @@ export const LaptopCard: FC<LaptopCardProps> = ({
 }) => {
   return (
     <div className="relative max-h-84 bg-neutral-900 overflow-hidden hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 rounded-xl border border-neutral-800 hover:border-purple-700/40">
-      {/* Image Container */}
       <div className="h-40 p-2 flex items-center justify-center relative">
         {image ? (
           <img
@@ -50,24 +49,20 @@ export const LaptopCard: FC<LaptopCardProps> = ({
         </div>
       </div>
 
-      {/* Content */}
       <Link
         to="/laptop/$laptopId"
         params={{ laptopId: id.toString() }}
         className=" "
       >
         <div className="space-y-2 bg-neutral-800 p-4">
-          {/* Title */}
           <h3 className="text-xl font-extrabold text-white line-clamp-1 transition-colors duration-300">
             {title}
           </h3>
 
-          {/* Specs/Description */}
           <p className="text-neutral-200 line-clamp-2">
             {shortDesc.toUpperCase()}
           </p>
 
-          {/* Price and Button Row */}
           <div className="flex items-center justify-between pt-3">
             <div className="bg-purple-900/40 px-3 py-1 rounded-md transition-all duration-300 hover:bg-purple-900/60">
               <span className="text-purple-300 font-bold">

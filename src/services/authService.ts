@@ -1,6 +1,5 @@
 import { apiRequest } from "./api";
 
-// Types
 export interface User {
   id: number;
   email: string;
@@ -16,9 +15,7 @@ export interface LoginCredentials {
   password: string;
 }
 
-// Auth API services
 export const authService = {
-  // Register a new user
   register: async (credentials: RegisterCredentials) => {
     return apiRequest<User>("/auth/signup", {
       method: "POST",
@@ -26,7 +23,6 @@ export const authService = {
     });
   },
 
-  // Login a user
   login: async (credentials: LoginCredentials) => {
     return apiRequest<User>("/auth/signin", {
       method: "POST",
@@ -34,12 +30,10 @@ export const authService = {
     });
   },
 
-  // Check if user is authenticated
   getCurrentUser: async () => {
     return apiRequest<User>("/auth/whoami");
   },
 
-  // Logout a user
   logout: async () => {
     return apiRequest("/auth/signout", {
       method: "POST",

@@ -9,7 +9,7 @@ import { RamIcon } from "../assets/Icons";
 import { StorageIcon } from "../assets/Icons";
 import { DisplayIcon } from "../assets/Icons";
 import { InfoIcon } from "../assets/Icons";
-import { MailIcon } from "../assets/Icons";
+
 import "./laptopDetailPage.css";
 import {
   Breadcrumb,
@@ -331,13 +331,10 @@ export default function LaptopDetailPage() {
 
           <div className="order-1 lg:order-2">
             <div className="bg-neutral-800/90 backdrop-blur-sm rounded-2xl p-8 border border-neutral-700/50 h-full flex flex-col shadow-lg relative overflow-hidden">
-              {/* Subtle background elements */}
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(124,58,237,0.07),transparent_70%)]"></div>
               <div className="absolute inset-0 opacity-5 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
 
-              {/* Content with improved visual hierarchy */}
               <div className="relative z-10">
-                {/* Status badges */}
                 <div className="flex flex-wrap gap-3 mb-6">
                   <span
                     className={`px-3 py-1 text-xs font-medium rounded-full border ${getStockStatusColor(
@@ -362,16 +359,14 @@ export default function LaptopDetailPage() {
                   </span>
                 </div>
 
-                {/* Title */}
                 <h1 className="text-3xl md:text-4xl font-bold text-white mb-6 leading-tight">
                   {laptop.title}
                 </h1>
 
-                {/* Price */}
                 <div className="mb-6">
                   <div className="inline-block rounded-md bg-neutral-800/80 px-3 py-2 border border-neutral-700/30">
                     <span className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-secondary-300">
-                      $
+                      ₾
                       {laptop.price.toLocaleString("en-US", {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
@@ -429,9 +424,8 @@ export default function LaptopDetailPage() {
                   </div>
                 </div>
 
-                {/* Contact Button */}
                 <div className="mt-auto">
-                  <button className="w-full py-4 px-6 bg-secondary-600 hover:bg-secondary-700 text-white font-semibold rounded-lg shadow-md transition-all duration-300 flex items-center justify-center gap-3">
+                  <button className="w-full cursor-pointer py-4 px-6 bg-secondary-600 hover:bg-secondary-700 text-white font-semibold rounded-lg shadow-md transition-all duration-300 flex items-center justify-center gap-3">
                     <PhoneIcon size={22} />
                     <span>Contact Us</span>
                   </button>
@@ -481,7 +475,6 @@ export default function LaptopDetailPage() {
                       key={specIndex}
                       className="px-6 py-2 grid grid-cols-2 transition-all duration-200 hover:bg-neutral-800/30 relative overflow-hidden group"
                     >
-                      {/* Hover effect */}
                       <div className="absolute inset-y-0 left-0 w-1 bg-secondary-500/0 transition-all duration-300 group-hover:bg-secondary-500/50"></div>
 
                       <div className="text-neutral-400 text-sm flex items-center">
@@ -499,7 +492,6 @@ export default function LaptopDetailPage() {
           </div>
         </div>
 
-        {/* Additional Information Section */}
         <div className="bg-gradient-to-br from-neutral-800/70 to-neutral-900/90 rounded-2xl p-8 border border-neutral-700/50">
           <h2 className="text-2xl font-bold text-white mb-6">
             Additional Information

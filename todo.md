@@ -12,17 +12,15 @@
 
 - [x] Filtering
 - [x] Favorites
+
   - [x] Backend
   - [x] Frontend
 
-Bug:
-~userid is being returned as id in laptops. its injected somewhere and i dont know where~
-
-"vram must be a string",
-"backlightType must be a string",
-"processorBrand must be one of the following values: ",
-"ram must be a string"
-
 - move to postgress
 
+today:
+
 - delete all laptop entries command
+- turn key highlihgts into accordion
+- IsAdmin
+- Dashboard

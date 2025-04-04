@@ -1,4 +1,4 @@
-import { JSX, ReactNode } from "react";
+import { JSX } from "react";
 import { LaptopT } from "../interfaces/laptopT";
 
 // Define the props for a single spec item
