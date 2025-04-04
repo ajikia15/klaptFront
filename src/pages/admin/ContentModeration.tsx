@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useRequireAuth } from "../../hooks/useRequireAuth";
 import { useSearchLaptops } from "../../hooks/useSearch"; // Import from useSearch.ts
-import { CheckCircle, XCircle, Eye, Trash2 } from "lucide-react";
+import { CheckCircle, XCircle, Eye, Trash2, AlertTriangle } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 
 export default function ContentModeration() {
@@ -12,6 +12,20 @@ export default function ContentModeration() {
 
   // Filter state
   const [statusFilter, setStatusFilter] = useState<string>("all");
+
+  // Function to handle the NUKE action
+  const handleNukeAll = () => {
+    if (
+      window.confirm(
+        "⚠️ WARNING: This will DELETE ALL LISTINGS from the database. This action CANNOT be undone! Are you absolutely sure?"
+      )
+    ) {
+      alert(
+        "NUKE command initiated! All listings would be deleted if this was connected to the backend."
+      );
+      // The actual delete functionality will be implemented by you
+    }
+  };
 
   return (
     <div className="min-h-screen bg-neutral-900 text-neutral-200 py-10">
@@ -66,6 +80,30 @@ export default function ContentModeration() {
             >
               Rejected
             </button>
+          </div>
+
+          {/* NUKE Button Section */}
+          <div className="mb-8 border-2 border-red-700 bg-red-900/20 rounded-lg p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <AlertTriangle className="text-red-500 mr-2" size={24} />
+                <span className="text-red-400 font-bold">DANGER ZONE</span>
+              </div>
+              <button
+                onClick={handleNukeAll}
+                className="px-6 py-3 bg-red-700 hover:bg-red-600 text-white font-bold rounded-lg flex items-center gap-2 transform transition-all hover:scale-105 hover:shadow-[0_0_15px_rgba(220,38,38,0.5)] animate-pulse"
+              >
+                <AlertTriangle size={18} />
+                <span className="uppercase tracking-wider">
+                  NUKE ALL LISTINGS
+                </span>
+                <AlertTriangle size={18} />
+              </button>
+            </div>
+            <p className="text-red-300 mt-2 text-sm">
+              This action will permanently delete ALL listings from the
+              database. Use with extreme caution!
+            </p>
           </div>
 
           {/* Laptops Table */}
