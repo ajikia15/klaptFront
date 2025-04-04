@@ -22,5 +22,5 @@ today:
 
 - delete all laptop entries command
 - turn key highlihgts into accordion
-- IsAdmin
+- [x] IsAdmin
 - Dashboard
