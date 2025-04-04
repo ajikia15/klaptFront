@@ -2,7 +2,6 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { LaptopT } from "../interfaces/laptopT";
 
-// Helper function to compare arrays
 function areArraysEqual<T>(arr1: T[], arr2: T[]): boolean {
   if (arr1.length !== arr2.length) return false;
   return arr1.every(
@@ -10,7 +9,6 @@ function areArraysEqual<T>(arr1: T[], arr2: T[]): boolean {
   );
 }
 
-// Make sure these interfaces match what the backend returns
 interface FilterOption {
   value: string;
   disabled: boolean;
@@ -27,7 +25,6 @@ interface FilterOptions {
   stockStatuses: FilterOption[];
   screenSizes: FilterOption[];
   screenResolutions: FilterOption[];
-  // Add missing filters
   processorBrands: FilterOption[];
   gpuBrands: FilterOption[];
   graphicsTypes: FilterOption[];
@@ -53,7 +50,6 @@ interface SelectedFilters {
   stockStatus: string[];
   screenSize: string[];
   screenResolution: string[];
-  // Add missing filters
   processorBrand: string[];
   gpuBrand: string[];
   graphicsType: string[];
@@ -65,7 +61,7 @@ interface SelectedFilters {
   shortDesc: string[];
 }
 
-export function useSearchLaptops(initialTerm: string = "") {
+export function useSearchLaptops(initialTerm: string = "", userId?: number) {
   const [searchTerm, setSearchTerm] = useState(initialTerm);
 
   // Initialize selected filters
@@ -102,7 +98,7 @@ export function useSearchLaptops(initialTerm: string = "") {
     isPending: isFilterPending,
     isRefetching: isFilterRefetching,
   } = useQuery<any, Error, FilterOptions>({
-    queryKey: ["filterOptions", JSON.stringify(selectedFilters)],
+    queryKey: ["filterOptions", JSON.stringify(selectedFilters), userId],
     queryFn: async () => {
       // Build query params for the filters endpoint
       const params = new URLSearchParams();
@@ -117,7 +113,10 @@ export function useSearchLaptops(initialTerm: string = "") {
         params.append("term", searchTerm);
       }
 
-      console.log("Fetching filter options with params:", params.toString());
+      // Only append userId if it's defined
+      if (userId !== undefined) {
+        params.append("userId", userId.toString());
+      }
 
       const response = await fetch(
         `http://localhost:3000/laptops/filters?${params.toString()}`
@@ -147,7 +146,12 @@ export function useSearchLaptops(initialTerm: string = "") {
     isPending, // Add this
     isRefetching, // Add this
   } = useQuery<LaptopT[], Error>({
-    queryKey: ["laptopSearch", searchTerm, JSON.stringify(selectedFilters)],
+    queryKey: [
+      "laptopSearch",
+      searchTerm,
+      JSON.stringify(selectedFilters),
+      userId,
+    ],
     queryFn: async (): Promise<LaptopT[]> => {
       // Build query params
       const params = new URLSearchParams();
@@ -159,6 +163,11 @@ export function useSearchLaptops(initialTerm: string = "") {
           params.append(key, value);
         });
       });
+
+      // Only append userId if it's defined
+      if (userId !== undefined) {
+        params.append("userId", userId.toString());
+      }
 
       const response = await fetch(
         `http://localhost:3000/laptops/search?${params.toString()}`
@@ -243,9 +252,9 @@ export function useSearchLaptops(initialTerm: string = "") {
     isFilterFetched,
     isFilterPending,
     isFilterRefetching,
-    isFetched, // from the laptops query
-    isPending, // from the laptops query
-    isRefetching, // from the laptops query
+    isFetched,
+    isPending,
+    isRefetching,
     resetFilters,
   };
 }

@@ -1,6 +1,7 @@
 import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
 import { LaptopCard } from "../components/LaptopCard";
+import { Link } from "@tanstack/react-router";
 import {
   Cpu,
   Mail,
@@ -10,18 +11,22 @@ import {
   Shield,
   LogOut,
   Crown,
+  Plus,
 } from "lucide-react";
+import { useSearchLaptops } from "../hooks/useLaptops";
 
 export default function ProfilePage() {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState("profile");
 
-  // Simply use the admin property directly from the user object
   const isAdmin = user?.admin || false;
 
-  // Placeholder for user's posts - you'll implement fetching later
-  const userPosts = [];
-  const isLoading = false;
+  // Fetch user's laptops
+  const {
+    data: userLaptops,
+    isLoading,
+    error,
+  } = useSearchLaptops("", user?.id);
 
   return (
     <div className="min-h-screen bg-neutral-900 text-neutral-200 py-10">
@@ -222,8 +227,18 @@ export default function ProfilePage() {
                         <div className="flex items-center gap-3 bg-neutral-800/50 p-3 rounded-lg border border-neutral-700/30">
                           <Book size={18} className="text-secondary-400" />
                           <span className="text-neutral-200 font-medium">
-                            {userPosts.length} laptop
-                            {userPosts.length !== 1 ? "s" : ""} posted
+                            {isLoading ? (
+                              <span className="text-neutral-400">
+                                Loading...
+                              </span>
+                            ) : userLaptops ? (
+                              <>
+                                {userLaptops.length} laptop
+                                {userLaptops.length !== 1 ? "s" : ""} posted
+                              </>
+                            ) : (
+                              "0 laptops posted"
+                            )}
                           </span>
                         </div>
                       </div>
@@ -249,31 +264,42 @@ export default function ProfilePage() {
                       Your Laptop Listings
                     </h2>
                   </div>
-                  <button className="bg-secondary-500 hover:bg-secondary-600 font-bold transition-all duration-300 px-4 py-2 rounded-md text-white flex items-center gap-2">
+                  <Link
+                    to="/add-listing"
+                    className="bg-secondary-500 hover:bg-secondary-600 font-bold transition-all duration-300 px-4 py-2 rounded-md text-white flex items-center gap-2"
+                  >
                     <span>Add New</span>
-                    <span className="text-lg">+</span>
-                  </button>
+                    <Plus size={18} />
+                  </Link>
                 </div>
 
                 {isLoading ? (
                   <div className="flex justify-center items-center h-64">
                     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500"></div>
                   </div>
-                ) : userPosts.length > 0 ? (
+                ) : error ? (
+                  <div className="bg-red-900/20 border border-red-700/30 rounded-lg p-8 text-center">
+                    <h3 className="text-red-300 font-semibold text-lg mb-2">
+                      Error Loading Your Laptops
+                    </h3>
+                    <p className="text-neutral-300">
+                      We encountered a problem while loading your listings.
+                      Please try again later.
+                    </p>
+                  </div>
+                ) : userLaptops && userLaptops.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {/* This is where you'll map through user's posts */}
-                    {/* Placeholder for illustration */}
-                    {/* {userPosts.map((post) => (
+                    {userLaptops.map((laptop) => (
                       <LaptopCard
-                        key={post.id}
-                        id={post.id}
-                        title={post.title}
-                        price={post.price}
-                        shortDesc={post.shortDesc}
-                        image={post.images[0]}
+                        key={laptop.id}
+                        id={laptop.id}
+                        title={laptop.title}
+                        price={laptop.price}
+                        shortDesc={laptop.shortDesc}
+                        image={laptop.images[0]}
                         isAuthenticated={true}
                       />
-                    ))} */}
+                    ))}
                   </div>
                 ) : (
                   <div className="bg-gradient-to-br from-neutral-800/70 to-neutral-900/90 rounded-2xl border border-neutral-700/50 p-10 text-center">
@@ -286,9 +312,12 @@ export default function ProfilePage() {
                         Start by adding your first laptop listing. It's easy to
                         get started and reach potential buyers.
                       </p>
-                      <button className="mt-4 bg-secondary-500 hover:bg-secondary-600 font-bold transition-all duration-300 px-6 py-3 rounded-md text-white flex items-center gap-2">
+                      <Link
+                        to="/add-listing"
+                        className="mt-4 bg-secondary-500 hover:bg-secondary-600 font-bold transition-all duration-300 px-6 py-3 rounded-md text-white flex items-center gap-2"
+                      >
                         Create Your First Listing
-                      </button>
+                      </Link>
                     </div>
                   </div>
                 )}
