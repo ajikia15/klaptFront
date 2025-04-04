@@ -15,6 +15,11 @@ import ProfilePage from "./pages/ProfilePage";
 import { useRequireAuth } from "./hooks/useRequireAuth";
 import { ReactNode } from "react";
 import AddListingPage from "./pages/AddListingPage";
+import UserManagement from "./pages/admin/UserManagement";
+import ContentModeration from "./pages/admin/ContentModeration";
+import Statistics from "./pages/admin/Statistics";
+import SystemSettings from "./pages/admin/SystemSettings";
+import { AdminProtectedRoute } from "./components/auth/AdminProtectedRoute";
 
 // Protected route wrapper component
 function ProtectedRoute({ children }: { children: ReactNode }) {
@@ -112,6 +117,47 @@ const profileRoute = createRoute({
   ),
 });
 
+// Admin routes
+const adminUserManagementRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/admin/users",
+  component: () => (
+    <AdminProtectedRoute>
+      <UserManagement />
+    </AdminProtectedRoute>
+  ),
+});
+
+const adminContentModerationRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/admin/moderation",
+  component: () => (
+    <AdminProtectedRoute>
+      <ContentModeration />
+    </AdminProtectedRoute>
+  ),
+});
+
+const adminStatisticsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/admin/statistics",
+  component: () => (
+    <AdminProtectedRoute>
+      <Statistics />
+    </AdminProtectedRoute>
+  ),
+});
+
+const adminSystemSettingsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/admin/system",
+  component: () => (
+    <AdminProtectedRoute>
+      <SystemSettings />
+    </AdminProtectedRoute>
+  ),
+});
+
 // Create the route tree using your routes
 const routeTree = rootRoute.addChildren([
   indexRoute,
@@ -123,6 +169,10 @@ const routeTree = rootRoute.addChildren([
   favoritesRoute,
   profileRoute,
   addLaptopRoute,
+  adminUserManagementRoute,
+  adminContentModerationRoute,
+  adminStatisticsRoute,
+  adminSystemSettingsRoute,
 ]);
 
 // Create the router using the route tree

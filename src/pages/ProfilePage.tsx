@@ -434,9 +434,12 @@ export default function ProfilePage() {
                       <p className="text-neutral-400 text-sm mb-3">
                         Manage user accounts and permissions
                       </p>
-                      <button className="text-amber-400 hover:text-amber-300 text-sm font-medium transition-colors">
+                      <Link
+                        to="/admin/users"
+                        className="text-amber-400 hover:text-amber-300 text-sm font-medium transition-colors"
+                      >
                         Manage Users →
-                      </button>
+                      </Link>
                     </div>
 
                     <div className="bg-neutral-800/40 border border-neutral-700/30 rounded-lg p-4 hover:bg-neutral-800/60 transition-colors">
@@ -446,9 +449,12 @@ export default function ProfilePage() {
                       <p className="text-neutral-400 text-sm mb-3">
                         Review and moderate user listings
                       </p>
-                      <button className="text-amber-400 hover:text-amber-300 text-sm font-medium transition-colors">
+                      <Link
+                        to="/admin/moderation"
+                        className="text-amber-400 hover:text-amber-300 text-sm font-medium transition-colors"
+                      >
                         View Reports →
-                      </button>
+                      </Link>
                     </div>
 
                     <div className="bg-neutral-800/40 border border-neutral-700/30 rounded-lg p-4 hover:bg-neutral-800/60 transition-colors">
@@ -458,9 +464,12 @@ export default function ProfilePage() {
                       <p className="text-neutral-400 text-sm mb-3">
                         View site usage and performance metrics
                       </p>
-                      <button className="text-amber-400 hover:text-amber-300 text-sm font-medium transition-colors">
+                      <Link
+                        to="/admin/statistics"
+                        className="text-amber-400 hover:text-amber-300 text-sm font-medium transition-colors"
+                      >
                         View Analytics →
-                      </button>
+                      </Link>
                     </div>
 
                     <div className="bg-neutral-800/40 border border-neutral-700/30 rounded-lg p-4 hover:bg-neutral-800/60 transition-colors">
@@ -470,9 +479,12 @@ export default function ProfilePage() {
                       <p className="text-neutral-400 text-sm mb-3">
                         Configure system parameters and features
                       </p>
-                      <button className="text-amber-400 hover:text-amber-300 text-sm font-medium transition-colors">
+                      <Link
+                        to="/admin/system"
+                        className="text-amber-400 hover:text-amber-300 text-sm font-medium transition-colors"
+                      >
                         System Config →
-                      </button>
+                      </Link>
                     </div>
                   </div>
 
