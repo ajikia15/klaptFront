@@ -21,9 +21,11 @@
 today:
 
 - delete all laptop entries command
-- turn key highlihgts into accordion
+- [x] turn key highlihgts into accordion
 - [x] IsAdmin
-- Profile page
+- [x] profile page
+
+- [ ] tooltips in content moderation
 
 - [ ] usable admin dashboard
 - [ ] view count

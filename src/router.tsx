@@ -20,6 +20,10 @@ import ContentModeration from "./pages/admin/ContentModeration";
 import Statistics from "./pages/admin/Statistics";
 import SystemSettings from "./pages/admin/SystemSettings";
 import { AdminProtectedRoute } from "./components/auth/AdminProtectedRoute";
+import ProfileMain from "./pages/profile/ProfileMain";
+import ProfilePosts from "./pages/profile/ProfilePosts";
+import ProfileAdmin from "./pages/profile/ProfileAdmin";
+import ProfileSettings from "./pages/profile/ProfileSettings";
 
 // Protected route wrapper component
 function ProtectedRoute({ children }: { children: ReactNode }) {
@@ -117,6 +121,31 @@ const profileRoute = createRoute({
   ),
 });
 
+// Profile tab routes
+const profileMainRoute = createRoute({
+  getParentRoute: () => profileRoute,
+  path: "/",
+  component: ProfileMain,
+});
+
+const profilePostsRoute = createRoute({
+  getParentRoute: () => profileRoute,
+  path: "/posts",
+  component: ProfilePosts,
+});
+
+const profileAdminRoute = createRoute({
+  getParentRoute: () => profileRoute,
+  path: "/admin",
+  component: ProfileAdmin,
+});
+
+const profileSettingsRoute = createRoute({
+  getParentRoute: () => profileRoute,
+  path: "/settings",
+  component: ProfileSettings,
+});
+
 // Admin routes
 const adminUserManagementRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -167,8 +196,13 @@ const routeTree = rootRoute.addChildren([
   loginRoute,
   registerRoute,
   favoritesRoute,
-  profileRoute,
   addLaptopRoute,
+  profileRoute.addChildren([
+    profileMainRoute,
+    profilePostsRoute,
+    profileAdminRoute,
+    profileSettingsRoute,
+  ]),
   adminUserManagementRoute,
   adminContentModerationRoute,
   adminStatisticsRoute,
