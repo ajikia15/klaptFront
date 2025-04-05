@@ -9,27 +9,38 @@
 
 - [ ] tooltips in content moderation
 
-- [ ] usable admin dashboard
 - [ ] view count
 
 - move to postgress
+- site statistics
+- system settings (define front page laptops)
 
 today
 
-- [ ] approve in frontend as well
-- [ ] delete all laptop entries command
+- [ ] usable admin dashboard
 
-Completed
+  - [x] content moderation
+  - [ ] user moderation
+
+- [ ] profile settings
+
+- [ ] user model + registration changes
+
+  - [ ] mobile phone
+  - [ ] username
+  - [ ] joindate
+        Completed
 
 - [x] Filtering
 - [x] Favorites
 
-  - [x] Backend
-  - [x] Frontend
+- [x] Get distinct parts
+- [x] Get amount of favorited items by user
 
 - [x] turn key highlihgts into accordion
 - [x] IsAdmin
 - [x] profile page
 
-- [x] Get distinct parts
-- [x] Get amount of favorited items by user
+- [x] approve in frontend as well
+- [x] ux improvements in content moderation
+- [x] delete all laptop entries command

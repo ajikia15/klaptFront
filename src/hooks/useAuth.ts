@@ -65,3 +65,34 @@ export const useLogout = () => {
     },
   });
 };
+
+export const useGetUsers = () => {
+  return useQuery({
+    queryKey: ["users"],
+    queryFn: async () => {
+      try {
+        const response = await fetch(`http://localhost:3000/auth`, {
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data as User[];
+      } catch (error) {
+        console.error("Error fetching users:", error);
+        throw error;
+      }
+    },
+    refetchOnWindowFocus: false,
+    retry: (failureCount, error: any) => {
+      if (error?.statusCode === 403) return false;
+      return failureCount < 3;
+    },
+  });
+};
