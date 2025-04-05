@@ -1,4 +1,4 @@
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "@/context/AuthContext";
 import { Mail, User, Settings, Book, Shield } from "lucide-react";
 import { useSearchLaptops } from "@/hooks/useSearch";
 

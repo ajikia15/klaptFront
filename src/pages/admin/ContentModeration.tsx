@@ -1,29 +1,79 @@
 import { useState } from "react";
 import { useRequireAuth } from "../../hooks/useRequireAuth";
-import { useSearchLaptops } from "../../hooks/useSearch"; // Import from useSearch.ts
+import { useSearchLaptops } from "../../hooks/useSearch";
 import { CheckCircle, XCircle, Eye, Trash2, AlertTriangle } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
+import {
+  ApproveDialog,
+  RejectDialog,
+  DeleteDialog,
+  NukeAllDialog,
+} from "../../components/admin/ModerationDialogs";
+import { useChangeStatus } from "@/hooks/useModeration";
 
 export default function ContentModeration() {
   useRequireAuth();
 
   const { laptops, isLoading, error } = useSearchLaptops();
+  const { mutate: changeStatus, error: statusError } = useChangeStatus();
 
   const [statusFilter, setStatusFilter] = useState<string>("all");
-  const handleNukeAll = () => {
-    if (
-      window.confirm(
-        "⚠️ WARNING: This will DELETE ALL LISTINGS from the database. This action CANNOT be undone! Are you absolutely sure?"
-      )
-    ) {
-      alert(
-        "NUKE command initiated! All listings would be deleted if this was connected to the backend."
-      );
-    }
-  };
+  const [selectedLaptopId, setSelectedLaptopId] = useState<number | null>(null);
+
+  // Dialog state
+  const [approveDialogOpen, setApproveDialogOpen] = useState(false);
+  const [rejectDialogOpen, setRejectDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [nukeDialogOpen, setNukeDialogOpen] = useState(false);
 
   const [contentTable] = useAutoAnimate();
+
+  // Action handlers
+  function approveListing(laptopId: number) {
+    console.log("Approving listing with ID:", laptopId);
+    changeStatus({
+      laptopId,
+      status: "approved",
+    });
+    setApproveDialogOpen(false);
+  }
+
+  function rejectListing(laptopId: number) {
+    changeStatus({
+      laptopId,
+      status: "rejected",
+    });
+    setRejectDialogOpen(false);
+  }
+
+  function deleteListing(laptopId: number) {
+    setDeleteDialogOpen(false);
+  }
+
+  // Dialog open handlers
+  function handleApproveClick(id: number) {
+    setSelectedLaptopId(id);
+    setApproveDialogOpen(true);
+  }
+
+  function handleRejectClick(id: number) {
+    setSelectedLaptopId(id);
+    setRejectDialogOpen(true);
+  }
+
+  function handleDeleteClick(id: number) {
+    setSelectedLaptopId(id);
+    setDeleteDialogOpen(true);
+  }
+
+  const handleNukeAll = () => {
+    alert(
+      "NUKE command initiated! All listings would be deleted if this was connected to the backend."
+    );
+    setNukeDialogOpen(false);
+  };
+
   return (
     <div className="min-h-screen bg-neutral-900 text-neutral-200 py-10">
       <div className="container mx-auto px-4">
@@ -80,6 +130,15 @@ export default function ContentModeration() {
           </div>
 
           {/* NUKE Button Section */}
+          <div className="mb-6 flex justify-end">
+            <button
+              onClick={() => setNukeDialogOpen(true)}
+              className="px-4 py-2 flex items-center gap-2 bg-red-900/20 hover:bg-red-900/40 text-red-400 hover:text-red-300 rounded-lg transition-colors border border-red-800/30"
+            >
+              <AlertTriangle size={16} />
+              Delete All Listings
+            </button>
+          </div>
 
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-left">
@@ -170,27 +229,21 @@ export default function ContentModeration() {
                             <button
                               className="p-1.5 text-green-400 hover:text-green-300 bg-green-900/20 hover:bg-green-900/30 rounded transition-colors"
                               title="Approve listing"
-                              onClick={() =>
-                                alert(`Approve laptop #${laptop.id}`)
-                              }
+                              onClick={() => handleApproveClick(laptop.id)}
                             >
                               <CheckCircle size={16} />
                             </button>
                             <button
                               className="p-1.5 text-red-400 hover:text-red-300 bg-red-900/20 hover:bg-red-900/30 rounded transition-colors"
                               title="Reject listing"
-                              onClick={() =>
-                                alert(`Reject laptop #${laptop.id}`)
-                              }
+                              onClick={() => handleRejectClick(laptop.id)}
                             >
                               <XCircle size={16} />
                             </button>
                             <button
                               className="p-1.5 text-red-400 hover:text-red-300 bg-red-900/20 hover:bg-red-900/30 rounded transition-colors"
                               title="Delete listing"
-                              onClick={() =>
-                                alert(`Delete laptop #${laptop.id}`)
-                              }
+                              onClick={() => handleDeleteClick(laptop.id)}
                             >
                               <Trash2 size={16} />
                             </button>
@@ -214,6 +267,34 @@ export default function ContentModeration() {
           </div>
         </div>
       </div>
+
+      {/* Moderation Dialogs */}
+      <ApproveDialog
+        open={approveDialogOpen}
+        onOpenChange={setApproveDialogOpen}
+        laptopId={selectedLaptopId}
+        onAction={approveListing}
+      />
+
+      <RejectDialog
+        open={rejectDialogOpen}
+        onOpenChange={setRejectDialogOpen}
+        laptopId={selectedLaptopId}
+        onAction={rejectListing}
+      />
+
+      <DeleteDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        laptopId={selectedLaptopId}
+        onAction={deleteListing}
+      />
+
+      <NukeAllDialog
+        open={nukeDialogOpen}
+        onOpenChange={setNukeDialogOpen}
+        onAction={handleNukeAll}
+      />
     </div>
   );
 }

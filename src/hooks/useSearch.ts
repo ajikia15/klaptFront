@@ -2,13 +2,6 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { LaptopT } from "../interfaces/laptopT";
 
-function areArraysEqual<T>(arr1: T[], arr2: T[]): boolean {
-  if (arr1.length !== arr2.length) return false;
-  return arr1.every(
-    (item, index) => JSON.stringify(item) === JSON.stringify(arr2[index])
-  );
-}
-
 interface FilterOption {
   value: string;
   disabled: boolean;
@@ -124,7 +117,6 @@ export function useSearchLaptops(initialTerm: string = "", userId?: number) {
       }
 
       const data = await response.json();
-      console.log("Received filter options:", data);
       return data;
     },
     select: (data: FilterOptions): FilterOptions => {

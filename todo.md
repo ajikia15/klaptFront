@@ -5,10 +5,21 @@
 - [ ] Kaido verified
 - [ ] Move away from sqlite
 
-- [x] Get distinct parts
-- [x] Get amount of favorited items by user
-
 - [ ] Chart for price ranges shadcn https://ui.shadcn.com/docs/components/chart
+
+- [ ] tooltips in content moderation
+
+- [ ] usable admin dashboard
+- [ ] view count
+
+- move to postgress
+
+today
+
+- [ ] approve in frontend as well
+- [ ] delete all laptop entries command
+
+Completed
 
 - [x] Filtering
 - [x] Favorites
@@ -16,18 +27,9 @@
   - [x] Backend
   - [x] Frontend
 
-- move to postgress
-
-today:
-
-- delete all laptop entries command
 - [x] turn key highlihgts into accordion
 - [x] IsAdmin
 - [x] profile page
 
-- [ ] tooltips in content moderation
-
-- [ ] usable admin dashboard
-- [ ] view count
-
-- [ ] approve in frontend as well
+- [x] Get distinct parts
+- [x] Get amount of favorited items by user

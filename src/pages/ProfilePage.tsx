@@ -49,7 +49,6 @@ export default function ProfilePage() {
               {/* Navigation links */}
               <div className="p-4">
                 <nav className="space-y-2.5 relative">
-                  {/* Profile Tab - using exact to only match exact path */}
                   <Link
                     to="/profile"
                     activeProps={{
@@ -90,7 +89,6 @@ export default function ProfilePage() {
                     <span>Your Posts</span>
                   </Link>
 
-                  {/* Admin dashboard link - only visible to admins */}
                   {isAdmin && (
                     <Link
                       to="/profile/admin"
