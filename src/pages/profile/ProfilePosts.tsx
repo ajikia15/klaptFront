@@ -2,12 +2,12 @@ import { useAuth } from "../../context/AuthContext";
 import { LaptopCard } from "../../components/LaptopCard";
 import { Link } from "@tanstack/react-router";
 import { Cpu, Plus } from "lucide-react";
-import { useSearchLaptops } from "../../hooks/useLaptops";
+import { useSearchLaptops } from "@/hooks/useSearch";
 
 export default function ProfilePosts() {
   const { user } = useAuth();
   const {
-    data: userLaptops,
+    laptops: userLaptops,
     isLoading,
     error,
   } = useSearchLaptops("", user?.id);

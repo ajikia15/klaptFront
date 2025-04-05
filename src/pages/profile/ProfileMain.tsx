@@ -1,13 +1,13 @@
 import { useAuth } from "../../context/AuthContext";
 import { Mail, User, Settings, Book, Shield } from "lucide-react";
-import { useSearchLaptops } from "../../hooks/useLaptops";
+import { useSearchLaptops } from "@/hooks/useSearch";
 
 export default function ProfileMain() {
   const { user } = useAuth();
   const isAdmin = user?.admin || false;
 
   // Fetch user's laptops
-  const { data: userLaptops, isLoading } = useSearchLaptops("", user?.id);
+  const { laptops: userLaptops, isLoading } = useSearchLaptops("", user?.id);
 
   return (
     <div className="bg-gradient-to-br from-neutral-800/70 to-neutral-900/90 rounded-2xl border border-neutral-700/50 p-8 relative overflow-hidden transition-all duration-300 hover:shadow-[0_4px_20px_rgba(79,38,144,0.15)]">
