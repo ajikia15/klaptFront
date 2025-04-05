@@ -25,10 +25,13 @@ export function useChangeStatus() {
       if (!response.ok) {
         throw new Error(`Failed to change laptop status to ${status}`);
       }
+
+      // Return the response data
+      return await response.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["laptops"],
+        queryKey: ["laptopSearch"],
       });
     },
   });
@@ -52,7 +55,7 @@ export function useDeleteLaptop() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["laptops"],
+        queryKey: ["laptopSearch"],
       });
     },
   });

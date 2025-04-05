@@ -166,3 +166,43 @@ export function NukeAllDialog({
     </Dialog>
   );
 }
+
+interface ArchiveUserDialogProps extends DialogProps {
+  laptopId: number | null;
+  onAction: (id: number) => void;
+}
+export function ArchiveDialog({
+  open,
+  onOpenChange,
+  laptopId,
+  onAction,
+}: ArchiveUserDialogProps) {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="bg-neutral-800 border border-neutral-700 text-neutral-200">
+        <DialogHeader>
+          <DialogTitle>Archive User</DialogTitle>
+          <DialogDescription className="text-neutral-400">
+            Are you sure you want to archive this user? This action cannot be
+            undone.
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <Button
+            variant="outline"
+            onClick={() => onOpenChange(false)}
+            className="bg-neutral-700 text-neutral-200 hover:bg-neutral-600"
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={() => laptopId && onAction(laptopId)}
+            className="bg-red-600 hover:bg-red-700 text-white"
+          >
+            Archive
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}

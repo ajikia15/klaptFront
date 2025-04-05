@@ -1,7 +1,14 @@
 import { useState } from "react";
 import { useRequireAuth } from "../../hooks/useRequireAuth";
 import { useSearchLaptops } from "../../hooks/useSearch";
-import { CheckCircle, XCircle, Eye, Trash2, AlertTriangle } from "lucide-react";
+import {
+  CheckCircle,
+  XCircle,
+  Eye,
+  Trash2,
+  AlertTriangle,
+  Archive,
+} from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import {
@@ -9,14 +16,17 @@ import {
   RejectDialog,
   DeleteDialog,
   NukeAllDialog,
+  ArchiveDialog,
 } from "../../components/admin/ModerationDialogs";
 import { useChangeStatus } from "@/hooks/useModeration";
+import { useDeleteLaptop } from "@/hooks/useModeration";
 
 export default function ContentModeration() {
   useRequireAuth();
 
   const { laptops, isLoading, error } = useSearchLaptops();
-  const { mutate: changeStatus, error: statusError } = useChangeStatus();
+  const { mutate: changeStatus } = useChangeStatus();
+  const { mutate: deleteLaptop } = useDeleteLaptop();
 
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [selectedLaptopId, setSelectedLaptopId] = useState<number | null>(null);
@@ -25,6 +35,7 @@ export default function ContentModeration() {
   const [approveDialogOpen, setApproveDialogOpen] = useState(false);
   const [rejectDialogOpen, setRejectDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [archiveDialogOpen, setArchiveDialogOpen] = useState(false);
   const [nukeDialogOpen, setNukeDialogOpen] = useState(false);
 
   const [contentTable] = useAutoAnimate();
@@ -48,7 +59,16 @@ export default function ContentModeration() {
   }
 
   function deleteListing(laptopId: number) {
+    deleteLaptop(laptopId);
     setDeleteDialogOpen(false);
+  }
+
+  function archiveListing(laptopId: number) {
+    changeStatus({
+      laptopId,
+      status: "archived",
+    });
+    setArchiveDialogOpen(false);
   }
 
   // Dialog open handlers
@@ -65,6 +85,10 @@ export default function ContentModeration() {
   function handleDeleteClick(id: number) {
     setSelectedLaptopId(id);
     setDeleteDialogOpen(true);
+  }
+  function handleArchiveClick(id: number) {
+    setSelectedLaptopId(id);
+    setArchiveDialogOpen(true);
   }
 
   const handleNukeAll = () => {
@@ -126,6 +150,16 @@ export default function ContentModeration() {
               }`}
             >
               Rejected
+            </button>
+            <button
+              onClick={() => setStatusFilter("archived")}
+              className={`px-4 py-2 rounded-lg transition-colors ${
+                statusFilter === "archived"
+                  ? "bg-amber-600 text-white"
+                  : "bg-neutral-800 hover:bg-neutral-700 text-neutral-300"
+              }`}
+            >
+              Archived
             </button>
           </div>
 
@@ -247,6 +281,13 @@ export default function ContentModeration() {
                             >
                               <Trash2 size={16} />
                             </button>
+                            <button
+                              className="p-1.5 text-red-400 hover:text-red-300 bg-red-900/20 hover:bg-red-900/30 rounded transition-colors"
+                              title="Delete listing"
+                              onClick={() => handleArchiveClick(laptop.id)}
+                            >
+                              <Archive size={16} />
+                            </button>
                           </div>
                         </td>
                       </tr>
@@ -294,6 +335,12 @@ export default function ContentModeration() {
         open={nukeDialogOpen}
         onOpenChange={setNukeDialogOpen}
         onAction={handleNukeAll}
+      />
+      <ArchiveDialog
+        open={archiveDialogOpen}
+        onOpenChange={setArchiveDialogOpen}
+        laptopId={selectedLaptopId}
+        onAction={archiveListing}
       />
     </div>
   );
