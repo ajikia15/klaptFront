@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useAuth } from "../context/AuthContext";
 
-// This hook can be used to protect routes that require authentication
 export function useRequireAuth(redirectTo: string = "/auth") {
   const { isAuthenticated, isLoading } = useAuth();
   const navigate = useNavigate();

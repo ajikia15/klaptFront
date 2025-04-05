@@ -29,3 +29,5 @@ today:
 
 - [ ] usable admin dashboard
 - [ ] view count
+
+- [ ] approve in frontend as well
