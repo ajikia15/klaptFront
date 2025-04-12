@@ -27,15 +27,9 @@ export const LaptopCard: FC<LaptopCardProps> = ({
       <div className="relative w-full pt-6 pb-4 px-6">
         <div className="absolute inset-0 bg-gradient-to-b from-purple-500/5 to-transparent"></div>
         <div className="absolute left-0 -translate-x-full transition-all flex flex-col gap-1 group-hover:-translate-x-0 z-20 opacity-0 group-hover:opacity-100 duration-300 ml-2">
-          <Badge className="bg-green-700/70 font-bold flex items-center gap-1.5">
-            Nvidia RTX
-          </Badge>
-          <Badge className="bg-red-600/70 font-bold flex items-center gap-1.5">
-            AMD Ryzen
-          </Badge>
-          <Badge className="bg-blue-600/70 font-bold flex items-center gap-1.5">
-            Intel Core
-          </Badge>
+          <Badge className="bg-green-700/40 font-bold">Nvidia RTX</Badge>
+          <Badge className="bg-red-600/40 font-bold ">AMD Ryzen</Badge>
+          <Badge className="bg-blue-600/40 font-bold ">Intel Core</Badge>
         </div>
         {/* overlay is behind the image */}
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 z-5"></div>
@@ -91,9 +85,9 @@ export const LaptopCard: FC<LaptopCardProps> = ({
             <Link
               to="/laptop/$laptopId"
               params={{ laptopId: id.toString() }}
-              className="relative overflow-hidden bg-secondary-500/30 hover:bg-secondary-500/40 px-4 py-1.5 rounded-md text-white text-sm font-medium flex items-center gap-1.5 group/btn transition-all duration-300 before:absolute before:inset-0 before:bg-gradient-to-r before:from-primary-500/0 before:via-secondary-400/50 before:to-primary-500/0 before:translate-x-[-100%] hover:before:translate-x-[100%] before:transition-transform before:duration-500 before:ease-in-out cursor-pointer"
+              className="relative overflow-hidden bg-secondary-700 hover:bg-secondary-700 px-4 py-2 rounded-md text-white text-sm font-medium flex items-center gap-1.5 group/btn transition-all duration-300 before:absolute before:inset-0 before:bg-gradient-to-r before:from-primary-500/0 before:via-secondary-400/50 before:to-primary-500/0 before:translate-x-[-100%] hover:before:translate-x-[100%] before:transition-transform before:duration-500 before:ease-in-out cursor-pointer"
             >
-              <span className="relative z-10">View Details</span>
+              <span className="relative z-10 font-bold">View Details</span>
               <ArrowRight
                 size={14}
                 className="relative z-10 transition-all duration-300 group-hover/btn:translate-x-1"
