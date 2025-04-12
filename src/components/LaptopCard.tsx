@@ -60,7 +60,7 @@ export const LaptopCard: FC<LaptopCardProps> = ({
         </div>
       </div>
 
-      <div className="relative flex flex-col flex-grow p-5 bg-neutral-800 before:absolute before:top-0 before:left-[10%] before:right-[10%] before:h-[1px] before:bg-gradient-to-r before:from-transparent before:via-purple-500/30 before:to-transparent">
+      <div className="relative flex flex-col flex-grow p-5 bg-neutral-800/60 before:absolute before:top-0 before:left-[10%] before:right-[10%] before:h-[1px] before:bg-gradient-to-r before:from-transparent before:via-purple-500/30 before:to-transparent">
         <div className="flex flex-col flex-grow">
           <Link
             to="/laptop/$laptopId"

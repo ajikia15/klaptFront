@@ -12,7 +12,7 @@ interface BrandShowcaseSectionProps {
 const BrandShowcaseSection = ({ brandLogos }: BrandShowcaseSectionProps) => {
   return (
     <section className="py-12 bg-neutral-900">
-      <div className="container mx-auto">
+      <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold text-white mb-2 text-center">
           Shop by Brand
         </h2>
@@ -26,7 +26,7 @@ const BrandShowcaseSection = ({ brandLogos }: BrandShowcaseSectionProps) => {
             <Link
               to="/search"
               key={brand.name}
-              className="bg-neutral-800 hover:bg-neutral-700 rounded-lg p-4 flex items-center justify-center h-20 transition-colors"
+              className="bg-neutral-800 hover:bg-neutral-700 rounded-lg p-4 flex items-center justify-center h-20 transition-colors shadow-md"
             >
               <span className="text-neutral-300 hover:text-white text-lg font-medium">
                 {brand.name}

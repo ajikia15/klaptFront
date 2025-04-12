@@ -16,8 +16,8 @@ interface CategorySectionProps {
 
 const CategorySection = ({ categories }: CategorySectionProps) => {
   return (
-    <section className="py-16  bg-neutral-800  border-neutral-800 mt-4">
-      <div className="container mx-auto">
+    <section className="py-16 bg-neutral-800">
+      <div className="container mx-auto px-4">
         <div className="mb-8 text-center">
           <h2 className="text-3xl font-bold text-white mb-2 relative inline-block">
             Browse by Category
@@ -34,7 +34,7 @@ const CategorySection = ({ categories }: CategorySectionProps) => {
             <Link
               to="/search"
               key={category.title}
-              className={`bg-gradient-to-br ${category.gradient} rounded-xl border ${category.borderColor} p-6 transition-transform duration-300 hover:scale-[1.02] group`}
+              className={`bg-gradient-to-br ${category.gradient} rounded-xl border ${category.borderColor} p-6 transition-transform duration-300 hover:scale-[1.02] group shadow-lg`}
             >
               {/* Icon - No outline */}
               <div className="mb-4">{category.icon}</div>

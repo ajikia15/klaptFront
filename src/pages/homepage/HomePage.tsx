@@ -22,7 +22,6 @@ import AnimatedStatsSection from "@/pages/homepage/AnimatedStatsSection";
 import SpecialDealsSection from "@/pages/homepage/SpecialDealsSection";
 import BrandShowcaseSection from "@/pages/homepage/BrandShowcaseSection";
 import TestimonialsSection from "@/pages/homepage/TestimonialsSection";
-import HorizontalLaptopCard from "@/components/HorizontalLaptopCard";
 
 // Brand logos - replace with actual brand logo paths
 const brandLogos = [
@@ -202,20 +201,17 @@ export default function HomePage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {isLoading
-              ? Array(3)
+              ? Array(4)
                   .fill(0)
                   .map((_, index) => (
-                    <div
-                      key={index}
-                      className="w-full h-[140px] bg-neutral-700 animate-pulse rounded-lg"
-                    ></div>
+                    <SkeletonCard key={`new-arrival-skeleton-${index}`} />
                   ))
               : laptops
-                  ?.slice(0, 3)
+                  ?.slice(0, 4)
                   .map((laptop) => (
-                    <HorizontalLaptopCard
+                    <LaptopCard
                       key={`new-${laptop.id}`}
                       id={laptop.id}
                       title={laptop.title}

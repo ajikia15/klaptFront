@@ -1,14 +1,14 @@
 const TestimonialsSection = () => {
   return (
     <section className="py-12 bg-neutral-800">
-      <div className="container mx-auto">
+      <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold text-white mb-8 text-center">
           What Our Customers Say
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="bg-neutral-900 rounded-lg p-6">
+            <div key={i} className="bg-neutral-900 rounded-lg p-6 shadow-lg">
               {/* Stars */}
               <div className="flex mb-4">
                 {Array(5)

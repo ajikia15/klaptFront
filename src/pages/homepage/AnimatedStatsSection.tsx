@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Check, Shield, Clock, HeartHandshake, ThumbsUp } from "lucide-react";
 
 const AnimatedStatsSection = () => {
   // For animated stats
@@ -62,7 +63,10 @@ const AnimatedStatsSection = () => {
 
   return (
     <section className="py-10 bg-neutral-800">
-      <div ref={statsRef} className="container mx-auto">
+      <h2 className="text-3xl font-bold text-white text-center mb-8">
+        But, why Kaido?
+      </h2>
+      <div ref={statsRef} className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div
             className={`text-center transition-all duration-1000 ${
@@ -71,7 +75,7 @@ const AnimatedStatsSection = () => {
                 : "opacity-0 translate-y-10"
             }`}
           >
-            <div className="text-5xl font-bold text-white mb-2">
+            <div className="text-5xl font-bold text-white">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary-400 to-secondary-400">
                 {animatedStats.customers.toLocaleString()}+
               </span>
@@ -86,7 +90,7 @@ const AnimatedStatsSection = () => {
                 : "opacity-0 translate-y-10"
             }`}
           >
-            <div className="text-5xl font-bold text-white mb-2">
+            <div className="text-5xl font-bold text-white ">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-secondary-400 to-primary-400">
                 {animatedStats.laptops.toLocaleString()}+
               </span>
@@ -101,12 +105,76 @@ const AnimatedStatsSection = () => {
                 : "opacity-0 translate-y-10"
             }`}
           >
-            <div className="text-5xl font-bold text-white mb-2">
+            <div className="text-5xl font-bold text-white">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-blue-400">
                 {animatedStats.brands}+
               </span>
             </div>
             <p className="text-neutral-300">Premium Brands</p>
+          </div>
+        </div>
+
+        <div className="mt-12 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+            <div className="bg-neutral-900 p-8 rounded-lg shadow-lg hover:bg-neutral-850 transition-colors">
+              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-primary-500/20 text-primary-400 mb-6 mx-auto">
+                <Check size={24} />
+              </div>
+              <h3 className="text-lg font-semibold text-white text-center mb-3">
+                Quality Guaranteed
+              </h3>
+              <p className="text-neutral-400 text-center text-sm">
+                Every laptop is thoroughly tested before shipping
+              </p>
+            </div>
+
+            <div className="bg-neutral-900 p-8 rounded-lg shadow-lg hover:bg-neutral-850 transition-colors">
+              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-secondary-500/20 text-secondary-400 mb-6 mx-auto">
+                <Shield size={24} />
+              </div>
+              <h3 className="text-lg font-semibold text-white text-center mb-3">
+                Extended Warranty
+              </h3>
+              <p className="text-neutral-400 text-center text-sm">
+                Get peace of mind with our industry-leading warranty coverage
+              </p>
+            </div>
+
+            <div className="bg-neutral-900 p-8 rounded-lg shadow-lg hover:bg-neutral-850 transition-colors">
+              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 mb-6 mx-auto">
+                <Clock size={24} />
+              </div>
+              <h3 className="text-lg font-semibold text-white text-center mb-3">
+                Fast Delivery
+              </h3>
+              <p className="text-neutral-400 text-center text-sm">
+                Most orders ship within 24 hours of purchase
+              </p>
+            </div>
+
+            <div className="bg-neutral-900 p-8 rounded-lg shadow-lg hover:bg-neutral-850 transition-colors">
+              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 mb-6 mx-auto">
+                <HeartHandshake size={24} />
+              </div>
+              <h3 className="text-lg font-semibold text-white text-center mb-3">
+                Expert Support
+              </h3>
+              <p className="text-neutral-400 text-center text-sm">
+                Our tech specialists are available 24/7 for assistance
+              </p>
+            </div>
+
+            <div className="bg-neutral-900 p-8 rounded-lg shadow-lg hover:bg-neutral-850 transition-colors">
+              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-green-500/20 text-green-400 mb-6 mx-auto">
+                <ThumbsUp size={24} />
+              </div>
+              <h3 className="text-lg font-semibold text-white text-center mb-3">
+                Satisfaction Guarantee
+              </h3>
+              <p className="text-neutral-400 text-center text-sm">
+                30-day money-back guarantee on all purchases
+              </p>
+            </div>
           </div>
         </div>
       </div>

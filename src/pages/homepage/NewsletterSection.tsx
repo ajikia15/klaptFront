@@ -1,7 +1,7 @@
 const NewsletterSection = () => {
   return (
     <section className="container mx-auto py-12 px-4">
-      <div className="bg-neutral-800 rounded-lg p-8">
+      <div className="bg-neutral-800 rounded-lg p-8 shadow-lg">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
             Stay Updated on Latest Tech

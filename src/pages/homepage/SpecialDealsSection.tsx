@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 const SpecialDealsSection = () => {
   return (
     <section className="py-12 bg-neutral-900">
-      <div className="container mx-auto">
+      <div className="container mx-auto px-4">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
           <div className="lg:w-1/2">
             <h2 className="text-3xl font-bold text-white mb-4">
@@ -23,7 +23,7 @@ const SpecialDealsSection = () => {
           </div>
 
           <div className="lg:w-1/2">
-            <div className="bg-neutral-800 rounded-lg p-6">
+            <div className="bg-neutral-800 rounded-lg p-6 shadow-lg">
               <span className="bg-primary-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide mb-4 inline-block">
                 Limited Time
               </span>
