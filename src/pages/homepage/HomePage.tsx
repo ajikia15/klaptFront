@@ -22,7 +22,6 @@ import AnimatedStatsSection from "@/pages/homepage/AnimatedStatsSection";
 import SpecialDealsSection from "@/pages/homepage/SpecialDealsSection";
 import BrandShowcaseSection from "@/pages/homepage/BrandShowcaseSection";
 import TestimonialsSection from "@/pages/homepage/TestimonialsSection";
-import NewsletterSection from "@/pages/homepage/NewsletterSection";
 import HorizontalLaptopCard from "@/components/HorizontalLaptopCard";
 
 // Brand logos - replace with actual brand logo paths
@@ -96,27 +95,22 @@ export default function HomePage() {
       {/* Featured Laptops Section */}
       <section className="container mx-auto py-10 relative">
         <div className="absolute top-0 right-0 w-1/3 h-1/2 bg-primary-500/5 rounded-full blur-[100px] -z-10"></div>
-        <div className="mb-6">
+        <div className="mb-6 flex items-center justify-between">
           <h2 className="text-3xl font-bold text-white flex items-center">
             <Star className="mr-3 text-secondary-400" size={28} />
             Featured Laptops
           </h2>
-          <div className="flex items-center justify-between mt-1">
-            <p className="text-neutral-400">
-              Our selection of top-rated laptops
-            </p>
-            <Link
-              to="/search"
-              className="text-secondary-400 hover:text-secondary-300 flex items-center"
-            >
-              View All <ArrowRight size={16} className="ml-2" />
-            </Link>
-          </div>
+          <Link
+            to="/search"
+            className="text-neutral-400 hover:text-neutral-300 flex items-center transition-all duration-300"
+          >
+            View All <ArrowRight size={16} className="ml-2" />
+          </Link>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {isLoading ? (
-            Array(8)
+            Array(4)
               .fill(0)
               .map((_, index) => <SkeletonCard key={`skeleton-${index}`} />)
           ) : error ? (
@@ -125,7 +119,7 @@ export default function HomePage() {
             </div>
           ) : (
             laptops
-              ?.slice(0, 8)
+              ?.slice(0, 4)
               .map((laptop) => (
                 <LaptopCard
                   key={laptop.id}
@@ -144,20 +138,17 @@ export default function HomePage() {
       <CategorySection categories={categories} />
 
       <section className="container mx-auto py-10 relative mt-4">
-        <div className="mb-6">
+        <div className="mb-6 flex items-center justify-between">
           <h2 className="text-3xl font-bold text-white flex items-center">
             <Trophy className="mr-3 text-amber-400" size={28} />
             Hot Cakes
           </h2>
-          <div className="flex items-center justify-between mt-1">
-            <p className="text-neutral-400">Our fastest selling laptops</p>
-            <Link
-              to="/search"
-              className="text-amber-400 hover:text-amber-300 flex items-center"
-            >
-              View All <ArrowRight size={16} className="ml-2" />
-            </Link>
-          </div>
+          <Link
+            to="/search"
+            className="text-neutral-400 hover:text-neutral-300 flex items-center transition-all duration-300"
+          >
+            View All <ArrowRight size={16} className="ml-2" />
+          </Link>
         </div>
 
         {isLoading ? (
@@ -194,26 +185,21 @@ export default function HomePage() {
       </section>
 
       <AnimatedStatsSection />
-      {/* New Arrivals */}
 
-      <section className="py-10 bg-gradient-to-br from-neutral-800/70 to-neutral-900/90  border-neutral-800 ">
+      {/* New Arrivals */}
+      <section className="py-12 bg-neutral-900">
         <div className="container mx-auto">
-          <div className="mb-6">
+          <div className="mb-6 flex items-center justify-between">
             <h2 className="text-3xl font-bold text-white flex items-center">
-              <TrendingUp className="mr-3 text-green-400" size={28} />
+              <TrendingUp className="mr-3 text-primary-400" size={28} />
               New Arrivals
             </h2>
-            <div className="flex items-center justify-between mt-1">
-              <p className="text-neutral-400">
-                Latest additions to our collection
-              </p>
-              <Link
-                to="/search"
-                className="text-green-400 hover:text-green-300 flex items-center"
-              >
-                View All <ArrowRight size={16} className="ml-2" />
-              </Link>
-            </div>
+            <Link
+              to="/search"
+              className="text-neutral-400 hover:text-neutral-300 flex items-center transition-all duration-300"
+            >
+              View All <ArrowRight size={16} className="ml-2" />
+            </Link>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
@@ -223,18 +209,8 @@ export default function HomePage() {
                   .map((_, index) => (
                     <div
                       key={index}
-                      className="w-full h-[140px] bg-neutral-800/50 animate-pulse rounded-xl flex-shrink-0 overflow-hidden"
-                    >
-                      <div className="flex h-full">
-                        <div className="w-1/3 bg-neutral-700/50"></div>
-                        <div className="w-2/3 p-4 space-y-2">
-                          <div className="h-4 bg-neutral-700/50 rounded w-3/4"></div>
-                          <div className="h-3 bg-neutral-700/50 rounded w-full"></div>
-                          <div className="h-3 bg-neutral-700/50 rounded w-2/3"></div>
-                          <div className="h-4 bg-neutral-700/50 rounded w-1/3 mt-4"></div>
-                        </div>
-                      </div>
-                    </div>
+                      className="w-full h-[140px] bg-neutral-700 animate-pulse rounded-lg"
+                    ></div>
                   ))
               : laptops
                   ?.slice(0, 3)
@@ -258,8 +234,6 @@ export default function HomePage() {
       <BrandShowcaseSection brandLogos={brandLogos} />
 
       <TestimonialsSection />
-
-      <NewsletterSection />
     </div>
   );
 }

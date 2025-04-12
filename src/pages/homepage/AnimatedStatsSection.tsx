@@ -61,9 +61,8 @@ const AnimatedStatsSection = () => {
   }, []);
 
   return (
-    <section className="container mx-auto py-10 overflow-hidden relative ">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(103,58,183,0.07),transparent_70%)]"></div>
-      <div ref={statsRef} className="container mx-auto relative z-10">
+    <section className="py-10 bg-neutral-800">
+      <div ref={statsRef} className="container mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div
             className={`text-center transition-all duration-1000 ${

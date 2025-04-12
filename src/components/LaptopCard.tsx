@@ -60,14 +60,14 @@ export const LaptopCard: FC<LaptopCardProps> = ({
         </div>
       </div>
 
-      <div className="relative flex flex-col flex-grow p-5 bg-neutral-900 before:absolute before:top-0 before:left-[10%] before:right-[10%] before:h-[1px] before:bg-gradient-to-r before:from-transparent before:via-purple-500/30 before:to-transparent">
+      <div className="relative flex flex-col flex-grow p-5 bg-neutral-800 before:absolute before:top-0 before:left-[10%] before:right-[10%] before:h-[1px] before:bg-gradient-to-r before:from-transparent before:via-purple-500/30 before:to-transparent">
         <div className="flex flex-col flex-grow">
           <Link
             to="/laptop/$laptopId"
             params={{ laptopId: id.toString() }}
             className="inline-block"
           >
-            <h3 className="text-lg font-bold text-white mb-2 line-clamp-1 hover:text-purple-400 transition-colors">
+            <h3 className="text-xl font-bold text-white mb-2 line-clamp-1 hover:text-purple-400 transition-colors">
               {title}
             </h3>
           </Link>
@@ -76,20 +76,20 @@ export const LaptopCard: FC<LaptopCardProps> = ({
             {shortDesc.toUpperCase()}
           </p>
 
-          <div className="flex items-center justify-between mt-auto">
+          <div className="flex items-center justify-between mt-auto pt-3 border-t border-neutral-700/50">
             <div className="text-purple-300 font-bold">
-              <span className="text-xs text-neutral-400 block">Price</span>$
+              <span className="text-sm text-neutral-400 block">Price</span>$
               {price.toLocaleString()}
             </div>
 
             <Link
               to="/laptop/$laptopId"
               params={{ laptopId: id.toString() }}
-              className="relative overflow-hidden bg-secondary-700 hover:bg-secondary-700 px-4 py-2 rounded-md text-white text-sm font-medium flex items-center gap-1.5 group/btn transition-all duration-300 before:absolute before:inset-0 before:bg-gradient-to-r before:from-primary-500/0 before:via-secondary-400/50 before:to-primary-500/0 before:translate-x-[-100%] hover:before:translate-x-[100%] before:transition-transform before:duration-500 before:ease-in-out cursor-pointer"
+              className="relative overflow-hidden bg-secondary-700 hover:bg-secondary-700 px-4 py-2 rounded-md text-white text-base font-medium flex items-center gap-1.5 group/btn transition-all duration-300 before:absolute before:inset-0 before:bg-gradient-to-r before:from-primary-500/0 before:via-secondary-400/50 before:to-primary-500/0 before:translate-x-[-100%] hover:before:translate-x-[100%] before:transition-transform before:duration-500 before:ease-in-out cursor-pointer"
             >
               <span className="relative z-10 font-bold">View Details</span>
               <ArrowRight
-                size={14}
+                size={16}
                 className="relative z-10 transition-all duration-300 group-hover/btn:translate-x-1"
               />
             </Link>
