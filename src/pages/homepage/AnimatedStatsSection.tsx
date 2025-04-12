@@ -116,11 +116,11 @@ const AnimatedStatsSection = () => {
 
         <div className="mt-12 mb-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-            <div className="bg-neutral-900 p-8 rounded-lg shadow-lg hover:bg-neutral-850 transition-colors">
-              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-primary-500/20 text-primary-400 mb-6 mx-auto">
+            <div className="bg-neutral-900 p-8 rounded-lg shadow-lg hover:bg-neutral-850 hover:scale-105 hover:shadow-xl group transition-all duration-300 ease-in-out">
+              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-primary-500/20 text-primary-400 mb-6 mx-auto group-hover:bg-primary-500/30 group-hover:text-primary-300 transform group-hover:scale-110 transition-all duration-300">
                 <Check size={24} />
               </div>
-              <h3 className="text-lg font-semibold text-white text-center mb-3">
+              <h3 className="text-lg font-semibold text-white text-center mb-3 group-hover:text-primary-300 transition-colors duration-300">
                 Quality Guaranteed
               </h3>
               <p className="text-neutral-400 text-center text-sm">
@@ -128,11 +128,11 @@ const AnimatedStatsSection = () => {
               </p>
             </div>
 
-            <div className="bg-neutral-900 p-8 rounded-lg shadow-lg hover:bg-neutral-850 transition-colors">
-              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-secondary-500/20 text-secondary-400 mb-6 mx-auto">
+            <div className="bg-neutral-900 p-8 rounded-lg shadow-lg hover:bg-neutral-850 hover:scale-105 hover:shadow-xl group transition-all duration-300 ease-in-out">
+              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-secondary-500/20 text-secondary-400 mb-6 mx-auto group-hover:bg-secondary-500/30 group-hover:text-secondary-300 transform group-hover:scale-110 transition-all duration-300">
                 <Shield size={24} />
               </div>
-              <h3 className="text-lg font-semibold text-white text-center mb-3">
+              <h3 className="text-lg font-semibold text-white text-center mb-3 group-hover:text-secondary-300 transition-colors duration-300">
                 Extended Warranty
               </h3>
               <p className="text-neutral-400 text-center text-sm">
@@ -140,11 +140,11 @@ const AnimatedStatsSection = () => {
               </p>
             </div>
 
-            <div className="bg-neutral-900 p-8 rounded-lg shadow-lg hover:bg-neutral-850 transition-colors">
-              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 mb-6 mx-auto">
+            <div className="bg-neutral-900 p-8 rounded-lg shadow-lg hover:bg-neutral-850 hover:scale-105 hover:shadow-xl group transition-all duration-300 ease-in-out">
+              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 mb-6 mx-auto group-hover:bg-purple-500/30 group-hover:text-purple-300 transform group-hover:scale-110 transition-all duration-300">
                 <Clock size={24} />
               </div>
-              <h3 className="text-lg font-semibold text-white text-center mb-3">
+              <h3 className="text-lg font-semibold text-white text-center mb-3 group-hover:text-purple-300 transition-colors duration-300">
                 Fast Delivery
               </h3>
               <p className="text-neutral-400 text-center text-sm">
@@ -152,11 +152,11 @@ const AnimatedStatsSection = () => {
               </p>
             </div>
 
-            <div className="bg-neutral-900 p-8 rounded-lg shadow-lg hover:bg-neutral-850 transition-colors">
-              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 mb-6 mx-auto">
+            <div className="bg-neutral-900 p-8 rounded-lg shadow-lg hover:bg-neutral-850 hover:scale-105 hover:shadow-xl group transition-all duration-300 ease-in-out">
+              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 mb-6 mx-auto group-hover:bg-blue-500/30 group-hover:text-blue-300 transform group-hover:scale-110 transition-all duration-300">
                 <HeartHandshake size={24} />
               </div>
-              <h3 className="text-lg font-semibold text-white text-center mb-3">
+              <h3 className="text-lg font-semibold text-white text-center mb-3 group-hover:text-blue-300 transition-colors duration-300">
                 Expert Support
               </h3>
               <p className="text-neutral-400 text-center text-sm">
@@ -164,11 +164,11 @@ const AnimatedStatsSection = () => {
               </p>
             </div>
 
-            <div className="bg-neutral-900 p-8 rounded-lg shadow-lg hover:bg-neutral-850 transition-colors">
-              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-green-500/20 text-green-400 mb-6 mx-auto">
+            <div className="bg-neutral-900 p-8 rounded-lg shadow-lg hover:bg-neutral-850 hover:scale-105 hover:shadow-xl group transition-all duration-300 ease-in-out">
+              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-green-500/20 text-green-400 mb-6 mx-auto group-hover:bg-green-500/30 group-hover:text-green-300 transform group-hover:scale-110 transition-all duration-300">
                 <ThumbsUp size={24} />
               </div>
-              <h3 className="text-lg font-semibold text-white text-center mb-3">
+              <h3 className="text-lg font-semibold text-white text-center mb-3 group-hover:text-green-300 transition-colors duration-300">
                 Satisfaction Guarantee
               </h3>
               <p className="text-neutral-400 text-center text-sm">
