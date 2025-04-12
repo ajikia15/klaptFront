@@ -23,15 +23,15 @@ export const LaptopCard: FC<LaptopCardProps> = ({
 }) => {
   return (
     <div className="group relative flex flex-col h-full rounded-2xl transition-all duration-300 bg-gradient-to-br from-neutral-800 via-neutral-900 to-neutral-950 border border-neutral-700/30 overflow-hidden">
-      {/* Image area with floating effect */}
-      <div className="group/image relative w-full pt-10 pb-6 px-6">
+      {/* Image area with floating effect - reduced size */}
+      <div className="group/image relative w-full pt-6 pb-4 px-6">
         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-purple-500/5 to-transparent"></div>
 
         {/* Dark overlay that appears on hover */}
         <div className="absolute inset-0 bg-black/0 group-hover/image:bg-black/40 transition-all duration-300"></div>
 
         {image ? (
-          <div className="relative z-10 flex items-center justify-center h-48 transition-all duration-500 group-hover/image:translate-y-[-8px] group-hover/image:scale-[1.02]">
+          <div className="relative z-10 flex items-center justify-center h-36 transition-all duration-500 group-hover/image:translate-y-[-8px] group-hover/image:scale-[1.02]">
             <img
               src={image}
               alt={title}
@@ -39,19 +39,19 @@ export const LaptopCard: FC<LaptopCardProps> = ({
             />
           </div>
         ) : (
-          <div className="h-48 w-full flex items-center justify-center text-neutral-500 border border-dashed border-neutral-700 rounded-lg">
+          <div className="h-36 w-full flex items-center justify-center text-neutral-500 border border-dashed border-neutral-700 rounded-lg">
             <span>No image available</span>
           </div>
         )}
 
         {/* Action buttons - appear on hover */}
         <div className="absolute top-3 right-3 z-20 flex gap-2 opacity-0 transform translate-y-2 group-hover/image:opacity-100 group-hover/image:translate-y-0 transition-all duration-300">
-          <button className="bg-neutral-800/90 hover:bg-purple-800/90 p-2 rounded-lg shadow-lg transition-all w-10 h-10 flex items-center justify-center">
-            <Maximize2 size={18} className="text-white" />
+          <button className="cursor-pointer bg-neutral-800/70 hover:bg-purple-800/90 p-2 rounded-lg shadow-lg transition-all w-10 h-10 flex items-center justify-center">
+            <Maximize2 size={20} className="text-white" />
           </button>
           <HeartBtn
             laptopId={id}
-            className="bg-neutral-800/90 hover:bg-purple-800/90 p-2 rounded-lg shadow-lg transition-all"
+            className="bg-neutral-800/70 hover:bg-purple-800/90 p-2 rounded-lg shadow-lg transition-all"
             isAuthenticated={isAuthenticated}
           />
         </div>
@@ -78,11 +78,11 @@ export const LaptopCard: FC<LaptopCardProps> = ({
               {price.toLocaleString()}
             </div>
 
-            <button className="bg-transparent hover:bg-purple-800 border border-purple-700 px-4 py-1.5 rounded-lg text-white text-sm font-medium flex items-center gap-1 group/btn transition-all">
-              Details
+            <button className=" relative overflow-hidden bg-secondary-500/30 hover:bg-secondary-500/40 px-4 py-1.5 rounded-md text-white text-sm font-medium flex items-center gap-1.5 group/btn transition-all duration-300 before:absolute before:inset-0 before:bg-gradient-to-r before:from-primary-500/0 before:via-secondary-400/50 before:to-primary-500/0 before:translate-x-[-100%] hover:before:translate-x-[100%] before:transition-transform before:duration-500 before:ease-in-out cursor-pointer">
+              <span className="relative z-10">View Details</span>
               <ArrowRight
                 size={14}
-                className="transition-transform duration-300 group-hover/btn:translate-x-1"
+                className="relative z-10 transition-all duration-300 group-hover/btn:translate-x-1"
               />
             </button>
           </div>

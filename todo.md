@@ -15,6 +15,8 @@
 - site statistics
 - system settings (define front page laptops)
 
+- [ ] slider step forms for registering initially, then for posting the laptop.
+
 today
 
 - [ ] usable admin dashboard
