@@ -3,6 +3,7 @@ import Navbar from "./components/navbar/Navbar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Outlet } from "@tanstack/react-router";
 import { AuthProvider } from "./context/AuthContext";
+import Footer from "./components/Footer";
 
 // Create a new QueryClient instance
 const queryClient = new QueryClient({
@@ -23,6 +24,7 @@ function App() {
           <main>
             <Outlet />
           </main>
+          <Footer />
         </div>
       </AuthProvider>
     </QueryClientProvider>
