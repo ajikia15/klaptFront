@@ -190,7 +190,7 @@ export default function Landing() {
           </div>
         </div>
       </div>
-      <FlashSection />
+      {/* <FlashSection /> TODO */}
     </section>
   );
 }
