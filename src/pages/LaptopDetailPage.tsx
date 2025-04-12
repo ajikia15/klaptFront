@@ -27,6 +27,7 @@ import {
   AccordionItem,
 } from "@/components/ui/accordion";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
+import { LaptopDetailSkeleton } from "./LaptopDetailSkeleton";
 
 export default function LaptopDetailPage() {
   const { laptopId } = useParams({ from: "/laptop/$laptopId" });
@@ -63,19 +64,9 @@ export default function LaptopDetailPage() {
     },
   });
 
+  // Replace loading spinner with skeleton loader
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-neutral-900 flex justify-center items-center">
-        <div className="relative">
-          <div className="w-16 h-16 border-t-4 border-b-4 border-secondary-500 rounded-full animate-spin"></div>
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-secondary-500 text-sm font-medium">
-              Loading
-            </span>
-          </div>
-        </div>
-      </div>
-    );
+    return <LaptopDetailSkeleton />;
   }
 
   if (error) {
