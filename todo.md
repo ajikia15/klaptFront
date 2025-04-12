@@ -25,11 +25,11 @@ today
 - [ ] profile settings
 
 - [ ] user model + registration changes
-
-  - [ ] mobile phone
   - [ ] username
   - [ ] joindate
-        Completed
+  - [ ] email verification (email must be verified to be able to post)
+
+Completed
 
 - [x] Filtering
 - [x] Favorites
