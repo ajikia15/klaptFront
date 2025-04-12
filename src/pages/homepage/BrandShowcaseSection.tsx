@@ -11,7 +11,7 @@ interface BrandShowcaseSectionProps {
 
 const BrandShowcaseSection = ({ brandLogos }: BrandShowcaseSectionProps) => {
   return (
-    <section className="container mx-auto py-10 mt-4">
+    <section className="container mx-auto py-10 ">
       <h2 className="text-3xl font-bold text-white mb-2 text-center relative inline-block">
         Shop by Brand
         <span className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 h-1 w-16 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full"></span>

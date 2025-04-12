@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 
 const SpecialDealsSection = () => {
   return (
-    <section className="py-12 bg-gradient-to-br from-neutral-800/70 to-neutral-900/90 border-y border-neutral-800 mt-4 relative">
+    <section className="py-12 bg-gradient-to-br from-neutral-800/70 to-neutral-900/90  border-neutral-800 relative">
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -right-40 w-96 h-96 bg-secondary-700/10 rounded-full blur-[80px]"></div>
         <div className="absolute -bottom-20 -left-20 w-72 h-72 bg-primary-700/10 rounded-full blur-[100px]"></div>

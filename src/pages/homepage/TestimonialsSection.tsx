@@ -1,6 +1,6 @@
 const TestimonialsSection = () => {
   return (
-    <section className="py-10 bg-gradient-to-br from-neutral-800/70 to-neutral-900/90 border-y border-neutral-800 mt-4">
+    <section className="py-10 bg-gradient-to-br from-neutral-800/70 to-neutral-900/90 ">
       <div className="container mx-auto">
         <h2 className="text-3xl font-bold text-white mb-8 text-center">
           What Our Customers Say

@@ -17,12 +17,12 @@ import {
 import { SkeletonCard } from "@/components/SkeletonCard";
 
 // Import section components
-import CategorySection from "@/components/sections/CategorySection";
-import AnimatedStatsSection from "@/components/sections/AnimatedStatsSection";
-import SpecialDealsSection from "@/components/sections/SpecialDealsSection";
-import BrandShowcaseSection from "@/components/sections/BrandShowcaseSection";
-import TestimonialsSection from "@/components/sections/TestimonialsSection";
-import NewsletterSection from "@/components/sections/NewsletterSection";
+import CategorySection from "@/pages/homepage/CategorySection";
+import AnimatedStatsSection from "@/pages/homepage/AnimatedStatsSection";
+import SpecialDealsSection from "@/pages/homepage/SpecialDealsSection";
+import BrandShowcaseSection from "@/pages/homepage/BrandShowcaseSection";
+import TestimonialsSection from "@/pages/homepage/TestimonialsSection";
+import NewsletterSection from "@/pages/homepage/NewsletterSection";
 import HorizontalLaptopCard from "@/components/HorizontalLaptopCard";
 
 // Brand logos - replace with actual brand logo paths
@@ -141,10 +141,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Categories Section - Now using component */}
       <CategorySection categories={categories} />
 
-      {/* Hot Cakes Section */}
       <section className="container mx-auto py-10 relative mt-4">
         <div className="mb-6">
           <h2 className="text-3xl font-bold text-white flex items-center">
@@ -195,8 +193,10 @@ export default function HomePage() {
         )}
       </section>
 
-      {/* New Arrivals - Using HorizontalLaptopCard component */}
-      <section className="py-10 bg-gradient-to-br from-neutral-800/70 to-neutral-900/90 border-y border-neutral-800 mt-4">
+      <AnimatedStatsSection />
+      {/* New Arrivals */}
+
+      <section className="py-10 bg-gradient-to-br from-neutral-800/70 to-neutral-900/90  border-neutral-800 ">
         <div className="container mx-auto">
           <div className="mb-6">
             <h2 className="text-3xl font-bold text-white flex items-center">
@@ -216,10 +216,9 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Grid layout with HorizontalLaptopCard */}
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             {isLoading
-              ? Array(6)
+              ? Array(3)
                   .fill(0)
                   .map((_, index) => (
                     <div
@@ -238,7 +237,7 @@ export default function HomePage() {
                     </div>
                   ))
               : laptops
-                  ?.slice(0, 6)
+                  ?.slice(0, 3)
                   .map((laptop) => (
                     <HorizontalLaptopCard
                       key={`new-${laptop.id}`}
@@ -254,19 +253,12 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Animated Stats Section - Now using component */}
-      <AnimatedStatsSection />
-
-      {/* Special Deals Section - Now using component */}
       <SpecialDealsSection />
 
-      {/* Brand Showcase - Now using component */}
       <BrandShowcaseSection brandLogos={brandLogos} />
 
-      {/* Testimonials - Now using component */}
       <TestimonialsSection />
 
-      {/* Newsletter CTA - Now using component */}
       <NewsletterSection />
     </div>
   );

@@ -16,7 +16,7 @@ interface CategorySectionProps {
 
 const CategorySection = ({ categories }: CategorySectionProps) => {
   return (
-    <section className="py-12 bg-gradient-to-br from-neutral-800/70 to-neutral-900/90 border-y border-neutral-800 mt-4">
+    <section className="py-12 bg-gradient-to-br from-neutral-800/70 to-neutral-900/90  border-neutral-800 mt-4">
       <div className="container mx-auto">
         <div className="mb-8 text-center">
           <h2 className="text-3xl font-bold text-white mb-2 relative inline-block">
