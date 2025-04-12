@@ -4,7 +4,7 @@ import {
   createRouter,
 } from "@tanstack/react-router";
 import App from "./App";
-import HomePage from "./pages/HomePage";
+import HomePage from "./pages/homepage/HomePage";
 import LaptopDetailPage from "./pages/LaptopDetailPage";
 import SearchPage from "./pages/SearchPage";
 import AuthPage from "./pages/AuthPage";
