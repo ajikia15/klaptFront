@@ -9,8 +9,6 @@
 
 - [ ] tooltips in content moderation
 
-- [ ] view count
-
 - move to postgress
 - site statistics
 - system settings (define front page laptops)
@@ -27,9 +25,14 @@ today
 - [ ] profile settings
 
 - [ ] user model + registration changes
+
   - [ ] username
   - [ ] joindate
   - [ ] email verification (email must be verified to be able to post)
+
+- [ ] view count
+- [ ] many to many fix
+- [ ] tags
 
 Completed
 

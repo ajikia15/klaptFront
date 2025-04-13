@@ -4,6 +4,7 @@ import { ArrowRight, Maximize2 } from "@deemlol/next-icons";
 import { Badge } from "@/components/ui/badge";
 import HeartBtn from "./HeartBtn";
 import { Circle } from "lucide-react";
+import LaptopTags from "./LaptopTags";
 
 interface LaptopCardProps {
   id: number;
@@ -12,6 +13,7 @@ interface LaptopCardProps {
   shortDesc: string;
   image: string;
   isAuthenticated: boolean;
+  tags?: string[];
 }
 
 export const LaptopCard: FC<LaptopCardProps> = ({
@@ -21,6 +23,7 @@ export const LaptopCard: FC<LaptopCardProps> = ({
   shortDesc,
   image,
   isAuthenticated,
+  tags = [],
 }) => {
   return (
     <div className="group relative flex flex-col h-full rounded-2xl transition-all duration-300 bg-gradient-to-br from-neutral-800 via-neutral-900 to-neutral-950 border border-neutral-700/30 overflow-hidden group/card">
@@ -72,9 +75,12 @@ export const LaptopCard: FC<LaptopCardProps> = ({
             </h3>
           </Link>
 
-          <p className="text-sm text-neutral-400 line-clamp-2 mb-5">
+          <p className="text-sm text-neutral-400 line-clamp-2 mb-2">
             {shortDesc.toUpperCase()}
           </p>
+          
+          {/* Display laptop tags */}
+          <LaptopTags tags={tags} className="mb-3" />
 
           <div className="flex items-center justify-between mt-auto pt-3 border-t border-neutral-700/50">
             <div className="text-purple-300 font-bold">

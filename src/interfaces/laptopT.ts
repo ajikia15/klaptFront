@@ -25,6 +25,7 @@ export type LaptopT = {
   year: number;
   description: string;
   images: string[];
+  tag?: string[];
   stockStatus: "reserved" | "sold" | "in stock";
   status: "approved" | "pending" | "rejected" | "archived";
   userId: number;

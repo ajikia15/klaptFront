@@ -36,6 +36,7 @@ interface FilterOptionsType {
   vram?: FilterOption[];
   years?: FilterOption[];
   models?: FilterOption[];
+  tags?: FilterOption[];
 }
 
 export default function SearchPage() {
@@ -46,6 +47,11 @@ export default function SearchPage() {
   type OptionsKey = keyof typeof displayFilters;
 
   const filterSections = [
+    {
+      title: "Tags",
+      filterKey: "tags" as FilterKey,
+      optionsKey: "tags" as OptionsKey,
+    },
     {
       title: "Brands",
       filterKey: "brand" as FilterKey,

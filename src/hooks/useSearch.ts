@@ -26,6 +26,7 @@ interface FilterOptions {
   vram: FilterOption[];
   years: FilterOption[];
   models: FilterOption[];
+  tags: FilterOption[];
   priceRange: {
     min: number;
     max: number;
@@ -52,6 +53,7 @@ interface SelectedFilters {
   year: string[];
   model: string[];
   shortDesc: string[];
+  tags: string[];
 }
 
 export function useSearchLaptops(initialTerm: string = "", userId?: number) {
@@ -78,6 +80,7 @@ export function useSearchLaptops(initialTerm: string = "", userId?: number) {
     year: [],
     model: [],
     shortDesc: [],
+    tags: [],
   });
 
   const {
@@ -204,6 +207,7 @@ export function useSearchLaptops(initialTerm: string = "", userId?: number) {
       year: [],
       model: [],
       shortDesc: [],
+      tags: [],
     });
     setSearchTerm("");
   };

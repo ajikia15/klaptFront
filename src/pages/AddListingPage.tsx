@@ -1,9 +1,7 @@
 import { useForm } from "@tanstack/react-form";
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { useAuth } from "../context/AuthContext";
 import { useRequireAuth } from "../hooks/useRequireAuth";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { SpinnerSVG } from "@/assets/SpinnerSVG";
 
 // Add predefined options for select fields
@@ -28,6 +26,15 @@ const RAM_TYPES = ["DDR3", "DDR4", "DDR5"];
 const STORAGE_TYPES = ["SSD", "HDD", "HDD + SSD"];
 const STOCK_STATUSES = ["in stock", "out of stock", "reserved", "pre-order"];
 const GRAPHICS_TYPES = ["Dedicated", "Integrated"];
+const CONDITION_TYPES = ["new", "like-new", "used", "damaged"];
+const TAG_OPTIONS = [
+  "gaming",
+  "business",
+  "productivity",
+  "budget",
+  "creative",
+  "ultrabook",
+];
 
 const vramOptions = [
   "2GB",
@@ -96,6 +103,8 @@ export default function AddListing() {
       stockStatus: "in stock",
       year: new Date().getFullYear().toString(),
       backlightType: "",
+      condition: "",
+      tags: [] as string[],
     },
     onSubmit: async ({ value }) => {
       try {
@@ -107,7 +116,7 @@ export default function AddListing() {
           price: parseFloat(value.price),
           cores: parseInt(value.cores),
           threads: parseInt(value.threads),
-          graphicsType: value.graphicsType, // Add this line to include graphics type
+          graphicsType: value.graphicsType,
           // Handle GPU fields based on graphics type
           gpuBrand: value.graphicsType === "Dedicated" ? value.gpuBrand : null,
           gpuModel: value.graphicsType === "Dedicated" ? value.gpuModel : null,
@@ -118,6 +127,10 @@ export default function AddListing() {
           ram: parseInt(value.ram),
           refreshRate: parseInt(value.refreshRate),
           year: parseInt(value.year),
+          // Include condition field
+          condition: value.condition || "new",
+          // Include tags field, or empty array if none selected
+          tag: value.tags || [],
           images:
             uploadedImages.length > 0
               ? uploadedImages
@@ -183,6 +196,8 @@ export default function AddListing() {
         stockStatus: "in stock",
         year: "2023",
         backlightType: "RGB",
+        condition: "new",
+        tags: ["gaming", "creative"],
       },
     });
   };
@@ -1350,27 +1365,38 @@ export default function AddListing() {
                           }
                         }}
                       >
-                        <span className="flex items-center space-x-2">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="w-6 h-6 text-neutral-300"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                            />
-                          </svg>
-                          <span className="font-medium text-neutral-300">
-                            Drop files to Attach, or
-                            <span className="text-secondary-500 ml-1">
-                              browse
-                            </span>
-                          </span>
+                        <span className="flex flex-col items-center justify-center h-full">
+                          {uploadingImages ? (
+                            <>
+                              <SpinnerSVG className="w-6 h-6 text-neutral-300 mb-2" />
+                              <span className="font-medium text-neutral-300">
+                                Uploading...
+                              </span>
+                            </>
+                          ) : (
+                            <>
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="w-6 h-6 text-neutral-300 mb-2"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                                />
+                              </svg>
+                              <span className="font-medium text-neutral-300">
+                                Drop files to attach, or{" "}
+                                <span className="text-secondary-500">
+                                  browse
+                                </span>
+                              </span>
+                            </>
+                          )}
                         </span>
                         <input
                           type="file"
@@ -1379,7 +1405,9 @@ export default function AddListing() {
                           accept="image/*"
                           multiple
                           onChange={handleImageUpload}
-                          disabled={formStatus === "submitting"}
+                          disabled={
+                            formStatus === "submitting" || uploadingImages
+                          }
                         />
                       </div>
 
@@ -1438,6 +1466,114 @@ export default function AddListing() {
                       )}
                     </div>
                   </div>
+                </div>
+
+                <div className="md:col-span-2 mt-4">
+                  <h2 className="text-xl font-semibold text-white mb-4 pb-2 border-b border-neutral-700">
+                    Additional Information
+                  </h2>
+                </div>
+
+                <div>
+                  <form.Field
+                    name="condition"
+                    validators={{
+                      onChange: ({ value }) => {
+                        if (!value) return "Condition is required";
+                        return undefined;
+                      },
+                    }}
+                  >
+                    {(field) => (
+                      <>
+                        <label
+                          htmlFor="condition"
+                          className="block text-sm font-medium text-neutral-200 mb-1"
+                        >
+                          Condition
+                        </label>
+                        <select
+                          id="condition"
+                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                          value={field.state.value || ""}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          disabled={formStatus === "submitting"}
+                        >
+                          <option value="" disabled>
+                            Select Condition
+                          </option>
+                          {CONDITION_TYPES.map((condition) => (
+                            <option key={condition} value={condition}>
+                              {condition.charAt(0).toUpperCase() +
+                                condition.slice(1)}
+                            </option>
+                          ))}
+                        </select>
+                        {field.state.meta.errors ? (
+                          <div className="text-red-300 text-sm mt-1">
+                            {field.state.meta.errors.join(", ")}
+                          </div>
+                        ) : null}
+                      </>
+                    )}
+                  </form.Field>
+                </div>
+
+                <div>
+                  <form.Field
+                    name="tags"
+                    validators={{
+                      onChange: () => {
+                        // Tags are optional, so no validation needed
+                        return undefined;
+                      },
+                    }}
+                  >
+                    {(field) => (
+                      <>
+                        <label
+                          htmlFor="tags"
+                          className="block text-sm font-medium text-neutral-200 mb-1"
+                        >
+                          Laptop Tags
+                          <span className="text-neutral-400 text-xs ml-2">
+                            (Select all that apply)
+                          </span>
+                        </label>
+                        <div className="grid grid-cols-2 gap-2 mt-2">
+                          {TAG_OPTIONS.map((tag) => (
+                            <label
+                              key={tag}
+                              className="flex items-center space-x-2 cursor-pointer rounded-md px-3 py-2 bg-neutral-800 hover:bg-neutral-700 border border-neutral-600 transition-colors"
+                            >
+                              <input
+                                type="checkbox"
+                                value={tag}
+                                checked={(field.state.value || []).includes(
+                                  tag
+                                )}
+                                onChange={(e) => {
+                                  const currentTags = field.state.value || [];
+                                  if (e.target.checked) {
+                                    field.handleChange([...currentTags, tag]);
+                                  } else {
+                                    field.handleChange(
+                                      currentTags.filter((t) => t !== tag)
+                                    );
+                                  }
+                                }}
+                                disabled={formStatus === "submitting"}
+                                className="rounded text-secondary-600 focus:ring-secondary-500"
+                              />
+                              <span className="text-neutral-200">
+                                {tag.charAt(0).toUpperCase() + tag.slice(1)}
+                              </span>
+                            </label>
+                          ))}
+                        </div>
+                      </>
+                    )}
+                  </form.Field>
                 </div>
               </div>
 
