@@ -78,7 +78,7 @@ export const LaptopCard: FC<LaptopCardProps> = ({
           <p className="text-sm text-neutral-400 line-clamp-2 mb-2">
             {shortDesc.toUpperCase()}
           </p>
-          
+
           {/* Display laptop tags */}
           <LaptopTags tags={tags} className="mb-3" />
 

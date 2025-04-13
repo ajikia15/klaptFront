@@ -7,9 +7,12 @@ interface LaptopTagsProps {
   className?: string;
 }
 
-export const LaptopTags: React.FC<LaptopTagsProps> = ({ tags = [], className = "" }) => {
+export const LaptopTags: React.FC<LaptopTagsProps> = ({
+  tags = [],
+  className = "",
+}) => {
   if (!tags || tags.length === 0) return null;
-  
+
   // Define color mappings for different tag types
   const getTagColor = (tag: string): string => {
     const tag_lower = tag.toLowerCase();
@@ -33,9 +36,11 @@ export const LaptopTags: React.FC<LaptopTagsProps> = ({ tags = [], className = "
   return (
     <div className={`flex flex-wrap gap-1 ${className}`}>
       {tags.map((tag, index) => (
-        <Badge 
-          key={`${tag}-${index}`} 
-          className={`${getTagColor(tag)} font-medium text-xs flex items-center gap-0.5 transition-colors cursor-default`}
+        <Badge
+          key={`${tag}-${index}`}
+          className={`${getTagColor(
+            tag
+          )} font-medium text-xs flex items-center gap-0.5 transition-colors cursor-default`}
         >
           <Tag size={10} className="mr-0.5" />
           {tag}
