@@ -48,19 +48,9 @@ export default function SearchPage() {
 
   const filterSections = [
     {
-      title: "Tags",
-      filterKey: "tags" as FilterKey,
-      optionsKey: "tags" as OptionsKey,
-    },
-    {
       title: "Brands",
       filterKey: "brand" as FilterKey,
       optionsKey: "brands" as OptionsKey,
-    },
-    {
-      title: "Processors",
-      filterKey: "processorModel" as FilterKey,
-      optionsKey: "processorModels" as OptionsKey,
     },
     {
       title: "Processor Brands",
@@ -68,9 +58,14 @@ export default function SearchPage() {
       optionsKey: "processorBrands" as OptionsKey,
     },
     {
-      title: "Graphics Cards",
-      filterKey: "gpuModel" as FilterKey,
-      optionsKey: "gpuModels" as OptionsKey,
+      title: "Processors",
+      filterKey: "processorModel" as FilterKey,
+      optionsKey: "processorModels" as OptionsKey,
+    },
+    {
+      title: "Graphics Type",
+      filterKey: "graphicsType" as FilterKey,
+      optionsKey: "graphicsTypes" as OptionsKey,
     },
     {
       title: "GPU Brands",
@@ -78,9 +73,14 @@ export default function SearchPage() {
       optionsKey: "gpuBrands" as OptionsKey,
     },
     {
-      title: "Graphics Type",
-      filterKey: "graphicsType" as FilterKey,
-      optionsKey: "graphicsTypes" as OptionsKey,
+      title: "Graphics Cards",
+      filterKey: "gpuModel" as FilterKey,
+      optionsKey: "gpuModels" as OptionsKey,
+    },
+    {
+      title: "VRAM",
+      filterKey: "vram" as FilterKey,
+      optionsKey: "vram" as OptionsKey,
     },
     {
       title: "RAM Size",
@@ -93,9 +93,14 @@ export default function SearchPage() {
       optionsKey: "ramTypes" as OptionsKey,
     },
     {
-      title: "VRAM",
-      filterKey: "vram" as FilterKey,
-      optionsKey: "vram" as OptionsKey,
+      title: "Storage Type",
+      filterKey: "storageType" as FilterKey,
+      optionsKey: "storageTypes" as OptionsKey,
+    },
+    {
+      title: "Storage Capacity",
+      filterKey: "storageCapacity" as FilterKey,
+      optionsKey: "storageCapacity" as OptionsKey,
     },
     {
       title: "Screen Size",
@@ -108,24 +113,14 @@ export default function SearchPage() {
       optionsKey: "screenResolutions" as OptionsKey,
     },
     {
-      title: "Storage Type",
-      filterKey: "storageType" as FilterKey,
-      optionsKey: "storageTypes" as OptionsKey,
-    },
-    {
-      title: "Storage Capacity",
-      filterKey: "storageCapacity" as FilterKey,
-      optionsKey: "storageCapacity" as OptionsKey,
-    },
-    {
       title: "Refresh Rate",
       filterKey: "refreshRate" as FilterKey,
       optionsKey: "refreshRates" as OptionsKey,
     },
     {
-      title: "Backlight Type",
-      filterKey: "backlightType" as FilterKey,
-      optionsKey: "backlightTypes" as OptionsKey,
+      title: "Stock Status",
+      filterKey: "stockStatus" as FilterKey,
+      optionsKey: "stockStatuses" as OptionsKey, // Change to match useSearch.ts
     },
     {
       title: "Year",
@@ -133,9 +128,14 @@ export default function SearchPage() {
       optionsKey: "years" as OptionsKey,
     },
     {
-      title: "Stock Status",
-      filterKey: "stockStatus" as FilterKey,
-      optionsKey: "stockStatuses" as OptionsKey, // Change to match useSearch.ts
+      title: "Backlight Type",
+      filterKey: "backlightType" as FilterKey,
+      optionsKey: "backlightTypes" as OptionsKey,
+    },
+    {
+      title: "Tags",
+      filterKey: "tags" as FilterKey,
+      optionsKey: "tags" as OptionsKey,
     },
   ];
 
@@ -175,6 +175,36 @@ export default function SearchPage() {
 
   const displayFilters = filterOptions || cachedFilters;
 
+  // Calculate if a filter section has options to display
+  const hasOptions = (optionsKey: OptionsKey): boolean => {
+    if (!displayFilters || !(optionsKey in displayFilters)) {
+      return false;
+    }
+
+    // Force TypeScript to recognize this as an array with a specific cast
+    const options = displayFilters[optionsKey] as unknown as any[];
+    return Array.isArray(options) && options.length > 0;
+  };
+
+  // Get the number of options for each filter section
+  const getOptionsCount = (optionsKey: OptionsKey): number => {
+    if (!displayFilters || !(optionsKey in displayFilters)) {
+      return 0;
+    }
+
+    // Force TypeScript to recognize this as an array with a specific cast
+    const options = displayFilters[optionsKey] as unknown as any[];
+    return Array.isArray(options) ? options.length : 0;
+  };
+
+  // Calculate appropriate scroll area height
+  const getScrollHeight = (optionsKey: OptionsKey): string => {
+    const count = getOptionsCount(optionsKey);
+    if (count <= 3) return "auto"; // No scroll for few items
+    if (count <= 6) return `${count * 28}px`; // Dynamic height for medium lists
+    return "168px"; // Cap height for long lists
+  };
+
   useEffect(() => {
     setIsTransitioning(true);
     refetch().finally(() => {
@@ -202,7 +232,7 @@ export default function SearchPage() {
       <h1 className="mb-6 text-3xl font-bold">Search Laptops</h1>
       <div className="flex flex-col gap-6 md:flex-row">
         <div className="w-full md:w-1/4 xl:w-1/5">
-          <div className="mb-4 rounded-md bg-neutral-900 py-4 relative">
+          <div className="mb-4 rounded-md bg-neutral-900 p-4 relative">
             <div className="flex mb-4 items-center justify-between">
               <h2 className="text-xl font-semibold">Filters</h2>
               <div className="flex items-center space-x-2">
@@ -228,56 +258,66 @@ export default function SearchPage() {
               </div>
             </div>
             <div className="space-y-6">
-              {filterSections.map(({ title, filterKey, optionsKey }) => (
-                <div key={filterKey}>
-                  <h3 className="mb-2 font-medium">{title}</h3>
-                  <div className="mb-3 border-b border-neutral-700"></div>
-                  <ScrollArea className="h-18">
-                    <div>
-                      {filterError ? (
-                        <p className="text-red-500">
-                          Error loading filters: {filterError.toString()}
-                        </p>
-                      ) : displayFilters &&
-                        optionsKey in displayFilters &&
-                        displayFilters[optionsKey] ? (
-                        (displayFilters[optionsKey] as FilterOption[]).map(
-                          (option) => (
-                            <div
-                              key={option.value}
-                              className="flex items-center space-x-2 py-1"
-                            >
-                              <Checkbox
-                                id={`${filterKey}-${option.value}`}
-                                checked={selectedFilters[filterKey].includes(
-                                  option.value
-                                )}
-                                onCheckedChange={() =>
-                                  toggleFilter(filterKey, option.value)
-                                }
-                                disabled={option.disabled}
-                                className={
-                                  option.disabled
-                                    ? "opacity-50 cursor-not-allowed"
-                                    : ""
-                                }
-                              />
-                              <label
-                                htmlFor={`${filterKey}-${option.value}`}
-                                className={`text-sm font-medium leading-none ${
-                                  option.disabled ? "text-neutral-500" : ""
-                                }`}
+              {filterSections
+                .filter(({ optionsKey }) => hasOptions(optionsKey))
+                .map(({ title, filterKey, optionsKey }) => (
+                  <div key={filterKey} className="filter-section">
+                    <h3 className="mb-2 font-medium">{title}</h3>
+                    <div className="mb-3 border-b border-neutral-700"></div>
+
+                    <ScrollArea
+                      className={getOptionsCount(optionsKey) > 3 ? "pr-4" : ""}
+                      style={{ maxHeight: getScrollHeight(optionsKey) }}
+                    >
+                      <div
+                        className={
+                          getOptionsCount(optionsKey) <= 3 ? "pb-1" : ""
+                        }
+                      >
+                        {filterError ? (
+                          <p className="text-red-500">
+                            Error loading filters: {filterError.toString()}
+                          </p>
+                        ) : displayFilters &&
+                          optionsKey in displayFilters &&
+                          displayFilters[optionsKey] ? (
+                          (displayFilters[optionsKey] as FilterOption[]).map(
+                            (option) => (
+                              <div
+                                key={option.value}
+                                className="flex items-center space-x-2 py-1"
                               >
-                                {option.value}
-                              </label>
-                            </div>
+                                <Checkbox
+                                  id={`${filterKey}-${option.value}`}
+                                  checked={selectedFilters[filterKey].includes(
+                                    option.value
+                                  )}
+                                  onCheckedChange={() =>
+                                    toggleFilter(filterKey, option.value)
+                                  }
+                                  disabled={option.disabled}
+                                  className={
+                                    option.disabled
+                                      ? "opacity-50 cursor-not-allowed"
+                                      : ""
+                                  }
+                                />
+                                <label
+                                  htmlFor={`${filterKey}-${option.value}`}
+                                  className={`text-sm font-medium leading-none ${
+                                    option.disabled ? "text-neutral-500" : ""
+                                  }`}
+                                >
+                                  {option.value}
+                                </label>
+                              </div>
+                            )
                           )
-                        )
-                      ) : null}
-                    </div>
-                  </ScrollArea>
-                </div>
-              ))}
+                        ) : null}
+                      </div>
+                    </ScrollArea>
+                  </div>
+                ))}
             </div>
           </div>
         </div>

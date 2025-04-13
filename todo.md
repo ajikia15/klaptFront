@@ -32,7 +32,8 @@ today
 
 - [ ] view count
 - [ ] many to many fix
-- [ ] tags
+- [x] tags
+  - [ ] autotagging (rtx? gaming. price <2.5k? budget.)
 
 Completed
 
