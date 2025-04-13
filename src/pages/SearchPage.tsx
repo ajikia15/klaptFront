@@ -6,7 +6,6 @@ import { useSearchLaptops } from "../hooks/useSearch";
 import { SkeletonCard } from "../components/SkeletonCard";
 import { useState, useEffect, useDeferredValue } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { RefreshSVG } from "@/assets/RefreshSVG";
 import { SpinnerSVG } from "@/assets/SpinnerSVG";
 import { useAuth } from "@/context/AuthContext";
 import {
@@ -465,281 +464,39 @@ export default function SearchPage() {
     <div className="flex mb-4 items-center justify-between">
       <h2 className="text-xl font-semibold">Filters</h2>
       <div className="flex items-center space-x-2">
-        {displayFilters?.brands && !isFilterRefetching && !isLoading ? (
-          <button
-            className="grid place-items-center"
-            type="button"
-            disabled={isLoadingFilters || isFilterRefetching}
-            aria-label="Reset filters"
-            onClick={() => {
-              resetFilters();
-              setSearchTerm("");
-            }}
-          >
-            <RefreshSVG />
-          </button>
-        ) : (
+        {isFilterRefetching || isLoading ? (
           <>
             <p className="text-neutral-500">Updating...</p>
             <SpinnerSVG className="animate-spin" />
           </>
-        )}
+        ) : null}
       </div>
     </div>
   );
 
   return (
     <div className="min-h-screen bg-neutral-900 text-neutral-200">
-      {/* Header Area with Search & Filters */}
+      {/* Header Area with page title and basic info */}
       <div className="bg-neutral-800/80 py-6 border-b border-neutral-700/50 sticky top-0 z-20 backdrop-blur-sm">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="w-full md:w-2/3">
-              <form onSubmit={handleSubmit} className="relative">
-                <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-                  <Search size={18} className="text-neutral-400" />
-                </div>
-                <input
-                  type="text"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="Search for laptops by brand, model, or specs..."
-                  className="w-full h-12 rounded-lg bg-neutral-900/90 pl-10 pr-4 text-white border border-neutral-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent shadow-inner"
-                />
-              </form>
-            </div>
-
-            <div className="flex gap-2 items-center justify-between md:w-1/3">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className="bg-neutral-900/90 border-neutral-700 text-neutral-300 hover:text-white hover:bg-neutral-800 flex-1"
-                  >
-                    <ArrowDownAZ size={16} className="mr-2" />
-                    {sortOption === "default"
-                      ? "Sort: Default"
-                      : sortOption === "priceLowToHigh"
-                      ? "Price: Low to High"
-                      : "Price: High to Low"}
-                    <ChevronDown size={16} className="ml-2" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-48 bg-neutral-800 border-neutral-700">
-                  <DropdownMenuLabel className="text-neutral-400">
-                    Sort By
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator className="bg-neutral-700" />
-                  <DropdownMenuItem
-                    onClick={() => setSortOption("default")}
-                    className={`${
-                      sortOption === "default"
-                        ? "bg-primary-900/20 text-primary-400"
-                        : ""
-                    } cursor-pointer hover:bg-neutral-700`}
-                  >
-                    Default
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => setSortOption("priceLowToHigh")}
-                    className={`${
-                      sortOption === "priceLowToHigh"
-                        ? "bg-primary-900/20 text-primary-400"
-                        : ""
-                    } cursor-pointer hover:bg-neutral-700`}
-                  >
-                    <ArrowUpAZ size={16} className="mr-2" />
-                    Price: Low to High
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => setSortOption("priceHighToLow")}
-                    className={`${
-                      sortOption === "priceHighToLow"
-                        ? "bg-primary-900/20 text-primary-400"
-                        : ""
-                    } cursor-pointer hover:bg-neutral-700`}
-                  >
-                    <ArrowDownAZ size={16} className="mr-2" />
-                    Price: High to Low
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              {/* Filter Button - Show on both mobile and desktop */}
-              <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-                <SheetTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className="bg-neutral-900/90 border-neutral-700 text-neutral-300 hover:text-white hover:bg-neutral-800 relative"
-                  >
-                    <Filter size={16} className="mr-2" />
-                    All Filters
-                    {activeFiltersCount > 0 && (
-                      <span className="absolute -top-2 -right-2 bg-primary-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                        {activeFiltersCount}
-                      </span>
-                    )}
-                  </Button>
-                </SheetTrigger>
-                <SheetContent
-                  side={showMobileUI ? "bottom" : "right"}
-                  className={`bg-neutral-900 border-neutral-700 ${
-                    showMobileUI ? "h-[85vh] rounded-t-xl" : "w-[400px]"
-                  }`}
-                >
-                  <SheetHeader>
-                    <SheetTitle className="text-white flex items-center justify-between">
-                      <div className="flex items-center">
-                        <Filter size={16} className="mr-2 text-primary-400" />
-                        All Filters
-                      </div>
-                      {activeFiltersCount > 0 && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => {
-                            resetFilters();
-                            setSearchTerm("");
-                          }}
-                          className="text-neutral-400 hover:text-white border-neutral-700 hover:bg-neutral-800"
-                        >
-                          <X size={14} className="mr-1" />
-                          Reset All
-                        </Button>
-                      )}
-                    </SheetTitle>
-                    <SheetDescription className="text-neutral-400">
-                      Narrow down your search with these filters
-                    </SheetDescription>
-                  </SheetHeader>
-
-                  <div className="h-[calc(100vh-170px)] overflow-y-auto py-4 pr-2">
-                    <Accordion
-                      type="multiple"
-                      defaultValue={["brand"]}
-                      className="space-y-2"
-                    >
-                      {filterSections
-                        .filter(({ optionsKey }) => hasOptions(optionsKey))
-                        .map((section) => (
-                          <AccordionItem
-                            key={section.filterKey}
-                            value={section.filterKey}
-                            className="border border-neutral-700/50 rounded-lg overflow-hidden"
-                          >
-                            <AccordionTrigger className="px-4 py-2 hover:no-underline bg-neutral-800/50 hover:bg-neutral-800 data-[state=open]:bg-neutral-800">
-                              <div className="flex items-center justify-between w-full">
-                                <span className="text-neutral-200">
-                                  {section.title}
-                                </span>
-                              </div>
-                            </AccordionTrigger>
-                            <AccordionContent className="px-4 py-3 bg-neutral-900">
-                              <FilterSection
-                                section={section}
-                                inAccordion={true}
-                              />
-                            </AccordionContent>
-                          </AccordionItem>
-                        ))}
-                    </Accordion>
-
-                    {/* Active Filters in Sheet - Added below the filters list */}
-                    {hasActiveFilters && (
-                      <div className="mt-6 pt-6 border-t border-neutral-700/30">
-                        <div className="px-1 mb-3">
-                          <h3 className="text-sm font-medium text-white flex items-center">
-                            <span className="h-1 w-4 bg-primary-500 rounded-full mr-2"></span>
-                            Applied Filters
-                          </h3>
-                        </div>
-                        <div className="px-1">
-                          <ActiveFiltersComponent />
-
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => {
-                              resetFilters();
-                              setSearchTerm("");
-                            }}
-                            className="mt-3 text-neutral-400 hover:text-white hover:bg-neutral-800/70 text-xs"
-                          >
-                            Clear All Filters
-                          </Button>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  <SheetFooter className="mt-4 flex-row gap-3">
-                    <Button
-                      variant="outline"
-                      onClick={() => setIsSheetOpen(false)}
-                      className="flex-1 border-neutral-700 hover:bg-neutral-800 text-neutral-300"
-                    >
-                      Cancel
-                    </Button>
-                    <Button
-                      onClick={() => setIsSheetOpen(false)}
-                      className="flex-1 bg-primary-600 hover:bg-primary-700 text-white"
-                    >
-                      Apply Filters
-                    </Button>
-                  </SheetFooter>
-                </SheetContent>
-              </Sheet>
-            </div>
-          </div>
+          <h1 className="text-2xl md:text-3xl font-bold">Search Laptops</h1>
         </div>
       </div>
 
       {/* Main Content with Sidebar */}
       <div className="container mx-auto py-8">
-        <h1 className="mb-6 text-3xl font-bold">Search Laptops</h1>
         <div className="flex flex-col gap-6 md:flex-row">
-          <div className="w-full md:w-1/4 xl:w-1/5">
+          {/* Filters sidebar - only visible on desktop */}
+          <div className="hidden md:block md:w-1/4 xl:w-1/5">
             <div className="mb-4 rounded-md bg-neutral-900 py-4 relative">
               <FilterHeader />
               <div className="space-y-4">
-                <Accordion
-                  type="multiple"
-                  defaultValue={filterSections
-                    .filter((section) => section.isPrimary)
-                    .map((section) => section.filterKey)}
-                  className="space-y-2"
-                >
-                  {filterSections
-                    .filter(
-                      (section) =>
-                        section.isPrimary && hasOptions(section.optionsKey)
-                    )
-                    .map((section) => (
-                      <AccordionItem
-                        key={section.filterKey}
-                        value={section.filterKey}
-                        className="border border-neutral-700/50 rounded-lg overflow-hidden"
-                      >
-                        <AccordionTrigger className="px-4 py-2 hover:no-underline bg-neutral-800/50 hover:bg-neutral-800 data-[state=open]:bg-neutral-800">
-                          <div className="flex items-center justify-between w-full">
-                            <span className="text-neutral-200 font-bold text-base">
-                              {section.title}
-                            </span>
-                          </div>
-                        </AccordionTrigger>
-                        <AccordionContent className="px-4 py-3 bg-neutral-900">
-                          <FilterSection section={section} maxItems={5} />
-                        </AccordionContent>
-                      </AccordionItem>
-                    ))}
-                </Accordion>
-
-                {/* View All Filters button for desktop */}
+                {/* Show All Filters button - moved to top */}
                 <Sheet>
                   <SheetTrigger asChild>
                     <Button
                       variant="outline"
-                      className="w-full mt-2 border-neutral-700 text-neutral-300 hover:text-white hover:bg-neutral-800"
+                      className="w-full mb-4 border-neutral-700 text-neutral-300 bg-neutral-800 "
                     >
                       <Filter size={16} className="mr-2" />
                       Show All Filters
@@ -839,6 +596,39 @@ export default function SearchPage() {
                   </SheetContent>
                 </Sheet>
 
+                {/* Filter accordions */}
+                <Accordion
+                  type="multiple"
+                  defaultValue={filterSections
+                    .filter((section) => section.isPrimary)
+                    .map((section) => section.filterKey)}
+                  className="space-y-2"
+                >
+                  {filterSections
+                    .filter(
+                      (section) =>
+                        section.isPrimary && hasOptions(section.optionsKey)
+                    )
+                    .map((section) => (
+                      <AccordionItem
+                        key={section.filterKey}
+                        value={section.filterKey}
+                        className="border border-neutral-700/50 rounded-lg overflow-hidden"
+                      >
+                        <AccordionTrigger className="px-4 py-2 hover:no-underline bg-neutral-800/50 hover:bg-neutral-800 data-[state=open]:bg-neutral-800">
+                          <div className="flex items-center justify-between w-full">
+                            <span className="text-neutral-200 font-bold text-base">
+                              {section.title}
+                            </span>
+                          </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="px-4 py-3 bg-neutral-900">
+                          <FilterSection section={section} maxItems={5} />
+                        </AccordionContent>
+                      </AccordionItem>
+                    ))}
+                </Accordion>
+
                 {/* Display active filters */}
                 {hasActiveFilters && (
                   <div className="mt-4 pt-4 border-t border-neutral-700/30">
@@ -865,11 +655,230 @@ export default function SearchPage() {
           </div>
 
           <div className="w-full md:w-3/4">
-            {!isLoading && laptops && laptops.length > 0 && (
-              <h2 className="mb-4 text-xl font-semibold text-white">
-                {laptops.length} result{laptops.length !== 1 ? "s" : ""} found
-              </h2>
-            )}
+            {/* Search, sort and filter controls */}
+            <div className="mb-6 rounded-lg bg-neutral-800/50 border border-neutral-700/50 p-4">
+              <div className="flex flex-col md:flex-row gap-4">
+                <div className="flex-1">
+                  <form onSubmit={handleSubmit} className="relative">
+                    <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                      <Search size={18} className="text-neutral-400" />
+                    </div>
+                    <input
+                      type="text"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      placeholder="Search for laptops by brand, model, or specs..."
+                      className="w-full h-10 rounded-lg bg-neutral-900/90 pl-10 pr-4 text-white border border-neutral-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent shadow-inner"
+                    />
+                  </form>
+                </div>
+
+                <div className="flex gap-2">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="bg-neutral-900/90 border-neutral-600 text-white hover:bg-neutral-700"
+                      >
+                        <ArrowDownAZ size={16} className="mr-2" />
+                        {sortOption === "default"
+                          ? "Sort: Default"
+                          : sortOption === "priceLowToHigh"
+                          ? "Price: Low to High"
+                          : "Price: High to Low"}
+                        <ChevronDown size={16} className="ml-2" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-48 bg-neutral-800 border-neutral-600">
+                      <DropdownMenuLabel className="text-neutral-200">
+                        Sort By
+                      </DropdownMenuLabel>
+                      <DropdownMenuSeparator className="bg-neutral-600" />
+                      <DropdownMenuItem
+                        onClick={() => setSortOption("default")}
+                        className={`${
+                          sortOption === "default"
+                            ? "bg-primary-800/40 text-primary-300"
+                            : "text-white"
+                        } cursor-pointer hover:bg-neutral-700`}
+                      >
+                        Default
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => setSortOption("priceLowToHigh")}
+                        className={`${
+                          sortOption === "priceLowToHigh"
+                            ? "bg-primary-800/40 text-primary-300"
+                            : "text-white"
+                        } cursor-pointer hover:bg-neutral-700`}
+                      >
+                        <ArrowUpAZ size={16} className="mr-2" />
+                        Price: Low to High
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => setSortOption("priceHighToLow")}
+                        className={`${
+                          sortOption === "priceHighToLow"
+                            ? "bg-primary-800/40 text-primary-300"
+                            : "text-white"
+                        } cursor-pointer hover:bg-neutral-700`}
+                      >
+                        <ArrowDownAZ size={16} className="mr-2" />
+                        Price: High to Low
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+
+                  {/* Mobile-only filter button */}
+                  <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+                    <SheetTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="lg:hidden bg-neutral-900/90 border-neutral-700 text-neutral-300 hover:text-white hover:bg-neutral-800 relative"
+                      >
+                        <Filter size={16} className="mr-2" />
+                        Filters
+                        {activeFiltersCount > 0 && (
+                          <span className="absolute -top-2 -right-2 bg-primary-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                            {activeFiltersCount}
+                          </span>
+                        )}
+                      </Button>
+                    </SheetTrigger>
+                    <SheetContent
+                      side="bottom"
+                      className="bg-neutral-900 border-neutral-700 h-[85vh] rounded-t-xl"
+                    >
+                      {/* Mobile filter sheet content - same as desktop sheet */}
+                      <SheetHeader>
+                        <SheetTitle className="text-white flex items-center justify-between">
+                          <div className="flex items-center">
+                            <Filter
+                              size={16}
+                              className="mr-2 text-primary-400"
+                            />
+                            All Filters
+                          </div>
+                          {activeFiltersCount > 0 && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => {
+                                resetFilters();
+                                setSearchTerm("");
+                              }}
+                              className="text-neutral-400 hover:text-white border-neutral-700 hover:bg-neutral-800"
+                            >
+                              <X size={14} className="mr-1" />
+                              Reset All
+                            </Button>
+                          )}
+                        </SheetTitle>
+                        <SheetDescription className="text-neutral-400">
+                          Narrow down your search with these filters
+                        </SheetDescription>
+                      </SheetHeader>
+
+                      {/* Copy of the filter sheet content */}
+                      <div className="h-[calc(100vh-170px)] overflow-y-auto py-4 pr-2">
+                        <Accordion
+                          type="multiple"
+                          defaultValue={["brand"]}
+                          className="space-y-2"
+                        >
+                          {filterSections
+                            .filter(({ optionsKey }) => hasOptions(optionsKey))
+                            .map((section) => (
+                              <AccordionItem
+                                key={section.filterKey}
+                                value={section.filterKey}
+                                className="border border-neutral-700/50 rounded-lg overflow-hidden"
+                              >
+                                <AccordionTrigger className="px-4 py-2 hover:no-underline bg-neutral-800/50 hover:bg-neutral-800 data-[state=open]:bg-neutral-800">
+                                  <div className="flex items-center justify-between w-full">
+                                    <span className="text-neutral-200 font-bold">
+                                      {section.title}
+                                    </span>
+                                  </div>
+                                </AccordionTrigger>
+                                <AccordionContent className="px-4 py-3 bg-neutral-900">
+                                  <FilterSection
+                                    section={section}
+                                    inAccordion={true}
+                                  />
+                                </AccordionContent>
+                              </AccordionItem>
+                            ))}
+                        </Accordion>
+                        {/* Mobile active filters */}
+                        {hasActiveFilters && (
+                          <div className="mt-6 pt-6 border-t border-neutral-700/30">
+                            <div className="px-1 mb-3">
+                              <h3 className="text-sm font-medium text-white flex items-center">
+                                <span className="h-1 w-4 bg-primary-500 rounded-full mr-2"></span>
+                                Applied Filters
+                              </h3>
+                            </div>
+                            <div className="px-1">
+                              <ActiveFiltersComponent />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      <SheetFooter className="mt-4 flex-row gap-3">
+                        <Button
+                          variant="outline"
+                          onClick={() => setIsSheetOpen(false)}
+                          className="flex-1 border-neutral-700 hover:bg-neutral-800 text-neutral-300"
+                        >
+                          Cancel
+                        </Button>
+                        <Button
+                          onClick={() => setIsSheetOpen(false)}
+                          className="flex-1 bg-primary-600 hover:bg-primary-700 text-white"
+                        >
+                          Apply Filters
+                        </Button>
+                      </SheetFooter>
+                    </SheetContent>
+                  </Sheet>
+                </div>
+              </div>
+
+              {/* Enhanced results count and active filters display */}
+              <div className="mt-4">
+                {!isLoading && laptops && (
+                  <div className="flex items-center mb-2">
+                    {laptops.length > 0 ? (
+                      <div className="flex flex-col">
+                        <h2 className="text-lg font-semibold text-white">
+                          {laptops.length} laptop
+                          {laptops.length !== 1 ? "s" : ""} found
+                        </h2>
+                        {searchTerm && (
+                          <p className="text-sm text-neutral-400">
+                            Showing results for "{searchTerm}"
+                          </p>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="flex items-center text-neutral-400">
+                        <Search size={16} className="mr-2 opacity-50" />
+                        <span>No results match your current criteria</span>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Showing active filters in search section for better context */}
+                {hasActiveFilters && (
+                  <div className="mt-2">
+                    <ActiveFiltersComponent />
+                  </div>
+                )}
+              </div>
+            </div>
 
             {error && (
               <div className="mb-4 p-4 text-center text-red-500">
@@ -888,7 +897,7 @@ export default function SearchPage() {
               {!showSkeletons &&
                 laptops &&
                 laptops.length > 0 &&
-                laptops.map((laptop) => (
+                sortedLaptops.map((laptop) => (
                   <LaptopCard
                     key={`laptop-${laptop.id}`}
                     id={laptop.id}
@@ -924,6 +933,17 @@ export default function SearchPage() {
                   <p className="mt-2 text-neutral-400">
                     Try adjusting your filters or search term.
                   </p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      resetFilters();
+                      setSearchTerm("");
+                    }}
+                    className="mt-4 border-neutral-700 hover:bg-neutral-700 text-neutral-300"
+                  >
+                    Clear all filters
+                  </Button>
                 </div>
               )}
           </div>
