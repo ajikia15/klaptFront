@@ -324,14 +324,14 @@ export default function AddListing() {
               )}
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Basic Information Section */}
+                {/* --- General Information Section --- */}
                 <div className="md:col-span-2">
                   <h2 className="text-xl font-semibold text-white mb-4 pb-2 border-b border-neutral-700">
-                    Basic Information
+                    General Information
                   </h2>
                 </div>
-
                 <div>
+                  {/* Title */}
                   <form.Field
                     name="title"
                     validators={{
@@ -366,8 +366,8 @@ export default function AddListing() {
                     )}
                   </form.Field>
                 </div>
-
                 <div>
+                  {/* Price */}
                   <form.Field
                     name="price"
                     validators={{
@@ -407,8 +407,8 @@ export default function AddListing() {
                     )}
                   </form.Field>
                 </div>
-
                 <div>
+                  {/* Brand */}
                   <form.Field
                     name="brand"
                     validators={{
@@ -449,8 +449,8 @@ export default function AddListing() {
                     )}
                   </form.Field>
                 </div>
-
                 <div>
+                  {/* Model */}
                   <form.Field
                     name="model"
                     validators={{
@@ -485,8 +485,8 @@ export default function AddListing() {
                     )}
                   </form.Field>
                 </div>
-
                 <div className="md:col-span-2">
+                  {/* Short Description */}
                   <form.Field
                     name="shortDesc"
                     validators={{
@@ -524,8 +524,8 @@ export default function AddListing() {
                     )}
                   </form.Field>
                 </div>
-
                 <div className="md:col-span-2">
+                  {/* Full Description */}
                   <form.Field
                     name="description"
                     validators={{
@@ -562,7 +562,14 @@ export default function AddListing() {
                   </form.Field>
                 </div>
 
+                {/* --- Specs Section --- */}
+                <div className="md:col-span-2 mt-4">
+                  <h2 className="text-xl font-semibold text-white mb-4 pb-2 border-b border-neutral-700">
+                    Specifications
+                  </h2>
+                </div>
                 <div>
+                  {/* Year */}
                   <form.Field
                     name="year"
                     validators={{
@@ -606,8 +613,8 @@ export default function AddListing() {
                     )}
                   </form.Field>
                 </div>
-
                 <div>
+                  {/* Stock Status */}
                   <form.Field name="stockStatus">
                     {(field) => (
                       <>
@@ -634,15 +641,117 @@ export default function AddListing() {
                     )}
                   </form.Field>
                 </div>
+                <div>
+                  {/* Condition */}
+                  <form.Field
+                    name="condition"
+                    validators={{
+                      onChange: ({ value }) => {
+                        if (!value) return "Condition is required";
+                        return undefined;
+                      },
+                    }}
+                  >
+                    {(field) => (
+                      <>
+                        <label
+                          htmlFor="condition"
+                          className="block text-sm font-medium text-neutral-200 mb-1"
+                        >
+                          Condition
+                        </label>
+                        <select
+                          id="condition"
+                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                          value={field.state.value || ""}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          disabled={formStatus === "submitting"}
+                        >
+                          <option value="" disabled>
+                            Select Condition
+                          </option>
+                          {CONDITION_TYPES.map((condition) => (
+                            <option key={condition} value={condition}>
+                              {condition.charAt(0).toUpperCase() +
+                                condition.slice(1)}
+                            </option>
+                          ))}
+                        </select>
+                        {field.state.meta.errors ? (
+                          <div className="text-red-300 text-sm mt-1">
+                            {field.state.meta.errors.join(", ")}
+                          </div>
+                        ) : null}
+                      </>
+                    )}
+                  </form.Field>
+                </div>
+                <div>
+                  {/* Tags */}
+                  <form.Field
+                    name="tags"
+                    validators={{
+                      onChange: () => {
+                        // Tags are optional, so no validation needed
+                        return undefined;
+                      },
+                    }}
+                  >
+                    {(field) => (
+                      <>
+                        <label
+                          htmlFor="tags"
+                          className="block text-sm font-medium text-neutral-200 mb-1"
+                        >
+                          Laptop Tags
+                          <span className="text-neutral-400 text-xs ml-2">
+                            (Select all that apply)
+                          </span>
+                        </label>
+                        <div className="grid grid-cols-2 gap-2 mt-2">
+                          {TAG_OPTIONS.map((tag) => (
+                            <label
+                              key={tag}
+                              className="flex items-center space-x-2 cursor-pointer rounded-md px-3 py-2 bg-neutral-800 hover:bg-neutral-700 border border-neutral-600 transition-colors"
+                            >
+                              <input
+                                type="checkbox"
+                                value={tag}
+                                checked={(field.state.value || []).includes(
+                                  tag
+                                )}
+                                onChange={(e) => {
+                                  const currentTags = field.state.value || [];
+                                  if (e.target.checked) {
+                                    field.handleChange([...currentTags, tag]);
+                                  } else {
+                                    field.handleChange(
+                                      currentTags.filter((t) => t !== tag)
+                                    );
+                                  }
+                                }}
+                                disabled={formStatus === "submitting"}
+                                className="rounded text-secondary-600 focus:ring-secondary-500"
+                              />
+                              <span className="text-neutral-200">
+                                {tag.charAt(0).toUpperCase() + tag.slice(1)}
+                              </span>
+                            </label>
+                          ))}
+                        </div>
+                      </>
+                    )}
+                  </form.Field>
+                </div>
 
-                {/* Processor Section */}
+                {/* --- Processor Section --- */}
                 <div className="md:col-span-2 mt-4">
-                  <h2 className="text-xl font-semibold text-white mb-4 pb-2 border-b border-neutral-700">
+                  <h2 className="text-lg font-semibold text-white mb-4 pb-2 border-b border-neutral-700">
                     Processor
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Processor Brand field */}
                     <div>
+                      {/* Processor Brand */}
                       <form.Field
                         name="processorBrand"
                         validators={{
@@ -687,9 +796,8 @@ export default function AddListing() {
                         )}
                       </form.Field>
                     </div>
-
-                    {/* Processor Model field */}
                     <div>
+                      {/* Processor Model */}
                       <form.Field
                         name="processorModel"
                         validators={{
@@ -726,17 +834,103 @@ export default function AddListing() {
                         )}
                       </form.Field>
                     </div>
+                    <div>
+                      {/* Cores */}
+                      <form.Field
+                        name="cores"
+                        validators={{
+                          onChange: ({ value }) => {
+                            if (!value) return "Number of cores is required";
+                            if (isNaN(Number(value)))
+                              return "Cores must be a number";
+                            if (Number(value) <= 0)
+                              return "Cores must be greater than zero";
+                            return undefined;
+                          },
+                        }}
+                      >
+                        {(field) => (
+                          <>
+                            <label
+                              htmlFor="cores"
+                              className="block text-sm font-medium text-neutral-200 mb-1"
+                            >
+                              Cores
+                            </label>
+                            <input
+                              id="cores"
+                              type="number"
+                              placeholder="e.g., 8"
+                              className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                              value={field.state.value}
+                              onChange={(e) =>
+                                field.handleChange(e.target.value)
+                              }
+                              disabled={formStatus === "submitting"}
+                            />
+                            {field.state.meta.errors ? (
+                              <div className="text-red-300 text-sm mt-1">
+                                {field.state.meta.errors.join(", ")}
+                              </div>
+                            ) : null}
+                          </>
+                        )}
+                      </form.Field>
+                    </div>
+                    <div>
+                      {/* Threads */}
+                      <form.Field
+                        name="threads"
+                        validators={{
+                          onChange: ({ value }) => {
+                            if (!value) return "Number of threads is required";
+                            if (isNaN(Number(value)))
+                              return "Threads must be a number";
+                            if (Number(value) <= 0)
+                              return "Threads must be greater than zero";
+                            return undefined;
+                          },
+                        }}
+                      >
+                        {(field) => (
+                          <>
+                            <label
+                              htmlFor="threads"
+                              className="block text-sm font-medium text-neutral-200 mb-1"
+                            >
+                              Threads
+                            </label>
+                            <input
+                              id="threads"
+                              type="number"
+                              placeholder="e.g., 16"
+                              className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                              value={field.state.value}
+                              onChange={(e) =>
+                                field.handleChange(e.target.value)
+                              }
+                              disabled={formStatus === "submitting"}
+                            />
+                            {field.state.meta.errors ? (
+                              <div className="text-red-300 text-sm mt-1">
+                                {field.state.meta.errors.join(", ")}
+                              </div>
+                            ) : null}
+                          </>
+                        )}
+                      </form.Field>
+                    </div>
                   </div>
                 </div>
 
-                {/* Graphics & Memory Section */}
+                {/* --- Graphics & Memory Section --- */}
                 <div className="md:col-span-2 mt-4">
-                  <h2 className="text-xl font-semibold text-white mb-4 pb-2 border-b border-neutral-700">
+                  <h2 className="text-lg font-semibold text-white mb-4 pb-2 border-b border-neutral-700">
                     Graphics & Memory
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Graphics Type field */}
                     <div>
+                      {/* Graphics Type */}
                       <form.Field
                         name="graphicsType"
                         validators={{
@@ -780,9 +974,8 @@ export default function AddListing() {
                         )}
                       </form.Field>
                     </div>
-
-                    {/* GPU brand field */}
                     <div>
+                      {/* GPU Brand */}
                       <form.Field
                         name="gpuBrand"
                         validators={{
@@ -831,9 +1024,8 @@ export default function AddListing() {
                         )}
                       </form.Field>
                     </div>
-
-                    {/* GPU Model field */}
                     <div>
+                      {/* GPU Model */}
                       <form.Field
                         name="gpuModel"
                         validators={{
@@ -876,9 +1068,8 @@ export default function AddListing() {
                         )}
                       </form.Field>
                     </div>
-
-                    {/* VRAM field */}
                     <div>
+                      {/* VRAM */}
                       <form.Field
                         name="vram"
                         validators={{
@@ -929,9 +1120,8 @@ export default function AddListing() {
                         )}
                       </form.Field>
                     </div>
-
-                    {/* RAM field */}
                     <div>
+                      {/* RAM */}
                       <form.Field
                         name="ram"
                         validators={{
@@ -976,9 +1166,8 @@ export default function AddListing() {
                         )}
                       </form.Field>
                     </div>
-
-                    {/* RAM Type field */}
                     <div>
+                      {/* RAM Type */}
                       <form.Field
                         name="ramType"
                         validators={{
@@ -1026,287 +1215,303 @@ export default function AddListing() {
                   </div>
                 </div>
 
-                {/* Storage & Display Section */}
+                {/* --- Storage & Display Section --- */}
                 <div className="md:col-span-2 mt-4">
-                  <h2 className="text-xl font-semibold text-white mb-4 pb-2 border-b border-neutral-700">
+                  <h2 className="text-lg font-semibold text-white mb-4 pb-2 border-b border-neutral-700">
                     Storage & Display
                   </h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      {/* Storage Type */}
+                      <form.Field
+                        name="storageType"
+                        validators={{
+                          onChange: ({ value }) => {
+                            if (!value) return "Storage type is required";
+                            return undefined;
+                          },
+                        }}
+                      >
+                        {(field) => (
+                          <>
+                            <label
+                              htmlFor="storageType"
+                              className="block text-sm font-medium text-neutral-200 mb-1"
+                            >
+                              Storage Type
+                            </label>
+                            <select
+                              id="storageType"
+                              className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                              value={field.state.value}
+                              onChange={(e) =>
+                                field.handleChange(e.target.value)
+                              }
+                              disabled={formStatus === "submitting"}
+                            >
+                              <option value="">Select Storage Type</option>
+                              {STORAGE_TYPES.map((type) => (
+                                <option key={type} value={type}>
+                                  {type}
+                                </option>
+                              ))}
+                            </select>
+                            {field.state.meta.errors ? (
+                              <div className="text-red-300 text-sm mt-1">
+                                {field.state.meta.errors.join(", ")}
+                              </div>
+                            ) : null}
+                          </>
+                        )}
+                      </form.Field>
+                    </div>
+                    <div>
+                      {/* Storage Capacity */}
+                      <form.Field
+                        name="storageCapacity"
+                        validators={{
+                          onChange: ({ value }) => {
+                            if (!value) return "Storage capacity is required";
+                            return undefined;
+                          },
+                        }}
+                      >
+                        {(field) => (
+                          <>
+                            <label
+                              htmlFor="storageCapacity"
+                              className="block text-sm font-medium text-neutral-200 mb-1"
+                            >
+                              Storage Capacity
+                            </label>
+                            <input
+                              id="storageCapacity"
+                              placeholder="e.g., 512, 1TB"
+                              className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                              value={field.state.value}
+                              onChange={(e) =>
+                                field.handleChange(e.target.value)
+                              }
+                              disabled={formStatus === "submitting"}
+                            />
+                            {field.state.meta.errors ? (
+                              <div className="text-red-300 text-sm mt-1">
+                                {field.state.meta.errors.join(", ")}
+                              </div>
+                            ) : null}
+                          </>
+                        )}
+                      </form.Field>
+                    </div>
+                    <div>
+                      {/* Screen Size */}
+                      <form.Field
+                        name="screenSize"
+                        validators={{
+                          onChange: ({ value }) => {
+                            if (!value) return "Screen size is required";
+                            return undefined;
+                          },
+                        }}
+                      >
+                        {(field) => (
+                          <>
+                            <label
+                              htmlFor="screenSize"
+                              className="block text-sm font-medium text-neutral-200 mb-1"
+                            >
+                              Screen Size (inches)
+                            </label>
+                            <input
+                              id="screenSize"
+                              placeholder="e.g., 15.6"
+                              className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                              value={field.state.value}
+                              onChange={(e) =>
+                                field.handleChange(e.target.value)
+                              }
+                              disabled={formStatus === "submitting"}
+                            />
+                            {field.state.meta.errors ? (
+                              <div className="text-red-300 text-sm mt-1">
+                                {field.state.meta.errors.join(", ")}
+                              </div>
+                            ) : null}
+                          </>
+                        )}
+                      </form.Field>
+                    </div>
+                    <div>
+                      {/* Screen Resolution */}
+                      <form.Field
+                        name="screenResolution"
+                        validators={{
+                          onChange: ({ value }) => {
+                            if (!value) return "Screen resolution is required";
+                            return undefined;
+                          },
+                        }}
+                      >
+                        {(field) => (
+                          <>
+                            <label
+                              htmlFor="screenResolution"
+                              className="block text-sm font-medium text-neutral-200 mb-1"
+                            >
+                              Screen Resolution
+                            </label>
+                            <input
+                              id="screenResolution"
+                              placeholder="e.g., 1920x1080, 2560x1440"
+                              className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                              value={field.state.value}
+                              onChange={(e) =>
+                                field.handleChange(e.target.value)
+                              }
+                              disabled={formStatus === "submitting"}
+                            />
+                            {field.state.meta.errors ? (
+                              <div className="text-red-300 text-sm mt-1">
+                                {field.state.meta.errors.join(", ")}
+                              </div>
+                            ) : null}
+                          </>
+                        )}
+                      </form.Field>
+                    </div>
+                    <div>
+                      {/* Refresh Rate */}
+                      <form.Field
+                        name="refreshRate"
+                        validators={{
+                          onChange: ({ value }) => {
+                            if (!value) return "Refresh rate is required";
+                            if (isNaN(Number(value)))
+                              return "Refresh rate must be a number";
+                            if (Number(value) <= 0)
+                              return "Refresh rate must be greater than zero";
+                            return undefined;
+                          },
+                        }}
+                      >
+                        {(field) => (
+                          <>
+                            <label
+                              htmlFor="refreshRate"
+                              className="block text-sm font-medium text-neutral-200 mb-1"
+                            >
+                              Refresh Rate (Hz)
+                            </label>
+                            <input
+                              id="refreshRate"
+                              type="number"
+                              placeholder="e.g., 60, 144, 240"
+                              className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                              value={field.state.value}
+                              onChange={(e) =>
+                                field.handleChange(e.target.value)
+                              }
+                              disabled={formStatus === "submitting"}
+                            />
+                            {field.state.meta.errors ? (
+                              <div className="text-red-300 text-sm mt-1">
+                                {field.state.meta.errors.join(", ")}
+                              </div>
+                            ) : null}
+                          </>
+                        )}
+                      </form.Field>
+                    </div>
+                    <div>
+                      {/* Weight */}
+                      <form.Field
+                        name="weight"
+                        validators={{
+                          onChange: ({ value }) => {
+                            if (!value) return "Weight is required";
+                            return undefined;
+                          },
+                        }}
+                      >
+                        {(field) => (
+                          <>
+                            <label
+                              htmlFor="weight"
+                              className="block text-sm font-medium text-neutral-200 mb-1"
+                            >
+                              Weight
+                            </label>
+                            <input
+                              id="weight"
+                              placeholder="e.g., 2.3kg, 5.1 lbs"
+                              className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                              value={field.state.value}
+                              onChange={(e) =>
+                                field.handleChange(e.target.value)
+                              }
+                              disabled={formStatus === "submitting"}
+                            />
+                            {field.state.meta.errors ? (
+                              <div className="text-red-300 text-sm mt-1">
+                                {field.state.meta.errors.join(", ")}
+                              </div>
+                            ) : null}
+                          </>
+                        )}
+                      </form.Field>
+                    </div>
+                    <div>
+                      {/* Backlight Type */}
+                      <form.Field
+                        name="backlightType"
+                        validators={{
+                          onChange: ({ value }) => {
+                            if (!value) return "Backlight type is required";
+                            return undefined;
+                          },
+                        }}
+                      >
+                        {(field) => (
+                          <>
+                            <label
+                              htmlFor="backlightType"
+                              className="block text-sm font-medium text-neutral-200 mb-1"
+                            >
+                              Keyboard Backlight Type
+                            </label>
+                            <select
+                              id="backlightType"
+                              className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                              value={field.state.value || ""}
+                              onChange={(e) =>
+                                field.handleChange(e.target.value)
+                              }
+                              disabled={formStatus === "submitting"}
+                            >
+                              <option value="" disabled>
+                                Select Backlight Type
+                              </option>
+                              {backlightTypeOptions.map((option) => (
+                                <option key={option} value={option}>
+                                  {option}
+                                </option>
+                              ))}
+                            </select>
+                            {field.state.meta.errors ? (
+                              <div className="text-red-300 text-sm mt-1">
+                                {field.state.meta.errors.join(", ")}
+                              </div>
+                            ) : null}
+                          </>
+                        )}
+                      </form.Field>
+                    </div>
+                  </div>
                 </div>
 
-                <div>
-                  <form.Field
-                    name="storageType"
-                    validators={{
-                      onChange: ({ value }) => {
-                        if (!value) return "Storage type is required";
-                        return undefined;
-                      },
-                    }}
-                  >
-                    {(field) => (
-                      <>
-                        <label
-                          htmlFor="storageType"
-                          className="block text-sm font-medium text-neutral-200 mb-1"
-                        >
-                          Storage Type
-                        </label>
-                        <select
-                          id="storageType"
-                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
-                          value={field.state.value}
-                          onChange={(e) => field.handleChange(e.target.value)}
-                          disabled={formStatus === "submitting"}
-                        >
-                          <option value="">Select Storage Type</option>
-                          {STORAGE_TYPES.map((type) => (
-                            <option key={type} value={type}>
-                              {type}
-                            </option>
-                          ))}
-                        </select>
-                        {field.state.meta.errors ? (
-                          <div className="text-red-300 text-sm mt-1">
-                            {field.state.meta.errors.join(", ")}
-                          </div>
-                        ) : null}
-                      </>
-                    )}
-                  </form.Field>
-                </div>
-
-                <div>
-                  <form.Field
-                    name="storageCapacity"
-                    validators={{
-                      onChange: ({ value }) => {
-                        if (!value) return "Storage capacity is required";
-                        return undefined;
-                      },
-                    }}
-                  >
-                    {(field) => (
-                      <>
-                        <label
-                          htmlFor="storageCapacity"
-                          className="block text-sm font-medium text-neutral-200 mb-1"
-                        >
-                          Storage Capacity
-                        </label>
-                        <input
-                          id="storageCapacity"
-                          placeholder="e.g., 512, 1TB"
-                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
-                          value={field.state.value}
-                          onChange={(e) => field.handleChange(e.target.value)}
-                          disabled={formStatus === "submitting"}
-                        />
-                        {field.state.meta.errors ? (
-                          <div className="text-red-300 text-sm mt-1">
-                            {field.state.meta.errors.join(", ")}
-                          </div>
-                        ) : null}
-                      </>
-                    )}
-                  </form.Field>
-                </div>
-
-                <div>
-                  <form.Field
-                    name="screenSize"
-                    validators={{
-                      onChange: ({ value }) => {
-                        if (!value) return "Screen size is required";
-                        return undefined;
-                      },
-                    }}
-                  >
-                    {(field) => (
-                      <>
-                        <label
-                          htmlFor="screenSize"
-                          className="block text-sm font-medium text-neutral-200 mb-1"
-                        >
-                          Screen Size (inches)
-                        </label>
-                        <input
-                          id="screenSize"
-                          placeholder="e.g., 15.6"
-                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
-                          value={field.state.value}
-                          onChange={(e) => field.handleChange(e.target.value)}
-                          disabled={formStatus === "submitting"}
-                        />
-                        {field.state.meta.errors ? (
-                          <div className="text-red-300 text-sm mt-1">
-                            {field.state.meta.errors.join(", ")}
-                          </div>
-                        ) : null}
-                      </>
-                    )}
-                  </form.Field>
-                </div>
-
-                <div>
-                  <form.Field
-                    name="screenResolution"
-                    validators={{
-                      onChange: ({ value }) => {
-                        if (!value) return "Screen resolution is required";
-                        return undefined;
-                      },
-                    }}
-                  >
-                    {(field) => (
-                      <>
-                        <label
-                          htmlFor="screenResolution"
-                          className="block text-sm font-medium text-neutral-200 mb-1"
-                        >
-                          Screen Resolution
-                        </label>
-                        <input
-                          id="screenResolution"
-                          placeholder="e.g., 1920x1080, 2560x1440"
-                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
-                          value={field.state.value}
-                          onChange={(e) => field.handleChange(e.target.value)}
-                          disabled={formStatus === "submitting"}
-                        />
-                        {field.state.meta.errors ? (
-                          <div className="text-red-300 text-sm mt-1">
-                            {field.state.meta.errors.join(", ")}
-                          </div>
-                        ) : null}
-                      </>
-                    )}
-                  </form.Field>
-                </div>
-
-                <div>
-                  <form.Field
-                    name="refreshRate"
-                    validators={{
-                      onChange: ({ value }) => {
-                        if (!value) return "Refresh rate is required";
-                        if (isNaN(Number(value)))
-                          return "Refresh rate must be a number";
-                        if (Number(value) <= 0)
-                          return "Refresh rate must be greater than zero";
-                        return undefined;
-                      },
-                    }}
-                  >
-                    {(field) => (
-                      <>
-                        <label
-                          htmlFor="refreshRate"
-                          className="block text-sm font-medium text-neutral-200 mb-1"
-                        >
-                          Refresh Rate (Hz)
-                        </label>
-                        <input
-                          id="refreshRate"
-                          type="number"
-                          placeholder="e.g., 60, 144, 240"
-                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
-                          value={field.state.value}
-                          onChange={(e) => field.handleChange(e.target.value)}
-                          disabled={formStatus === "submitting"}
-                        />
-                        {field.state.meta.errors ? (
-                          <div className="text-red-300 text-sm mt-1">
-                            {field.state.meta.errors.join(", ")}
-                          </div>
-                        ) : null}
-                      </>
-                    )}
-                  </form.Field>
-                </div>
-
-                <div>
-                  <form.Field
-                    name="weight"
-                    validators={{
-                      onChange: ({ value }) => {
-                        if (!value) return "Weight is required";
-                        return undefined;
-                      },
-                    }}
-                  >
-                    {(field) => (
-                      <>
-                        <label
-                          htmlFor="weight"
-                          className="block text-sm font-medium text-neutral-200 mb-1"
-                        >
-                          Weight
-                        </label>
-                        <input
-                          id="weight"
-                          placeholder="e.g., 2.3kg, 5.1 lbs"
-                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
-                          value={field.state.value}
-                          onChange={(e) => field.handleChange(e.target.value)}
-                          disabled={formStatus === "submitting"}
-                        />
-                        {field.state.meta.errors ? (
-                          <div className="text-red-300 text-sm mt-1">
-                            {field.state.meta.errors.join(", ")}
-                          </div>
-                        ) : null}
-                      </>
-                    )}
-                  </form.Field>
-                </div>
-
-                <div>
-                  <form.Field
-                    name="backlightType"
-                    validators={{
-                      onChange: ({ value }) => {
-                        if (!value) return "Backlight type is required";
-                        return undefined;
-                      },
-                    }}
-                  >
-                    {(field) => (
-                      <>
-                        <label
-                          htmlFor="backlightType"
-                          className="block text-sm font-medium text-neutral-200 mb-1"
-                        >
-                          Keyboard Backlight Type
-                        </label>
-                        <select
-                          id="backlightType"
-                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
-                          value={field.state.value || ""}
-                          onChange={(e) => field.handleChange(e.target.value)}
-                          disabled={formStatus === "submitting"}
-                        >
-                          <option value="" disabled>
-                            Select Backlight Type
-                          </option>
-                          {backlightTypeOptions.map((option) => (
-                            <option key={option} value={option}>
-                              {option}
-                            </option>
-                          ))}
-                        </select>
-                        {field.state.meta.errors ? (
-                          <div className="text-red-300 text-sm mt-1">
-                            {field.state.meta.errors.join(", ")}
-                          </div>
-                        ) : null}
-                      </>
-                    )}
-                  </form.Field>
-                </div>
-
-                {/* Images Section */}
+                {/* --- Images Section --- */}
                 <div className="md:col-span-2 mt-4">
-                  <h2 className="text-xl font-semibold text-white mb-4 pb-2 border-b border-neutral-700">
+                  <h2 className="text-lg font-semibold text-white mb-4 pb-2 border-b border-neutral-700">
                     Images
                   </h2>
                   <div className="mb-6">
@@ -1466,114 +1671,6 @@ export default function AddListing() {
                       )}
                     </div>
                   </div>
-                </div>
-
-                <div className="md:col-span-2 mt-4">
-                  <h2 className="text-xl font-semibold text-white mb-4 pb-2 border-b border-neutral-700">
-                    Additional Information
-                  </h2>
-                </div>
-
-                <div>
-                  <form.Field
-                    name="condition"
-                    validators={{
-                      onChange: ({ value }) => {
-                        if (!value) return "Condition is required";
-                        return undefined;
-                      },
-                    }}
-                  >
-                    {(field) => (
-                      <>
-                        <label
-                          htmlFor="condition"
-                          className="block text-sm font-medium text-neutral-200 mb-1"
-                        >
-                          Condition
-                        </label>
-                        <select
-                          id="condition"
-                          className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
-                          value={field.state.value || ""}
-                          onChange={(e) => field.handleChange(e.target.value)}
-                          disabled={formStatus === "submitting"}
-                        >
-                          <option value="" disabled>
-                            Select Condition
-                          </option>
-                          {CONDITION_TYPES.map((condition) => (
-                            <option key={condition} value={condition}>
-                              {condition.charAt(0).toUpperCase() +
-                                condition.slice(1)}
-                            </option>
-                          ))}
-                        </select>
-                        {field.state.meta.errors ? (
-                          <div className="text-red-300 text-sm mt-1">
-                            {field.state.meta.errors.join(", ")}
-                          </div>
-                        ) : null}
-                      </>
-                    )}
-                  </form.Field>
-                </div>
-
-                <div>
-                  <form.Field
-                    name="tags"
-                    validators={{
-                      onChange: () => {
-                        // Tags are optional, so no validation needed
-                        return undefined;
-                      },
-                    }}
-                  >
-                    {(field) => (
-                      <>
-                        <label
-                          htmlFor="tags"
-                          className="block text-sm font-medium text-neutral-200 mb-1"
-                        >
-                          Laptop Tags
-                          <span className="text-neutral-400 text-xs ml-2">
-                            (Select all that apply)
-                          </span>
-                        </label>
-                        <div className="grid grid-cols-2 gap-2 mt-2">
-                          {TAG_OPTIONS.map((tag) => (
-                            <label
-                              key={tag}
-                              className="flex items-center space-x-2 cursor-pointer rounded-md px-3 py-2 bg-neutral-800 hover:bg-neutral-700 border border-neutral-600 transition-colors"
-                            >
-                              <input
-                                type="checkbox"
-                                value={tag}
-                                checked={(field.state.value || []).includes(
-                                  tag
-                                )}
-                                onChange={(e) => {
-                                  const currentTags = field.state.value || [];
-                                  if (e.target.checked) {
-                                    field.handleChange([...currentTags, tag]);
-                                  } else {
-                                    field.handleChange(
-                                      currentTags.filter((t) => t !== tag)
-                                    );
-                                  }
-                                }}
-                                disabled={formStatus === "submitting"}
-                                className="rounded text-secondary-600 focus:ring-secondary-500"
-                              />
-                              <span className="text-neutral-200">
-                                {tag.charAt(0).toUpperCase() + tag.slice(1)}
-                              </span>
-                            </label>
-                          ))}
-                        </div>
-                      </>
-                    )}
-                  </form.Field>
                 </div>
               </div>
 

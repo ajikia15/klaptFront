@@ -22,18 +22,16 @@ export default function ProfilePage() {
     <div className="min-h-screen bg-neutral-900 text-neutral-200 py-10">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Profile Sidebar */}
           <div className="md:col-span-1">
             <div className="bg-neutral-800 rounded-2xl border border-neutral-700/50 sticky top-24 transition-all duration-300 hover:shadow-[0_4px_20px_rgba(79,38,144,0.15)]">
-              {/* Profile Header */}
               <div className="text-center p-6 border-b border-neutral-700/30">
                 <div className="bg-gradient-to-br from-purple-700/30 to-secondary-600/30 rounded-full h-24 w-24 flex items-center justify-center mb-4 mx-auto border-2 border-purple-500/30 transition-transform duration-500 hover:scale-105">
                   <span className="text-4xl font-bold text-white">
-                    {user?.email?.charAt(0).toUpperCase()}
+                    {user?.username.charAt(0).toUpperCase()}
                   </span>
                 </div>
                 <h2 className="text-xl font-bold text-white">
-                  {user?.email?.split("@")[0]}
+                  {user?.username}
                 </h2>
                 <p className="text-sm text-neutral-400 mt-1">{user?.email}</p>
 
