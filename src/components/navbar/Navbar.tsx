@@ -96,14 +96,14 @@ export default function Navbar() {
                 <DropdownMenuTrigger className="focus:outline-none">
                   <div
                     className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-600 to-primary-600 flex items-center justify-center text-white font-medium cursor-pointer transition-transform hover:scale-105"
-                    title={user?.email}
+                    title={user?.username}
                   >
-                    {user?.email ? user.email[0].toUpperCase() : "?"}
+                    {user?.username ? user.username[0].toUpperCase() : "?"}
                   </div>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="min-w-[200px] bg-neutral-800 border-neutral-700 text-white">
                   <div className="px-2 py-1.5 text-sm text-neutral-400">
-                    {user?.email}
+                    Hello, {user?.username}!
                   </div>
                   <DropdownMenuSeparator className="bg-neutral-700" />
                   <DropdownMenuItem
