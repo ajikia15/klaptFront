@@ -14,6 +14,7 @@ export const RegistrationForm = () => {
   const form = useForm({
     defaultValues: {
       email: "",
+      username: "",
       password: "",
       confirmPassword: "",
     },
@@ -29,6 +30,7 @@ export const RegistrationForm = () => {
 
         await register({
           email: value.email,
+          username: value.username,
           password: value.password,
         });
 
@@ -108,7 +110,49 @@ export const RegistrationForm = () => {
           )}
         </form.Field>
       </div>
-
+      <div>
+        <form.Field
+          name="username"
+          validators={{
+            onChange: ({ value }) => {
+              if (!value) return "Username is required";
+              if (value.length < 3) {
+                return "Username must be at least 3 characters";
+              }
+              if (value.length > 20) {
+                return "Username must be at most 20 characters";
+              }
+              return undefined;
+            },
+          }}
+        >
+          {(field) => (
+            <>
+              <label
+                htmlFor="Username"
+                className="block text-sm font-medium text-neutral-200 mb-1"
+              >
+                Username
+              </label>
+              <input
+                id="Username"
+                name="Username"
+                type="text"
+                className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                value={field.state.value}
+                onChange={(e) => field.handleChange(e.target.value)}
+                disabled={formStatus === "submitting"}
+                placeholder="chickenjockey12"
+              />
+              {field.state.meta.errors ? (
+                <div className="text-red-300 text-sm mt-1">
+                  {field.state.meta.errors.join(", ")}
+                </div>
+              ) : null}
+            </>
+          )}
+        </form.Field>
+      </div>
       <div>
         <form.Field
           name="password"

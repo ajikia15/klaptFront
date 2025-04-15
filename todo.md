@@ -15,12 +15,13 @@
 
 - [ ] slider step forms for registering initially, then for posting the laptop.
 
-today
-
 - [ ] usable admin dashboard
 
   - [x] content moderation
   - [ ] user moderation
+  - [ ] laptop updating
+    - [ ] update from form
+    - [ ] inline updating on the page
 
 - [ ] profile settings
 

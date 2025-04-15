@@ -4,11 +4,13 @@ export interface User {
   id: number;
   email: string;
   admin: boolean;
+  username: string;
 }
 
 export interface RegisterCredentials {
   email: string;
   password: string;
+  username: string;
 }
 
 export interface LoginCredentials {
