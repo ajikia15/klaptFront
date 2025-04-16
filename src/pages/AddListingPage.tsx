@@ -38,7 +38,7 @@ const vramOptions = ["2", "3", "4", "6", "8", "10", "12", "16", "24", "48"];
 const backlightTypeOptions = ["RGB", "Single-color", "None"];
 const ramOptions = ["4", "8", "12", "16", "24", "32", "64", "96", "128"];
 
-export default function AddListingPage2() {
+export default function AddListingPage() {
   const [formStatus, setFormStatus] = useState<
     "idle" | "submitting" | "success" | "error"
   >("idle");
@@ -220,7 +220,6 @@ export default function AddListingPage2() {
     form.reset(newValues);
   }
 
-  // --- Image Upload Logic (preserved) ---
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
