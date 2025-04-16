@@ -164,6 +164,61 @@ export default function AddListingPage2() {
       }
     },
   });
+  function handleFillTestData() {
+    const testData = {
+      title: "Lenovo Legion 5",
+      price: "1100",
+      brand: "Lenovo",
+      model: "Legion 5",
+      shortDesc: "Short description",
+      description: "Full description",
+      year: "2021",
+      stockStatus: "in stock",
+      condition: "used",
+      processorBrand: "AMD",
+      processorModel: "Ryzen 7 4800H",
+      cores: "8",
+      threads: "16",
+      graphicsType: "Dedicated",
+      gpuBrand: "NVIDIA",
+      gpuModel: "RTX 4060Ti",
+      vram: "6",
+      ram: "16",
+      ramType: "DDR4",
+      storageType: "SSD",
+      storageCapacity: "512",
+      screenSize: "15.6",
+      screenResolution: "1920x1080",
+      refreshRate: "144",
+      weight: "2.3",
+      backlightType: "RGB",
+      tag: ["gaming", "productivity"],
+      images: ["https://placehold.co/800x600/111827/eee?text=Test+Image"],
+    };
+
+    // We assume form.state.values has the same keys as defaultValues.
+    type FormValues = typeof form.state.values;
+    const newValues: FormValues = { ...form.state.values };
+
+    for (const [key, value] of Object.entries(testData)) {
+      const k = key as keyof FormValues;
+      const currentVal = newValues[k];
+
+      if (Array.isArray(currentVal)) {
+        if (currentVal.length === 0) {
+          newValues[k] = Array.isArray(value) ? value : ([value] as any);
+        }
+      } else {
+        if (!currentVal) {
+          newValues[k] = Array.isArray(value)
+            ? value.join(",")
+            : (value as any);
+        }
+      }
+    }
+
+    form.reset(newValues);
+  }
 
   // --- Image Upload Logic (preserved) ---
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -215,7 +270,6 @@ export default function AddListingPage2() {
     setUploadedImages(uploadedImages.filter((_, i) => i !== index));
   };
 
-  // --- UI ---
   return (
     <div className="min-h-screen bg-neutral-900 text-neutral-200 py-10">
       <div className="container mx-auto px-4">
@@ -379,7 +433,6 @@ export default function AddListingPage2() {
                   </div>
                 )}
               </form.Field>
-              {/* Short Desc (required) */}
               <form.Field
                 name="shortDesc"
                 validators={{
@@ -1369,6 +1422,13 @@ export default function AddListingPage2() {
                     <span>Create Listing</span>
                   </>
                 )}
+              </button>
+              <button
+                type="button"
+                onClick={handleFillTestData}
+                className="px-4 py-2 bg-blue-600 text-white rounded-md ml-4"
+              >
+                Fill with Test Data
               </button>
             </div>
           </form>
