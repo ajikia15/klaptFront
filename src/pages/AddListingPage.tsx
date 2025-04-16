@@ -48,7 +48,6 @@ export default function AddListingPage() {
   const [graphicsType, setGraphicsType] = useState<string>("");
   const navigate = useNavigate();
 
-  // --- Tanstack Form Setup ---
   const form = useForm({
     defaultValues: {
       title: "",

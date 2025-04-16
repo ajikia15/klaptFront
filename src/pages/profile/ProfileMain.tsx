@@ -1,20 +1,59 @@
 import { useAuth } from "@/context/AuthContext";
-import { Mail, User, Settings, Book, Shield, Pencil, Save } from "lucide-react";
+import {
+  Mail,
+  User,
+  Settings,
+  Book,
+  Shield,
+  Pencil,
+  Save,
+  Loader,
+  X,
+} from "lucide-react";
 import { useSearchLaptops } from "@/hooks/useSearch";
 import { useState } from "react";
-
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { useForm } from "@tanstack/react-form";
 export default function ProfileMain() {
+  const [hasEdited, setHasEdited] = useState(false);
+
+  const [editMode, setEditMode] = useState(false);
+
+  const handleSaveButton = () => {
+    setHasEdited(false);
+    setEditMode(false);
+  };
+
+  const handleEditButton = () => {
+    setEditMode(true);
+  };
+
+  const handleResetButton = () => {
+    setHasEdited(false);
+    setEditMode(false);
+  };
+
   const { user } = useAuth();
   const isAdmin = user?.admin || false;
 
+  const form = useForm({
+    defaultValues: { username: user?.username || "" },
+    onSubmit: async ({ value }) => {
+      // await updateUsername(value.username);
+    },
+  });
+
   // Fetch user's laptops
   const { laptops: userLaptops, isLoading } = useSearchLaptops("", user?.id);
-
-  const [hasEdited, setHasEdited] = useState(false);
-
-  const handleEditButton = () => {
-    setHasEdited(true);
-  };
 
   const newUserValue = {
     username: user?.username,
@@ -45,9 +84,36 @@ export default function ProfileMain() {
                     {user?.username || "Not set"}
                   </span>
                 </div>
-                <button className="group-hover:opacity-100 opacity-0 transition-opacity duration-300">
-                  <Pencil size={18} className="text-secondary-400 ml-3" />
-                </button>
+
+                <Dialog>
+                  <DialogTrigger
+                    className={`transition-opacity duration-300  flex-row items-center ${
+                      editMode ? "flex opacity-100" : "opacity-0 hidden"
+                    } `}
+                  >
+                    <Pencil size={18} className="text-neutral-400 ml-3" />
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Change Username</DialogTitle>
+                      <DialogDescription>
+                        This action cannot be undone. This will permanently
+                        delete your account and remove your data from our
+                        servers.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <form.Field
+                      name="username"
+                      children={(field) => (
+                        <input
+                          value={field.state.value}
+                          type="text"
+                          onChange={(e) => field.handleChange(e.target.value)}
+                        />
+                      )}
+                    />
+                  </DialogContent>
+                </Dialog>
               </div>
             </div>
 
@@ -108,17 +174,34 @@ export default function ProfileMain() {
             </div>
           </div>
         </div>
-        {hasEdited && (
-          <div className="mt-8">
+        <div className="mt-8 flex flex-row gap-4">
+          {editMode ? (
+            <>
+              <button
+                onClick={handleSaveButton}
+                disabled={!hasEdited}
+                className="py-3 px-6 bg-secondary-600 disabled:opacity-50 hover:bg-secondary-700 text-white font-medium rounded-lg transition-colors duration-300 flex items-center gap-2"
+              >
+                <Save size={18} />
+                Save Changes
+              </button>
+              <button
+                onClick={handleResetButton}
+                className="py-3 px-6 bg-secondary-600 hover:bg-secondary-700 text-white font-medium rounded-lg transition-colors duration-300 flex items-center gap-2"
+              >
+                <X size={18} />
+              </button>
+            </>
+          ) : (
             <button
               onClick={handleEditButton}
               className="py-3 px-6 bg-secondary-600 hover:bg-secondary-700 text-white font-medium rounded-lg transition-colors duration-300 flex items-center gap-2"
             >
-              <Save size={18} />
-              Save Changes
+              <Pencil size={18} />
+              Edit
             </button>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
