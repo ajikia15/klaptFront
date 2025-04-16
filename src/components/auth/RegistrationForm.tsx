@@ -36,7 +36,6 @@ export const RegistrationForm = () => {
 
         setFormStatus("success");
 
-        // Redirect to home page after successful registration
         setTimeout(() => {
           navigate({ to: "/" });
         }, 1000);

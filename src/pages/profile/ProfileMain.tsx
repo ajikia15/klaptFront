@@ -1,30 +1,13 @@
 import { useAuth } from "@/context/AuthContext";
-import {
-  Mail,
-  User,
-  Settings,
-  Book,
-  Shield,
-  Pencil,
-  Save,
-  Loader,
-  X,
-} from "lucide-react";
+import { Mail, User, Book, Shield, Pencil, Save, X } from "lucide-react";
 import { useSearchLaptops } from "@/hooks/useSearch";
 import { useState } from "react";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { useUpdateUser } from "@/hooks/useAuth";
 import { useForm } from "@tanstack/react-form";
+
 export default function ProfileMain() {
   const { user } = useAuth();
+  if (!user) return <div>loading...</div>;
   const isAdmin = user?.admin || false;
   const [editUsername, setEditUsername] = useState(false);
   const [usernameValue, setUsernameValue] = useState(user?.username || "");
@@ -42,15 +25,19 @@ export default function ProfileMain() {
     setUsernameValue(user?.username || "");
     setHasEdited(false);
   };
-  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUsernameValue(e.target.value);
-    setHasEdited(e.target.value !== user?.username);
-  };
-  const handleSaveUsername = async () => {
-    // TODO: Call updateUsername(usernameValue) here
-    setEditUsername(false);
-    setHasEdited(false);
-  };
+
+  const updateUser = useUpdateUser();
+  const form = useForm({
+    defaultValues: { username: user!.username.toString() },
+    onSubmit: async ({ value }) => {
+      updateUser.mutate({
+        id: user!.id.toString(),
+        username: value.username,
+      });
+      setEditUsername(false);
+      setHasEdited(false);
+    },
+  });
 
   return (
     <div className="bg-gradient-to-br from-neutral-800/70 to-neutral-900/90 rounded-2xl border border-neutral-700/50 p-8 relative overflow-hidden transition-all duration-300 hover:shadow-[0_4px_20px_rgba(79,38,144,0.15)]">
@@ -71,43 +58,55 @@ export default function ProfileMain() {
                 <User size={22} className="text-secondary-400" />
               </div>
               <div className="flex flex-1 items-center justify-between gap-4">
-                <div className="flex flex-col">
+                <div className="flex flex-col w-48 min-h-[40px]">
                   <span className="text-xs text-neutral-400 font-semibold uppercase tracking-wide mb-1">
                     Username
                   </span>
                   {editUsername ? (
-                    <input
-                      className="bg-neutral-700/60 border border-secondary-500 rounded px-2 py-1 text-neutral-100 focus:outline-none focus:ring-2 focus:ring-secondary-500 transition-all w-48"
-                      value={usernameValue}
-                      onChange={handleUsernameChange}
-                      autoFocus
-                    />
+                    <form onSubmit={form.handleSubmit} className="w-full">
+                      <div className="flex items-center gap-2">
+                        <form.Field name="username">
+                          {(field) => (
+                            <input
+                              className="w-full bg-neutral-700/60 border border-secondary-500 rounded px-2 py-1 text-neutral-100 focus:outline-none focus:ring-2 focus:ring-secondary-500 transition-all min-h-[28px]"
+                              value={field.state.value}
+                              onChange={(e) => {
+                                field.handleChange(e.target.value);
+                                setHasEdited(e.target.value !== user?.username);
+                              }}
+                              autoFocus
+                            />
+                          )}
+                        </form.Field>
+                        <button
+                          type="submit"
+                          disabled={
+                            !hasEdited ||
+                            form.state.values.username.trim() === ""
+                          }
+                          className="p-1 rounded bg-secondary-600 hover:bg-secondary-700 text-white disabled:opacity-50 transition-colors"
+                          title="Save"
+                        >
+                          <Save size={16} />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleCancelEdit}
+                          className="p-1 rounded bg-neutral-700 hover:bg-neutral-600 text-neutral-300 transition-colors"
+                          title="Cancel"
+                        >
+                          <X size={16} />
+                        </button>
+                      </div>
+                    </form>
                   ) : (
-                    <span className="text-lg text-neutral-200 font-semibold">
+                    <span className="w-full block truncate text-lg text-neutral-200 font-semibold min-h-[28px]">
                       {user?.username || "Not set"}
                     </span>
                   )}
                 </div>
                 <div className="flex items-center gap-1">
-                  {editUsername ? (
-                    <>
-                      <button
-                        onClick={handleSaveUsername}
-                        disabled={!hasEdited || usernameValue.trim() === ""}
-                        className="p-1 rounded bg-secondary-600 hover:bg-secondary-700 text-white disabled:opacity-50 transition-colors"
-                        title="Save"
-                      >
-                        <Save size={16} />
-                      </button>
-                      <button
-                        onClick={handleCancelEdit}
-                        className="p-1 rounded bg-neutral-700 hover:bg-neutral-600 text-neutral-300 transition-colors"
-                        title="Cancel"
-                      >
-                        <X size={16} />
-                      </button>
-                    </>
-                  ) : (
+                  {!editUsername && (
                     <button
                       onClick={handleEditUsername}
                       className="p-1 rounded hover:bg-neutral-700 transition-colors"
@@ -124,15 +123,13 @@ export default function ProfileMain() {
               <div className="flex-shrink-0 bg-secondary-700/20 rounded-full p-2">
                 <Mail size={22} className="text-secondary-400" />
               </div>
-              <div className="flex flex-1 items-center justify-between gap-4">
-                <div className="flex flex-col">
-                  <span className="text-xs text-neutral-400 font-semibold uppercase tracking-wide mb-1">
-                    Email Address
-                  </span>
-                  <span className="text-lg text-neutral-200 font-semibold">
-                    {user?.email}
-                  </span>
-                </div>
+              <div className="flex flex-col flex-1">
+                <span className="text-xs text-neutral-400 font-semibold uppercase tracking-wide mb-1">
+                  Email Address
+                </span>
+                <span className="text-lg text-neutral-200 font-semibold">
+                  {user?.email}
+                </span>
               </div>
             </div>
           </div>
@@ -145,21 +142,19 @@ export default function ProfileMain() {
                   className={isAdmin ? "text-amber-400" : "text-secondary-400"}
                 />
               </div>
-              <div className="flex flex-1 items-center justify-between gap-4">
-                <div className="flex flex-col">
-                  <span className="text-xs text-neutral-400 font-semibold uppercase tracking-wide mb-1">
-                    Account Type
-                  </span>
-                  <span
-                    className={
-                      isAdmin
-                        ? "text-lg text-amber-200 font-semibold"
-                        : "text-lg text-neutral-200 font-semibold"
-                    }
-                  >
-                    {isAdmin ? "Administrator" : "Standard User"}
-                  </span>
-                </div>
+              <div className="flex flex-col flex-1">
+                <span className="text-xs text-neutral-400 font-semibold uppercase tracking-wide mb-1">
+                  Account Type
+                </span>
+                <span
+                  className={
+                    isAdmin
+                      ? "text-lg text-amber-200 font-semibold"
+                      : "text-lg text-neutral-200 font-semibold"
+                  }
+                >
+                  {isAdmin ? "Administrator" : "Standard User"}
+                </span>
               </div>
             </div>
             {/* Activity Card */}
@@ -167,24 +162,22 @@ export default function ProfileMain() {
               <div className="flex-shrink-0 bg-secondary-700/20 rounded-full p-2">
                 <Book size={22} className="text-secondary-400" />
               </div>
-              <div className="flex flex-1 items-center justify-between gap-4">
-                <div className="flex flex-col">
-                  <span className="text-xs text-neutral-400 font-semibold uppercase tracking-wide mb-1">
-                    Activity
-                  </span>
-                  <span className="text-lg text-neutral-200 font-semibold">
-                    {isLoading ? (
-                      <span className="text-neutral-400">Loading...</span>
-                    ) : userLaptops ? (
-                      <>
-                        {userLaptops.length} laptop
-                        {userLaptops.length !== 1 ? "s" : ""} posted
-                      </>
-                    ) : (
-                      "0 laptops posted"
-                    )}
-                  </span>
-                </div>
+              <div className="flex flex-col flex-1">
+                <span className="text-xs text-neutral-400 font-semibold uppercase tracking-wide mb-1">
+                  Activity
+                </span>
+                <span className="text-lg text-neutral-200 font-semibold">
+                  {isLoading ? (
+                    <span className="text-neutral-400">Loading...</span>
+                  ) : userLaptops ? (
+                    <>
+                      {userLaptops.length} laptop
+                      {userLaptops.length !== 1 ? "s" : ""} posted
+                    </>
+                  ) : (
+                    "0 laptops posted"
+                  )}
+                </span>
               </div>
             </div>
           </div>

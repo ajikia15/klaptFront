@@ -42,4 +42,11 @@ export const authService = {
       method: "POST",
     });
   },
+
+  updateUser: async (userId: string, data: Partial<User>) => {
+    return apiRequest<User>(`/auth/${userId}`, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    });
+  },
 };

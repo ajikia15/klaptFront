@@ -96,3 +96,15 @@ export const useGetUsers = () => {
     },
   });
 };
+export const useUpdateUser = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, ...data }: { id: string; [key: string]: any }) =>
+      authService.updateUser(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [USER_QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
+  });
+};
