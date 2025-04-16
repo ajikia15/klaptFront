@@ -29,4 +29,5 @@ export type LaptopT = {
   stockStatus: "reserved" | "sold" | "in stock";
   status: "approved" | "pending" | "rejected" | "archived";
   userId: number;
+  condition: "new" | "used" | "refurbished";
 };
