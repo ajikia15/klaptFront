@@ -14,7 +14,7 @@ import FavoritesPage from "./pages/FavoritesPage";
 import ProfilePage from "./pages/ProfilePage";
 import { useRequireAuth } from "./hooks/useRequireAuth";
 import { ReactNode } from "react";
-import AddListingPage from "./pages/AddListingPage1";
+import AddListingPage from "./pages/AddListingPage";
 import UserManagement from "./pages/admin/UserManagement";
 import ContentModeration from "./pages/admin/ContentModeration";
 import Statistics from "./pages/admin/Statistics";
