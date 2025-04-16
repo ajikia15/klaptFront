@@ -104,7 +104,6 @@ export const useUpdateUser = () => {
       authService.updateUser(id, data),
     onMutate: async ({ id, ...newData }) => {
       await queryClient.cancelQueries({ queryKey: [USER_QUERY_KEY] });
-
       const previousUser = queryClient.getQueryData([USER_QUERY_KEY]);
 
       queryClient.setQueryData([USER_QUERY_KEY], (old: any) => ({
@@ -116,9 +115,6 @@ export const useUpdateUser = () => {
     },
     onError: (err, newData, context: any) => {
       queryClient.setQueryData([USER_QUERY_KEY], context.previousUser);
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: [USER_QUERY_KEY] });
     },
   });
 };
