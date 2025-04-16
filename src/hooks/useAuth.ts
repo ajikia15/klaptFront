@@ -102,9 +102,23 @@ export const useUpdateUser = () => {
   return useMutation({
     mutationFn: ({ id, ...data }: { id: string; [key: string]: any }) =>
       authService.updateUser(id, data),
-    onSuccess: () => {
+    onMutate: async ({ id, ...newData }) => {
+      await queryClient.cancelQueries({ queryKey: [USER_QUERY_KEY] });
+
+      const previousUser = queryClient.getQueryData([USER_QUERY_KEY]);
+
+      queryClient.setQueryData([USER_QUERY_KEY], (old: any) => ({
+        ...old,
+        ...newData,
+      }));
+
+      return { previousUser };
+    },
+    onError: (err, newData, context: any) => {
+      queryClient.setQueryData([USER_QUERY_KEY], context.previousUser);
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: [USER_QUERY_KEY] });
-      queryClient.invalidateQueries({ queryKey: ["users"] });
     },
   });
 };

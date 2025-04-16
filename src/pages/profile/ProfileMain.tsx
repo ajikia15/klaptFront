@@ -4,40 +4,51 @@ import { useSearchLaptops } from "@/hooks/useSearch";
 import { useState } from "react";
 import { useUpdateUser } from "@/hooks/useAuth";
 import { useForm } from "@tanstack/react-form";
+import { useToasts } from "@/assets/Toasts";
 
 export default function ProfileMain() {
+  const { userUpdateSuccessToast, userUpdateErrorToast } = useToasts();
   const { user } = useAuth();
-  if (!user) return <div>loading...</div>;
-  const isAdmin = user?.admin || false;
   const [editUsername, setEditUsername] = useState(false);
-  const [usernameValue, setUsernameValue] = useState(user?.username || "");
   const [hasEdited, setHasEdited] = useState(false);
+  const { laptops: userLaptops, isLoading } = useSearchLaptops(
+    "",
+    user?.id ? user.id : undefined
+  );
+  const updateUser = useUpdateUser();
 
-  // Fetch user's laptops
-  const { laptops: userLaptops, isLoading } = useSearchLaptops("", user?.id);
+  const form = useForm({
+    defaultValues: { username: user?.username || "" },
+    onSubmit: async ({ value }) => {
+      if (!user) return;
+      try {
+        await updateUser.mutateAsync({
+          id: user.id.toString(),
+          username: value.username,
+        });
+        userUpdateSuccessToast();
+        setEditUsername(false);
+        setHasEdited(false);
+      } catch (error) {
+        userUpdateErrorToast("Failed to update username. Please try again.");
+      }
+    },
+  });
+
+  if (!user) return <div>Loading...</div>;
+
+  const isAdmin = user.admin;
 
   const handleEditUsername = () => {
     setEditUsername(true);
-    setUsernameValue(user?.username || "");
-  };
-  const handleCancelEdit = () => {
-    setEditUsername(false);
-    setUsernameValue(user?.username || "");
-    setHasEdited(false);
+    form.reset({ username: user.username });
   };
 
-  const updateUser = useUpdateUser();
-  const form = useForm({
-    defaultValues: { username: user!.username.toString() },
-    onSubmit: async ({ value }) => {
-      updateUser.mutate({
-        id: user!.id.toString(),
-        username: value.username,
-      });
-      setEditUsername(false);
-      setHasEdited(false);
-    },
-  });
+  const handleCancelEdit = () => {
+    setEditUsername(false);
+    form.reset({ username: user.username });
+    setHasEdited(false);
+  };
 
   return (
     <div className="bg-gradient-to-br from-neutral-800/70 to-neutral-900/90 rounded-2xl border border-neutral-700/50 p-8 relative overflow-hidden transition-all duration-300 hover:shadow-[0_4px_20px_rgba(79,38,144,0.15)]">
@@ -72,7 +83,7 @@ export default function ProfileMain() {
                               value={field.state.value}
                               onChange={(e) => {
                                 field.handleChange(e.target.value);
-                                setHasEdited(e.target.value !== user?.username);
+                                setHasEdited(e.target.value !== user.username);
                               }}
                               autoFocus
                             />
@@ -82,12 +93,17 @@ export default function ProfileMain() {
                           type="submit"
                           disabled={
                             !hasEdited ||
-                            form.state.values.username.trim() === ""
+                            form.state.values.username.trim() === "" ||
+                            updateUser.isPending
                           }
                           className="p-1 rounded bg-secondary-600 hover:bg-secondary-700 text-white disabled:opacity-50 transition-colors"
                           title="Save"
                         >
-                          <Save size={16} />
+                          {updateUser.isPending ? (
+                            <span className="animate-spin">⌛</span>
+                          ) : (
+                            <Save size={16} />
+                          )}
                         </button>
                         <button
                           type="button"
@@ -101,7 +117,7 @@ export default function ProfileMain() {
                     </form>
                   ) : (
                     <span className="w-full block truncate text-lg text-neutral-200 font-semibold min-h-[28px]">
-                      {user?.username || "Not set"}
+                      {user.username}
                     </span>
                   )}
                 </div>
@@ -128,7 +144,7 @@ export default function ProfileMain() {
                   Email Address
                 </span>
                 <span className="text-lg text-neutral-200 font-semibold">
-                  {user?.email}
+                  {user.email}
                 </span>
               </div>
             </div>
@@ -175,7 +191,7 @@ export default function ProfileMain() {
                       {userLaptops.length !== 1 ? "s" : ""} posted
                     </>
                   ) : (
-                    "0 laptops posted"
+                    "No laptops posted"
                   )}
                 </span>
               </div>

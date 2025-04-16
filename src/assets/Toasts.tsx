@@ -46,6 +46,22 @@ export const useToasts = () => {
       });
     },
 
+    userUpdateSuccessToast: () => {
+      toast.success("User updated successfully!", {
+        description: "Your username has been updated.",
+        position: "top-right",
+        classNames: commonClassNames,
+      });
+    },
+
+    userUpdateErrorToast: (message: string) => {
+      toast.error("Error", {
+        description: message,
+        position: "top-right",
+        classNames: commonClassNames,
+      });
+    },
+
     // Action toasts
     copyToClipboardToast: (text: string) => {
       navigator.clipboard.writeText(text);
