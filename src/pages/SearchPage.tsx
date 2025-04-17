@@ -491,12 +491,43 @@ export default function SearchPage() {
             <div className="relative mb-4 rounded-md bg-neutral-900 py-4">
               <FilterHeader />
               <div className="space-y-4">
-                {/* Show All Filters button - moved to top */}
+                {/* Filter accordions */}
+                <Accordion
+                  type="multiple"
+                  defaultValue={filterSections
+                    .filter((section) => section.isPrimary)
+                    .map((section) => section.filterKey)}
+                  className="space-y-2"
+                >
+                  {filterSections
+                    .filter(
+                      (section) =>
+                        section.isPrimary && hasOptions(section.optionsKey)
+                    )
+                    .map((section) => (
+                      <AccordionItem
+                        key={section.filterKey}
+                        value={section.filterKey}
+                        className="overflow-hidden rounded-lg border border-neutral-700/50"
+                      >
+                        <AccordionTrigger className="bg-neutral-800/50 px-4 py-2 hover:bg-neutral-800 hover:no-underline data-[state=open]:bg-neutral-800">
+                          <div className="flex w-full items-center justify-between">
+                            <span className="text-base font-bold text-neutral-200">
+                              {section.title}
+                            </span>
+                          </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="bg-neutral-900 px-4 py-3">
+                          <FilterSection section={section} maxItems={5} />
+                        </AccordionContent>
+                      </AccordionItem>
+                    ))}
+                </Accordion>
                 <Sheet>
                   <SheetTrigger asChild>
                     <Button
                       variant="outline"
-                      className="mb-4 w-full border-neutral-700 bg-neutral-800 text-neutral-300"
+                      className="mb-4 w-full border-neutral-700 bg-neutral-800 text-neutral-200 hover:bg-neutral-700 hover:text-neutral-200"
                     >
                       <Filter size={16} className="mr-2" />
                       Show All Filters
@@ -595,40 +626,6 @@ export default function SearchPage() {
                     </div>
                   </SheetContent>
                 </Sheet>
-
-                {/* Filter accordions */}
-                <Accordion
-                  type="multiple"
-                  defaultValue={filterSections
-                    .filter((section) => section.isPrimary)
-                    .map((section) => section.filterKey)}
-                  className="space-y-2"
-                >
-                  {filterSections
-                    .filter(
-                      (section) =>
-                        section.isPrimary && hasOptions(section.optionsKey)
-                    )
-                    .map((section) => (
-                      <AccordionItem
-                        key={section.filterKey}
-                        value={section.filterKey}
-                        className="overflow-hidden rounded-lg border border-neutral-700/50"
-                      >
-                        <AccordionTrigger className="bg-neutral-800/50 px-4 py-2 hover:bg-neutral-800 hover:no-underline data-[state=open]:bg-neutral-800">
-                          <div className="flex w-full items-center justify-between">
-                            <span className="text-base font-bold text-neutral-200">
-                              {section.title}
-                            </span>
-                          </div>
-                        </AccordionTrigger>
-                        <AccordionContent className="bg-neutral-900 px-4 py-3">
-                          <FilterSection section={section} maxItems={5} />
-                        </AccordionContent>
-                      </AccordionItem>
-                    ))}
-                </Accordion>
-
                 {/* Display active filters */}
                 {hasActiveFilters && (
                   <div className="mt-4 border-t border-neutral-700/30 pt-4">

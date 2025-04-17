@@ -3,7 +3,6 @@ import { Link } from "@tanstack/react-router";
 import { ArrowRight, Maximize2 } from "@deemlol/next-icons";
 import { Badge } from "@/components/ui/badge";
 import HeartBtn from "./HeartBtn";
-import LaptopTags from "./LaptopTags";
 import { LaptopT } from "@/interfaces/laptopT";
 
 interface LaptopCardProps extends LaptopT {
@@ -59,22 +58,22 @@ export const LaptopCard: FC<LaptopCardProps> = (laptop) => {
 
           <div className="mb-4 space-x-2 space-y-1">
             {laptop.gpuBrand.toLowerCase().includes("nvidia") && (
-              <Badge className="cursor-pointer border border-neutral-700/20 bg-neutral-800 font-bold shadow-sm transition-all hover:bg-green-600/80">
+              <Badge className="cursor-pointer border border-neutral-700/20 bg-green-700/80 font-bold shadow-sm transition-all hover:bg-green-600/80">
                 {laptop.gpuModel}
               </Badge>
             )}
             {laptop.gpuBrand.toLowerCase().includes("AMD") && (
-              <Badge className="cursor-pointer border border-neutral-700/20 bg-neutral-800 font-bold shadow-sm transition-all hover:bg-red-500/80">
+              <Badge className="cursor-pointer border border-neutral-700/20 bg-red-600/80 font-bold shadow-sm transition-all hover:bg-red-500/80">
                 {laptop.gpuModel}
               </Badge>
             )}
             {laptop.processorBrand.includes("Intel") && (
-              <Badge className="cursor-pointer border border-neutral-700/20 bg-neutral-800 font-bold shadow-sm transition-all hover:bg-blue-500/80">
+              <Badge className="cursor-pointer border border-neutral-700/20 bg-blue-600/80 font-bold shadow-sm transition-all hover:bg-blue-500/80">
                 {laptop.processorModel}
               </Badge>
             )}
             {laptop.processorBrand.toLowerCase().includes("amd") && (
-              <Badge className="cursor-pointer border border-neutral-700/20 bg-neutral-800 font-bold shadow-sm transition-all hover:bg-red-500/80">
+              <Badge className="cursor-pointer border border-neutral-700/20 bg-red-600/80 font-bold shadow-sm transition-all hover:bg-red-500/80">
                 {laptop.processorModel}
               </Badge>
             )}
