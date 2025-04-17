@@ -396,7 +396,7 @@ export default function SearchPage() {
               (displayFilters[optionsKey] as FilterOption[]).length >
                 maxItems &&
               !inAccordion && (
-                <div className="mt-1 pt-1 border-t border-neutral-700/30">
+                <div className="mt-1 border-t border-neutral-700/30 pt-1">
                   <Sheet>
                     <SheetTrigger asChild>
                       <Button
@@ -411,10 +411,10 @@ export default function SearchPage() {
                     </SheetTrigger>
                     <SheetContent
                       side="right"
-                      className="w-[400px] bg-neutral-900 border-neutral-700/50"
+                      className="w-[400px] border-neutral-700/50 bg-neutral-900"
                     >
                       <SheetHeader>
-                        <SheetTitle className="text-white flex items-center justify-between">
+                        <SheetTitle className="flex items-center justify-between text-white">
                           <span>{section.title}</span>
                         </SheetTitle>
                       </SheetHeader>
@@ -443,12 +443,12 @@ export default function SearchPage() {
             values.map((value: string) => (
               <Badge
                 key={`${key}-${value}`}
-                className="px-2 py-1 bg-neutral-800 hover:bg-neutral-700 text-white border-neutral-700/50 cursor-pointer transition-all hover:shadow-md"
+                className="cursor-pointer border-neutral-700/50 bg-neutral-800 px-2 py-1 text-white transition-all hover:bg-neutral-700 hover:shadow-md"
                 variant="outline"
                 onClick={() => toggleFilter(key as FilterKey, value)}
               >
                 <X size={12} className="text-neutral-400" />
-                <span className="text-neutral-400 text-xs mr-1">
+                <span className="mr-1 text-xs text-neutral-400">
                   {filterSections.find((f) => f.filterKey === key)?.title}:
                 </span>
                 <span>{value}</span>
@@ -461,7 +461,7 @@ export default function SearchPage() {
 
   // Main header of the filter section - showing loading state properly
   const FilterHeader = () => (
-    <div className="flex mb-4 items-center justify-between">
+    <div className="mb-4 flex items-center justify-between">
       <h2 className="text-xl font-semibold">Filters</h2>
       <div className="flex items-center space-x-2">
         {isFilterRefetching || isLoading ? (
@@ -477,9 +477,9 @@ export default function SearchPage() {
   return (
     <div className="min-h-screen bg-neutral-900 text-neutral-200">
       {/* Header Area with page title and basic info */}
-      <div className="bg-neutral-800/80 py-6 border-b border-neutral-700/50 sticky top-0 z-20 backdrop-blur-sm">
+      <div className="sticky top-0 z-20 border-b border-neutral-700/50 bg-neutral-800/80 py-6 backdrop-blur-sm">
         <div className="container mx-auto px-4">
-          <h1 className="text-2xl md:text-3xl font-bold">Search Laptops</h1>
+          <h1 className="text-2xl font-bold md:text-3xl">Search Laptops</h1>
         </div>
       </div>
 
@@ -488,7 +488,7 @@ export default function SearchPage() {
         <div className="flex flex-col gap-6 md:flex-row">
           {/* Filters sidebar - only visible on desktop */}
           <div className="hidden md:block md:w-1/4 xl:w-1/5">
-            <div className="mb-4 rounded-md bg-neutral-900 py-4 relative">
+            <div className="relative mb-4 rounded-md bg-neutral-900 py-4">
               <FilterHeader />
               <div className="space-y-4">
                 {/* Show All Filters button - moved to top */}
@@ -496,12 +496,12 @@ export default function SearchPage() {
                   <SheetTrigger asChild>
                     <Button
                       variant="outline"
-                      className="w-full mb-4 border-neutral-700 text-neutral-300 bg-neutral-800 "
+                      className="mb-4 w-full border-neutral-700 bg-neutral-800 text-neutral-300"
                     >
                       <Filter size={16} className="mr-2" />
                       Show All Filters
                       {activeFiltersCount > 0 && (
-                        <span className="ml-2 bg-primary-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                        <span className="ml-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary-600 text-xs text-white">
                           {activeFiltersCount}
                         </span>
                       )}
@@ -509,10 +509,10 @@ export default function SearchPage() {
                   </SheetTrigger>
                   <SheetContent
                     side="right"
-                    className="bg-neutral-900 border-neutral-700 w-[400px]"
+                    className="w-[400px] border-neutral-700 bg-neutral-900"
                   >
                     <SheetHeader>
-                      <SheetTitle className="text-white flex items-center justify-between">
+                      <SheetTitle className="flex items-center justify-between text-white">
                         <div className="flex items-center">
                           <Filter size={16} className="mr-2 text-primary-400" />
                           All Filters
@@ -525,7 +525,7 @@ export default function SearchPage() {
                               resetFilters();
                               setSearchTerm("");
                             }}
-                            className="text-neutral-400 hover:text-white border-neutral-700 hover:bg-neutral-800"
+                            className="border-neutral-700 text-neutral-400 hover:bg-neutral-800 hover:text-white"
                           >
                             <X size={14} className="mr-1" />
                             Reset All
@@ -548,16 +548,16 @@ export default function SearchPage() {
                             <AccordionItem
                               key={section.filterKey}
                               value={section.filterKey}
-                              className="border border-neutral-700/50 rounded-lg overflow-hidden"
+                              className="overflow-hidden rounded-lg border border-neutral-700/50"
                             >
-                              <AccordionTrigger className="px-4 py-2 hover:no-underline bg-neutral-800/50 hover:bg-neutral-800 data-[state=open]:bg-neutral-800">
-                                <div className="flex items-center justify-between w-full">
-                                  <span className="text-neutral-200 font-bold">
+                              <AccordionTrigger className="bg-neutral-800/50 px-4 py-2 hover:bg-neutral-800 hover:no-underline data-[state=open]:bg-neutral-800">
+                                <div className="flex w-full items-center justify-between">
+                                  <span className="font-bold text-neutral-200">
                                     {section.title}
                                   </span>
                                 </div>
                               </AccordionTrigger>
-                              <AccordionContent className="px-4 py-3 bg-neutral-900">
+                              <AccordionContent className="bg-neutral-900 px-4 py-3">
                                 <FilterSection
                                   section={section}
                                   inAccordion={true}
@@ -569,10 +569,10 @@ export default function SearchPage() {
 
                       {/* Active Filters in Sheet */}
                       {hasActiveFilters && (
-                        <div className="mt-6 pt-6 border-t border-neutral-700/30">
-                          <div className="px-1 mb-3">
-                            <h3 className="text-sm font-medium text-white flex items-center">
-                              <span className="h-1 w-4 bg-primary-500 rounded-full mr-2"></span>
+                        <div className="mt-6 border-t border-neutral-700/30 pt-6">
+                          <div className="mb-3 px-1">
+                            <h3 className="flex items-center text-sm font-medium text-white">
+                              <span className="mr-2 h-1 w-4 rounded-full bg-primary-500"></span>
                               Applied Filters
                             </h3>
                           </div>
@@ -585,7 +585,7 @@ export default function SearchPage() {
                                 resetFilters();
                                 setSearchTerm("");
                               }}
-                              className="mt-3 text-neutral-400 hover:text-white hover:bg-neutral-800/70 text-xs"
+                              className="mt-3 text-xs text-neutral-400 hover:bg-neutral-800/70 hover:text-white"
                             >
                               Clear All Filters
                             </Button>
@@ -613,16 +613,16 @@ export default function SearchPage() {
                       <AccordionItem
                         key={section.filterKey}
                         value={section.filterKey}
-                        className="border border-neutral-700/50 rounded-lg overflow-hidden"
+                        className="overflow-hidden rounded-lg border border-neutral-700/50"
                       >
-                        <AccordionTrigger className="px-4 py-2 hover:no-underline bg-neutral-800/50 hover:bg-neutral-800 data-[state=open]:bg-neutral-800">
-                          <div className="flex items-center justify-between w-full">
-                            <span className="text-neutral-200 font-bold text-base">
+                        <AccordionTrigger className="bg-neutral-800/50 px-4 py-2 hover:bg-neutral-800 hover:no-underline data-[state=open]:bg-neutral-800">
+                          <div className="flex w-full items-center justify-between">
+                            <span className="text-base font-bold text-neutral-200">
                               {section.title}
                             </span>
                           </div>
                         </AccordionTrigger>
-                        <AccordionContent className="px-4 py-3 bg-neutral-900">
+                        <AccordionContent className="bg-neutral-900 px-4 py-3">
                           <FilterSection section={section} maxItems={5} />
                         </AccordionContent>
                       </AccordionItem>
@@ -631,9 +631,9 @@ export default function SearchPage() {
 
                 {/* Display active filters */}
                 {hasActiveFilters && (
-                  <div className="mt-4 pt-4 border-t border-neutral-700/30">
-                    <h3 className="text-sm font-medium text-white mb-2 flex items-center">
-                      <span className="h-1 w-4 bg-primary-500 rounded-full mr-2"></span>
+                  <div className="mt-4 border-t border-neutral-700/30 pt-4">
+                    <h3 className="mb-2 flex items-center text-sm font-medium text-white">
+                      <span className="mr-2 h-1 w-4 rounded-full bg-primary-500"></span>
                       Applied Filters
                     </h3>
                     <ActiveFiltersComponent />
@@ -644,7 +644,7 @@ export default function SearchPage() {
                         resetFilters();
                         setSearchTerm("");
                       }}
-                      className="mt-2 text-neutral-400 hover:text-white hover:bg-neutral-800/70 text-xs"
+                      className="mt-2 text-xs text-neutral-400 hover:bg-neutral-800/70 hover:text-white"
                     >
                       Clear All Filters
                     </Button>
@@ -656,11 +656,11 @@ export default function SearchPage() {
 
           <div className="w-full md:w-3/4">
             {/* Search, sort and filter controls */}
-            <div className="mb-6 rounded-lg bg-neutral-800/50 border border-neutral-700/50 p-4">
-              <div className="flex flex-col md:flex-row gap-4">
+            <div className="mb-6 rounded-lg border border-neutral-700/50 bg-neutral-800/50 p-4">
+              <div className="flex flex-col gap-4 md:flex-row">
                 <div className="flex-1">
                   <form onSubmit={handleSubmit} className="relative">
-                    <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                    <div className="pointer-events-none absolute inset-y-0 left-3 flex items-center">
                       <Search size={18} className="text-neutral-400" />
                     </div>
                     <input
@@ -668,7 +668,7 @@ export default function SearchPage() {
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       placeholder="Search for laptops by brand, model, or specs..."
-                      className="w-full h-10 rounded-lg bg-neutral-900/90 pl-10 pr-4 text-white border border-neutral-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent shadow-inner"
+                      className="h-10 w-full rounded-lg border border-neutral-700 bg-neutral-900/90 pl-10 pr-4 text-white shadow-inner focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary-500"
                     />
                   </form>
                 </div>
@@ -678,7 +678,7 @@ export default function SearchPage() {
                     <DropdownMenuTrigger asChild>
                       <Button
                         variant="outline"
-                        className="bg-neutral-900/90 border-neutral-600 text-white hover:bg-neutral-700"
+                        className="border-neutral-600 bg-neutral-900/90 text-white hover:bg-neutral-700"
                       >
                         <ArrowDownAZ size={16} className="mr-2" />
                         {sortOption === "default"
@@ -689,7 +689,7 @@ export default function SearchPage() {
                         <ChevronDown size={16} className="ml-2" />
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-48 bg-neutral-800 border-neutral-600">
+                    <DropdownMenuContent className="w-48 border-neutral-600 bg-neutral-800">
                       <DropdownMenuLabel className="text-neutral-200">
                         Sort By
                       </DropdownMenuLabel>
@@ -734,12 +734,12 @@ export default function SearchPage() {
                     <SheetTrigger asChild>
                       <Button
                         variant="outline"
-                        className="lg:hidden bg-neutral-900/90 border-neutral-700 text-neutral-300 hover:text-white hover:bg-neutral-800 relative"
+                        className="relative border-neutral-700 bg-neutral-900/90 text-neutral-300 hover:bg-neutral-800 hover:text-white lg:hidden"
                       >
                         <Filter size={16} className="mr-2" />
                         Filters
                         {activeFiltersCount > 0 && (
-                          <span className="absolute -top-2 -right-2 bg-primary-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                          <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary-600 text-xs text-white">
                             {activeFiltersCount}
                           </span>
                         )}
@@ -747,11 +747,11 @@ export default function SearchPage() {
                     </SheetTrigger>
                     <SheetContent
                       side="bottom"
-                      className="bg-neutral-900 border-neutral-700 h-[85vh] rounded-t-xl"
+                      className="h-[85vh] rounded-t-xl border-neutral-700 bg-neutral-900"
                     >
                       {/* Mobile filter sheet content - same as desktop sheet */}
                       <SheetHeader>
-                        <SheetTitle className="text-white flex items-center justify-between">
+                        <SheetTitle className="flex items-center justify-between text-white">
                           <div className="flex items-center">
                             <Filter
                               size={16}
@@ -767,7 +767,7 @@ export default function SearchPage() {
                                 resetFilters();
                                 setSearchTerm("");
                               }}
-                              className="text-neutral-400 hover:text-white border-neutral-700 hover:bg-neutral-800"
+                              className="border-neutral-700 text-neutral-400 hover:bg-neutral-800 hover:text-white"
                             >
                               <X size={14} className="mr-1" />
                               Reset All
@@ -792,16 +792,16 @@ export default function SearchPage() {
                               <AccordionItem
                                 key={section.filterKey}
                                 value={section.filterKey}
-                                className="border border-neutral-700/50 rounded-lg overflow-hidden"
+                                className="overflow-hidden rounded-lg border border-neutral-700/50"
                               >
-                                <AccordionTrigger className="px-4 py-2 hover:no-underline bg-neutral-800/50 hover:bg-neutral-800 data-[state=open]:bg-neutral-800">
-                                  <div className="flex items-center justify-between w-full">
-                                    <span className="text-neutral-200 font-bold">
+                                <AccordionTrigger className="bg-neutral-800/50 px-4 py-2 hover:bg-neutral-800 hover:no-underline data-[state=open]:bg-neutral-800">
+                                  <div className="flex w-full items-center justify-between">
+                                    <span className="font-bold text-neutral-200">
                                       {section.title}
                                     </span>
                                   </div>
                                 </AccordionTrigger>
-                                <AccordionContent className="px-4 py-3 bg-neutral-900">
+                                <AccordionContent className="bg-neutral-900 px-4 py-3">
                                   <FilterSection
                                     section={section}
                                     inAccordion={true}
@@ -812,10 +812,10 @@ export default function SearchPage() {
                         </Accordion>
                         {/* Mobile active filters */}
                         {hasActiveFilters && (
-                          <div className="mt-6 pt-6 border-t border-neutral-700/30">
-                            <div className="px-1 mb-3">
-                              <h3 className="text-sm font-medium text-white flex items-center">
-                                <span className="h-1 w-4 bg-primary-500 rounded-full mr-2"></span>
+                          <div className="mt-6 border-t border-neutral-700/30 pt-6">
+                            <div className="mb-3 px-1">
+                              <h3 className="flex items-center text-sm font-medium text-white">
+                                <span className="mr-2 h-1 w-4 rounded-full bg-primary-500"></span>
                                 Applied Filters
                               </h3>
                             </div>
@@ -830,13 +830,13 @@ export default function SearchPage() {
                         <Button
                           variant="outline"
                           onClick={() => setIsSheetOpen(false)}
-                          className="flex-1 border-neutral-700 hover:bg-neutral-800 text-neutral-300"
+                          className="flex-1 border-neutral-700 text-neutral-300 hover:bg-neutral-800"
                         >
                           Cancel
                         </Button>
                         <Button
                           onClick={() => setIsSheetOpen(false)}
-                          className="flex-1 bg-primary-600 hover:bg-primary-700 text-white"
+                          className="flex-1 bg-primary-600 text-white hover:bg-primary-700"
                         >
                           Apply Filters
                         </Button>
@@ -849,7 +849,7 @@ export default function SearchPage() {
               {/* Enhanced results count and active filters display */}
               <div className="mt-4">
                 {!isLoading && laptops && (
-                  <div className="flex items-center mb-2">
+                  <div className="mb-2 flex items-center">
                     {laptops.length > 0 ? (
                       <div className="flex flex-col">
                         <h2 className="text-lg font-semibold text-white">
@@ -886,7 +886,7 @@ export default function SearchPage() {
               </div>
             )}
 
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 min-h-[200px]">
+            <div className="grid min-h-[200px] grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
               {showSkeletons &&
                 Array(6)
                   .fill(0)
@@ -906,7 +906,7 @@ export default function SearchPage() {
                 ))}
 
               <div
-                className="opacity-0 pointer-events-none h-0 md:col-span-2 lg:col-span-3"
+                className="pointer-events-none h-0 opacity-0 md:col-span-2 lg:col-span-3"
                 aria-hidden="true"
                 key="ghost-element"
               />
@@ -936,7 +936,7 @@ export default function SearchPage() {
                       resetFilters();
                       setSearchTerm("");
                     }}
-                    className="mt-4 border-neutral-700 hover:bg-neutral-700 text-neutral-300"
+                    className="mt-4 border-neutral-700 text-neutral-300 hover:bg-neutral-700"
                   >
                     Clear all filters
                   </Button>
