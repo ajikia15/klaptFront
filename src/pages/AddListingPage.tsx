@@ -166,34 +166,36 @@ export default function AddListingPage() {
   });
   function handleFillTestData() {
     const testData = {
-      title: "Lenovo Legion 5",
-      price: "1100",
-      brand: "Lenovo",
-      model: "Legion 5",
-      shortDesc: "Short description",
-      description: "Full description",
-      year: "2021",
+      title: "Acer Predator Helios 16",
+      price: "2299",
+      brand: "Acer",
+      model: "Predator Helios 16",
+      shortDesc:
+        "High-performance gaming laptop with RTX 4080 and 13th Gen Intel Core i9",
+      description:
+        "Experience unrivaled gaming performance with the latest Acer Predator Helios 16, featuring NVIDIA GeForce RTX 4080 graphics and a powerful Intel Core i9-13900HX processor. Mini-LED display with 250Hz refresh rate provides stunning visuals.",
+      year: "2023",
       stockStatus: "in stock",
-      condition: "used",
-      processorBrand: "AMD",
-      processorModel: "Ryzen 7 4800H",
-      cores: "8",
-      threads: "16",
+      condition: "new",
+      processorBrand: "Intel",
+      processorModel: "Core i9-13900HX",
+      cores: "24",
+      threads: "32",
       graphicsType: "Dedicated",
       gpuBrand: "NVIDIA",
-      gpuModel: "RTX 4060Ti",
-      vram: "6",
-      ram: "16",
-      ramType: "DDR4",
+      gpuModel: "RTX 4080",
+      vram: "12",
+      ram: "32",
+      ramType: "DDR5",
       storageType: "SSD",
-      storageCapacity: "512",
-      screenSize: "15.6",
-      screenResolution: "1920x1080",
-      refreshRate: "144",
-      weight: "2.3",
+      storageCapacity: "2048",
+      screenSize: "16",
+      screenResolution: "2560x1600",
+      refreshRate: "250",
+      weight: "2.7",
       backlightType: "RGB",
       tag: ["gaming", "productivity"],
-      images: ["https://placehold.co/800x600/111827/eee?text=Test+Image"],
+      images: ["https://i.ibb.co/DgTvz43f/predator.png"],
     };
 
     // We assume form.state.values has the same keys as defaultValues.
@@ -1281,7 +1283,17 @@ export default function AddListingPage() {
               {/* Add Image Link Form */}
               <div className="mb-4">
                 <label className="block text-sm font-medium text-neutral-200 mb-2">
-                  Add Image URL
+                  Add Image URL{" "}
+                  <span
+                    className="text-neutral-500 cursor-pointer"
+                    onClick={() => {
+                      navigator.clipboard.writeText(
+                        "https://i.ibb.co/DgTvz43f/predator.png"
+                      );
+                    }}
+                  >
+                    https://i.ibb.co/DgTvz43f/predator.png
+                  </span>
                 </label>
                 <div className="flex gap-2">
                   <input
