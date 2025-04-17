@@ -47,15 +47,7 @@ export default function ProfilePosts() {
       ) : userLaptops && userLaptops.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {userLaptops.map((laptop) => (
-            <LaptopCard
-              key={laptop.id}
-              id={laptop.id}
-              title={laptop.title}
-              price={laptop.price}
-              shortDesc={laptop.shortDesc}
-              image={laptop.images[0]}
-              isAuthenticated={true}
-            />
+            <LaptopCard key={laptop.id} isAuthenticated={true} {...laptop} />
           ))}
         </div>
       ) : (

@@ -188,7 +188,7 @@ export default function AddListingPage() {
       ram: "32",
       ramType: "DDR5",
       storageType: "SSD",
-      storageCapacity: "2048",
+      storageCapacity: "512GB",
       screenSize: "16",
       screenResolution: "2560x1600",
       refreshRate: "250",

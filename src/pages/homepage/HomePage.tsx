@@ -122,12 +122,8 @@ export default function HomePage() {
               .map((laptop) => (
                 <LaptopCard
                   key={laptop.id}
-                  id={laptop.id}
-                  title={laptop.title}
-                  shortDesc={laptop.shortDesc}
-                  price={laptop.price}
-                  image={laptop.images[0]}
                   isAuthenticated={isAuthenticated}
+                  {...laptop}
                 />
               ))
           )}
@@ -166,13 +162,9 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {laptops.slice(0, 4).map((laptop) => (
               <LaptopCard
-                key={`hotcake-${laptop.id}`}
-                id={laptop.id}
-                title={laptop.title}
-                shortDesc={laptop.shortDesc}
-                price={laptop.price}
-                image={laptop.images[0]}
+                key={laptop.id}
                 isAuthenticated={isAuthenticated}
+                {...laptop}
               />
             ))}
           </div>
@@ -212,13 +204,9 @@ export default function HomePage() {
                   ?.slice(0, 4)
                   .map((laptop) => (
                     <LaptopCard
-                      key={`new-${laptop.id}`}
-                      id={laptop.id}
-                      title={laptop.title}
-                      shortDesc={laptop.shortDesc}
-                      price={laptop.price}
-                      image={laptop.images[0]}
+                      key={laptop.id}
                       isAuthenticated={isAuthenticated}
+                      {...laptop}
                     />
                   ))}
           </div>

@@ -899,13 +899,9 @@ export default function SearchPage() {
                 laptops.length > 0 &&
                 sortedLaptops.map((laptop) => (
                   <LaptopCard
-                    key={`laptop-${laptop.id}`}
-                    id={laptop.id}
-                    title={laptop.title}
-                    price={laptop.price}
-                    shortDesc={laptop.shortDesc}
-                    image={laptop.images[0]}
+                    key={laptop.id}
                     isAuthenticated={isAuthenticated}
+                    {...laptop}
                   />
                 ))}
 
