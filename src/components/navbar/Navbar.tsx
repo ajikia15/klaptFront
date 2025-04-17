@@ -41,23 +41,18 @@ export default function Navbar() {
   return (
     <nav className="sticky top-0 z-50 w-full bg-neutral-900 shadow-lg">
       <div className="container mx-auto flex items-center justify-between px-4 py-3">
-        {/* Logo and Search Section */}
-        <div className="flex flex-1 items-center md:flex-none">
-          <Link
-            to="/"
-            className="mr-2 flex-shrink-0 text-2xl font-bold text-white md:mr-6"
-          >
-            Kaido
-          </Link>
-
-          {/* Desktop Search */}
-          <div className="hidden md:block md:w-[320px] lg:w-[400px]">
-            <Searchbar />
-          </div>
-        </div>
+        {/* Logo */}
+        <Link to="/" className="flex-shrink-0 text-2xl font-bold text-white">
+          Kaido
+        </Link>
 
         {/* Mobile Search - Full width when visible */}
         <div className="mx-2 w-full md:hidden">
+          <Searchbar />
+        </div>
+
+        {/* Desktop Search - Centered */}
+        <div className="hidden md:mx-auto md:block md:max-w-md md:flex-1 md:px-8">
           <Searchbar />
         </div>
 
