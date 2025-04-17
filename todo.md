@@ -1,5 +1,3 @@
-- [ ] Laptop tags (gaming, rendering, etc)
-- [ ] loading spinners/ skeletons
 - [ ] Key highlights in accordion, opened on mobile, closed on pc?
 
 - [ ] Kaido verified
@@ -27,19 +25,21 @@
 
 - [ ] user model + registration changes
 
-  - [ ] username
+  - [x] username
   - [ ] joindate
   - [ ] email verification (email must be verified to be able to post)
 
 - [ ] view count
 - [ ] many to many fix
-- [x] tags
-  - [ ] autotagging (rtx? gaming. price <2.5k? budget.)
+
+- [ ] autotagging (rtx? gaming. price <2.5k? budget.)
 
 Completed
 
 - [x] Filtering
 - [x] Favorites
+
+- [x] tags
 
 - [x] Get distinct parts
 - [x] Get amount of favorited items by user

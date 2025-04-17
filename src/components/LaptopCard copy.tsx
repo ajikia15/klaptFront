@@ -29,6 +29,11 @@ export const LaptopCard: FC<LaptopCardProps> = ({
     <div className="group relative flex flex-col h-full rounded-2xl transition-all duration-300 bg-gradient-to-br from-neutral-800 via-neutral-900 to-neutral-950 border border-neutral-700/30 overflow-hidden group/card">
       <div className="relative w-full pt-6 pb-4 px-6">
         <div className="absolute inset-0 bg-gradient-to-b from-purple-500/5 to-transparent"></div>
+        <div className="absolute left-0 -translate-x-full transition-all flex flex-col gap-1 group-hover:-translate-x-0 z-20 opacity-0 group-hover:opacity-100 duration-300 ml-2">
+          <Badge className="bg-green-700/40 font-bold">Nvidia RTX</Badge>
+          <Badge className="bg-red-600/40 font-bold ">AMD Ryzen</Badge>
+          <Badge className="bg-blue-600/40 font-bold ">Intel Core</Badge>
+        </div>
         {/* overlay is behind the image */}
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 z-5"></div>
 
@@ -70,15 +75,9 @@ export const LaptopCard: FC<LaptopCardProps> = ({
             </h3>
           </Link>
 
-          <div className="mb-4 space-x-2 space-y-1">
-            <Badge className="bg-green-700/80 font-bold">RTX 4050</Badge>
-            <Badge className="bg-red-600/80 font-bold ">Ryzen 9</Badge>
-            <Badge className=" font-bold bg-orange-600/80">144Hz</Badge>
-            <Badge className=" font-bold bg-neutral-800">1TB SSD</Badge>
-            <Badge className=" font-bold bg-neutral-800">16GB RAM</Badge>
-
-            {/* <Badge className="bg-blue-600/80 font-bold ">Intel Core</Badge> */}
-          </div>
+          <p className="text-sm text-neutral-400 line-clamp-2 mb-2">
+            {shortDesc.toUpperCase()}
+          </p>
 
           {/* Display laptop tags */}
           <LaptopTags tags={tags} className="mb-3" />

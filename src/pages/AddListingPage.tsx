@@ -46,6 +46,7 @@ export default function AddListingPage() {
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
   const [uploadingImages, setUploadingImages] = useState(false);
   const [graphicsType, setGraphicsType] = useState<string>("");
+  const [imageLink, setImageLink] = useState(""); // Add this line
   const navigate = useNavigate();
 
   const form = useForm({
@@ -266,6 +267,29 @@ export default function AddListingPage() {
     const imageUrl = uploadedImages[index];
     if (imageUrl.startsWith("blob:")) URL.revokeObjectURL(imageUrl);
     setUploadedImages(uploadedImages.filter((_, i) => i !== index));
+  };
+
+  // Add this function after removeImage
+  const handleImageLinkSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!imageLink) return;
+
+    try {
+      new URL(imageLink);
+      // Add the new image to the existing images array
+      setUploadedImages((prev) => {
+        // Check if image is already in the array
+        if (prev.includes(imageLink)) {
+          alert("This image URL has already been added");
+          return prev;
+        }
+        return [...prev, imageLink];
+      });
+      setImageLink("");
+    } catch (err) {
+      alert("Please enter a valid image URL");
+    }
   };
 
   return (
@@ -1253,6 +1277,30 @@ export default function AddListingPage() {
               <h2 className="text-lg font-semibold text-white mb-4 pb-2 border-b border-neutral-700">
                 Images
               </h2>
+
+              {/* Add Image Link Form */}
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-neutral-200 mb-2">
+                  Add Image URL
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={imageLink}
+                    onChange={(e) => setImageLink(e.target.value)}
+                    placeholder="Enter image URL"
+                    className="flex-1 px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md"
+                  />
+                  <button
+                    type="button" // Changed from submit to button
+                    onClick={handleImageLinkSubmit}
+                    className="px-4 py-2 bg-secondary-600 text-white rounded-md hover:bg-secondary-700"
+                  >
+                    Add Link
+                  </button>
+                </div>
+              </div>
+
               <label className="block text-sm font-medium text-neutral-200 mb-2">
                 Upload Images{" "}
                 <span className="text-neutral-400 text-xs ml-2">
