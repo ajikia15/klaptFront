@@ -18,6 +18,9 @@ import {
   DrawerContent,
   DrawerTrigger,
   DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerDescription,
 } from "@/components/ui/drawer";
 
 export default function Navbar() {
@@ -156,6 +159,10 @@ export default function Navbar() {
             <DrawerTrigger className="flex h-9 w-9 items-center justify-center rounded-full bg-neutral-800 hover:bg-neutral-700">
               <Menu size={20} className="text-neutral-100" />
             </DrawerTrigger>
+            <DrawerHeader className="hidden">
+              <DrawerTitle></DrawerTitle>
+              <DrawerDescription></DrawerDescription>
+            </DrawerHeader>
             <DrawerContent className="border-t border-neutral-800 bg-neutral-900">
               <div className="px-6 pb-2 pt-6">
                 {isAuthenticated && (
