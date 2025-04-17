@@ -146,12 +146,15 @@ export default function AddListingPage() {
             laptopData[k as keyof typeof laptopData] === undefined &&
             delete laptopData[k as keyof typeof laptopData]
         );
-        const response = await fetch("http://localhost:3000/laptops", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify(laptopData),
-        });
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/laptops`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify(laptopData),
+          }
+        );
         if (!response.ok) throw new Error("Failed to add listing");
         setFormStatus("success");
         const data = await response.json();
@@ -295,15 +298,15 @@ export default function AddListingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-900 text-neutral-200 py-10">
+    <div className="min-h-screen bg-neutral-900 py-10 text-neutral-200">
       <div className="container mx-auto px-4">
-        <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
+        <h1 className="mb-2 text-3xl font-bold text-white md:text-4xl">
           Add New Laptop Listing
         </h1>
-        <p className="text-neutral-400 mb-8">
+        <p className="mb-8 text-neutral-400">
           Fields marked <span className="text-red-400">*</span> are required.
         </p>
-        <div className="bg-gradient-to-br from-neutral-800/70 to-neutral-900/90 rounded-2xl border border-neutral-700/50 p-8 mb-6 relative overflow-hidden">
+        <div className="relative mb-6 overflow-hidden rounded-2xl border border-neutral-700/50 bg-gradient-to-br from-neutral-800/70 to-neutral-900/90 p-8">
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -312,16 +315,16 @@ export default function AddListingPage() {
             }}
           >
             {formStatus === "error" && (
-              <div className="p-4 mb-6 bg-red-900/50 text-red-200 rounded-md">
+              <div className="mb-6 rounded-md bg-red-900/50 p-4 text-red-200">
                 {errorMessage}
               </div>
             )}
             {formStatus === "success" && (
-              <div className="p-4 mb-6 bg-green-900/50 text-green-200 rounded-md">
+              <div className="mb-6 rounded-md bg-green-900/50 p-4 text-green-200">
                 Listing created successfully! Redirecting...
               </div>
             )}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               {/* Title (required) */}
               <form.Field
                 name="title"
@@ -333,19 +336,19 @@ export default function AddListingPage() {
                   <div>
                     <label
                       htmlFor="title"
-                      className="block text-sm font-medium text-neutral-200 mb-1"
+                      className="mb-1 block text-sm font-medium text-neutral-200"
                     >
                       Title <span className="text-red-400">*</span>
                     </label>
                     <input
                       id="title"
-                      className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md"
+                      className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       disabled={formStatus === "submitting"}
                     />
                     {field.state.meta.errors && (
-                      <div className="text-red-300 text-sm mt-1">
+                      <div className="mt-1 text-sm text-red-300">
                         {field.state.meta.errors.join(", ")}
                       </div>
                     )}
@@ -370,20 +373,20 @@ export default function AddListingPage() {
                   <div>
                     <label
                       htmlFor="price"
-                      className="block text-sm font-medium text-neutral-200 mb-1"
+                      className="mb-1 block text-sm font-medium text-neutral-200"
                     >
                       Price ($) <span className="text-red-400">*</span>
                     </label>
                     <input
                       id="price"
                       type="number"
-                      className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md"
+                      className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       disabled={formStatus === "submitting"}
                     />
                     {field.state.meta.errors && (
-                      <div className="text-red-300 text-sm mt-1">
+                      <div className="mt-1 text-sm text-red-300">
                         {field.state.meta.errors.join(", ")}
                       </div>
                     )}
@@ -401,13 +404,13 @@ export default function AddListingPage() {
                   <div>
                     <label
                       htmlFor="brand"
-                      className="block text-sm font-medium text-neutral-200 mb-1"
+                      className="mb-1 block text-sm font-medium text-neutral-200"
                     >
                       Brand <span className="text-red-400">*</span>
                     </label>
                     <select
                       id="brand"
-                      className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md"
+                      className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       disabled={formStatus === "submitting"}
@@ -420,7 +423,7 @@ export default function AddListingPage() {
                       ))}
                     </select>
                     {field.state.meta.errors && (
-                      <div className="text-red-300 text-sm mt-1">
+                      <div className="mt-1 text-sm text-red-300">
                         {field.state.meta.errors.join(", ")}
                       </div>
                     )}
@@ -438,19 +441,19 @@ export default function AddListingPage() {
                   <div>
                     <label
                       htmlFor="model"
-                      className="block text-sm font-medium text-neutral-200 mb-1"
+                      className="mb-1 block text-sm font-medium text-neutral-200"
                     >
                       Model <span className="text-red-400">*</span>
                     </label>
                     <input
                       id="model"
-                      className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md"
+                      className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       disabled={formStatus === "submitting"}
                     />
                     {field.state.meta.errors && (
-                      <div className="text-red-300 text-sm mt-1">
+                      <div className="mt-1 text-sm text-red-300">
                         {field.state.meta.errors.join(", ")}
                       </div>
                     )}
@@ -472,20 +475,20 @@ export default function AddListingPage() {
                   <div className="md:col-span-2">
                     <label
                       htmlFor="shortDesc"
-                      className="block text-sm font-medium text-neutral-200 mb-1"
+                      className="mb-1 block text-sm font-medium text-neutral-200"
                     >
                       Short Description <span className="text-red-400">*</span>
                     </label>
                     <input
                       id="shortDesc"
                       maxLength={100}
-                      className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md"
+                      className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       disabled={formStatus === "submitting"}
                     />
                     {field.state.meta.errors && (
-                      <div className="text-red-300 text-sm mt-1">
+                      <div className="mt-1 text-sm text-red-300">
                         {field.state.meta.errors.join(", ")}
                       </div>
                     )}
@@ -503,20 +506,20 @@ export default function AddListingPage() {
                   <div className="md:col-span-2">
                     <label
                       htmlFor="description"
-                      className="block text-sm font-medium text-neutral-200 mb-1"
+                      className="mb-1 block text-sm font-medium text-neutral-200"
                     >
                       Full Description <span className="text-red-400">*</span>
                     </label>
                     <textarea
                       id="description"
                       rows={4}
-                      className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md"
+                      className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       disabled={formStatus === "submitting"}
                     />
                     {field.state.meta.errors && (
-                      <div className="text-red-300 text-sm mt-1">
+                      <div className="mt-1 text-sm text-red-300">
                         {field.state.meta.errors.join(", ")}
                       </div>
                     )}
@@ -539,20 +542,20 @@ export default function AddListingPage() {
                   <div>
                     <label
                       htmlFor="year"
-                      className="block text-sm font-medium text-neutral-200 mb-1"
+                      className="mb-1 block text-sm font-medium text-neutral-200"
                     >
                       Year <span className="text-red-400">*</span>
                     </label>
                     <input
                       id="year"
                       type="number"
-                      className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md"
+                      className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       disabled={formStatus === "submitting"}
                     />
                     {field.state.meta.errors && (
-                      <div className="text-red-300 text-sm mt-1">
+                      <div className="mt-1 text-sm text-red-300">
                         {field.state.meta.errors.join(", ")}
                       </div>
                     )}
@@ -565,13 +568,13 @@ export default function AddListingPage() {
                   <div>
                     <label
                       htmlFor="stockStatus"
-                      className="block text-sm font-medium text-neutral-200 mb-1"
+                      className="mb-1 block text-sm font-medium text-neutral-200"
                     >
                       Stock Status <span className="text-red-400">*</span>
                     </label>
                     <select
                       id="stockStatus"
-                      className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md"
+                      className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       disabled={formStatus === "submitting"}
@@ -596,13 +599,13 @@ export default function AddListingPage() {
                   <div>
                     <label
                       htmlFor="condition"
-                      className="block text-sm font-medium text-neutral-200 mb-1"
+                      className="mb-1 block text-sm font-medium text-neutral-200"
                     >
                       Condition <span className="text-red-400">*</span>
                     </label>
                     <select
                       id="condition"
-                      className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md"
+                      className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       disabled={formStatus === "submitting"}
@@ -615,7 +618,7 @@ export default function AddListingPage() {
                       ))}
                     </select>
                     {field.state.meta.errors && (
-                      <div className="text-red-300 text-sm mt-1">
+                      <div className="mt-1 text-sm text-red-300">
                         {field.state.meta.errors.join(", ")}
                       </div>
                     )}
@@ -628,18 +631,18 @@ export default function AddListingPage() {
                   <div>
                     <label
                       htmlFor="tag"
-                      className="block text-sm font-medium text-neutral-200 mb-1"
+                      className="mb-1 block text-sm font-medium text-neutral-200"
                     >
                       Laptop Tags{" "}
-                      <span className="text-neutral-400 text-xs ml-2">
+                      <span className="ml-2 text-xs text-neutral-400">
                         (optional)
                       </span>
                     </label>
-                    <div className="grid grid-cols-2 gap-2 mt-2">
+                    <div className="mt-2 grid grid-cols-2 gap-2">
                       {TAG_OPTIONS.map((tag) => (
                         <label
                           key={tag}
-                          className="flex items-center space-x-2 cursor-pointer rounded-md px-3 py-2 bg-neutral-800 hover:bg-neutral-700 border border-neutral-600 transition-colors"
+                          className="flex cursor-pointer items-center space-x-2 rounded-md border border-neutral-600 bg-neutral-800 px-3 py-2 transition-colors hover:bg-neutral-700"
                         >
                           <input
                             type="checkbox"
@@ -677,13 +680,13 @@ export default function AddListingPage() {
                   <div>
                     <label
                       htmlFor="processorBrand"
-                      className="block text-sm font-medium text-neutral-200 mb-1"
+                      className="mb-1 block text-sm font-medium text-neutral-200"
                     >
                       Processor Brand <span className="text-red-400">*</span>
                     </label>
                     <select
                       id="processorBrand"
-                      className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md"
+                      className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       disabled={formStatus === "submitting"}
@@ -696,7 +699,7 @@ export default function AddListingPage() {
                       ))}
                     </select>
                     {field.state.meta.errors && (
-                      <div className="text-red-300 text-sm mt-1">
+                      <div className="mt-1 text-sm text-red-300">
                         {field.state.meta.errors.join(", ")}
                       </div>
                     )}
@@ -714,19 +717,19 @@ export default function AddListingPage() {
                   <div>
                     <label
                       htmlFor="processorModel"
-                      className="block text-sm font-medium text-neutral-200 mb-1"
+                      className="mb-1 block text-sm font-medium text-neutral-200"
                     >
                       Processor Model <span className="text-red-400">*</span>
                     </label>
                     <input
                       id="processorModel"
-                      className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md"
+                      className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       disabled={formStatus === "submitting"}
                     />
                     {field.state.meta.errors && (
-                      <div className="text-red-300 text-sm mt-1">
+                      <div className="mt-1 text-sm text-red-300">
                         {field.state.meta.errors.join(", ")}
                       </div>
                     )}
@@ -749,20 +752,20 @@ export default function AddListingPage() {
                   <div>
                     <label
                       htmlFor="cores"
-                      className="block text-sm font-medium text-neutral-200 mb-1"
+                      className="mb-1 block text-sm font-medium text-neutral-200"
                     >
                       Cores <span className="text-red-400">*</span>
                     </label>
                     <input
                       id="cores"
                       type="number"
-                      className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md"
+                      className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       disabled={formStatus === "submitting"}
                     />
                     {field.state.meta.errors && (
-                      <div className="text-red-300 text-sm mt-1">
+                      <div className="mt-1 text-sm text-red-300">
                         {field.state.meta.errors.join(", ")}
                       </div>
                     )}
@@ -785,20 +788,20 @@ export default function AddListingPage() {
                   <div>
                     <label
                       htmlFor="threads"
-                      className="block text-sm font-medium text-neutral-200 mb-1"
+                      className="mb-1 block text-sm font-medium text-neutral-200"
                     >
                       Threads <span className="text-red-400">*</span>
                     </label>
                     <input
                       id="threads"
                       type="number"
-                      className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md"
+                      className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       disabled={formStatus === "submitting"}
                     />
                     {field.state.meta.errors && (
-                      <div className="text-red-300 text-sm mt-1">
+                      <div className="mt-1 text-sm text-red-300">
                         {field.state.meta.errors.join(", ")}
                       </div>
                     )}
@@ -816,13 +819,13 @@ export default function AddListingPage() {
                   <div>
                     <label
                       htmlFor="graphicsType"
-                      className="block text-sm font-medium text-neutral-200 mb-1"
+                      className="mb-1 block text-sm font-medium text-neutral-200"
                     >
                       Graphics Type <span className="text-red-400">*</span>
                     </label>
                     <select
                       id="graphicsType"
-                      className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md"
+                      className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => {
                         field.handleChange(e.target.value);
@@ -838,7 +841,7 @@ export default function AddListingPage() {
                       ))}
                     </select>
                     {field.state.meta.errors && (
-                      <div className="text-red-300 text-sm mt-1">
+                      <div className="mt-1 text-sm text-red-300">
                         {field.state.meta.errors.join(", ")}
                       </div>
                     )}
@@ -859,7 +862,7 @@ export default function AddListingPage() {
                   <div>
                     <label
                       htmlFor="gpuBrand"
-                      className="block text-sm font-medium text-neutral-200 mb-1"
+                      className="mb-1 block text-sm font-medium text-neutral-200"
                     >
                       GPU Brand{" "}
                       {graphicsType === "Dedicated" && (
@@ -868,7 +871,7 @@ export default function AddListingPage() {
                     </label>
                     <select
                       id="gpuBrand"
-                      className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md"
+                      className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       disabled={
@@ -884,7 +887,7 @@ export default function AddListingPage() {
                       ))}
                     </select>
                     {field.state.meta.errors && (
-                      <div className="text-red-300 text-sm mt-1">
+                      <div className="mt-1 text-sm text-red-300">
                         {field.state.meta.errors.join(", ")}
                       </div>
                     )}
@@ -904,7 +907,7 @@ export default function AddListingPage() {
                   <div>
                     <label
                       htmlFor="gpuModel"
-                      className="block text-sm font-medium text-neutral-200 mb-1"
+                      className="mb-1 block text-sm font-medium text-neutral-200"
                     >
                       GPU Model{" "}
                       {graphicsType === "Dedicated" && (
@@ -913,7 +916,7 @@ export default function AddListingPage() {
                     </label>
                     <input
                       id="gpuModel"
-                      className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md"
+                      className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       disabled={
@@ -922,7 +925,7 @@ export default function AddListingPage() {
                       }
                     />
                     {field.state.meta.errors && (
-                      <div className="text-red-300 text-sm mt-1">
+                      <div className="mt-1 text-sm text-red-300">
                         {field.state.meta.errors.join(", ")}
                       </div>
                     )}
@@ -942,7 +945,7 @@ export default function AddListingPage() {
                   <div>
                     <label
                       htmlFor="vram"
-                      className="block text-sm font-medium text-neutral-200 mb-1"
+                      className="mb-1 block text-sm font-medium text-neutral-200"
                     >
                       VRAM{" "}
                       {graphicsType === "Dedicated" && (
@@ -951,7 +954,7 @@ export default function AddListingPage() {
                     </label>
                     <select
                       id="vram"
-                      className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md"
+                      className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       disabled={
@@ -967,7 +970,7 @@ export default function AddListingPage() {
                       ))}
                     </select>
                     {field.state.meta.errors && (
-                      <div className="text-red-300 text-sm mt-1">
+                      <div className="mt-1 text-sm text-red-300">
                         {field.state.meta.errors.join(", ")}
                       </div>
                     )}
@@ -985,13 +988,13 @@ export default function AddListingPage() {
                   <div>
                     <label
                       htmlFor="ram"
-                      className="block text-sm font-medium text-neutral-200 mb-1"
+                      className="mb-1 block text-sm font-medium text-neutral-200"
                     >
                       RAM <span className="text-red-400">*</span>
                     </label>
                     <select
                       id="ram"
-                      className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md"
+                      className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       disabled={formStatus === "submitting"}
@@ -1004,7 +1007,7 @@ export default function AddListingPage() {
                       ))}
                     </select>
                     {field.state.meta.errors && (
-                      <div className="text-red-300 text-sm mt-1">
+                      <div className="mt-1 text-sm text-red-300">
                         {field.state.meta.errors.join(", ")}
                       </div>
                     )}
@@ -1022,13 +1025,13 @@ export default function AddListingPage() {
                   <div>
                     <label
                       htmlFor="ramType"
-                      className="block text-sm font-medium text-neutral-200 mb-1"
+                      className="mb-1 block text-sm font-medium text-neutral-200"
                     >
                       RAM Type <span className="text-red-400">*</span>
                     </label>
                     <select
                       id="ramType"
-                      className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md"
+                      className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       disabled={formStatus === "submitting"}
@@ -1041,7 +1044,7 @@ export default function AddListingPage() {
                       ))}
                     </select>
                     {field.state.meta.errors && (
-                      <div className="text-red-300 text-sm mt-1">
+                      <div className="mt-1 text-sm text-red-300">
                         {field.state.meta.errors.join(", ")}
                       </div>
                     )}
@@ -1059,13 +1062,13 @@ export default function AddListingPage() {
                   <div>
                     <label
                       htmlFor="storageType"
-                      className="block text-sm font-medium text-neutral-200 mb-1"
+                      className="mb-1 block text-sm font-medium text-neutral-200"
                     >
                       Storage Type <span className="text-red-400">*</span>
                     </label>
                     <select
                       id="storageType"
-                      className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md"
+                      className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       disabled={formStatus === "submitting"}
@@ -1078,7 +1081,7 @@ export default function AddListingPage() {
                       ))}
                     </select>
                     {field.state.meta.errors && (
-                      <div className="text-red-300 text-sm mt-1">
+                      <div className="mt-1 text-sm text-red-300">
                         {field.state.meta.errors.join(", ")}
                       </div>
                     )}
@@ -1096,19 +1099,19 @@ export default function AddListingPage() {
                   <div>
                     <label
                       htmlFor="storageCapacity"
-                      className="block text-sm font-medium text-neutral-200 mb-1"
+                      className="mb-1 block text-sm font-medium text-neutral-200"
                     >
                       Storage Capacity <span className="text-red-400">*</span>
                     </label>
                     <input
                       id="storageCapacity"
-                      className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md"
+                      className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       disabled={formStatus === "submitting"}
                     />
                     {field.state.meta.errors && (
-                      <div className="text-red-300 text-sm mt-1">
+                      <div className="mt-1 text-sm text-red-300">
                         {field.state.meta.errors.join(", ")}
                       </div>
                     )}
@@ -1126,20 +1129,20 @@ export default function AddListingPage() {
                   <div>
                     <label
                       htmlFor="screenSize"
-                      className="block text-sm font-medium text-neutral-200 mb-1"
+                      className="mb-1 block text-sm font-medium text-neutral-200"
                     >
                       Screen Size (inches){" "}
                       <span className="text-red-400">*</span>
                     </label>
                     <input
                       id="screenSize"
-                      className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md"
+                      className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       disabled={formStatus === "submitting"}
                     />
                     {field.state.meta.errors && (
-                      <div className="text-red-300 text-sm mt-1">
+                      <div className="mt-1 text-sm text-red-300">
                         {field.state.meta.errors.join(", ")}
                       </div>
                     )}
@@ -1157,19 +1160,19 @@ export default function AddListingPage() {
                   <div>
                     <label
                       htmlFor="screenResolution"
-                      className="block text-sm font-medium text-neutral-200 mb-1"
+                      className="mb-1 block text-sm font-medium text-neutral-200"
                     >
                       Screen Resolution <span className="text-red-400">*</span>
                     </label>
                     <input
                       id="screenResolution"
-                      className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md"
+                      className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       disabled={formStatus === "submitting"}
                     />
                     {field.state.meta.errors && (
-                      <div className="text-red-300 text-sm mt-1">
+                      <div className="mt-1 text-sm text-red-300">
                         {field.state.meta.errors.join(", ")}
                       </div>
                     )}
@@ -1192,20 +1195,20 @@ export default function AddListingPage() {
                   <div>
                     <label
                       htmlFor="refreshRate"
-                      className="block text-sm font-medium text-neutral-200 mb-1"
+                      className="mb-1 block text-sm font-medium text-neutral-200"
                     >
                       Refresh Rate (Hz) <span className="text-red-400">*</span>
                     </label>
                     <input
                       id="refreshRate"
                       type="number"
-                      className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md"
+                      className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       disabled={formStatus === "submitting"}
                     />
                     {field.state.meta.errors && (
-                      <div className="text-red-300 text-sm mt-1">
+                      <div className="mt-1 text-sm text-red-300">
                         {field.state.meta.errors.join(", ")}
                       </div>
                     )}
@@ -1218,16 +1221,16 @@ export default function AddListingPage() {
                   <div>
                     <label
                       htmlFor="weight"
-                      className="block text-sm font-medium text-neutral-200 mb-1"
+                      className="mb-1 block text-sm font-medium text-neutral-200"
                     >
                       Weight{" "}
-                      <span className="text-neutral-400 text-xs ml-2">
+                      <span className="ml-2 text-xs text-neutral-400">
                         (optional)
                       </span>
                     </label>
                     <input
                       id="weight"
-                      className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md"
+                      className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       disabled={formStatus === "submitting"}
@@ -1246,14 +1249,14 @@ export default function AddListingPage() {
                   <div>
                     <label
                       htmlFor="backlightType"
-                      className="block text-sm font-medium text-neutral-200 mb-1"
+                      className="mb-1 block text-sm font-medium text-neutral-200"
                     >
                       Keyboard Backlight Type{" "}
                       <span className="text-red-400">*</span>
                     </label>
                     <select
                       id="backlightType"
-                      className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md"
+                      className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       disabled={formStatus === "submitting"}
@@ -1266,7 +1269,7 @@ export default function AddListingPage() {
                       ))}
                     </select>
                     {field.state.meta.errors && (
-                      <div className="text-red-300 text-sm mt-1">
+                      <div className="mt-1 text-sm text-red-300">
                         {field.state.meta.errors.join(", ")}
                       </div>
                     )}
@@ -1276,16 +1279,16 @@ export default function AddListingPage() {
             </div>
             {/* Images Section (preserved) */}
             <div className="mt-8">
-              <h2 className="text-lg font-semibold text-white mb-4 pb-2 border-b border-neutral-700">
+              <h2 className="mb-4 border-b border-neutral-700 pb-2 text-lg font-semibold text-white">
                 Images
               </h2>
 
               {/* Add Image Link Form */}
               <div className="mb-4">
-                <label className="block text-sm font-medium text-neutral-200 mb-2">
+                <label className="mb-2 block text-sm font-medium text-neutral-200">
                   Add Image URL{" "}
                   <span
-                    className="text-neutral-500 cursor-pointer"
+                    className="cursor-pointer text-neutral-500"
                     onClick={() => {
                       navigator.clipboard.writeText(
                         "https://i.ibb.co/DgTvz43f/predator.png"
@@ -1301,27 +1304,27 @@ export default function AddListingPage() {
                     value={imageLink}
                     onChange={(e) => setImageLink(e.target.value)}
                     placeholder="Enter image URL"
-                    className="flex-1 px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md"
+                    className="flex-1 rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                   />
                   <button
                     type="button" // Changed from submit to button
                     onClick={handleImageLinkSubmit}
-                    className="px-4 py-2 bg-secondary-600 text-white rounded-md hover:bg-secondary-700"
+                    className="rounded-md bg-secondary-600 px-4 py-2 text-white hover:bg-secondary-700"
                   >
                     Add Link
                   </button>
                 </div>
               </div>
 
-              <label className="block text-sm font-medium text-neutral-200 mb-2">
+              <label className="mb-2 block text-sm font-medium text-neutral-200">
                 Upload Images{" "}
-                <span className="text-neutral-400 text-xs ml-2">
+                <span className="ml-2 text-xs text-neutral-400">
                   (Multiple files supported)
                 </span>
               </label>
               <div className="flex flex-col space-y-4">
                 <div
-                  className="flex justify-center w-full h-32 px-4 transition bg-neutral-700 border-2 border-neutral-600 border-dashed rounded-md appearance-none cursor-pointer hover:border-secondary-500 focus:outline-none"
+                  className="flex h-32 w-full cursor-pointer appearance-none justify-center rounded-md border-2 border-dashed border-neutral-600 bg-neutral-700 px-4 transition hover:border-secondary-500 focus:outline-none"
                   onClick={() => {
                     const fileInput = document.querySelector(
                       'input[name="file_upload2"]'
@@ -1355,10 +1358,10 @@ export default function AddListingPage() {
                     }
                   }}
                 >
-                  <span className="flex flex-col items-center justify-center h-full">
+                  <span className="flex h-full flex-col items-center justify-center">
                     {uploadingImages ? (
                       <>
-                        <SpinnerSVG className="w-6 h-6 text-neutral-300 mb-2" />
+                        <SpinnerSVG className="mb-2 h-6 w-6 text-neutral-300" />
                         <span className="font-medium text-neutral-300">
                           Uploading...
                         </span>
@@ -1367,7 +1370,7 @@ export default function AddListingPage() {
                       <>
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          className="w-6 h-6 text-neutral-300 mb-2"
+                          className="mb-2 h-6 w-6 text-neutral-300"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
@@ -1398,7 +1401,7 @@ export default function AddListingPage() {
                 </div>
                 {uploadedImages.length > 0 && (
                   <div>
-                    <div className="flex justify-between items-center mb-2">
+                    <div className="mb-2 flex items-center justify-between">
                       <p className="text-sm text-neutral-400">
                         {uploadedImages.length} image
                         {uploadedImages.length !== 1 ? "s" : ""} uploaded
@@ -1411,11 +1414,11 @@ export default function AddListingPage() {
                         Clear all
                       </button>
                     </div>
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
                       {uploadedImages.map((image, index) => (
                         <div
                           key={index}
-                          className="relative group border border-neutral-700 rounded-md overflow-hidden"
+                          className="group relative overflow-hidden rounded-md border border-neutral-700"
                         >
                           <img
                             src={image}
@@ -1425,7 +1428,7 @@ export default function AddListingPage() {
                           <button
                             type="button"
                             onClick={() => removeImage(index)}
-                            className="absolute top-1 right-1 bg-red-600/90 hover:bg-red-700 text-white p-1 rounded-full shadow-md opacity-80 hover:opacity-100 transition-opacity"
+                            className="absolute right-1 top-1 rounded-full bg-red-600/90 p-1 text-white opacity-80 shadow-md transition-opacity hover:bg-red-700 hover:opacity-100"
                             aria-label="Remove image"
                             title="Remove image"
                           >
@@ -1455,11 +1458,11 @@ export default function AddListingPage() {
               <button
                 type="submit"
                 disabled={formStatus === "submitting"}
-                className="py-3 px-8 flex items-center justify-center gap-3 text-white font-semibold rounded-lg shadow-lg bg-gradient-to-r from-purple-600 to-primary-600 hover:from-purple-700 hover:to-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex items-center justify-center gap-3 rounded-lg bg-gradient-to-r from-purple-600 to-primary-600 px-8 py-3 font-semibold text-white shadow-lg hover:from-purple-700 hover:to-primary-700 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {formStatus === "submitting" ? (
                   <>
-                    <SpinnerSVG className="w-5 h-5" />
+                    <SpinnerSVG className="h-5 w-5" />
                     <span>Creating Listing...</span>
                   </>
                 ) : (
@@ -1484,7 +1487,7 @@ export default function AddListingPage() {
               <button
                 type="button"
                 onClick={handleFillTestData}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md ml-4"
+                className="ml-4 rounded-md bg-blue-600 px-4 py-2 text-white"
               >
                 Fill with Test Data
               </button>

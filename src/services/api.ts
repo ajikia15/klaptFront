@@ -1,5 +1,5 @@
 // Base API configuration and helper functions
-const API_URL = "http://localhost:3000";
+const API_URL = `${import.meta.env.VITE_API_URL}`;
 
 interface ApiResponse<T> {
   data?: T;
@@ -13,7 +13,6 @@ export async function apiRequest<T>(
 ): Promise<ApiResponse<T>> {
   const url = `${API_URL}${endpoint}`;
 
-  // Default headers
   const headers = {
     "Content-Type": "application/json",
     ...(options.headers || {}),
@@ -23,7 +22,7 @@ export async function apiRequest<T>(
     const response = await fetch(url, {
       ...options,
       headers,
-      credentials: "include", // This will send cookies with requests
+      credentials: "include",
     });
 
     const data = await response.json();
