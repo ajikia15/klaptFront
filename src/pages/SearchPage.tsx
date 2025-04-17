@@ -30,6 +30,16 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -100,6 +110,7 @@ export default function SearchPage() {
   const navigate = useNavigate();
   const showMobileUI = useMediaQuery("(max-width: 768px)");
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   // Type-safe filter configuration
   type FilterKey = keyof typeof selectedFilters;
@@ -725,9 +736,9 @@ export default function SearchPage() {
                     </DropdownMenuContent>
                   </DropdownMenu>
 
-                  {/* Mobile-only filter button */}
-                  <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-                    <SheetTrigger asChild>
+                  {/* Mobile-only filter button - replaced Sheet with Drawer */}
+                  <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+                    <DrawerTrigger asChild>
                       <Button
                         variant="outline"
                         className="relative border-neutral-700 bg-neutral-900/90 text-neutral-300 hover:bg-neutral-800 hover:text-white lg:hidden"
@@ -740,14 +751,11 @@ export default function SearchPage() {
                           </span>
                         )}
                       </Button>
-                    </SheetTrigger>
-                    <SheetContent
-                      side="bottom"
-                      className="h-screen rounded-t-xl border-neutral-700 bg-neutral-900 px-2"
-                    >
-                      {/* Mobile filter sheet content - same as desktop sheet */}
-                      <SheetHeader>
-                        <SheetTitle className="flex items-center justify-between text-white">
+                    </DrawerTrigger>
+                    <DrawerContent className="border-t border-neutral-700 bg-neutral-900 px-2">
+                      {/* Mobile filter drawer content */}
+                      <DrawerHeader>
+                        <DrawerTitle className="flex items-center justify-between text-white">
                           <div className="flex items-center">
                             <Filter
                               size={16}
@@ -769,14 +777,14 @@ export default function SearchPage() {
                               Reset All
                             </Button>
                           )}
-                        </SheetTitle>
-                        <SheetDescription className="text-neutral-400">
+                        </DrawerTitle>
+                        <DrawerDescription className="text-neutral-400">
                           Narrow down your search with these filters
-                        </SheetDescription>
-                      </SheetHeader>
+                        </DrawerDescription>
+                      </DrawerHeader>
 
                       {/* Copy of the filter sheet content */}
-                      <div className="h-[calc(100vh-170px)] overflow-y-auto">
+                      <div className="overflow-y-auto pb-20">
                         <Accordion
                           type="multiple"
                           defaultValue={["brand"]}
@@ -822,23 +830,24 @@ export default function SearchPage() {
                         )}
                       </div>
 
-                      <SheetFooter className="mt-4 flex-row gap-3">
+                      <DrawerFooter className="mt-4 border-t border-neutral-700/30 pt-4">
                         <Button
-                          variant="outline"
-                          onClick={() => setIsSheetOpen(false)}
-                          className="flex-1 border-neutral-700 text-neutral-300 hover:bg-neutral-800"
-                        >
-                          Cancel
-                        </Button>
-                        <Button
-                          onClick={() => setIsSheetOpen(false)}
-                          className="flex-1 bg-primary-600 text-white hover:bg-primary-700"
+                          onClick={() => setIsDrawerOpen(false)}
+                          className="bg-primary-600 text-white hover:bg-primary-700"
                         >
                           Apply Filters
                         </Button>
-                      </SheetFooter>
-                    </SheetContent>
-                  </Sheet>
+                        <DrawerClose asChild>
+                          <Button
+                            variant="outline"
+                            className="border-neutral-700 text-neutral-300 hover:bg-neutral-800"
+                          >
+                            Cancel
+                          </Button>
+                        </DrawerClose>
+                      </DrawerFooter>
+                    </DrawerContent>
+                  </Drawer>
                 </div>
               </div>
 

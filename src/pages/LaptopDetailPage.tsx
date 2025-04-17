@@ -56,7 +56,9 @@ export default function LaptopDetailPage() {
   } = useQuery<LaptopT>({
     queryKey: ["laptop", laptopId],
     queryFn: async () => {
-      const response = await fetch(`http://localhost:3000/laptops/${laptopId}`);
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/laptops/${laptopId}`
+      );
       if (!response.ok) {
         throw new Error("Failed to fetch laptop details");
       }
@@ -71,9 +73,9 @@ export default function LaptopDetailPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-neutral-900 flex justify-center items-center">
-        <div className="bg-neutral-800 border border-red-500/30 rounded-lg p-8 max-w-lg">
-          <h2 className="text-2xl font-bold text-red-400 mb-4">Error</h2>
+      <div className="flex min-h-screen items-center justify-center bg-neutral-900">
+        <div className="max-w-lg rounded-lg border border-red-500/30 bg-neutral-800 p-8">
+          <h2 className="mb-4 text-2xl font-bold text-red-400">Error</h2>
           <p className="text-neutral-300">{error.toString()}</p>
         </div>
       </div>
@@ -82,9 +84,9 @@ export default function LaptopDetailPage() {
 
   if (!laptop) {
     return (
-      <div className="min-h-screen bg-neutral-900 flex justify-center items-center">
-        <div className="bg-neutral-800 border border-neutral-700 rounded-lg p-8 max-w-lg">
-          <h2 className="text-2xl font-bold text-neutral-200 mb-4">
+      <div className="flex min-h-screen items-center justify-center bg-neutral-900">
+        <div className="max-w-lg rounded-lg border border-neutral-700 bg-neutral-800 p-8">
+          <h2 className="mb-4 text-2xl font-bold text-neutral-200">
             Not Found
           </h2>
           <p className="text-neutral-400">
@@ -260,7 +262,7 @@ export default function LaptopDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-900 text-neutral-200 pt-6 pb-16">
+    <div className="min-h-screen bg-neutral-900 pb-16 pt-6 text-neutral-200">
       <div className="container mx-auto">
         <Breadcrumb className="mb-8">
           <BreadcrumbList>
@@ -290,15 +292,15 @@ export default function LaptopDetailPage() {
           </BreadcrumbList>
         </Breadcrumb>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-16">
+        <div className="mb-16 grid grid-cols-1 gap-10 lg:grid-cols-2">
           {/* Image Gallery */}
-          <div className="order-2 lg:order-1 space-y-6" ref={animationParent}>
+          <div className="order-2 space-y-6 lg:order-1" ref={animationParent}>
             {/* Main Image */}
-            <div className="relative group">
-              <div className="absolute inset-0 bg-gradient-to-b from-purple-500/5 to-purple-900/10 rounded-2xl"></div>
+            <div className="group relative">
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-purple-500/5 to-purple-900/10"></div>
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(103,58,183,0.1),transparent_70%)]"></div>
-              <div className="bg-neutral-800/50 rounded-2xl p-8 border border-neutral-700/50 overflow-hidden aspect-[4/3] flex items-center justify-center">
-                <div className="absolute inset-0 opacity-5 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+              <div className="flex aspect-[4/3] items-center justify-center overflow-hidden rounded-2xl border border-neutral-700/50 bg-neutral-800/50 p-8">
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] opacity-5"></div>
                 <img
                   src={laptop.images[selectedImage] || laptop.images[0]}
                   alt={laptop.title}
@@ -307,14 +309,14 @@ export default function LaptopDetailPage() {
                     target.onerror = null;
                     target.src = `https://placehold.co/800x600/111827/444?text=No+Image`;
                   }}
-                  className="max-h-[400px] max-w-full object-contain transition-transform duration-500 ease-out transform group-hover:scale-105"
+                  className="max-h-[400px] max-w-full transform object-contain transition-transform duration-500 ease-out group-hover:scale-105"
                 />
               </div>
             </div>
 
             {/* Thumbnails */}
             {laptop.images.length > 1 && (
-              <div className="flex gap-3 overflow-x-auto pb-2 px-1">
+              <div className="flex gap-3 overflow-x-auto px-1 pb-2">
                 {laptop.images.map((image, index) => (
                   <button
                     key={index}
@@ -342,12 +344,12 @@ export default function LaptopDetailPage() {
           </div>
 
           <div className="order-1 lg:order-2">
-            <div className="bg-neutral-800/90 backdrop-blur-sm rounded-2xl p-8 border border-neutral-700/50 h-full flex flex-col shadow-lg relative overflow-hidden">
+            <div className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-neutral-700/50 bg-neutral-800/90 p-8 shadow-lg backdrop-blur-sm">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(124,58,237,0.07),transparent_70%)]"></div>
-              <div className="absolute inset-0 opacity-5 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+              <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] opacity-5"></div>
 
               <div className="relative z-10">
-                <div className="flex flex-wrap gap-3 mb-6">
+                <div className="mb-6 flex flex-wrap gap-3">
                   <span
                     className={`px-3 py-1 text-xs font-medium rounded-full border ${getStockStatusColor(
                       laptop.stockStatus
@@ -358,7 +360,7 @@ export default function LaptopDetailPage() {
                   </span>
 
                   {laptop.year && (
-                    <span className="px-3 py-1 text-xs font-medium rounded-full border border-neutral-700 text-neutral-300 bg-neutral-800/50">
+                    <span className="rounded-full border border-neutral-700 bg-neutral-800/50 px-3 py-1 text-xs font-medium text-neutral-300">
                       {laptop.year}
                     </span>
                   )}
@@ -366,18 +368,18 @@ export default function LaptopDetailPage() {
 
                 {/* Brand & Model */}
                 <div className="mb-2">
-                  <span className="text-sm font-medium text-secondary-400 uppercase tracking-wider">
+                  <span className="text-sm font-medium uppercase tracking-wider text-secondary-400">
                     {laptop.brand} {laptop.model}
                   </span>
                 </div>
 
-                <h1 className="text-3xl md:text-4xl font-bold text-white mb-6 leading-tight">
+                <h1 className="mb-6 text-3xl font-bold leading-tight text-white md:text-4xl">
                   {laptop.title}
                 </h1>
 
                 <div className="mb-6">
-                  <div className="inline-block rounded-md bg-neutral-800/80 px-3 py-2 border border-neutral-700/30">
-                    <span className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-secondary-300">
+                  <div className="inline-block rounded-md border border-neutral-700/30 bg-neutral-800/80 px-3 py-2">
+                    <span className="bg-gradient-to-r from-purple-400 to-secondary-300 bg-clip-text text-3xl font-bold text-transparent md:text-4xl">
                       ₾
                       {laptop.price.toLocaleString("en-US", {
                         minimumFractionDigits: 2,
@@ -388,8 +390,8 @@ export default function LaptopDetailPage() {
                 </div>
 
                 {/* Description */}
-                <div className="prose prose-invert prose-sm max-w-none mb-8">
-                  <p className="text-neutral-300 leading-relaxed">
+                <div className="prose prose-invert prose-sm mb-8 max-w-none">
+                  <p className="leading-relaxed text-neutral-300">
                     {laptop.description}
                   </p>
                 </div>
@@ -406,15 +408,15 @@ export default function LaptopDetailPage() {
                       value="key-highlights"
                       className="border-none"
                     >
-                      <AccordionPrimitive.Trigger className="flex w-full items-center py-2 px-0 text-lg font-semibold text-white hover:no-underline">
+                      <AccordionPrimitive.Trigger className="flex w-full items-center px-0 py-2 text-lg font-semibold text-white hover:no-underline">
                         <div className="flex items-center gap-2">
-                          <div className="h-1 w-5 bg-secondary-500 rounded-full"></div>
+                          <div className="h-1 w-5 rounded-full bg-secondary-500"></div>
                           <span>Key Highlights</span>
                         </div>
                       </AccordionPrimitive.Trigger>
-                      <AccordionContent className="pt-4 pl-7">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div className="bg-neutral-700/20 rounded-lg p-3 border border-neutral-700/30">
+                      <AccordionContent className="pl-7 pt-4">
+                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                          <div className="rounded-lg border border-neutral-700/30 bg-neutral-700/20 p-3">
                             <div className="flex items-center gap-2">
                               <CpuIcon
                                 size={18}
@@ -425,7 +427,7 @@ export default function LaptopDetailPage() {
                               </span>
                             </div>
                           </div>
-                          <div className="bg-neutral-700/20 rounded-lg p-3 border border-neutral-700/30">
+                          <div className="rounded-lg border border-neutral-700/30 bg-neutral-700/20 p-3">
                             <div className="flex items-center gap-2">
                               <RamIcon
                                 size={18}
@@ -436,7 +438,7 @@ export default function LaptopDetailPage() {
                               </span>
                             </div>
                           </div>
-                          <div className="bg-neutral-700/20 rounded-lg p-3 border border-neutral-700/30">
+                          <div className="rounded-lg border border-neutral-700/30 bg-neutral-700/20 p-3">
                             <div className="flex items-center gap-2">
                               <GpuIcon
                                 size={18}
@@ -447,7 +449,7 @@ export default function LaptopDetailPage() {
                               </span>
                             </div>
                           </div>
-                          <div className="bg-neutral-700/20 rounded-lg p-3 border border-neutral-700/30">
+                          <div className="rounded-lg border border-neutral-700/30 bg-neutral-700/20 p-3">
                             <div className="flex items-center gap-2">
                               <DisplayIcon
                                 size={18}
@@ -466,7 +468,7 @@ export default function LaptopDetailPage() {
                 </div>
 
                 <div className="mt-auto">
-                  <button className="w-full cursor-pointer py-4 px-6 bg-secondary-600 hover:bg-secondary-700 text-white font-semibold rounded-lg shadow-md transition-all duration-300 flex items-center justify-center gap-3">
+                  <button className="flex w-full cursor-pointer items-center justify-center gap-3 rounded-lg bg-secondary-600 px-6 py-4 font-semibold text-white shadow-md transition-all duration-300 hover:bg-secondary-700">
                     <PhoneIcon size={22} />
                     <span>Contact Us</span>
                   </button>
@@ -477,30 +479,30 @@ export default function LaptopDetailPage() {
         </div>
 
         <div className="mb-16">
-          <h2 className="text-2xl md:text-3xl font-bold text-white mb-8">
+          <h2 className="mb-8 text-2xl font-bold text-white md:text-3xl">
             Key Specifications
           </h2>
 
           {/* Replace the inline implementation with the imported component */}
           <KeySpecsCard laptop={laptop} keySpecs={keySpecs} />
 
-          <h2 className="text-2xl md:text-3xl font-bold text-white mb-8">
+          <h2 className="mb-8 text-2xl font-bold text-white md:text-3xl">
             Detailed Specifications
           </h2>
 
           {/* Detailed Specs Section - with fixed padding */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
             {specGroups.map((group, groupIndex) => (
               <div
                 key={groupIndex}
-                className="bg-gradient-to-br from-neutral-800/70 to-neutral-900/90 rounded-2xl overflow-hidden border border-neutral-700/50 transition-all duration-300 hover:shadow-[0_4px_20px_rgba(79,38,144,0.15)]"
+                className="overflow-hidden rounded-2xl border border-neutral-700/50 bg-gradient-to-br from-neutral-800/70 to-neutral-900/90 transition-all duration-300 hover:shadow-[0_4px_20px_rgba(79,38,144,0.15)]"
               >
-                <div className="px-6 py-4 border-b border-neutral-700/50 bg-neutral-800/50 flex items-center">
+                <div className="flex items-center border-b border-neutral-700/50 bg-neutral-800/50 px-6 py-4">
                   {group.items.length > 0 &&
                     (() => {
                       const IconComponent = group.items[0].Icon;
                       return (
-                        <span className="text-secondary-400 mr-3">
+                        <span className="mr-3 text-secondary-400">
                           <IconComponent size={18} />
                         </span>
                       );
@@ -514,15 +516,15 @@ export default function LaptopDetailPage() {
                   {group.items.map((spec, specIndex) => (
                     <div
                       key={specIndex}
-                      className="px-6 py-2 grid grid-cols-2 transition-all duration-200 hover:bg-neutral-800/30 relative overflow-hidden group"
+                      className="group relative grid grid-cols-2 overflow-hidden px-6 py-2 transition-all duration-200 hover:bg-neutral-800/30"
                     >
                       <div className="absolute inset-y-0 left-0 w-1 bg-secondary-500/0 transition-all duration-300 group-hover:bg-secondary-500/50"></div>
 
-                      <div className="text-neutral-400 text-sm flex items-center">
+                      <div className="flex items-center text-sm text-neutral-400">
                         {spec.label}
                       </div>
 
-                      <div className="text-neutral-200 font-medium flex items-center">
+                      <div className="flex items-center font-medium text-neutral-200">
                         {spec.value}
                       </div>
                     </div>
@@ -533,15 +535,15 @@ export default function LaptopDetailPage() {
           </div>
         </div>
 
-        <div className="bg-gradient-to-br from-neutral-800/70 to-neutral-900/90 rounded-2xl p-8 border border-neutral-700/50">
-          <h2 className="text-2xl font-bold text-white mb-6">
+        <div className="rounded-2xl border border-neutral-700/50 bg-gradient-to-br from-neutral-800/70 to-neutral-900/90 p-8">
+          <h2 className="mb-6 text-2xl font-bold text-white">
             Additional Information
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-6 gap-x-10">
+          <div className="grid grid-cols-1 gap-x-10 gap-y-6 md:grid-cols-2 lg:grid-cols-3">
             {laptop.weight && (
               <div>
-                <h4 className="text-sm uppercase tracking-wider text-neutral-500 mb-1">
+                <h4 className="mb-1 text-sm uppercase tracking-wider text-neutral-500">
                   Weight
                 </h4>
                 <div className="text-neutral-200">{laptop.weight}</div>
@@ -550,7 +552,7 @@ export default function LaptopDetailPage() {
 
             {laptop.backlightType && (
               <div>
-                <h4 className="text-sm uppercase tracking-wider text-neutral-500 mb-1">
+                <h4 className="mb-1 text-sm uppercase tracking-wider text-neutral-500">
                   Keyboard Backlight
                 </h4>
                 <div className="text-neutral-200">{laptop.backlightType}</div>
@@ -559,7 +561,7 @@ export default function LaptopDetailPage() {
 
             {laptop.year && (
               <div>
-                <h4 className="text-sm uppercase tracking-wider text-neutral-500 mb-1">
+                <h4 className="mb-1 text-sm uppercase tracking-wider text-neutral-500">
                   Release Year
                 </h4>
                 <div className="text-neutral-200">{laptop.year}</div>

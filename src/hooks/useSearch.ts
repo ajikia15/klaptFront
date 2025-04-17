@@ -112,7 +112,7 @@ export function useSearchLaptops(initialTerm: string = "", userId?: number) {
       }
 
       const response = await fetch(
-        `http://localhost:3000/laptops/filters?${params.toString()}`
+        `${import.meta.env.VITE_API_URL}/laptops/filters?${params.toString()}`
       );
 
       if (!response.ok) {
@@ -158,7 +158,7 @@ export function useSearchLaptops(initialTerm: string = "", userId?: number) {
       }
 
       const response = await fetch(
-        `http://localhost:3000/laptops/search?${params.toString()}`
+        `${import.meta.env.VITE_API_URL}/laptops/search?${params.toString()}`
       );
       if (!response.ok) {
         throw new Error("Failed to search laptops");

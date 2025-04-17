@@ -71,7 +71,7 @@ export const useGetUsers = () => {
     queryKey: ["users"],
     queryFn: async () => {
       try {
-        const response = await fetch(`http://localhost:3000/auth`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/auth`, {
           credentials: "include",
           headers: {
             "Content-Type": "application/json",

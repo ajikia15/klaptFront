@@ -12,7 +12,9 @@ export default function Searchbar() {
   const { data: randomLaptopName } = useQuery({
     queryKey: ["randomLaptop"],
     queryFn: async () => {
-      const response = await fetch("http://localhost:3000/laptops/random");
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/laptops/random`
+      );
       if (!response.ok) {
         throw new Error("Failed to fetch random laptop");
       }
@@ -37,7 +39,7 @@ export default function Searchbar() {
   };
 
   return (
-    <form onSubmit={handleSearch} className="relative w-full group">
+    <form onSubmit={handleSearch} className="group relative w-full">
       <div
         className={`absolute inset-0 bg-gradient-to-r from-purple-500/30 via-primary-500/30 to-pink-500/30 rounded-full blur-md transition-opacity duration-300 ${
           isFocused ? "opacity-100" : "opacity-0"
@@ -51,7 +53,7 @@ export default function Searchbar() {
           onChange={(e) => setSearchTerm(e.target.value)}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
-          className="w-full rounded-full border-[1.5px] border-neutral-700/80 bg-neutral-800/90 px-5 py-2.5 pr-12 text-white placeholder-neutral-400 transition-all duration-300 focus:border-primary-500/70 focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:bg-neutral-800"
+          className="w-full rounded-full border-[1.5px] border-neutral-700/80 bg-neutral-800/90 px-5 py-2.5 pr-12 text-white placeholder-neutral-400 transition-all duration-300 focus:border-primary-500/70 focus:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-primary-500/30"
         />
         <button
           type="submit"

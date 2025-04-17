@@ -12,7 +12,7 @@ export function useChangeStatus() {
       status: "approved" | "pending" | "rejected" | "archived";
     }) => {
       const response = await fetch(
-        `http://localhost:3000/laptops/${laptopId}`,
+        `${import.meta.env.VITE_API_URL}/laptops/${laptopId}`,
         {
           method: "PATCH",
           credentials: "include",
@@ -43,7 +43,7 @@ export function useDeleteLaptop() {
   return useMutation({
     mutationFn: async (laptopId: number) => {
       const response = await fetch(
-        `http://localhost:3000/laptops/${laptopId}`,
+        `${import.meta.env.VITE_API_URL}/laptops/${laptopId}`,
         {
           method: "DELETE",
           credentials: "include",
@@ -66,10 +66,13 @@ export function useDeleteUser() {
 
   return useMutation({
     mutationFn: async (userId: number) => {
-      const response = await fetch(`http://localhost:3000/users/${userId}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/users/${userId}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
+      );
       if (!response.ok) {
         throw new Error(`Failed to delete user with id ${userId}`);
       }
@@ -93,7 +96,7 @@ export function useUserRole() {
       admin: boolean;
     }) => {
       const response = await fetch(
-        `http://localhost:3000/users/${userId}/role`,
+        `${import.meta.env.VITE_API_URL}/users/${userId}/role`,
         {
           method: "PATCH",
           credentials: "include",

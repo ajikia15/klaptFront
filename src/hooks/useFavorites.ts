@@ -7,7 +7,9 @@ export function useFavoriteStatus(laptopId: number) {
     queryKey: ["favorites", laptopId],
     queryFn: async () => {
       const response = await fetch(
-        `http://localhost:3000/favorites/${encodeURIComponent(laptopId)}`,
+        `${import.meta.env.VITE_API_URL}/favorites/${encodeURIComponent(
+          laptopId
+        )}`,
         { credentials: "include" }
       );
       if (!response.ok) {
@@ -33,9 +35,12 @@ export function useListFavorites() {
   return useQuery<FavoriteT[]>({
     queryKey: ["favorites"],
     queryFn: async () => {
-      const response = await fetch(`http://localhost:3000/favorites`, {
-        credentials: "include",
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/favorites`,
+        {
+          credentials: "include",
+        }
+      );
       if (!response.ok) {
         throw new Error("Failed to fetch favorites");
       }
@@ -50,14 +55,17 @@ export function useAddToFavorites() {
 
   return useMutation({
     mutationFn: async (laptopId: number) => {
-      const response = await fetch(`http://localhost:3000/favorites`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ laptopId }),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/favorites`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ laptopId }),
+        }
+      );
       if (!response.ok) {
         throw new Error("Failed to add to favorites");
       }
@@ -76,7 +84,9 @@ export function useRemoveFromFavorites() {
   return useMutation({
     mutationFn: async (laptopId: number) => {
       const response = await fetch(
-        `http://localhost:3000/favorites/${encodeURIComponent(laptopId)}`,
+        `${import.meta.env.VITE_API_URL}/favorites/${encodeURIComponent(
+          laptopId
+        )}`,
         {
           method: "DELETE",
           credentials: "include",

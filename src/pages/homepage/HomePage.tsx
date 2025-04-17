@@ -74,7 +74,7 @@ export default function HomePage() {
   } = useQuery<LaptopT[]>({
     queryKey: ["laptops"],
     queryFn: async () => {
-      const response = await fetch("http://localhost:3000/laptops");
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/laptops`);
       if (!response.ok) {
         throw new Error("Failed to fetch laptops");
       }
