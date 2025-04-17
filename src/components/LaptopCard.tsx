@@ -71,11 +71,35 @@ export const LaptopCard: FC<LaptopCardProps> = ({
           </Link>
 
           <div className="mb-4 space-x-2 space-y-1">
-            <Badge className="bg-green-700/80 font-bold">RTX 4050</Badge>
-            <Badge className="bg-red-600/80 font-bold ">Ryzen 9</Badge>
-            <Badge className=" font-bold bg-orange-600/80">144Hz</Badge>
-            <Badge className=" font-bold bg-neutral-800">1TB SSD</Badge>
-            <Badge className=" font-bold bg-neutral-800">16GB RAM</Badge>
+            {shortDesc.includes("RTX") && (
+              <Badge className="bg-green-700/80 hover:bg-green-600/80 font-bold transition-all cursor-pointer shadow-sm border border-neutral-700/20">
+                RTX 4050
+              </Badge>
+            )}
+            {shortDesc.includes("AMD") && (
+              <Badge className="bg-red-600/80 hover:bg-red-500/80 font-bold transition-all cursor-pointer shadow-sm border border-neutral-700/20">
+                AMD
+              </Badge>
+            )}
+            {shortDesc.includes("Intel") && (
+              <Badge className="bg-blue-600/80 hover:bg-blue-500/80 font-bold transition-all cursor-pointer shadow-sm border border-neutral-700/20">
+                i9-13900HX
+              </Badge>
+            )}
+            {shortDesc.includes("Ryzen") && (
+              <Badge className="bg-red-600/80 hover:bg-red-500/80 font-bold transition-all cursor-pointer shadow-sm border border-neutral-700/20">
+                Ryzen 9 6900Hs
+              </Badge>
+            )}
+            <Badge className="font-bold bg-neutral-800  hover:bg-neutral-700 transition-all cursor-pointer shadow-sm border border-neutral-700/20">
+              144Hz
+            </Badge>
+            <Badge className="font-bold bg-neutral-800  hover:bg-neutral-700 transition-all cursor-pointer shadow-sm border border-neutral-700/20">
+              1TB SSD
+            </Badge>
+            <Badge className="font-bold bg-neutral-800  hover:bg-neutral-700 transition-all cursor-pointer shadow-sm border border-neutral-700/20">
+              16GB RAM
+            </Badge>
 
             {/* <Badge className="bg-blue-600/80 font-bold ">Intel Core</Badge> */}
           </div>
