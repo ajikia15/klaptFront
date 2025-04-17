@@ -59,38 +59,38 @@ export const LaptopCard: FC<LaptopCardProps> = (laptop) => {
 
           <div className="mb-4 space-x-2 space-y-1">
             {laptop.gpuBrand.toLowerCase().includes("nvidia") && (
-              <Badge className="cursor-pointer border border-neutral-700/20 bg-neutral-800 font-bold shadow-sm transition-all hover:bg-green-600/80">
+              <Badge className="cursor-pointer border border-neutral-700/20 bg-neutral-800 font-bold text-neutral-200 shadow-sm transition-all hover:bg-green-600/80 hover:text-neutral-100">
                 {laptop.gpuModel}
               </Badge>
             )}
             {laptop.gpuBrand.toLowerCase().includes("AMD") && (
-              <Badge className="cursor-pointer border border-neutral-700/20 bg-neutral-800 font-bold shadow-sm transition-all hover:bg-red-500/80">
+              <Badge className="cursor-pointer border border-neutral-700/20 bg-neutral-800 font-bold text-neutral-200 shadow-sm transition-all hover:bg-red-500/80 hover:text-neutral-100">
                 {laptop.gpuModel}
               </Badge>
             )}
             {laptop.processorBrand.includes("Intel") && (
-              <Badge className="cursor-pointer border border-neutral-700/20 bg-neutral-800 font-bold shadow-sm transition-all hover:bg-blue-500/80">
+              <Badge className="cursor-pointer border border-neutral-700/20 bg-neutral-800 font-bold text-neutral-200 shadow-sm transition-all hover:bg-blue-500/80 hover:text-neutral-100">
                 {laptop.processorModel}
               </Badge>
             )}
             {laptop.processorBrand.toLowerCase().includes("amd") && (
-              <Badge className="cursor-pointer border border-neutral-700/20 bg-neutral-800 font-bold shadow-sm transition-all hover:bg-red-500/80">
+              <Badge className="cursor-pointer border border-neutral-700/20 bg-neutral-800 font-bold text-neutral-200 shadow-sm transition-all hover:bg-red-500/80 hover:text-neutral-100">
                 {laptop.processorModel}
               </Badge>
             )}
-            <Badge className="cursor-pointer border border-neutral-700/20 bg-neutral-800 font-bold shadow-sm transition-all hover:bg-neutral-700">
+            <Badge className="cursor-pointer border border-neutral-700/20 bg-neutral-800 font-bold text-neutral-200 shadow-sm transition-all hover:bg-neutral-700 hover:text-neutral-100">
               {laptop.refreshRate}Hz
             </Badge>
-            <Badge className="cursor-pointer border border-neutral-700/20 bg-neutral-800 font-bold shadow-sm transition-all hover:bg-neutral-700">
+            <Badge className="cursor-pointer border border-neutral-700/20 bg-neutral-800 font-bold text-neutral-200 shadow-sm transition-all hover:bg-neutral-700 hover:text-neutral-100">
               {laptop.storageCapacity}
             </Badge>
-            <Badge className="cursor-pointer border border-neutral-700/20 bg-neutral-800 font-bold shadow-sm transition-all hover:bg-neutral-700">
+            <Badge className="cursor-pointer border border-neutral-700/20 bg-neutral-800 font-bold text-neutral-200 shadow-sm transition-all hover:bg-neutral-700 hover:text-neutral-100">
               {laptop.ram}GB
             </Badge>
-            <Badge className="cursor-pointer border border-neutral-700/20 bg-neutral-800 font-bold shadow-sm transition-all hover:bg-neutral-700">
+            <Badge className="cursor-pointer border border-neutral-700/20 bg-neutral-800 font-bold text-neutral-200 shadow-sm transition-all hover:bg-neutral-700 hover:text-neutral-100">
               {laptop.ramType}
             </Badge>
-            <Badge className="cursor-pointer border border-neutral-700/20 bg-neutral-800 font-bold shadow-sm transition-all hover:bg-neutral-700">
+            <Badge className="cursor-pointer border border-neutral-700/20 bg-neutral-800 font-bold text-neutral-200 shadow-sm transition-all hover:bg-neutral-700 hover:text-neutral-100">
               {laptop.screenResolution}
             </Badge>
 

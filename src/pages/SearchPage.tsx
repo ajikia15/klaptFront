@@ -459,7 +459,6 @@ export default function SearchPage() {
     );
   };
 
-  // Main header of the filter section - showing loading state properly
   const FilterHeader = () => (
     <div className="mb-4 flex items-center justify-between">
       <h2 className="text-xl font-semibold">Filters</h2>
@@ -488,7 +487,7 @@ export default function SearchPage() {
         <div className="flex flex-col gap-6 md:flex-row">
           {/* Filters sidebar - only visible on desktop */}
           <div className="hidden md:block md:w-1/4 xl:w-1/5">
-            <div className="relative mb-4 rounded-md bg-neutral-900 py-4">
+            <div className="relative rounded-md bg-neutral-900">
               <FilterHeader />
               <div className="space-y-4">
                 {/* Filter accordions */}
