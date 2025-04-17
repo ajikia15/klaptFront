@@ -743,7 +743,7 @@ export default function SearchPage() {
                     </SheetTrigger>
                     <SheetContent
                       side="bottom"
-                      className="h-[85vh] rounded-t-xl border-neutral-700 bg-neutral-900"
+                      className="h-screen rounded-t-xl border-neutral-700 bg-neutral-900 px-2"
                     >
                       {/* Mobile filter sheet content - same as desktop sheet */}
                       <SheetHeader>
@@ -776,7 +776,7 @@ export default function SearchPage() {
                       </SheetHeader>
 
                       {/* Copy of the filter sheet content */}
-                      <div className="h-[calc(100vh-170px)] overflow-y-auto py-4 pr-2">
+                      <div className="h-[calc(100vh-170px)] overflow-y-auto">
                         <Accordion
                           type="multiple"
                           defaultValue={["brand"]}

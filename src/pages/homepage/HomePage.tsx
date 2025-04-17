@@ -92,28 +92,28 @@ export default function HomePage() {
       </div>
 
       {/* Featured Laptops Section */}
-      <section className="container mx-auto py-10 relative">
-        <div className="absolute top-0 right-0 w-1/3 h-1/2 bg-primary-500/5 rounded-full blur-[100px] -z-10"></div>
+      <section className="container relative mx-auto py-10">
+        <div className="absolute right-0 top-0 -z-10 h-1/2 w-1/3 rounded-full bg-primary-500/5 blur-[100px]"></div>
         <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-3xl font-bold text-white flex items-center">
+          <h2 className="flex items-center text-3xl font-bold text-white">
             <Star className="mr-3 text-secondary-400" size={28} />
             Featured Laptops
           </h2>
           <Link
             to="/search"
-            className="text-neutral-400 hover:text-neutral-300 flex items-center transition-all duration-300"
+            className="flex items-center text-neutral-400 transition-all duration-300 hover:text-neutral-300"
           >
             View All <ArrowRight size={16} className="ml-2" />
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {isLoading ? (
             Array(4)
               .fill(0)
               .map((_, index) => <SkeletonCard key={`skeleton-${index}`} />)
           ) : error ? (
-            <div className="col-span-full text-red-500 text-center p-4">
+            <div className="col-span-full p-4 text-center text-red-500">
               Error loading laptops: {error.toString()}
             </div>
           ) : (
@@ -132,22 +132,22 @@ export default function HomePage() {
 
       <CategorySection categories={categories} />
 
-      <section className="container mx-auto py-10 relative mt-4">
+      <section className="container relative mx-auto mt-4 py-10">
         <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-3xl font-bold text-white flex items-center">
+          <h2 className="flex items-center text-3xl font-bold text-white">
             <Trophy className="mr-3 text-amber-400" size={28} />
             Hot Cakes
           </h2>
           <Link
             to="/search"
-            className="text-neutral-400 hover:text-neutral-300 flex items-center transition-all duration-300"
+            className="flex items-center text-neutral-400 transition-all duration-300 hover:text-neutral-300"
           >
             View All <ArrowRight size={16} className="ml-2" />
           </Link>
         </div>
 
         {isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {Array(4)
               .fill(0)
               .map((_, index) => (
@@ -155,11 +155,11 @@ export default function HomePage() {
               ))}
           </div>
         ) : error ? (
-          <div className="text-red-500 text-center p-4">
+          <div className="p-4 text-center text-red-500">
             Error loading laptops: {error.toString()}
           </div>
         ) : laptops && laptops.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {laptops.slice(0, 4).map((laptop) => (
               <LaptopCard
                 key={laptop.id}
@@ -169,7 +169,7 @@ export default function HomePage() {
             ))}
           </div>
         ) : (
-          <div className="text-center py-12 text-neutral-400">
+          <div className="py-12 text-center text-neutral-400">
             No laptops available
           </div>
         )}
@@ -178,22 +178,22 @@ export default function HomePage() {
       <AnimatedStatsSection />
 
       {/* New Arrivals */}
-      <section className="py-12 bg-neutral-900">
+      <section className="bg-neutral-900 py-12">
         <div className="container mx-auto">
           <div className="mb-6 flex items-center justify-between">
-            <h2 className="text-3xl font-bold text-white flex items-center">
+            <h2 className="flex items-center text-3xl font-bold text-white">
               <TrendingUp className="mr-3 text-primary-400" size={28} />
               New Arrivals
             </h2>
             <Link
               to="/search"
-              className="text-neutral-400 hover:text-neutral-300 flex items-center transition-all duration-300"
+              className="flex items-center text-neutral-400 transition-all duration-300 hover:text-neutral-300"
             >
               View All <ArrowRight size={16} className="ml-2" />
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {isLoading
               ? Array(4)
                   .fill(0)
