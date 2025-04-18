@@ -69,7 +69,7 @@ export default function ProfileMain() {
                 <User size={22} className="text-secondary-400" />
               </div>
               <div className="flex flex-1 items-center justify-between gap-4">
-                <div className="flex min-h-[40px] w-48 flex-col">
+                <div className="min-h-10 flex w-48 flex-col">
                   <span className="mb-1 text-xs font-semibold uppercase tracking-wide text-neutral-400">
                     Username
                   </span>
@@ -124,8 +124,9 @@ export default function ProfileMain() {
                 <div className="flex items-center gap-1">
                   {!editUsername && (
                     <Button
+                      variant={"outline"}
                       onClick={handleEditUsername}
-                      className="rounded p-1 transition-colors hover:bg-neutral-700"
+                      className="rounded border-0 p-1 transition-colors hover:bg-neutral-700"
                       title="Edit Username"
                     >
                       <Pencil size={18} className="text-neutral-400" />
