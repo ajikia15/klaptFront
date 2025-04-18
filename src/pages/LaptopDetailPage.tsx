@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link, useParams } from "@tanstack/react-router";
 import { LaptopT } from "../interfaces/laptopT";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { CpuIcon } from "../assets/Icons";
 import { GpuIcon } from "../assets/Icons";
@@ -9,6 +9,7 @@ import { RamIcon } from "../assets/Icons";
 import { StorageIcon } from "../assets/Icons";
 import { DisplayIcon } from "../assets/Icons";
 import { InfoIcon } from "../assets/Icons";
+import { useMediaQuery } from "../hooks/useMediaQuery";
 
 import "./laptopDetailPage.css";
 import {
@@ -34,21 +35,7 @@ export default function LaptopDetailPage() {
   const { laptopId } = useParams({ from: "/laptop/$laptopId" });
   const [animationParent] = useAutoAnimate();
   const [selectedImage, setSelectedImage] = useState(0);
-  const [isMobile, setIsMobile] = useState(false); // TODO
-
-  // // Check if device is mobile
-  // useEffect(() => {
-  //   const checkMobile = () => {
-  //     setIsMobile(window.innerWidth < 768);
-  //   };
-
-  //   checkMobile();
-  //   window.addEventListener("resize", checkMobile);
-
-  //   return () => {
-  //     window.removeEventListener("resize", checkMobile);
-  //   };
-  // }, []);
+  const isMobile = useMediaQuery("(max-width: 1023px)");
 
   const {
     data: laptop,
@@ -294,8 +281,8 @@ export default function LaptopDetailPage() {
         </Breadcrumb>
 
         <div className="mb-16 grid grid-cols-1 gap-10 lg:grid-cols-2">
-          {/* Image Gallery */}
-          <div className="order-2 space-y-6 lg:order-1" ref={animationParent}>
+          {/* Image Gallery - Now appears first on mobile */}
+          <div className="order-1 space-y-6" ref={animationParent}>
             {/* Main Image */}
             <div className="group relative">
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-purple-500/5 to-purple-900/10"></div>
@@ -344,7 +331,8 @@ export default function LaptopDetailPage() {
             )}
           </div>
 
-          <div className="order-1 lg:order-2">
+          {/* Details section - Now appears second on mobile */}
+          <div className="order-2">
             <div className="border-neutral-700/50 bg-neutral-800/90 relative flex h-full flex-col overflow-hidden rounded-2xl border p-8 shadow-lg backdrop-blur-sm">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(124,58,237,0.07),transparent_70%)]"></div>
               <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] opacity-5"></div>
@@ -480,12 +468,16 @@ export default function LaptopDetailPage() {
         </div>
 
         <div className="mb-16">
-          <h2 className="mb-8 text-2xl font-bold text-white md:text-3xl">
-            Key Specifications
-          </h2>
+          {!isMobile && (
+            <>
+              <h2 className="mb-8 text-2xl font-bold text-white md:text-3xl">
+                Key Specifications
+              </h2>
 
-          {/* Replace the inline implementation with the imported component */}
-          <KeySpecsCard laptop={laptop} keySpecs={keySpecs} />
+              {/* Replace the inline implementation with the imported component */}
+              <KeySpecsCard laptop={laptop} keySpecs={keySpecs} />
+            </>
+          )}
 
           <h2 className="mb-8 text-2xl font-bold text-white md:text-3xl">
             Detailed Specifications

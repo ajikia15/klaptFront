@@ -1,32 +1,19 @@
-import { useState, useEffect } from "react";
+import * as React from "react";
 
-/**
- * Custom hook that returns whether a media query matches the current viewport
- * @param query The media query to match against (e.g., "(max-width: 768px)")
- * @returns Boolean indicating if the media query matches
- */
-export function useMediaQuery(query: string): boolean {
-  const [matches, setMatches] = useState<boolean>(false);
+export function useMediaQuery(query: string) {
+  const [value, setValue] = React.useState(false);
 
-  useEffect(() => {
-    const mediaQuery = window.matchMedia(query);
+  React.useEffect(() => {
+    function onChange(event: MediaQueryListEvent) {
+      setValue(event.matches);
+    }
 
-    // Set the initial match state
-    setMatches(mediaQuery.matches);
+    const result = matchMedia(query);
+    result.addEventListener("change", onChange);
+    setValue(result.matches);
 
-    // Define the callback handler
-    const handler = (event: MediaQueryListEvent) => {
-      setMatches(event.matches);
-    };
-
-    // Add the event listener
-    mediaQuery.addEventListener("change", handler);
-
-    // Clean up
-    return () => {
-      mediaQuery.removeEventListener("change", handler);
-    };
+    return () => result.removeEventListener("change", onChange);
   }, [query]);
 
-  return matches;
+  return value;
 }

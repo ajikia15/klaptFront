@@ -79,7 +79,7 @@ export default function ProfileMain() {
                         <form.Field name="username">
                           {(field) => (
                             <input
-                              className="bg-neutral-700/60 min-h-[28px] w-full rounded border border-secondary-500 px-2 py-1 text-neutral-100 transition-all focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                              className="bg-neutral-700/60 min-h-7 w-full rounded border border-secondary-500 px-2 py-1 text-neutral-100 transition-all focus:outline-none focus:ring-2 focus:ring-secondary-500"
                               value={field.state.value}
                               onChange={(e) => {
                                 field.handleChange(e.target.value);
