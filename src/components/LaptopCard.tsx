@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import HeartBtn from "./HeartBtn";
 import LaptopTags from "./LaptopTags";
 import { LaptopT } from "@/interfaces/laptopT";
+import { Button } from "./ui/button";
 
 interface LaptopCardProps extends LaptopT {
   isAuthenticated: boolean;
@@ -108,13 +109,14 @@ export const LaptopCard: FC<LaptopCardProps> = (laptop) => {
             <Link
               to="/laptop/$laptopId"
               params={{ laptopId: laptop.id.toString() }}
-              className="group/btn relative flex cursor-pointer items-center gap-1.5 overflow-hidden rounded-md bg-secondary-700 px-4 py-2 text-base font-medium text-white transition-all duration-300 before:absolute before:inset-0 before:translate-x-[-100%] before:bg-gradient-to-r before:from-primary-500/0 before:via-secondary-400/50 before:to-primary-500/0 before:transition-transform before:duration-500 before:ease-in-out hover:bg-secondary-700 hover:before:translate-x-[100%]"
             >
-              <span className="relative z-10 font-bold">View Details</span>
-              <ArrowRight
-                size={16}
-                className="relative z-10 transition-all duration-300 group-hover/btn:translate-x-1"
-              />
+              <Button className="group/btn" variant={"secondary"}>
+                Details
+                <ArrowRight
+                  size={16}
+                  className="relative z-10 transition-all duration-300 group-hover/btn:translate-x-1"
+                />
+              </Button>
             </Link>
           </div>
         </div>
