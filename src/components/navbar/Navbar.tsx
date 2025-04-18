@@ -77,17 +77,16 @@ export default function Navbar() {
 
           {isAuthenticated ? (
             <>
-              <Link
-                to="/favorites"
-                className="relative grid cursor-pointer place-items-center rounded-full bg-neutral-800 p-2 text-neutral-100 transition-colors hover:bg-neutral-700 hover:text-secondary-400"
-                title="Favorites"
-              >
-                <Heart size={20} />
-                {favorites && favorites.length > 0 && (
-                  <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-secondary-400 text-xs text-neutral-100">
-                    {isLoading ? <SpinnerSVG /> : favorites?.length ?? 0}
-                  </span>
-                )}
+              <Link to="/favorites" title="Favorites">
+                <Button className="relative aspect-square" variant={"outline"}>
+                  Favorites
+                  <Heart size={20} />
+                  {favorites && favorites.length > 0 && (
+                    <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-secondary-400 text-xs text-neutral-100">
+                      {isLoading ? <SpinnerSVG /> : favorites?.length ?? 0}
+                    </span>
+                  )}
+                </Button>
               </Link>
 
               <DropdownMenu>
@@ -99,7 +98,7 @@ export default function Navbar() {
                     {user?.username ? user.username[0].toUpperCase() : "?"}
                   </div>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="min-w-[200px] border-neutral-700 bg-neutral-800 text-white">
+                <DropdownMenuContent className="min-w-52 border-neutral-700 bg-neutral-800 text-white">
                   <div className="px-2 py-1.5 text-sm text-neutral-400">
                     Hello, {user?.username}!
                   </div>
