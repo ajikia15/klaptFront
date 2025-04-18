@@ -1,34 +1,35 @@
 import { Link } from "@tanstack/react-router";
 
-interface BrandLogo {
-  name: string;
-  logo: string;
-}
-
-interface BrandShowcaseSectionProps {
-  brandLogos: BrandLogo[];
-}
-
-const BrandShowcaseSection = ({ brandLogos }: BrandShowcaseSectionProps) => {
+const BrandShowcaseSection = () => {
+  const brandLogos = [
+    { name: "ASUS", logo: "/brands/asus.svg" },
+    { name: "Dell", logo: "/brands/dell.svg" },
+    { name: "HP", logo: "/brands/hp.svg" },
+    { name: "Lenovo", logo: "/brands/lenovo.svg" },
+    { name: "Apple", logo: "/brands/apple.svg" },
+    { name: "MSI", logo: "/brands/msi.svg" },
+    { name: "Acer", logo: "/brands/acer.svg" },
+    { name: "Razer", logo: "/brands/razer.svg" },
+  ];
   return (
-    <section className="py-12 bg-neutral-900">
+    <section className="bg-neutral-900 py-12">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold text-white mb-2 text-center">
+        <h2 className="mb-2 text-center text-3xl font-bold text-white">
           Shop by Brand
         </h2>
-        <p className="text-neutral-400 text-center max-w-2xl mx-auto mb-8">
+        <p className="mx-auto mb-8 max-w-2xl text-center text-neutral-400">
           Explore our wide range of laptops from the world's leading
           manufacturers
         </p>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-8">
           {brandLogos.map((brand) => (
             <Link
               to="/search"
               key={brand.name}
-              className="bg-neutral-800 hover:bg-neutral-700 rounded-lg p-4 flex items-center justify-center h-20 transition-colors shadow-md"
+              className="flex h-20 items-center justify-center rounded-lg bg-neutral-800 p-4 shadow-md transition-colors hover:bg-neutral-700"
             >
-              <span className="text-neutral-300 hover:text-white text-lg font-medium">
+              <span className="text-lg font-medium text-neutral-300 hover:text-white">
                 {brand.name}
               </span>
             </Link>

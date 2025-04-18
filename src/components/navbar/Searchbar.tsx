@@ -75,11 +75,8 @@ export default function Searchbar({ fullScreen = false }: SearchbarProps) {
 
         <Button
           type="submit"
-          className={`absolute right-3 top-1/2 -translate-y-1/2 transform cursor-pointer transition-all duration-300 rounded-full h-8 w-8 flex items-center justify-center ${
-            isFocused || fullScreen
-              ? "bg-primary-500 text-white"
-              : "text-neutral-400 hover:text-white"
-          }`}
+          variant={"outline"}
+          className={`absolute right-3 top-1/2 h-8 w-8 -translate-y-1/2 transform cursor-pointer rounded-full transition-all duration-300`}
         >
           <Search
             size={fullScreen ? 20 : 18}

@@ -24,16 +24,6 @@ import BrandShowcaseSection from "@/pages/homepage/BrandShowcaseSection";
 import TestimonialsSection from "@/pages/homepage/TestimonialsSection";
 
 // Brand logos - replace with actual brand logo paths
-const brandLogos = [
-  { name: "ASUS", logo: "/brands/asus.svg" },
-  { name: "Dell", logo: "/brands/dell.svg" },
-  { name: "HP", logo: "/brands/hp.svg" },
-  { name: "Lenovo", logo: "/brands/lenovo.svg" },
-  { name: "Apple", logo: "/brands/apple.svg" },
-  { name: "MSI", logo: "/brands/msi.svg" },
-  { name: "Acer", logo: "/brands/acer.svg" },
-  { name: "Razer", logo: "/brands/razer.svg" },
-];
 
 const categories = [
   {
@@ -93,7 +83,7 @@ export default function HomePage() {
 
       {/* Featured Laptops Section */}
       <section className="container relative mx-auto py-10">
-        <div className="absolute right-0 top-0 -z-10 h-1/2 w-1/3 rounded-full bg-primary-500/5 blur-[100px]"></div>
+        <div className="bg-primary-500/5 absolute right-0 top-0 -z-10 h-1/2 w-1/3 rounded-full blur-[100px]"></div>
         <div className="mb-6 flex items-center justify-between">
           <h2 className="flex items-center text-3xl font-bold text-white">
             <Star className="mr-3 text-secondary-400" size={28} />
@@ -215,7 +205,7 @@ export default function HomePage() {
 
       <SpecialDealsSection />
 
-      <BrandShowcaseSection brandLogos={brandLogos} />
+      <BrandShowcaseSection />
 
       <TestimonialsSection />
     </div>
