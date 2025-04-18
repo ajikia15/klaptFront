@@ -35,6 +35,26 @@ function ProtectedRoute({ children }: { children: ReactNode }) {
 // Define search params for the search route
 interface SearchRouteSearchParams {
   term?: string;
+  brand?: string[];
+  gpuModel?: string[];
+  processorModel?: string[];
+  ramType?: string[];
+  ram?: string[];
+  storageType?: string[];
+  storageCapacity?: string[];
+  stockStatus?: string[];
+  screenSize?: string[];
+  screenResolution?: string[];
+  processorBrand?: string[];
+  gpuBrand?: string[];
+  graphicsType?: string[];
+  backlightType?: string[];
+  refreshRate?: string[];
+  vram?: string[];
+  year?: string[];
+  model?: string[];
+  shortDesc?: string[];
+  tags?: string[];
 }
 
 // Create a root route
@@ -65,6 +85,106 @@ const searchRoute = createRoute({
   ): SearchRouteSearchParams => {
     return {
       term: search.term ? String(search.term) : undefined,
+      brand: search.brand
+        ? Array.isArray(search.brand)
+          ? search.brand.map(String)
+          : [String(search.brand)]
+        : undefined,
+      gpuModel: search.gpuModel
+        ? Array.isArray(search.gpuModel)
+          ? search.gpuModel.map(String)
+          : [String(search.gpuModel)]
+        : undefined,
+      processorModel: search.processorModel
+        ? Array.isArray(search.processorModel)
+          ? search.processorModel.map(String)
+          : [String(search.processorModel)]
+        : undefined,
+      ramType: search.ramType
+        ? Array.isArray(search.ramType)
+          ? search.ramType.map(String)
+          : [String(search.ramType)]
+        : undefined,
+      ram: search.ram
+        ? Array.isArray(search.ram)
+          ? search.ram.map(String)
+          : [String(search.ram)]
+        : undefined,
+      storageType: search.storageType
+        ? Array.isArray(search.storageType)
+          ? search.storageType.map(String)
+          : [String(search.storageType)]
+        : undefined,
+      storageCapacity: search.storageCapacity
+        ? Array.isArray(search.storageCapacity)
+          ? search.storageCapacity.map(String)
+          : [String(search.storageCapacity)]
+        : undefined,
+      stockStatus: search.stockStatus
+        ? Array.isArray(search.stockStatus)
+          ? search.stockStatus.map(String)
+          : [String(search.stockStatus)]
+        : undefined,
+      screenSize: search.screenSize
+        ? Array.isArray(search.screenSize)
+          ? search.screenSize.map(String)
+          : [String(search.screenSize)]
+        : undefined,
+      screenResolution: search.screenResolution
+        ? Array.isArray(search.screenResolution)
+          ? search.screenResolution.map(String)
+          : [String(search.screenResolution)]
+        : undefined,
+      processorBrand: search.processorBrand
+        ? Array.isArray(search.processorBrand)
+          ? search.processorBrand.map(String)
+          : [String(search.processorBrand)]
+        : undefined,
+      gpuBrand: search.gpuBrand
+        ? Array.isArray(search.gpuBrand)
+          ? search.gpuBrand.map(String)
+          : [String(search.gpuBrand)]
+        : undefined,
+      graphicsType: search.graphicsType
+        ? Array.isArray(search.graphicsType)
+          ? search.graphicsType.map(String)
+          : [String(search.graphicsType)]
+        : undefined,
+      backlightType: search.backlightType
+        ? Array.isArray(search.backlightType)
+          ? search.backlightType.map(String)
+          : [String(search.backlightType)]
+        : undefined,
+      refreshRate: search.refreshRate
+        ? Array.isArray(search.refreshRate)
+          ? search.refreshRate.map(String)
+          : [String(search.refreshRate)]
+        : undefined,
+      vram: search.vram
+        ? Array.isArray(search.vram)
+          ? search.vram.map(String)
+          : [String(search.vram)]
+        : undefined,
+      year: search.year
+        ? Array.isArray(search.year)
+          ? search.year.map(String)
+          : [String(search.year)]
+        : undefined,
+      model: search.model
+        ? Array.isArray(search.model)
+          ? search.model.map(String)
+          : [String(search.model)]
+        : undefined,
+      shortDesc: search.shortDesc
+        ? Array.isArray(search.shortDesc)
+          ? search.shortDesc.map(String)
+          : [String(search.shortDesc)]
+        : undefined,
+      tags: search.tags
+        ? Array.isArray(search.tags)
+          ? search.tags.map(String)
+          : [String(search.tags)]
+        : undefined,
     };
   },
 });
@@ -224,4 +344,6 @@ declare module "@tanstack/react-router" {
   }
 }
 
+// Export searchRoute so it can be imported elsewhere
+export { searchRoute };
 export default router;

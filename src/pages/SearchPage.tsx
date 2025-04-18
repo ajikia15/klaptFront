@@ -1,13 +1,12 @@
 import { useNavigate } from "@tanstack/react-router";
-import { useSearch } from "@tanstack/react-router";
 import { LaptopCard } from "../components/LaptopCard";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useSearchLaptops } from "../hooks/useSearch";
 import { SkeletonCard } from "../components/SkeletonCard";
 import { useState, useEffect, useDeferredValue } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { SpinnerSVG } from "@/assets/SpinnerSVG";
 import { useAuth } from "@/context/AuthContext";
+import { useNewSearch } from "../hooks/useNewSearch";
 import {
   X,
   Search,
@@ -15,9 +14,6 @@ import {
   ArrowDownAZ,
   ArrowUpAZ,
   ChevronDown,
-  ChevronRight,
-  Loader2,
-  Star,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -106,11 +102,30 @@ interface FilterOptionsType {
 }
 
 export default function SearchPage() {
-  const search = useSearch({ from: "/search" });
   const navigate = useNavigate();
   const showMobileUI = useMediaQuery("(max-width: 768px)");
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  // Use the new URL-based search hook instead of the old one
+  const {
+    searchTerm,
+    setSearchTerm,
+    selectedFilters,
+    filterOptions,
+    laptops,
+    isLoadingFilters,
+    filterError,
+    isLoading,
+    error,
+    toggleFilter,
+    refetch,
+    resetFilters,
+    isFilterRefetching,
+    isFetched,
+    isPending,
+    isRefetching,
+  } = useNewSearch();
 
   // Type-safe filter configuration
   type FilterKey = keyof typeof selectedFilters;
@@ -235,22 +250,6 @@ export default function SearchPage() {
     "default" | "priceLowToHigh" | "priceHighToLow"
   >("default");
 
-  const {
-    searchTerm,
-    setSearchTerm,
-    selectedFilters,
-    filterOptions,
-    laptops,
-    isLoadingFilters,
-    filterError,
-    isLoading,
-    error,
-    toggleFilter,
-    refetch,
-    resetFilters,
-    isFilterRefetching,
-  } = useSearchLaptops(search.term || "");
-
   const deferredSearchTerm = useDeferredValue(searchTerm);
 
   const [cachedFilters, setCachedFilters] = useState<FilterOptionsType | null>(
@@ -292,21 +291,19 @@ export default function SearchPage() {
     return "168px";
   };
 
+  // This effect is simplified since URL changes are now handled by the hook
   useEffect(() => {
     setIsTransitioning(true);
     refetch().finally(() => {
       setTimeout(() => setIsTransitioning(false), 300);
     });
-  }, [deferredSearchTerm, selectedFilters, refetch]);
+  }, [deferredSearchTerm, refetch]);
 
+  // Form submission now just updates the search term
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    navigate({
-      to: "/search",
-      search: { term: searchTerm },
-      replace: true,
-    });
+    // The hook handles URL updates
+    setSearchTerm(searchTerm);
   };
 
   // Sort laptops based on current sort option
@@ -321,8 +318,7 @@ export default function SearchPage() {
       })
     : [];
 
-  const isPending = searchTerm !== deferredSearchTerm;
-  const showSkeletons = isLoading || isTransitioning || isPending;
+  const showSkeletons = isLoading || isTransitioning || isPending || !isFetched;
   const { isAuthenticated } = useAuth();
 
   // Count how many active filters we have
@@ -333,6 +329,16 @@ export default function SearchPage() {
 
   // Check if any filter is applied
   const hasActiveFilters = activeFiltersCount > 0;
+
+  // Fix the checkbox issue by ensuring consistent value comparison
+  const isValueSelected = (
+    filterKey: FilterKey,
+    optionValue: string
+  ): boolean => {
+    const selectedValues = selectedFilters[filterKey];
+    // Normalize both values to strings for comparison to avoid type mismatches
+    return selectedValues.map(String).includes(String(optionValue));
+  };
 
   // FILTER COMPONENT - Extracted for reusability
   const FilterSection = ({
@@ -366,18 +372,16 @@ export default function SearchPage() {
                       id={`${filterKey}-${option.value}${
                         inAccordion ? "-sheet" : ""
                       }`}
-                      checked={selectedFilters[filterKey].includes(
-                        option.value
-                      )}
+                      // Use our helper function to ensure consistent type comparison
+                      checked={isValueSelected(filterKey, option.value)}
                       onCheckedChange={() =>
                         toggleFilter(filterKey, option.value)
                       }
-                      // Don't disable checkboxes during filter loading to avoid confusion
                       disabled={option.disabled}
                       className={`${
                         option.disabled ? "opacity-50 cursor-not-allowed" : ""
                       } ${
-                        selectedFilters[filterKey].includes(option.value)
+                        isValueSelected(filterKey, option.value)
                           ? "border-primary-500"
                           : ""
                       }`}
@@ -389,7 +393,7 @@ export default function SearchPage() {
                       className={`text-sm leading-none ${
                         option.disabled
                           ? "text-neutral-500"
-                          : selectedFilters[filterKey].includes(option.value)
+                          : isValueSelected(filterKey, option.value)
                           ? "text-white"
                           : "text-neutral-400"
                       } cursor-pointer hover:text-white transition-colors`}
@@ -407,7 +411,7 @@ export default function SearchPage() {
               (displayFilters[optionsKey] as FilterOption[]).length >
                 maxItems &&
               !inAccordion && (
-                <div className="mt-1 border-t border-neutral-700/30 pt-1">
+                <div className="border-neutral-700/30 mt-1 border-t pt-1">
                   <Sheet>
                     <SheetTrigger asChild>
                       <Button
@@ -422,7 +426,7 @@ export default function SearchPage() {
                     </SheetTrigger>
                     <SheetContent
                       side="right"
-                      className="w-[400px] border-neutral-700/50 bg-neutral-900"
+                      className="border-neutral-700/50 w-[400px] bg-neutral-900"
                     >
                       <SheetHeader>
                         <SheetTitle className="flex items-center justify-between text-white">
@@ -454,7 +458,7 @@ export default function SearchPage() {
             values.map((value: string) => (
               <Badge
                 key={`${key}-${value}`}
-                className="cursor-pointer border-neutral-700/50 bg-neutral-800 px-2 py-1 text-white transition-all hover:bg-neutral-700 hover:shadow-md"
+                className="border-neutral-700/50 cursor-pointer bg-neutral-800 px-2 py-1 text-white transition-all hover:bg-neutral-700 hover:shadow-md"
                 variant="outline"
                 onClick={() => toggleFilter(key as FilterKey, value)}
               >
@@ -487,11 +491,6 @@ export default function SearchPage() {
   return (
     <div className="min-h-screen bg-neutral-900 text-neutral-200">
       {/* Header Area with page title and basic info */}
-      <div className="sticky top-0 z-20 border-b border-neutral-700/50 bg-neutral-800/80 py-6 backdrop-blur-sm">
-        <div className="container mx-auto px-4">
-          <h1 className="text-2xl font-bold md:text-3xl">Search Laptops</h1>
-        </div>
-      </div>
 
       {/* Main Content with Sidebar */}
       <div className="container mx-auto py-8">
@@ -518,7 +517,7 @@ export default function SearchPage() {
                       <AccordionItem
                         key={section.filterKey}
                         value={section.filterKey}
-                        className="overflow-hidden rounded-lg border border-neutral-700/50"
+                        className="border-neutral-700/50 overflow-hidden rounded-lg border"
                       >
                         <AccordionTrigger className="bg-neutral-800/50 px-4 py-2 hover:bg-neutral-800 hover:no-underline data-[state=open]:bg-neutral-800">
                           <div className="flex w-full items-center justify-between">
@@ -589,7 +588,7 @@ export default function SearchPage() {
                             <AccordionItem
                               key={section.filterKey}
                               value={section.filterKey}
-                              className="overflow-hidden rounded-lg border border-neutral-700/50"
+                              className="border-neutral-700/50 overflow-hidden rounded-lg border"
                             >
                               <AccordionTrigger className="bg-neutral-800/50 px-4 py-2 hover:bg-neutral-800 hover:no-underline data-[state=open]:bg-neutral-800">
                                 <div className="flex w-full items-center justify-between">
@@ -610,7 +609,7 @@ export default function SearchPage() {
 
                       {/* Active Filters in Sheet */}
                       {hasActiveFilters && (
-                        <div className="mt-6 border-t border-neutral-700/30 pt-6">
+                        <div className="border-neutral-700/30 mt-6 border-t pt-6">
                           <div className="mb-3 px-1">
                             <h3 className="flex items-center text-sm font-medium text-white">
                               <span className="mr-2 h-1 w-4 rounded-full bg-primary-500"></span>
@@ -626,7 +625,7 @@ export default function SearchPage() {
                                 resetFilters();
                                 setSearchTerm("");
                               }}
-                              className="mt-3 text-xs text-neutral-400 hover:bg-neutral-800/70 hover:text-white"
+                              className="hover:bg-neutral-800/70 mt-3 text-xs text-neutral-400 hover:text-white"
                             >
                               Clear All Filters
                             </Button>
@@ -638,7 +637,7 @@ export default function SearchPage() {
                 </Sheet>
                 {/* Display active filters */}
                 {hasActiveFilters && (
-                  <div className="mt-4 border-t border-neutral-700/30 pt-4">
+                  <div className="border-neutral-700/30 mt-4 border-t pt-4">
                     <h3 className="mb-2 flex items-center text-sm font-medium text-white">
                       <span className="mr-2 h-1 w-4 rounded-full bg-primary-500"></span>
                       Applied Filters
@@ -651,7 +650,7 @@ export default function SearchPage() {
                         resetFilters();
                         setSearchTerm("");
                       }}
-                      className="mt-2 text-xs text-neutral-400 hover:bg-neutral-800/70 hover:text-white"
+                      className="hover:bg-neutral-800/70 mt-2 text-xs text-neutral-400 hover:text-white"
                     >
                       Clear All Filters
                     </Button>
@@ -663,7 +662,7 @@ export default function SearchPage() {
 
           <div className="w-full md:w-3/4">
             {/* Search, sort and filter controls */}
-            <div className="mb-6 rounded-lg border border-neutral-700/50 bg-neutral-800/50 p-4">
+            <div className="border-neutral-700/50 bg-neutral-800/50 mb-6 rounded-lg border p-4">
               <div className="flex flex-col gap-4 md:flex-row">
                 <div className="flex-1">
                   <form onSubmit={handleSubmit} className="relative">
@@ -675,7 +674,7 @@ export default function SearchPage() {
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       placeholder="Search for laptops by brand, model, or specs..."
-                      className="h-10 w-full rounded-lg border border-neutral-700 bg-neutral-900/90 pl-10 pr-4 text-white shadow-inner focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      className="bg-neutral-900/90 h-10 w-full rounded-lg border border-neutral-700 pl-10 pr-4 text-white shadow-inner focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary-500"
                     />
                   </form>
                 </div>
@@ -685,7 +684,7 @@ export default function SearchPage() {
                     <DropdownMenuTrigger asChild>
                       <Button
                         variant="outline"
-                        className="border-neutral-600 bg-neutral-900/90 text-white hover:bg-neutral-700"
+                        className="bg-neutral-900/90 border-neutral-600 text-white hover:bg-neutral-700"
                       >
                         <ArrowDownAZ size={16} className="mr-2" />
                         {sortOption === "default"
@@ -741,7 +740,7 @@ export default function SearchPage() {
                     <DrawerTrigger asChild>
                       <Button
                         variant="outline"
-                        className="relative border-neutral-700 bg-neutral-900/90 text-neutral-300 hover:bg-neutral-800 hover:text-white lg:hidden"
+                        className="bg-neutral-900/90 relative border-neutral-700 text-neutral-300 hover:bg-neutral-800 hover:text-white lg:hidden"
                       >
                         <Filter size={16} className="mr-2" />
                         Filters
@@ -796,7 +795,7 @@ export default function SearchPage() {
                               <AccordionItem
                                 key={section.filterKey}
                                 value={section.filterKey}
-                                className="overflow-hidden rounded-lg border border-neutral-700/50"
+                                className="border-neutral-700/50 overflow-hidden rounded-lg border"
                               >
                                 <AccordionTrigger className="bg-neutral-800/50 px-4 py-2 hover:bg-neutral-800 hover:no-underline data-[state=open]:bg-neutral-800">
                                   <div className="flex w-full items-center justify-between">
@@ -816,7 +815,7 @@ export default function SearchPage() {
                         </Accordion>
                         {/* Mobile active filters */}
                         {hasActiveFilters && (
-                          <div className="mt-6 border-t border-neutral-700/30 pt-6">
+                          <div className="border-neutral-700/30 mt-6 border-t pt-6">
                             <div className="mb-3 px-1">
                               <h3 className="flex items-center text-sm font-medium text-white">
                                 <span className="mr-2 h-1 w-4 rounded-full bg-primary-500"></span>
@@ -830,7 +829,7 @@ export default function SearchPage() {
                         )}
                       </div>
 
-                      <DrawerFooter className="mt-4 border-t border-neutral-700/30 pt-4">
+                      <DrawerFooter className="border-neutral-700/30 mt-4 border-t pt-4">
                         <Button
                           onClick={() => setIsDrawerOpen(false)}
                           className="bg-primary-600 text-white hover:bg-primary-700"
