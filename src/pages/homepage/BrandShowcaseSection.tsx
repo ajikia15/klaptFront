@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 
 const BrandShowcaseSection = () => {
   const brandLogos = [
-    { name: "ASUS", logo: "/brands/asus.svg" },
+    { name: "Asus", logo: "/brands/asus.svg" },
     { name: "Dell", logo: "/brands/dell.svg" },
     { name: "HP", logo: "/brands/hp.svg" },
     { name: "Lenovo", logo: "/brands/lenovo.svg" },
@@ -27,6 +27,7 @@ const BrandShowcaseSection = () => {
             <Link
               to="/search"
               key={brand.name}
+              search={{ brand: [brand.name] }}
               className="flex h-20 items-center justify-center rounded-lg bg-neutral-800 p-4 shadow-md transition-colors hover:bg-neutral-700"
             >
               <span className="text-lg font-medium text-neutral-300 hover:text-white">
