@@ -128,9 +128,9 @@ export const LoginForm = () => {
                   Password
                 </label>
                 {/* BUTTON TODO */}
-                <Button className="text-xs text-secondary-400 transition-colors hover:text-secondary-300 focus:outline-none">
+                <span className="cursor-pointer text-xs text-secondary-400 transition-colors hover:text-secondary-300 focus:outline-none">
                   Forgot password?
-                </Button>
+                </span>
               </div>
               <input
                 id="password"
@@ -157,10 +157,10 @@ export const LoginForm = () => {
         <Button
           type="submit"
           disabled={formStatus === "submitting"}
-          className="flex w-full transform items-center justify-center gap-3 rounded-lg bg-gradient-to-r from-purple-600 to-primary-600 px-6 py-4 font-semibold text-white shadow-lg transition-transform duration-300 hover:scale-[1.02] hover:from-purple-700 hover:to-primary-700 focus:ring-2 focus:ring-secondary-500 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:opacity-50"
+          className="flex w-full items-center justify-center gap-3 rounded-lg bg-gradient-to-r from-purple-600 to-primary-600 px-6 py-4 font-semibold text-white shadow-lg transition-all duration-300 hover:from-purple-700 hover:to-primary-700 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {formStatus === "submitting" ? (
-            <span className="flex items-center justify-center">
+            <>
               <svg
                 className="-ml-1 mr-3 h-5 w-5 animate-spin text-white"
                 xmlns="http://www.w3.org/2000/svg"
@@ -182,7 +182,7 @@ export const LoginForm = () => {
                 ></path>
               </svg>
               Logging in...
-            </span>
+            </>
           ) : (
             <>
               <svg
