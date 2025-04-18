@@ -3,6 +3,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTypingEffect } from "../../hooks/useTypingEffect";
+import { Button } from "../ui/button";
 
 interface SearchbarProps {
   fullScreen?: boolean;
@@ -70,7 +71,9 @@ export default function Searchbar({ fullScreen = false }: SearchbarProps) {
           }`}
           autoFocus={fullScreen}
         />
-        <button
+        {/* BUTTON TODO */}
+
+        <Button
           type="submit"
           className={`absolute right-3 top-1/2 -translate-y-1/2 transform cursor-pointer transition-all duration-300 rounded-full h-8 w-8 flex items-center justify-center ${
             isFocused || fullScreen
@@ -84,7 +87,7 @@ export default function Searchbar({ fullScreen = false }: SearchbarProps) {
               isFocused ? "scale-90" : ""
             }`}
           />
-        </button>
+        </Button>
       </div>
     </form>
   );

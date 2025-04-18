@@ -35,9 +35,9 @@ export const LaptopCard: FC<LaptopCardProps> = (laptop) => {
         )}
 
         <div className="absolute right-3 top-3 z-20 flex translate-y-2 gap-2 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-          <button className="bg-neutral-800/70 flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg p-2 shadow-lg transition-all hover:bg-purple-800/90">
+          <Button className="bg-neutral-800/70 flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg p-2 shadow-lg transition-all hover:bg-purple-800/90">
             <Maximize2 size={20} className="text-white" />
-          </button>
+          </Button>
           <HeartBtn
             laptopId={laptop.id}
             className="bg-neutral-800/70 rounded-lg p-2 shadow-lg transition-all hover:bg-purple-800/90"

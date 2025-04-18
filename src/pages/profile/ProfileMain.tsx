@@ -89,7 +89,7 @@ export default function ProfileMain() {
                             />
                           )}
                         </form.Field>
-                        <button
+                        <Button
                           type="submit"
                           disabled={
                             !hasEdited ||
@@ -104,15 +104,15 @@ export default function ProfileMain() {
                           ) : (
                             <Save size={16} />
                           )}
-                        </button>
-                        <button
+                        </Button>
+                        <Button
                           type="button"
                           onClick={handleCancelEdit}
                           className="p-1 rounded bg-neutral-700 hover:bg-neutral-600 text-neutral-300 transition-colors"
                           title="Cancel"
                         >
                           <X size={16} />
-                        </button>
+                        </Button>
                       </div>
                     </form>
                   ) : (
@@ -123,13 +123,13 @@ export default function ProfileMain() {
                 </div>
                 <div className="flex items-center gap-1">
                   {!editUsername && (
-                    <button
+                    <Button
                       onClick={handleEditUsername}
                       className="p-1 rounded hover:bg-neutral-700 transition-colors"
                       title="Edit Username"
                     >
                       <Pencil size={18} className="text-neutral-400" />
-                    </button>
+                    </Button>
                   )}
                 </div>
               </div>

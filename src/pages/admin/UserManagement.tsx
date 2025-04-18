@@ -14,6 +14,7 @@ import {
 import { Link } from "@tanstack/react-router";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { User } from "../../services/authService";
+import { Button } from "@/components/ui/button";
 
 // Add proper type definitions for components
 interface LetterAvatarProps {
@@ -42,7 +43,7 @@ const LetterAvatar = ({ email }: LetterAvatarProps) => {
 
   return (
     <div
-      className="flex items-center justify-center rounded-full text-white font-medium"
+      className="flex items-center justify-center rounded-full font-medium text-white"
       style={{
         backgroundColor: `hsl(${hue}, 70%, 40%)`,
         width: "100%",
@@ -63,26 +64,26 @@ const BanUserDialog = ({
 }: DialogProps) => {
   if (!open) return null;
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <div className="bg-neutral-800 rounded-xl max-w-md w-full p-6 border border-amber-700/30">
-        <h2 className="text-xl font-bold text-white mb-4">Ban User</h2>
-        <p className="text-neutral-300 mb-6">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+      <div className="w-full max-w-md rounded-xl border border-amber-700/30 bg-neutral-800 p-6">
+        <h2 className="mb-4 text-xl font-bold text-white">Ban User</h2>
+        <p className="mb-6 text-neutral-300">
           Are you sure you want to ban this user? They will no longer be able to
           log in or post content.
         </p>
         <div className="flex justify-end gap-3">
-          <button
+          <Button
             onClick={() => onOpenChange(false)}
-            className="px-4 py-2 rounded-lg bg-neutral-700 text-neutral-200 hover:bg-neutral-600"
+            className="rounded-lg bg-neutral-700 px-4 py-2 text-neutral-200 hover:bg-neutral-600"
           >
             Cancel
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() => onAction(userId)}
-            className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700"
+            className="rounded-lg bg-red-600 px-4 py-2 text-white hover:bg-red-700"
           >
             Ban User
-          </button>
+          </Button>
         </div>
       </div>
     </div>
@@ -97,26 +98,26 @@ const UnbanUserDialog = ({
 }: DialogProps) => {
   if (!open) return null;
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <div className="bg-neutral-800 rounded-xl max-w-md w-full p-6 border border-amber-700/30">
-        <h2 className="text-xl font-bold text-white mb-4">Unban User</h2>
-        <p className="text-neutral-300 mb-6">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+      <div className="w-full max-w-md rounded-xl border border-amber-700/30 bg-neutral-800 p-6">
+        <h2 className="mb-4 text-xl font-bold text-white">Unban User</h2>
+        <p className="mb-6 text-neutral-300">
           Are you sure you want to unban this user? They will regain access to
           their account.
         </p>
         <div className="flex justify-end gap-3">
-          <button
+          <Button
             onClick={() => onOpenChange(false)}
-            className="px-4 py-2 rounded-lg bg-neutral-700 text-neutral-200 hover:bg-neutral-600"
+            className="rounded-lg bg-neutral-700 px-4 py-2 text-neutral-200 hover:bg-neutral-600"
           >
             Cancel
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() => onAction(userId)}
-            className="px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700"
+            className="rounded-lg bg-green-600 px-4 py-2 text-white hover:bg-green-700"
           >
             Unban User
-          </button>
+          </Button>
         </div>
       </div>
     </div>
@@ -131,26 +132,26 @@ const DeleteUserDialog = ({
 }: DialogProps) => {
   if (!open) return null;
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <div className="bg-neutral-800 rounded-xl max-w-md w-full p-6 border border-amber-700/30">
-        <h2 className="text-xl font-bold text-white mb-4">Delete User</h2>
-        <p className="text-neutral-300 mb-6">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+      <div className="w-full max-w-md rounded-xl border border-amber-700/30 bg-neutral-800 p-6">
+        <h2 className="mb-4 text-xl font-bold text-white">Delete User</h2>
+        <p className="mb-6 text-neutral-300">
           Are you sure you want to permanently delete this user? This action
           cannot be undone.
         </p>
         <div className="flex justify-end gap-3">
-          <button
+          <Button
             onClick={() => onOpenChange(false)}
-            className="px-4 py-2 rounded-lg bg-neutral-700 text-neutral-200 hover:bg-neutral-600"
+            className="rounded-lg bg-neutral-700 px-4 py-2 text-neutral-200 hover:bg-neutral-600"
           >
             Cancel
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() => onAction(userId)}
-            className="px-4 py-2 rounded-lg bg-red-700 text-white hover:bg-red-800"
+            className="rounded-lg bg-red-700 px-4 py-2 text-white hover:bg-red-800"
           >
             Delete User
-          </button>
+          </Button>
         </div>
       </div>
     </div>
@@ -167,35 +168,35 @@ const PromoteUserDialog = ({
 
   if (!open) return null;
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <div className="bg-neutral-800 rounded-xl max-w-md w-full p-6 border border-amber-700/30">
-        <h2 className="text-xl font-bold text-white mb-4">Change User Role</h2>
-        <p className="text-neutral-300 mb-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+      <div className="w-full max-w-md rounded-xl border border-amber-700/30 bg-neutral-800 p-6">
+        <h2 className="mb-4 text-xl font-bold text-white">Change User Role</h2>
+        <p className="mb-4 text-neutral-300">
           Select a new role for this user:
         </p>
         <div className="mb-6">
           <select
             value={selectedRole}
             onChange={(e) => setSelectedRole(e.target.value)}
-            className="w-full p-2 bg-neutral-700 text-neutral-200 rounded-lg border border-neutral-600"
+            className="w-full rounded-lg border border-neutral-600 bg-neutral-700 p-2 text-neutral-200"
           >
             <option value="user">Regular User</option>
             <option value="admin">Administrator</option>
           </select>
         </div>
         <div className="flex justify-end gap-3">
-          <button
+          <Button
             onClick={() => onOpenChange(false)}
-            className="px-4 py-2 rounded-lg bg-neutral-700 text-neutral-200 hover:bg-neutral-600"
+            className="rounded-lg bg-neutral-700 px-4 py-2 text-neutral-200 hover:bg-neutral-600"
           >
             Cancel
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() => onAction(userId, selectedRole)}
-            className="px-4 py-2 rounded-lg bg-amber-600 text-white hover:bg-amber-700"
+            className="rounded-lg bg-amber-600 px-4 py-2 text-white hover:bg-amber-700"
           >
             Change Role
-          </button>
+          </Button>
         </div>
       </div>
     </div>
@@ -305,20 +306,20 @@ export default function UserManagement() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-900 text-neutral-200 py-10">
+    <div className="min-h-screen bg-neutral-900 py-10 text-neutral-200">
       <div className="container mx-auto px-4">
-        <div className="bg-gradient-to-br from-neutral-800/70 to-neutral-900/90 rounded-2xl border border-amber-700/30 p-4 sm:p-8">
-          <h1 className="text-2xl font-bold text-white mb-4">
+        <div className="from-neutral-800/70 to-neutral-900/90 rounded-2xl border border-amber-700/30 bg-gradient-to-br p-4 sm:p-8">
+          <h1 className="mb-4 text-2xl font-bold text-white">
             User Management
           </h1>
-          <p className="text-neutral-400 mb-6">
+          <p className="mb-6 text-neutral-400">
             Manage user accounts, permissions, and access
           </p>
 
           {/* Filter buttons */}
           <div className="mb-4">
-            <h3 className="text-sm text-neutral-400 mb-2">Filter by Role:</h3>
-            <div className="flex flex-wrap gap-2 mb-6">
+            <h3 className="mb-2 text-sm text-neutral-400">Filter by Role:</h3>
+            <div className="mb-6 flex flex-wrap gap-2">
               {["all", "admin", "user"].map((role) => {
                 let activeClass = "";
                 let inactiveClass = "";
@@ -327,21 +328,21 @@ export default function UserManagement() {
                   case "admin":
                     activeClass = "bg-amber-600 text-white";
                     inactiveClass =
-                      "bg-amber-900/20 hover:bg-amber-900/40 text-amber-400 hover:text-amber-300 border border-amber-800/30";
+                      "border border-amber-800/30 bg-amber-900/20 text-amber-400 hover:bg-amber-900/40 hover:text-amber-300";
                     break;
                   case "user":
                     activeClass = "bg-green-600 text-white";
                     inactiveClass =
-                      "bg-green-900/20 hover:bg-green-900/40 text-green-400 hover:text-green-300 border border-green-800/30";
+                      "border border-green-800/30 bg-green-900/20 text-green-400 hover:bg-green-900/40 hover:text-green-300";
                     break;
                   default: // "all"
                     activeClass = "bg-neutral-600 text-white";
                     inactiveClass =
-                      "bg-neutral-800/70 hover:bg-neutral-700 text-neutral-400 hover:text-neutral-300 border border-neutral-700/30";
+                      "bg-neutral-800/70 border-neutral-700/30 border text-neutral-400 hover:bg-neutral-700 hover:text-neutral-300";
                 }
 
                 return (
-                  <button
+                  <Button
                     key={`role-${role}`}
                     onClick={() => setRoleFilter(role)}
                     className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg transition-colors flex items-center gap-1.5 text-xs sm:text-sm ${
@@ -352,15 +353,15 @@ export default function UserManagement() {
                     {role === "user" && <UserCheck size={14} />}
                     {role === "all" && <Users size={14} />}
                     {role.charAt(0).toUpperCase() + role.slice(1)}
-                  </button>
+                  </Button>
                 );
               })}
             </div>
           </div>
 
-          <div className="overflow-x-auto rounded-lg border border-neutral-700/30">
+          <div className="border-neutral-700/30 overflow-x-auto rounded-lg border">
             {/* Table header - grid for desktop with additional Role column */}
-            <div className="hidden md:grid grid-cols-7 bg-neutral-800 text-xs uppercase font-medium">
+            <div className="hidden grid-cols-7 bg-neutral-800 text-xs font-medium uppercase md:grid">
               <div className="col-span-1 px-6 py-3">ID</div>
               <div className="col-span-2 px-6 py-3">Email</div>
               <div className="col-span-1 px-6 py-3">Role</div>
@@ -369,14 +370,14 @@ export default function UserManagement() {
 
             {/* Loading state */}
             {isLoading && (
-              <div className="py-8 bg-neutral-800/40 text-center">
+              <div className="bg-neutral-800/40 py-8 text-center">
                 <p className="text-neutral-400">Loading users...</p>
               </div>
             )}
 
             {/* Error state */}
             {error && (
-              <div className="py-8 bg-neutral-800/40 text-center">
+              <div className="bg-neutral-800/40 py-8 text-center">
                 <p className="text-red-400">
                   Error loading users. Please try again later.
                 </p>
@@ -390,111 +391,111 @@ export default function UserManagement() {
                   filteredUsers.map((user: User) => (
                     <div
                       key={user.id}
-                      className="md:grid md:grid-cols-7 block bg-neutral-800/30 border-b border-neutral-700/30 hover:bg-neutral-800/50 transition-colors"
+                      className="bg-neutral-800/30 border-neutral-700/30 hover:bg-neutral-800/50 block border-b transition-colors md:grid md:grid-cols-7"
                     >
                       {/* Mobile card view */}
                       <div className="p-4 md:hidden">
-                        <div className="flex items-start mb-3">
-                          <div className="w-12 h-12 mr-3 rounded-full overflow-hidden flex-shrink-0">
+                        <div className="mb-3 flex items-start">
+                          <div className="mr-3 h-12 w-12 flex-shrink-0 overflow-hidden rounded-full">
                             <LetterAvatar email={user.email} />
                           </div>
                           <div className="flex-1">
-                            <h3 className="font-medium mb-1">ID: {user.id}</h3>
-                            <p className="text-sm text-neutral-400 mb-1">
+                            <h3 className="mb-1 font-medium">ID: {user.id}</h3>
+                            <p className="mb-1 text-sm text-neutral-400">
                               {user.email}
                             </p>
-                            <div className="flex items-center gap-3 mb-2">
+                            <div className="mb-2 flex items-center gap-3">
                               <Badge variant={user.admin ? "admin" : "user"}>
                                 {user.admin ? "Admin" : "User"}
                               </Badge>
                             </div>
                           </div>
                         </div>
-                        <div className="flex flex-wrap gap-2 mt-2">
+                        <div className="mt-2 flex flex-wrap gap-2">
                           <Link
                             to={`/`} // TODO
-                            className="p-1.5 text-blue-400 hover:text-blue-300 bg-blue-900/20 hover:bg-blue-900/30 rounded transition-colors flex items-center gap-1"
+                            className="flex items-center gap-1 rounded bg-blue-900/20 p-1.5 text-blue-400 transition-colors hover:bg-blue-900/30 hover:text-blue-300"
                           >
                             <Eye size={16} />
                             <span className="text-xs">View</span>
                           </Link>
-                          <button
-                            className="p-1.5 text-red-400 hover:text-red-300 bg-red-900/20 hover:bg-red-900/30 rounded transition-colors flex items-center gap-1"
+                          <Button
+                            className="flex items-center gap-1 rounded bg-red-900/20 p-1.5 text-red-400 transition-colors hover:bg-red-900/30 hover:text-red-300"
                             onClick={() => openBanDialog(user.id)}
                           >
                             <UserX size={16} />
                             <span className="text-xs">Ban</span>
-                          </button>
-                          <button
-                            className="p-1.5 text-amber-400 hover:text-amber-300 bg-amber-900/20 hover:bg-amber-900/30 rounded transition-colors flex items-center gap-1"
+                          </Button>
+                          <Button
+                            className="flex items-center gap-1 rounded bg-amber-900/20 p-1.5 text-amber-400 transition-colors hover:bg-amber-900/30 hover:text-amber-300"
                             onClick={() => openPromoteDialog(user.id)}
                           >
                             <UserCog size={16} />
                             <span className="text-xs">Role</span>
-                          </button>
-                          <button
-                            className="p-1.5 text-red-400 hover:text-red-300 bg-red-900/20 hover:bg-red-900/30 rounded transition-colors flex items-center gap-1"
+                          </Button>
+                          <Button
+                            className="flex items-center gap-1 rounded bg-red-900/20 p-1.5 text-red-400 transition-colors hover:bg-red-900/30 hover:text-red-300"
                             onClick={() => openDeleteDialog(user.id)}
                           >
                             <Trash2 size={16} />
                             <span className="text-xs">Delete</span>
-                          </button>
+                          </Button>
                         </div>
                       </div>
 
                       {/* Desktop table view with separate columns */}
-                      <div className="col-span-1 px-6 py-4 min-h-[72px] items-center hidden md:flex">
+                      <div className="col-span-1 hidden min-h-[72px] items-center px-6 py-4 md:flex">
                         <div className="flex items-center">
-                          <div className="w-8 h-8 mr-3 rounded-full overflow-hidden">
+                          <div className="mr-3 h-8 w-8 overflow-hidden rounded-full">
                             <LetterAvatar email={user.email} />
                           </div>
                           <div className="font-medium">{user.id}</div>
                         </div>
                       </div>
-                      <div className="col-span-2 px-6 py-4 items-center text-sm hidden md:flex">
+                      <div className="col-span-2 hidden items-center px-6 py-4 text-sm md:flex">
                         {user.email}
                       </div>
-                      <div className="col-span-1 px-6 py-4 items-center text-sm hidden md:flex">
+                      <div className="col-span-1 hidden items-center px-6 py-4 text-sm md:flex">
                         <Badge variant={user.admin ? "admin" : "user"}>
                           {user.admin ? "Admin" : "User"}
                         </Badge>
                       </div>
-                      <div className="col-span-3 px-6 py-4 items-center hidden md:flex">
+                      <div className="col-span-3 hidden items-center px-6 py-4 md:flex">
                         <div className="flex space-x-1.5">
                           <Link
                             to={`/`} // TODO
-                            className="p-1.5 text-blue-400 hover:text-blue-300 bg-blue-900/20 hover:bg-blue-900/30 rounded transition-colors"
+                            className="rounded bg-blue-900/20 p-1.5 text-blue-400 transition-colors hover:bg-blue-900/30 hover:text-blue-300"
                             title="View user profile"
                           >
                             <Eye size={16} />
                           </Link>
-                          <button
-                            className="p-1.5 text-red-400 hover:text-red-300 bg-red-900/20 hover:bg-red-900/30 rounded transition-colors"
+                          <Button
+                            className="rounded bg-red-900/20 p-1.5 text-red-400 transition-colors hover:bg-red-900/30 hover:text-red-300"
                             title="Ban user"
                             onClick={() => openBanDialog(user.id)}
                           >
                             <UserX size={16} />
-                          </button>
-                          <button
-                            className="p-1.5 text-amber-400 hover:text-amber-300 bg-amber-900/20 hover:bg-amber-900/30 rounded transition-colors"
+                          </Button>
+                          <Button
+                            className="rounded bg-amber-900/20 p-1.5 text-amber-400 transition-colors hover:bg-amber-900/30 hover:text-amber-300"
                             title="Change user role"
                             onClick={() => openPromoteDialog(user.id)}
                           >
                             <UserCog size={16} />
-                          </button>
-                          <button
-                            className="p-1.5 text-red-400 hover:text-red-300 bg-red-900/20 hover:bg-red-900/30 rounded transition-colors"
+                          </Button>
+                          <Button
+                            className="rounded bg-red-900/20 p-1.5 text-red-400 transition-colors hover:bg-red-900/30 hover:text-red-300"
                             title="Delete user"
                             onClick={() => openDeleteDialog(user.id)}
                           >
                             <Trash2 size={16} />
-                          </button>
+                          </Button>
                         </div>
                       </div>
                     </div>
                   ))
                 ) : (
-                  <div className="py-8 bg-neutral-800/40 text-center">
+                  <div className="bg-neutral-800/40 py-8 text-center">
                     <p className="text-neutral-400">
                       No users found matching the selected filters.
                     </p>

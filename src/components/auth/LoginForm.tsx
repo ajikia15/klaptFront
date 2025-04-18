@@ -2,6 +2,7 @@ import { useForm } from "@tanstack/react-form";
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "@tanstack/react-router";
+import { Button } from "../ui/button";
 
 export const LoginForm = () => {
   const [formStatus, setFormStatus] = useState<
@@ -52,13 +53,13 @@ export const LoginForm = () => {
       className="space-y-5"
     >
       {formStatus === "error" && (
-        <div className="p-3 bg-red-900/50 text-red-200 rounded-md">
+        <div className="rounded-md bg-red-900/50 p-3 text-red-200">
           {errorMessage}
         </div>
       )}
 
       {formStatus === "success" && (
-        <div className="p-3 bg-green-900/50 text-green-200 rounded-md">
+        <div className="rounded-md bg-green-900/50 p-3 text-green-200">
           Login successful! Redirecting...
         </div>
       )}
@@ -80,7 +81,7 @@ export const LoginForm = () => {
             <>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-neutral-200 mb-1"
+                className="mb-1 block text-sm font-medium text-neutral-200"
               >
                 Email
               </label>
@@ -88,14 +89,14 @@ export const LoginForm = () => {
                 id="email"
                 name="email"
                 type="email"
-                className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-secondary-500"
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
                 disabled={formStatus === "submitting"}
                 placeholder="your@email.com"
               />
               {field.state.meta.errors ? (
-                <div className="text-red-300 text-sm mt-1">
+                <div className="mt-1 text-sm text-red-300">
                   {field.state.meta.errors.join(", ")}
                 </div>
               ) : null}
@@ -119,32 +120,30 @@ export const LoginForm = () => {
         >
           {(field) => (
             <>
-              <div className="flex justify-between items-center mb-1">
+              <div className="mb-1 flex items-center justify-between">
                 <label
                   htmlFor="password"
                   className="block text-sm font-medium text-neutral-200"
                 >
                   Password
                 </label>
-                <button
-                  type="button"
-                  className="text-xs text-secondary-400 hover:text-secondary-300 focus:outline-none transition-colors"
-                >
+                {/* BUTTON TODO */}
+                <Button className="text-xs text-secondary-400 transition-colors hover:text-secondary-300 focus:outline-none">
                   Forgot password?
-                </button>
+                </Button>
               </div>
               <input
                 id="password"
                 name="password"
                 type="password"
-                className="w-full px-4 py-3 bg-neutral-700 border border-neutral-600 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-secondary-500"
+                className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-secondary-500"
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
                 disabled={formStatus === "submitting"}
                 placeholder="••••••••"
               />
               {field.state.meta.errors ? (
-                <div className="text-red-300 text-sm mt-1">
+                <div className="mt-1 text-sm text-red-300">
                   {field.state.meta.errors.join(", ")}
                 </div>
               ) : null}
@@ -154,15 +153,16 @@ export const LoginForm = () => {
       </div>
 
       <div className="mt-6">
-        <button
+        {/* BUTTON TODO */}
+        <Button
           type="submit"
           disabled={formStatus === "submitting"}
-          className="w-full py-4 px-6 flex items-center justify-center gap-3 text-white font-semibold rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-[1.02] focus:ring-2 focus:ring-secondary-500 focus:ring-opacity-50 bg-gradient-to-r from-purple-600 to-primary-600 hover:from-purple-700 hover:to-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex w-full transform items-center justify-center gap-3 rounded-lg bg-gradient-to-r from-purple-600 to-primary-600 px-6 py-4 font-semibold text-white shadow-lg transition-transform duration-300 hover:scale-[1.02] hover:from-purple-700 hover:to-primary-700 focus:ring-2 focus:ring-secondary-500 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {formStatus === "submitting" ? (
             <span className="flex items-center justify-center">
               <svg
-                className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                className="-ml-1 mr-3 h-5 w-5 animate-spin text-white"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -203,7 +203,7 @@ export const LoginForm = () => {
               Sign In
             </>
           )}
-        </button>
+        </Button>
       </div>
     </form>
   );

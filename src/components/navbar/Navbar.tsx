@@ -22,6 +22,7 @@ import {
   DrawerTitle,
   DrawerDescription,
 } from "@/components/ui/drawer";
+import { Button } from "../ui/button";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -138,11 +139,8 @@ export default function Navbar() {
               >
                 Sign In
               </Link>
-              <Link
-                to="/register"
-                className="transform rounded-lg bg-gradient-to-r from-purple-600 to-primary-600 px-4 py-2 text-sm font-medium text-white shadow-md transition-all hover:scale-[1.02] hover:from-purple-700 hover:to-primary-700 hover:shadow-lg"
-              >
-                Create Account
+              <Link to="/register">
+                <Button variant={"outline"}>Create Account</Button>
               </Link>
             </>
           )}
@@ -239,8 +237,9 @@ export default function Navbar() {
                           )}
                         </Link>
                       </DrawerClose>
+                      {/* BUTTON TODO */}
 
-                      <button
+                      <Button
                         onClick={handleLogout}
                         className="mt-3 flex items-center rounded-lg bg-red-900/30 px-4 py-3.5 text-red-400"
                       >
@@ -261,7 +260,7 @@ export default function Navbar() {
                           <line x1="21" y1="12" x2="9" y2="12"></line>
                         </svg>
                         Logout
-                      </button>
+                      </Button>
                     </>
                   ) : (
                     <>

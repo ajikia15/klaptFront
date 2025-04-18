@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import FlashSection from "./FlashSection";
+import { Button } from "./ui/button";
 
 export default function Landing() {
   const [emblaRef, emblaApi] = useEmblaCarousel({
@@ -109,35 +110,35 @@ export default function Landing() {
   return (
     <section className="w-full">
       {/* Sidebar DISABLED grid-cols-4 col-span-3 */}
-      {/* <div className="col-span-1 bg-neutral-800 rounded-lg p-4 box-border border-neutral-700 border">
+      {/* <div className="col-span-1 box-border rounded-lg border border-neutral-700 bg-neutral-800 p-4">
         <ul className="flex flex-col gap-4">
-          <li className="flex justify-between items-center">
+          <li className="flex items-center justify-between">
             <span>Asus</span>
             <ArrowRight size={18} />
           </li>
-          <li className="flex justify-between items-center">
+          <li className="flex items-center justify-between">
             <span>Lenovo</span>
             <ArrowRight size={18} />
           </li>
-          <li className="flex justify-between items-center">
+          <li className="flex items-center justify-between">
             <span>MSI</span>
             <ArrowRight size={18} />
           </li>
-          <li className="flex justify-between items-center">
+          <li className="flex items-center justify-between">
             <span>Acer</span>
             <ArrowRight size={18} />
           </li>
-          <li className="flex justify-between items-center">
+          <li className="flex items-center justify-between">
             <span>HP</span>
             <ArrowRight size={18} />
           </li>
-          <li className="flex justify-between items-center">
+          <li className="flex items-center justify-between">
             <span>Dell</span>
             <ArrowRight size={18} />
           </li>
         </ul>
       </div> */}
-      <div className=" relative overflow-hidden rounded-lg">
+      <div className="relative overflow-hidden rounded-lg">
         {/* Embla Carousel Container */}
         <div className="overflow-hidden" ref={emblaRef}>
           <div className="flex transition-transform">
@@ -145,11 +146,11 @@ export default function Landing() {
               <div key={slide.id} className="relative min-w-full">
                 {/* Slide content */}
                 <div
-                  className={`h-[400px] flex items-center justify-center relative overflow-hidden`}
+                  className={`relative flex h-[400px] items-center justify-center overflow-hidden`}
                 >
                   {/* Background image */}
                   <div
-                    className="absolute inset-0 bg-cover bg-center z-0 transition-opacity duration-500"
+                    className="absolute inset-0 z-0 bg-cover bg-center transition-opacity duration-500"
                     style={{ backgroundImage: `url(${slide.image})` }}
                   />
 
@@ -159,12 +160,12 @@ export default function Landing() {
                   />
 
                   {/* Text content */}
-                  <div className="relative z-20 text-white text-center p-8 max-w-lg transition-all duration-500">
-                    <h2 className="text-3xl font-bold mb-4">{slide.title}</h2>
+                  <div className="relative z-20 max-w-lg p-8 text-center text-white transition-all duration-500">
+                    <h2 className="mb-4 text-3xl font-bold">{slide.title}</h2>
                     <p className="text-lg">{slide.description}</p>
-                    <button className="mt-6 px-6 py-3 bg-white text-neutral-900 font-medium rounded-md hover:bg-neutral-200 transition-colors">
+                    <Button className="mt-6 rounded-md bg-white px-6 py-3 font-medium text-neutral-900 transition-colors hover:bg-neutral-200">
                       Learn More
-                    </button>
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -173,10 +174,10 @@ export default function Landing() {
         </div>
 
         {/* Dots Navigation */}
-        <div className="flex justify-center mt-4 absolute bottom-4 left-0 right-0 items-center">
-          <div className="flex items-center justify-center gap-2 p-2 bg-neutral-700/20 rounded-xl backdrop-blur-xl">
+        <div className="absolute bottom-4 left-0 right-0 mt-4 flex items-center justify-center">
+          <div className="bg-neutral-700/20 flex items-center justify-center gap-2 rounded-xl p-2 backdrop-blur-xl">
             {slides.map((_, index) => (
-              <button
+              <Button
                 key={index}
                 onClick={() => scrollTo(index)}
                 className={`w-3 h-3 rounded-full transition-all duration-300 ${

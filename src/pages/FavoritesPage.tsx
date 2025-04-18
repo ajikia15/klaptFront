@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { useListFavorites } from "@/hooks/useFavorites";
 
 export default function FavoritesPage() {
@@ -9,25 +10,20 @@ export default function FavoritesPage() {
 
   if (error) {
     return (
-      <div className="flex w-full h-[80vh] items-center justify-center flex-col gap-5">
-        <h1 className="font-bold text-3xl text-red-500">
+      <div className="flex h-[80vh] w-full flex-col items-center justify-center gap-5">
+        <h1 className="text-3xl font-bold text-red-500">
           Error loading favorites
         </h1>
         <p className="text-white">{error.message}</p>
-        <button
-          onClick={() => refetch()}
-          className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
-        >
-          Try Again
-        </button>
+        <Button onClick={() => refetch()}>Try Again</Button>
       </div>
     );
   }
 
   if (!favorites || favorites.length === 0) {
     return (
-      <div className="flex w-full h-[80vh] items-center justify-center flex-col gap-5">
-        <h1 className="font-bold text-5xl">Don't you like anything?</h1>
+      <div className="flex h-[80vh] w-full flex-col items-center justify-center gap-5">
+        <h1 className="text-5xl font-bold">Don't you like anything?</h1>
         <p className="text-xl">Favorite something!</p>
       </div>
     );

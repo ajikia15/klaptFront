@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/accordion";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import { LaptopDetailSkeleton } from "./LaptopDetailSkeleton";
+import { Button } from "@/components/ui/button";
 
 export default function LaptopDetailPage() {
   const { laptopId } = useParams({ from: "/laptop/$laptopId" });
@@ -299,7 +300,7 @@ export default function LaptopDetailPage() {
             <div className="group relative">
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-purple-500/5 to-purple-900/10"></div>
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(103,58,183,0.1),transparent_70%)]"></div>
-              <div className="flex aspect-[4/3] items-center justify-center overflow-hidden rounded-2xl border border-neutral-700/50 bg-neutral-800/50 p-8">
+              <div className="border-neutral-700/50 bg-neutral-800/50 flex aspect-[4/3] items-center justify-center overflow-hidden rounded-2xl border p-8">
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] opacity-5"></div>
                 <img
                   src={laptop.images[selectedImage] || laptop.images[0]}
@@ -318,7 +319,7 @@ export default function LaptopDetailPage() {
             {laptop.images.length > 1 && (
               <div className="flex gap-3 overflow-x-auto px-1 pb-2">
                 {laptop.images.map((image, index) => (
-                  <button
+                  <Button
                     key={index}
                     className={`flex-shrink-0 h-20 w-20 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
                       selectedImage === index
@@ -337,14 +338,14 @@ export default function LaptopDetailPage() {
                         target.src = `https://placehold.co/200x200/111827/444?text=No+Image`;
                       }}
                     />
-                  </button>
+                  </Button>
                 ))}
               </div>
             )}
           </div>
 
           <div className="order-1 lg:order-2">
-            <div className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-neutral-700/50 bg-neutral-800/90 p-8 shadow-lg backdrop-blur-sm">
+            <div className="border-neutral-700/50 bg-neutral-800/90 relative flex h-full flex-col overflow-hidden rounded-2xl border p-8 shadow-lg backdrop-blur-sm">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(124,58,237,0.07),transparent_70%)]"></div>
               <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] opacity-5"></div>
 
@@ -360,7 +361,7 @@ export default function LaptopDetailPage() {
                   </span>
 
                   {laptop.year && (
-                    <span className="rounded-full border border-neutral-700 bg-neutral-800/50 px-3 py-1 text-xs font-medium text-neutral-300">
+                    <span className="bg-neutral-800/50 rounded-full border border-neutral-700 px-3 py-1 text-xs font-medium text-neutral-300">
                       {laptop.year}
                     </span>
                   )}
@@ -378,7 +379,7 @@ export default function LaptopDetailPage() {
                 </h1>
 
                 <div className="mb-6">
-                  <div className="inline-block rounded-md border border-neutral-700/30 bg-neutral-800/80 px-3 py-2">
+                  <div className="border-neutral-700/30 bg-neutral-800/80 inline-block rounded-md border px-3 py-2">
                     <span className="bg-gradient-to-r from-purple-400 to-secondary-300 bg-clip-text text-3xl font-bold text-transparent md:text-4xl">
                       ₾
                       {laptop.price.toLocaleString("en-US", {
@@ -416,7 +417,7 @@ export default function LaptopDetailPage() {
                       </AccordionPrimitive.Trigger>
                       <AccordionContent className="pl-7 pt-4">
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                          <div className="rounded-lg border border-neutral-700/30 bg-neutral-700/20 p-3">
+                          <div className="border-neutral-700/30 bg-neutral-700/20 rounded-lg border p-3">
                             <div className="flex items-center gap-2">
                               <CpuIcon
                                 size={18}
@@ -427,7 +428,7 @@ export default function LaptopDetailPage() {
                               </span>
                             </div>
                           </div>
-                          <div className="rounded-lg border border-neutral-700/30 bg-neutral-700/20 p-3">
+                          <div className="border-neutral-700/30 bg-neutral-700/20 rounded-lg border p-3">
                             <div className="flex items-center gap-2">
                               <RamIcon
                                 size={18}
@@ -438,7 +439,7 @@ export default function LaptopDetailPage() {
                               </span>
                             </div>
                           </div>
-                          <div className="rounded-lg border border-neutral-700/30 bg-neutral-700/20 p-3">
+                          <div className="border-neutral-700/30 bg-neutral-700/20 rounded-lg border p-3">
                             <div className="flex items-center gap-2">
                               <GpuIcon
                                 size={18}
@@ -449,7 +450,7 @@ export default function LaptopDetailPage() {
                               </span>
                             </div>
                           </div>
-                          <div className="rounded-lg border border-neutral-700/30 bg-neutral-700/20 p-3">
+                          <div className="border-neutral-700/30 bg-neutral-700/20 rounded-lg border p-3">
                             <div className="flex items-center gap-2">
                               <DisplayIcon
                                 size={18}
@@ -468,10 +469,10 @@ export default function LaptopDetailPage() {
                 </div>
 
                 <div className="mt-auto">
-                  <button className="flex w-full cursor-pointer items-center justify-center gap-3 rounded-lg bg-secondary-600 px-6 py-4 font-semibold text-white shadow-md transition-all duration-300 hover:bg-secondary-700">
+                  <Button className="flex w-full cursor-pointer items-center justify-center gap-3 rounded-lg bg-secondary-600 px-6 py-4 font-semibold text-white shadow-md transition-all duration-300 hover:bg-secondary-700">
                     <PhoneIcon size={22} />
                     <span>Contact Us</span>
-                  </button>
+                  </Button>
                 </div>
               </div>
             </div>
@@ -495,9 +496,9 @@ export default function LaptopDetailPage() {
             {specGroups.map((group, groupIndex) => (
               <div
                 key={groupIndex}
-                className="overflow-hidden rounded-2xl border border-neutral-700/50 bg-gradient-to-br from-neutral-800/70 to-neutral-900/90 transition-all duration-300 hover:shadow-[0_4px_20px_rgba(79,38,144,0.15)]"
+                className="border-neutral-700/50 from-neutral-800/70 to-neutral-900/90 overflow-hidden rounded-2xl border bg-gradient-to-br transition-all duration-300 hover:shadow-[0_4px_20px_rgba(79,38,144,0.15)]"
               >
-                <div className="flex items-center border-b border-neutral-700/50 bg-neutral-800/50 px-6 py-4">
+                <div className="border-neutral-700/50 bg-neutral-800/50 flex items-center border-b px-6 py-4">
                   {group.items.length > 0 &&
                     (() => {
                       const IconComponent = group.items[0].Icon;
@@ -512,13 +513,13 @@ export default function LaptopDetailPage() {
                   </h3>
                 </div>
 
-                <div className="divide-y divide-neutral-700/30">
+                <div className="divide-neutral-700/30 divide-y">
                   {group.items.map((spec, specIndex) => (
                     <div
                       key={specIndex}
-                      className="group relative grid grid-cols-2 overflow-hidden px-6 py-2 transition-all duration-200 hover:bg-neutral-800/30"
+                      className="hover:bg-neutral-800/30 group relative grid grid-cols-2 overflow-hidden px-6 py-2 transition-all duration-200"
                     >
-                      <div className="absolute inset-y-0 left-0 w-1 bg-secondary-500/0 transition-all duration-300 group-hover:bg-secondary-500/50"></div>
+                      <div className="bg-secondary-500/0 group-hover:bg-secondary-500/50 absolute inset-y-0 left-0 w-1 transition-all duration-300"></div>
 
                       <div className="flex items-center text-sm text-neutral-400">
                         {spec.label}
@@ -535,7 +536,7 @@ export default function LaptopDetailPage() {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-neutral-700/50 bg-gradient-to-br from-neutral-800/70 to-neutral-900/90 p-8">
+        <div className="border-neutral-700/50 from-neutral-800/70 to-neutral-900/90 rounded-2xl border bg-gradient-to-br p-8">
           <h2 className="mb-6 text-2xl font-bold text-white">
             Additional Information
           </h2>

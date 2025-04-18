@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { SpinnerSVG } from "@/assets/SpinnerSVG";
 import { LaptopT } from "@/interfaces/laptopT";
+import { Button } from "@/components/ui/button";
 
 const LAPTOP_BRANDS = [
   "ASUS",
@@ -306,7 +307,7 @@ export default function AddListingPage() {
         <p className="mb-8 text-neutral-400">
           Fields marked <span className="text-red-400">*</span> are required.
         </p>
-        <div className="relative mb-6 overflow-hidden rounded-2xl border border-neutral-700/50 bg-gradient-to-br from-neutral-800/70 to-neutral-900/90 p-8">
+        <div className="border-neutral-700/50 from-neutral-800/70 to-neutral-900/90 relative mb-6 overflow-hidden rounded-2xl border bg-gradient-to-br p-8">
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -1306,18 +1307,19 @@ export default function AddListingPage() {
                     placeholder="Enter image URL"
                     className="flex-1 rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                   />
-                  <button
-                    type="button" // Changed from submit to button
+                  {/* BUTTON TODO */}
+
+                  <Button
                     onClick={handleImageLinkSubmit}
                     className="rounded-md bg-secondary-600 px-4 py-2 text-white hover:bg-secondary-700"
                   >
                     Add Link
-                  </button>
+                  </Button>
                 </div>
               </div>
 
               <label className="mb-2 block text-sm font-medium text-neutral-200">
-                Upload Images{" "}
+                Upload Images
                 <span className="ml-2 text-xs text-neutral-400">
                   (Multiple files supported)
                 </span>
@@ -1406,13 +1408,13 @@ export default function AddListingPage() {
                         {uploadedImages.length} image
                         {uploadedImages.length !== 1 ? "s" : ""} uploaded
                       </p>
-                      <button
+                      <Button
                         type="button"
                         onClick={() => setUploadedImages([])}
                         className="text-sm text-red-400 hover:text-red-300"
                       >
                         Clear all
-                      </button>
+                      </Button>
                     </div>
                     <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
                       {uploadedImages.map((image, index) => (
@@ -1425,7 +1427,7 @@ export default function AddListingPage() {
                             alt={`Preview ${index + 1}`}
                             className="h-24 w-full object-cover"
                           />
-                          <button
+                          <Button
                             type="button"
                             onClick={() => removeImage(index)}
                             className="absolute right-1 top-1 rounded-full bg-red-600/90 p-1 text-white opacity-80 shadow-md transition-opacity hover:bg-red-700 hover:opacity-100"
@@ -1446,7 +1448,7 @@ export default function AddListingPage() {
                                 d="M6 18L18 6M6 6l12 12"
                               />
                             </svg>
-                          </button>
+                          </Button>
                         </div>
                       ))}
                     </div>
@@ -1455,7 +1457,7 @@ export default function AddListingPage() {
               </div>
             </div>
             <div className="mt-8 flex justify-end">
-              <button
+              <Button
                 type="submit"
                 disabled={formStatus === "submitting"}
                 className="flex items-center justify-center gap-3 rounded-lg bg-gradient-to-r from-purple-600 to-primary-600 px-8 py-3 font-semibold text-white shadow-lg hover:from-purple-700 hover:to-primary-700 disabled:cursor-not-allowed disabled:opacity-50"
@@ -1483,14 +1485,14 @@ export default function AddListingPage() {
                     <span>Create Listing</span>
                   </>
                 )}
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
                 onClick={handleFillTestData}
                 className="ml-4 rounded-md bg-blue-600 px-4 py-2 text-white"
               >
                 Fill with Test Data
-              </button>
+              </Button>
             </div>
           </form>
         </div>

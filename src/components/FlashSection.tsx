@@ -3,7 +3,7 @@ import "./emblaflashcards.css";
 import { useCallback, useEffect, useState } from "react";
 import { ArrowLeft, ArrowRight } from "@deemlol/next-icons";
 import { FlashCard } from "./FlashCard";
-
+import { Button } from "./ui/button";
 const flashDeals = [
   {
     title: "Gaming Laptops",
@@ -75,7 +75,7 @@ export default function FlashSection() {
           {flashDeals.map((deal, index) => (
             <div
               key={index}
-              className="flex-[0_0_280px] min-w-0 relative group"
+              className="group relative min-w-0 flex-[0_0_280px]"
             >
               <FlashCard
                 title={deal.title}
@@ -88,21 +88,21 @@ export default function FlashSection() {
       </div>
 
       {prevBtnEnabled && (
-        <button
-          className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-neutral-800 p-2 rounded-full border border-neutral-700 transition-opacity hover:bg-neutral-700"
+        <Button
+          className="absolute left-0 top-1/2 -translate-y-1/2 transform rounded-full border border-neutral-700 bg-neutral-800 p-2 transition-opacity hover:bg-neutral-700"
           onClick={scrollPrev}
         >
           <ArrowLeft size={24} className="text-white" />
-        </button>
+        </Button>
       )}
 
       {nextBtnEnabled && (
-        <button
-          className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-neutral-800 p-2 rounded-full border border-neutral-700 transition-opacity hover:bg-neutral-700"
+        <Button
+          className="absolute right-0 top-1/2 -translate-y-1/2 transform rounded-full border border-neutral-700 bg-neutral-800 p-2 transition-opacity hover:bg-neutral-700"
           onClick={scrollNext}
         >
           <ArrowRight size={24} className="text-white" />
-        </button>
+        </Button>
       )}
     </div>
   );
