@@ -23,7 +23,7 @@ import {
   DrawerDescription,
 } from "@/components/ui/drawer";
 import { Button } from "../ui/button";
-import { Plus } from "lucide-react";
+import { Plus, User } from "lucide-react";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -165,25 +165,12 @@ export default function Navbar() {
                   {isAuthenticated ? (
                     <>
                       <DrawerClose asChild>
-                        <Link to="/add-listing" className="">
-                          <Button>
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="18"
-                              height="18"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              className="mr-3"
-                            >
-                              <line x1="12" y1="5" x2="12" y2="19"></line>
-                              <line x1="5" y1="12" x2="19" y2="12"></line>
-                            </svg>
-                            Create Post
-                          </Button>
+                        <Link
+                          to="/add-listing"
+                          className="flex items-center rounded-lg bg-neutral-800 px-4 py-3.5 text-white"
+                        >
+                          <Plus size={18} className="mr-3" />
+                          Create Post
                         </Link>
                       </DrawerClose>
 
@@ -192,21 +179,7 @@ export default function Navbar() {
                           to="/profile"
                           className="flex items-center rounded-lg bg-neutral-800 px-4 py-3.5 text-white"
                         >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="18"
-                            height="18"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="mr-3"
-                          >
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="12" cy="7" r="4"></circle>
-                          </svg>
+                          <User size={18} className="mr-3" />
                           Profile
                         </Link>
                       </DrawerClose>
@@ -225,7 +198,6 @@ export default function Navbar() {
                           )}
                         </Link>
                       </DrawerClose>
-                      {/* BUTTON TODO */}
 
                       <Button
                         onClick={handleLogout}

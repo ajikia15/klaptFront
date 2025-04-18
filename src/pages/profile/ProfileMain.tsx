@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useUpdateUser } from "@/hooks/useAuth";
 import { useForm } from "@tanstack/react-form";
 import { useToasts } from "@/assets/Toasts";
-
+import { Button } from "@/components/ui/button";
 export default function ProfileMain() {
   const { userUpdateSuccessToast, userUpdateErrorToast } = useToasts();
   const { user } = useAuth();
@@ -51,26 +51,26 @@ export default function ProfileMain() {
   };
 
   return (
-    <div className="bg-gradient-to-br from-neutral-800/70 to-neutral-900/90 rounded-2xl border border-neutral-700/50 p-8 relative overflow-hidden transition-all duration-300 hover:shadow-[0_4px_20px_rgba(79,38,144,0.15)]">
+    <div className="from-neutral-800/70 to-neutral-900/90 border-neutral-700/50 relative overflow-hidden rounded-2xl border bg-gradient-to-br p-8 transition-all duration-300 hover:shadow-[0_4px_20px_rgba(79,38,144,0.15)]">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(124,58,237,0.07),transparent_70%)]"></div>
-      <div className="absolute inset-0 opacity-5 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] opacity-5"></div>
 
       <div className="relative z-10">
-        <div className="flex items-center gap-2 mb-6">
-          <div className="h-1 w-5 bg-secondary-500 rounded-full"></div>
+        <div className="mb-6 flex items-center gap-2">
+          <div className="h-1 w-5 rounded-full bg-secondary-500"></div>
           <h2 className="text-2xl font-bold text-white">Profile Information</h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
           <div className="space-y-6">
             {/* Username Card */}
-            <div className="bg-gradient-to-br from-neutral-800/80 to-neutral-900/80 backdrop-blur-md rounded-xl shadow-lg border border-neutral-700/40 p-5 flex items-center gap-4 hover:shadow-xl transition-all">
-              <div className="flex-shrink-0 bg-secondary-700/20 rounded-full p-2">
+            <div className="from-neutral-800/80 to-neutral-900/80 border-neutral-700/40 flex items-center gap-4 rounded-xl border bg-gradient-to-br p-5 shadow-lg backdrop-blur-md transition-all hover:shadow-xl">
+              <div className="bg-secondary-700/20 flex-shrink-0 rounded-full p-2">
                 <User size={22} className="text-secondary-400" />
               </div>
               <div className="flex flex-1 items-center justify-between gap-4">
-                <div className="flex flex-col w-48 min-h-[40px]">
-                  <span className="text-xs text-neutral-400 font-semibold uppercase tracking-wide mb-1">
+                <div className="flex min-h-[40px] w-48 flex-col">
+                  <span className="mb-1 text-xs font-semibold uppercase tracking-wide text-neutral-400">
                     Username
                   </span>
                   {editUsername ? (
@@ -79,7 +79,7 @@ export default function ProfileMain() {
                         <form.Field name="username">
                           {(field) => (
                             <input
-                              className="w-full bg-neutral-700/60 border border-secondary-500 rounded px-2 py-1 text-neutral-100 focus:outline-none focus:ring-2 focus:ring-secondary-500 transition-all min-h-[28px]"
+                              className="bg-neutral-700/60 min-h-[28px] w-full rounded border border-secondary-500 px-2 py-1 text-neutral-100 transition-all focus:outline-none focus:ring-2 focus:ring-secondary-500"
                               value={field.state.value}
                               onChange={(e) => {
                                 field.handleChange(e.target.value);
@@ -96,7 +96,7 @@ export default function ProfileMain() {
                             form.state.values.username.trim() === "" ||
                             updateUser.isPending
                           }
-                          className="p-1 rounded bg-secondary-600 hover:bg-secondary-700 text-white disabled:opacity-50 transition-colors"
+                          className="rounded bg-secondary-600 p-1 text-white transition-colors hover:bg-secondary-700 disabled:opacity-50"
                           title="Save"
                         >
                           {updateUser.isPending ? (
@@ -108,7 +108,7 @@ export default function ProfileMain() {
                         <Button
                           type="button"
                           onClick={handleCancelEdit}
-                          className="p-1 rounded bg-neutral-700 hover:bg-neutral-600 text-neutral-300 transition-colors"
+                          className="rounded bg-neutral-700 p-1 text-neutral-300 transition-colors hover:bg-neutral-600"
                           title="Cancel"
                         >
                           <X size={16} />
@@ -116,7 +116,7 @@ export default function ProfileMain() {
                       </div>
                     </form>
                   ) : (
-                    <span className="w-full block truncate text-lg text-neutral-200 font-semibold min-h-[28px]">
+                    <span className="block min-h-[28px] w-full truncate text-lg font-semibold text-neutral-200">
                       {user.username}
                     </span>
                   )}
@@ -125,7 +125,7 @@ export default function ProfileMain() {
                   {!editUsername && (
                     <Button
                       onClick={handleEditUsername}
-                      className="p-1 rounded hover:bg-neutral-700 transition-colors"
+                      className="rounded p-1 transition-colors hover:bg-neutral-700"
                       title="Edit Username"
                     >
                       <Pencil size={18} className="text-neutral-400" />
@@ -135,15 +135,15 @@ export default function ProfileMain() {
               </div>
             </div>
             {/* Email Card */}
-            <div className="bg-gradient-to-br from-neutral-800/80 to-neutral-900/80 backdrop-blur-md rounded-xl shadow-lg border border-neutral-700/40 p-5 flex items-center gap-4 hover:shadow-xl transition-all">
-              <div className="flex-shrink-0 bg-secondary-700/20 rounded-full p-2">
+            <div className="from-neutral-800/80 to-neutral-900/80 border-neutral-700/40 flex items-center gap-4 rounded-xl border bg-gradient-to-br p-5 shadow-lg backdrop-blur-md transition-all hover:shadow-xl">
+              <div className="bg-secondary-700/20 flex-shrink-0 rounded-full p-2">
                 <Mail size={22} className="text-secondary-400" />
               </div>
-              <div className="flex flex-col flex-1">
-                <span className="text-xs text-neutral-400 font-semibold uppercase tracking-wide mb-1">
+              <div className="flex flex-1 flex-col">
+                <span className="mb-1 text-xs font-semibold uppercase tracking-wide text-neutral-400">
                   Email Address
                 </span>
-                <span className="text-lg text-neutral-200 font-semibold">
+                <span className="text-lg font-semibold text-neutral-200">
                   {user.email}
                 </span>
               </div>
@@ -151,15 +151,15 @@ export default function ProfileMain() {
           </div>
           <div className="space-y-6">
             {/* Account Type Card */}
-            <div className="bg-gradient-to-br from-neutral-800/80 to-neutral-900/80 backdrop-blur-md rounded-xl shadow-lg border border-neutral-700/40 p-5 flex items-center gap-4 hover:shadow-xl transition-all">
-              <div className="flex-shrink-0 bg-secondary-700/20 rounded-full p-2">
+            <div className="from-neutral-800/80 to-neutral-900/80 border-neutral-700/40 flex items-center gap-4 rounded-xl border bg-gradient-to-br p-5 shadow-lg backdrop-blur-md transition-all hover:shadow-xl">
+              <div className="bg-secondary-700/20 flex-shrink-0 rounded-full p-2">
                 <Shield
                   size={22}
                   className={isAdmin ? "text-amber-400" : "text-secondary-400"}
                 />
               </div>
-              <div className="flex flex-col flex-1">
-                <span className="text-xs text-neutral-400 font-semibold uppercase tracking-wide mb-1">
+              <div className="flex flex-1 flex-col">
+                <span className="mb-1 text-xs font-semibold uppercase tracking-wide text-neutral-400">
                   Account Type
                 </span>
                 <span
@@ -174,15 +174,15 @@ export default function ProfileMain() {
               </div>
             </div>
             {/* Activity Card */}
-            <div className="bg-gradient-to-br from-neutral-800/80 to-neutral-900/80 backdrop-blur-md rounded-xl shadow-lg border border-neutral-700/40 p-5 flex items-center gap-4 hover:shadow-xl transition-all">
-              <div className="flex-shrink-0 bg-secondary-700/20 rounded-full p-2">
+            <div className="from-neutral-800/80 to-neutral-900/80 border-neutral-700/40 flex items-center gap-4 rounded-xl border bg-gradient-to-br p-5 shadow-lg backdrop-blur-md transition-all hover:shadow-xl">
+              <div className="bg-secondary-700/20 flex-shrink-0 rounded-full p-2">
                 <Book size={22} className="text-secondary-400" />
               </div>
-              <div className="flex flex-col flex-1">
-                <span className="text-xs text-neutral-400 font-semibold uppercase tracking-wide mb-1">
+              <div className="flex flex-1 flex-col">
+                <span className="mb-1 text-xs font-semibold uppercase tracking-wide text-neutral-400">
                   Activity
                 </span>
-                <span className="text-lg text-neutral-200 font-semibold">
+                <span className="text-lg font-semibold text-neutral-200">
                   {isLoading ? (
                     <span className="text-neutral-400">Loading...</span>
                   ) : userLaptops ? (
