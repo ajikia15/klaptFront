@@ -110,7 +110,7 @@ export const LaptopCard: FC<LaptopCardProps> = (laptop) => {
               to="/laptop/$laptopId"
               params={{ laptopId: laptop.id.toString() }}
             >
-              <Button className="group/btn">
+              <Button variant={"secondary"} className="group/btn font-bold">
                 Details
                 <ArrowRight
                   size={16}
