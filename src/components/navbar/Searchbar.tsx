@@ -37,13 +37,11 @@ export default function Searchbar({ fullScreen = false }: SearchbarProps) {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (searchTerm.trim()) {
-      navigate({
-        to: "/search",
-        search: { term: searchTerm },
-      });
-      setSearchTerm("");
-    }
+    navigate({
+      to: "/search",
+      search: { term: searchTerm },
+    });
+    setSearchTerm("");
   };
 
   return (
