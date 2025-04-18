@@ -1,10 +1,9 @@
 import { useForm } from "@tanstack/react-form";
 import { useState } from "react";
-import { useNavigate } from "@tanstack/react-router";
 import { SpinnerSVG } from "@/assets/SpinnerSVG";
-import { LaptopT } from "@/interfaces/laptopT";
 import { Button } from "@/components/ui/button";
-// TODO https://fatahchan.github.io/shadcn-tanstack-form/
+import { useAddListing } from "@/hooks/useAddListing";
+import { useImageManagement } from "@/hooks/useImageManagement";
 const LAPTOP_BRANDS = [
   "ASUS",
   "Dell",
@@ -40,15 +39,18 @@ const backlightTypeOptions = ["RGB", "Single-color", "None"];
 const ramOptions = ["4", "8", "12", "16", "24", "32", "64", "96", "128"];
 
 export default function AddListingPage() {
-  const [formStatus, setFormStatus] = useState<
-    "idle" | "submitting" | "success" | "error"
-  >("idle");
-  const [errorMessage, setErrorMessage] = useState("");
-  const [uploadedImages, setUploadedImages] = useState<string[]>([]);
-  const [uploadingImages, setUploadingImages] = useState(false);
   const [graphicsType, setGraphicsType] = useState<string>("");
-  const [imageLink, setImageLink] = useState(""); // Add this line
-  const navigate = useNavigate();
+  const { formStatus, errorMessage, addListing } = useAddListing();
+  const {
+    uploadedImages,
+    uploadingImages,
+    imageLink,
+    setImageLink,
+    handleImageUpload,
+    removeImage,
+    handleImageLinkSubmit,
+    clearImages,
+  } = useImageManagement();
 
   const form = useForm({
     defaultValues: {
@@ -83,91 +85,18 @@ export default function AddListingPage() {
     },
     onSubmit: async ({ value }) => {
       try {
-        setFormStatus("submitting");
-        // Allowed values for union types
-        const processorBrands = ["Intel", "AMD", "Apple"];
-        const ramTypes = ["DDR3", "DDR4", "DDR5"];
-        const storageTypes = ["HDD", "SSD", "HDD + SSD"];
-        const stockStatuses = ["reserved", "sold", "in stock"];
-        const graphicsTypes = ["Dedicated", "Integrated"];
-        const conditionTypes = ["new", "like-new", "used", "damaged"];
-        const backlightTypes = ["RGB", "Single-color", "None"];
-
-        // Helper to cast or undefined
-        const castOrUndef = (val: string, allowed: string[]) =>
-          allowed.includes(val) ? (val as any) : undefined;
-
-        const graphicsType = castOrUndef(value.graphicsType, graphicsTypes);
-        const processorBrand = castOrUndef(
-          value.processorBrand,
-          processorBrands
-        );
-        const ramType = castOrUndef(value.ramType, ramTypes);
-        const storageType = castOrUndef(value.storageType, storageTypes);
-        const stockStatus = castOrUndef(value.stockStatus, stockStatuses);
-        const condition = castOrUndef(value.condition, conditionTypes);
-        const backlightType = castOrUndef(value.backlightType, backlightTypes);
-
-        const laptopData: Partial<LaptopT> = {
+        // Update value.images with the uploadedImages
+        const valueWithImages = {
           ...value,
-          processorBrand: processorBrand,
-          price: parseFloat(value.price),
-          cores: parseInt(value.cores),
-          threads: parseInt(value.threads),
-          graphicsType,
-          vram:
-            graphicsType === "Dedicated" && value.vram
-              ? parseInt(value.vram)
-              : undefined,
-          gpuBrand:
-            graphicsType === "Dedicated" && value.gpuBrand
-              ? value.gpuBrand
-              : undefined,
-          gpuModel:
-            graphicsType === "Dedicated" && value.gpuModel
-              ? value.gpuModel
-              : undefined,
-          ram: parseInt(value.ram),
-          ramType,
-          storageType,
-          refreshRate: parseInt(value.refreshRate),
-          year: parseInt(value.year),
-          images:
-            uploadedImages.length > 0
-              ? uploadedImages
-              : ["https://placehold.co/800x600/111827/444?text=No+Image"],
-          tag: value.tag && value.tag.length > 0 ? value.tag : undefined,
-          stockStatus,
-          condition,
-          backlightType,
+          images: uploadedImages,
         };
-        // Remove any keys with value undefined (optional, but keeps payload clean)
-        Object.keys(laptopData).forEach(
-          (k) =>
-            laptopData[k as keyof typeof laptopData] === undefined &&
-            delete laptopData[k as keyof typeof laptopData]
-        );
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/laptops`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-            body: JSON.stringify(laptopData),
-          }
-        );
-        if (!response.ok) throw new Error("Failed to add listing");
-        setFormStatus("success");
-        const data = await response.json();
-        setTimeout(() => navigate({ to: `/laptop/${data.id}` }), 1500);
+        await addListing(valueWithImages);
       } catch (error) {
-        setFormStatus("error");
-        setErrorMessage(
-          error instanceof Error ? error.message : "Failed to add listing"
-        );
+        // Error is already handled in the hook
       }
     },
   });
+
   function handleFillTestData() {
     const testData = {
       title: "Acer Predator Helios 16",
@@ -225,78 +154,6 @@ export default function AddListingPage() {
 
     form.reset(newValues);
   }
-
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (!files || files.length === 0) return;
-    setUploadingImages(true);
-    try {
-      const tempPreviews = Array.from(files).map((file) =>
-        URL.createObjectURL(file)
-      );
-      setUploadedImages((prev) => [...prev, ...tempPreviews]);
-      const uploadPromises = Array.from(files).map(async (file, fileIndex) => {
-        const formData = new FormData();
-        formData.append("image", file);
-        const response = await fetch(
-          `https://api.imgbb.com/1/upload?key=${
-            import.meta.env.VITE_IMGBB_API_KEY
-          }`,
-          { method: "POST", body: formData }
-        );
-        if (!response.ok)
-          throw new Error(`Failed to upload image: ${response.statusText}`);
-        const data = await response.json();
-        setUploadedImages((prev) => {
-          const tempIndex = prev.indexOf(tempPreviews[fileIndex]);
-          if (tempIndex !== -1) {
-            const newUrls = [...prev];
-            newUrls[tempIndex] = data.data.url;
-            return newUrls;
-          }
-          return prev;
-        });
-        URL.revokeObjectURL(tempPreviews[fileIndex]);
-        return data.data.url;
-      });
-      await Promise.all(uploadPromises);
-    } catch (error) {
-      alert("Failed to upload one or more images. Please try again.");
-      setUploadedImages((prev) =>
-        prev.filter((url) => !url.startsWith("blob:"))
-      );
-    } finally {
-      setUploadingImages(false);
-    }
-  };
-  const removeImage = (index: number) => {
-    const imageUrl = uploadedImages[index];
-    if (imageUrl.startsWith("blob:")) URL.revokeObjectURL(imageUrl);
-    setUploadedImages(uploadedImages.filter((_, i) => i !== index));
-  };
-
-  // Add this function after removeImage
-  const handleImageLinkSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (!imageLink) return;
-
-    try {
-      new URL(imageLink);
-      // Add the new image to the existing images array
-      setUploadedImages((prev) => {
-        // Check if image is already in the array
-        if (prev.includes(imageLink)) {
-          alert("This image URL has already been added");
-          return prev;
-        }
-        return [...prev, imageLink];
-      });
-      setImageLink("");
-    } catch (err) {
-      alert("Please enter a valid image URL");
-    }
-  };
 
   return (
     <div className="min-h-screen bg-neutral-900 py-10 text-neutral-200">
@@ -1410,7 +1267,7 @@ export default function AddListingPage() {
                       </p>
                       <Button
                         type="button"
-                        onClick={() => setUploadedImages([])}
+                        onClick={clearImages}
                         className="text-sm text-red-400 hover:text-red-300"
                       >
                         Clear all
