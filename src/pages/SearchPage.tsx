@@ -399,53 +399,55 @@ export default function SearchPage() {
 
       <div className="container mx-auto py-8">
         <div className="flex flex-col gap-6 md:flex-row">
-          <div className="hidden md:block md:w-1/4 xl:w-1/5">
-            <div className="sticky top-4 rounded-md bg-neutral-900">
-              <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-xl font-semibold">Filters</h2>
-                <div className="flex items-center space-x-2">
-                  {isFilterRefetching || isLoading ? (
-                    <>
-                      <p className="text-neutral-500">Updating...</p>
-                      <SpinnerSVG className="animate-spin" />
-                    </>
-                  ) : null}
+          {!isMobile && (
+            <div className="hidden md:block md:w-1/4 xl:w-1/5">
+              <div className="sticky top-4 rounded-md bg-neutral-900">
+                <div className="mb-4 flex items-center justify-between">
+                  <h2 className="text-xl font-semibold">Filters</h2>
+                  <div className="flex items-center space-x-2">
+                    {isFilterRefetching || isLoading ? (
+                      <>
+                        <p className="text-neutral-500">Updating...</p>
+                        <SpinnerSVG className="animate-spin" />
+                      </>
+                    ) : null}
+                  </div>
+                </div>
+
+                {/* Scrollable filters area */}
+                <div className="scrollbar-thin scrollbar-thumb-neutral-600 scrollbar-track-transparent max-h-[calc(100vh-160px)] overflow-y-auto pr-1">
+                  <Accordion
+                    type="multiple"
+                    defaultValue={filterSections.map(
+                      (section) => section.filterKey
+                    )}
+                    className="space-y-1.5"
+                  >
+                    {filterSections
+                      .filter((section) => hasOptions(section.optionsKey))
+                      .map((section) => (
+                        <AccordionItem
+                          key={section.filterKey}
+                          value={section.filterKey}
+                          className="border-neutral-800/50 overflow-hidden border-b"
+                        >
+                          <AccordionTrigger className="group px-1 py-2 hover:no-underline">
+                            <div className="flex w-full items-center justify-between">
+                              <span className="text-sm font-medium text-neutral-300 transition-colors group-hover:text-white">
+                                {section.title}
+                              </span>
+                            </div>
+                          </AccordionTrigger>
+                          <AccordionContent className="px-1 pb-2 pt-1">
+                            <FilterSection section={section} maxItems={5} />
+                          </AccordionContent>
+                        </AccordionItem>
+                      ))}
+                  </Accordion>
                 </div>
               </div>
-
-              {/* Scrollable filters area */}
-              <div className="scrollbar-thin scrollbar-thumb-neutral-600 scrollbar-track-transparent max-h-[calc(100vh-160px)] overflow-y-auto pr-1">
-                <Accordion
-                  type="multiple"
-                  defaultValue={filterSections.map(
-                    (section) => section.filterKey
-                  )}
-                  className="space-y-1.5"
-                >
-                  {filterSections
-                    .filter((section) => hasOptions(section.optionsKey))
-                    .map((section) => (
-                      <AccordionItem
-                        key={section.filterKey}
-                        value={section.filterKey}
-                        className="border-neutral-800/50 overflow-hidden border-b"
-                      >
-                        <AccordionTrigger className="group px-1 py-2 hover:no-underline">
-                          <div className="flex w-full items-center justify-between">
-                            <span className="text-sm font-medium text-neutral-300 transition-colors group-hover:text-white">
-                              {section.title}
-                            </span>
-                          </div>
-                        </AccordionTrigger>
-                        <AccordionContent className="px-1 pb-2 pt-1">
-                          <FilterSection section={section} maxItems={5} />
-                        </AccordionContent>
-                      </AccordionItem>
-                    ))}
-                </Accordion>
-              </div>
             </div>
-          </div>
+          )}
 
           <div className="w-full md:w-3/4">
             {/* Search, sort and filter controls */}
