@@ -38,11 +38,13 @@ export const LaptopCard: FC<LaptopCardProps> = (laptop) => {
           <Button className="bg-neutral-800/70 flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg p-2 shadow-lg transition-all hover:bg-purple-800/90">
             <Maximize2 size={20} className="text-white" />
           </Button>
-          <HeartBtn
-            laptopId={laptop.id}
-            className="bg-neutral-800/70 rounded-lg p-2 shadow-lg transition-all hover:bg-purple-800/90"
-            isAuthenticated={laptop.isAuthenticated}
-          />
+          {laptop.isAuthenticated && ( // TODO: dont fetch when not authenticated instead of disabling the button
+            <HeartBtn
+              laptopId={laptop.id}
+              className="bg-neutral-800/70 rounded-lg p-2 shadow-lg transition-all hover:bg-purple-800/90"
+              isAuthenticated={laptop.isAuthenticated}
+            />
+          )}
         </div>
       </div>
 
