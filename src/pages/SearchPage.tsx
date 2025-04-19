@@ -217,7 +217,6 @@ export default function SearchPage() {
     },
   ];
 
-  const [isTransitioning, setIsTransitioning] = useState(false);
   const [sortOption, setSortOption] = useState<
     "default" | "priceLowToHigh" | "priceHighToLow"
   >("default");
@@ -246,16 +245,6 @@ export default function SearchPage() {
     return Array.isArray(options) ? options.length : 0;
   };
 
-  // Refetch data when search term changes - now using searchTerm directly
-  useEffect(() => {
-    if (searchTerm === "" || searchTerm.length >= 2) {
-      setIsTransitioning(true);
-      refetch().finally(() => {
-        setIsTransitioning(false);
-      });
-    }
-  }, [searchTerm, refetch]);
-
   // Sort laptops based on current sort option - now memoized
   const sortedLaptops = useMemo(() => {
     if (!laptops) return [];
@@ -270,7 +259,7 @@ export default function SearchPage() {
     });
   }, [laptops, sortOption]);
 
-  const showSkeletons = isLoading || isTransitioning || isPending || !isFetched;
+  const showSkeletons = !isFetched;
   const { isAuthenticated } = useAuth();
 
   // Memoize derived values for better performance
