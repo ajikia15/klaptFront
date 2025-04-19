@@ -448,6 +448,8 @@ export default function SearchPage() {
     </div>
   );
 
+  const [tagAnimationParent] = useAutoAnimate();
+
   return (
     <div className="min-h-screen bg-neutral-900 text-neutral-200">
       {/* Header Area with page title and basic info */}
@@ -602,7 +604,7 @@ export default function SearchPage() {
 
           <div className="w-full md:w-3/4">
             {/* Search, sort and filter controls */}
-            <div className="border-neutral-700/50 bg-neutral-800/50 mb-6 rounded-lg border p-4">
+            <div className="border-neutral-700/50 bg-neutral-800/50 mb-4 rounded-lg border p-4">
               <div className="flex flex-col gap-4 md:flex-row">
                 <div className="flex-1">
                   <form onSubmit={handleSubmit} className="relative">
@@ -789,49 +791,45 @@ export default function SearchPage() {
                   </Drawer>
                 </div>
               </div>
+            </div>
 
-              {/* Enhanced results display */}
-              <div className="mt-4">
-                <div className="mb-2 flex flex-wrap items-center gap-2">
-                  <p className="flex flex-wrap items-center gap-1 text-sm text-neutral-400">
-                    Showing results for{" "}
-                    {hasActiveFilters ? (
-                      <>
-                        filtered laptops:
-                        {Object.entries(selectedFilters).map(
-                          ([key, values]) =>
-                            values.length > 0 &&
-                            values.map((value: string) => (
-                              <Badge
-                                key={`${key}-${value}`}
-                                className="border-neutral-700/50 inline-flex items-center bg-neutral-800 px-1.5 py-0.5 text-white transition-all hover:bg-neutral-700 hover:shadow-md"
-                                variant="outline"
-                                onClick={() =>
-                                  toggleFilter(key as FilterKey, value)
-                                }
-                              >
-                                <X
-                                  size={10}
-                                  className="mr-0.5 text-neutral-400"
-                                />
-                                <span className="mr-0.5 text-xs text-neutral-400">
-                                  {
-                                    filterSections.find(
-                                      (f) => f.filterKey === key
-                                    )?.title
-                                  }
-                                  :
-                                </span>
-                                <span className="text-xs">{value}</span>
-                              </Badge>
-                            ))
-                        )}
-                      </>
-                    ) : (
-                      "all laptops"
+            <div className="mb-5 px-1">
+              <div
+                className="flex flex-wrap items-center gap-1 text-sm text-neutral-400"
+                ref={tagAnimationParent}
+              >
+                <p className="py-1">Showing results for </p>
+                {hasActiveFilters ? (
+                  <>
+                    filter options:
+                    {Object.entries(selectedFilters).map(
+                      ([key, values]) =>
+                        values.length > 0 &&
+                        values.map((value: string) => (
+                          <Badge
+                            key={`${key}-${value}`}
+                            className="border-neutral-700/50 inline-flex items-center bg-neutral-800 !py-1 px-1.5 text-white transition-all hover:bg-neutral-700 hover:shadow-md"
+                            variant="outline"
+                            onClick={() =>
+                              toggleFilter(key as FilterKey, value)
+                            }
+                          >
+                            <X size={10} className="mr-0.5 text-neutral-400" />
+                            <span className="mr-0.5 text-xs text-neutral-400">
+                              {
+                                filterSections.find((f) => f.filterKey === key)
+                                  ?.title
+                              }
+                              :
+                            </span>
+                            <span className="text-xs">{value}</span>
+                          </Badge>
+                        ))
                     )}
-                  </p>
-                </div>
+                  </>
+                ) : (
+                  "all laptops"
+                )}
               </div>
             </div>
 
