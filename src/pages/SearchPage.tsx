@@ -49,6 +49,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import { useDebounce } from "@/hooks/useDebounce";
 
 interface FilterOption {
   value: string;
@@ -224,6 +225,7 @@ export default function SearchPage() {
   >("default");
 
   const deferredSearchTerm = useDeferredValue(searchTerm);
+  const debouncedSearchTerm = useDebounce(deferredSearchTerm, 300); // 300ms delay
 
   const [cachedFilters, setCachedFilters] = useState<FilterOptionsType | null>(
     null
@@ -251,11 +253,13 @@ export default function SearchPage() {
 
   // Refetch data when search term changes
   useEffect(() => {
-    setIsTransitioning(true);
-    refetch().finally(() => {
-      setIsTransitioning(false);
-    });
-  }, [deferredSearchTerm, refetch]);
+    if (debouncedSearchTerm === "" || debouncedSearchTerm.length >= 2) {
+      setIsTransitioning(true);
+      refetch().finally(() => {
+        setIsTransitioning(false);
+      });
+    }
+  }, [debouncedSearchTerm, refetch]);
 
   // Sort laptops based on current sort option - now memoized
   const sortedLaptops = useMemo(() => {
