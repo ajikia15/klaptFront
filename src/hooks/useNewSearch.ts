@@ -2,6 +2,7 @@ import { useSearch, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { LaptopT } from "../interfaces/laptopT";
 import { searchRoute } from "../router";
+import { useCallback, useMemo } from "react";
 
 interface FilterOption {
   value: string;
@@ -60,55 +61,90 @@ export function useNewSearch(userId?: number) {
   const search = useSearch({ from: searchRoute.id });
   const navigate = useNavigate({ from: searchRoute.id });
 
-  // Helper function to get array values from search params
-  const getArrayParam = (key: FilterCategory): string[] => {
-    return search[key] || [];
-  };
+  // Helper function to get array values from search params - memoize to maintain stable references
+  const getArrayParam = useCallback(
+    (key: FilterCategory): string[] => {
+      return search[key] || [];
+    },
+    [search]
+  );
 
-  // Function to toggle a filter value in or out
-  const toggleFilter = (category: FilterCategory, value: string) => {
-    const currentValues = getArrayParam(category);
-    let newValues: string[];
+  // Create memoized selected filters object to avoid recreating on each render
+  const selectedFilters = useMemo(() => {
+    return {
+      brand: getArrayParam("brand"),
+      gpuModel: getArrayParam("gpuModel"),
+      processorModel: getArrayParam("processorModel"),
+      ramType: getArrayParam("ramType"),
+      ram: getArrayParam("ram"),
+      storageType: getArrayParam("storageType"),
+      storageCapacity: getArrayParam("storageCapacity"),
+      stockStatus: getArrayParam("stockStatus"),
+      screenSize: getArrayParam("screenSize"),
+      screenResolution: getArrayParam("screenResolution"),
+      processorBrand: getArrayParam("processorBrand"),
+      gpuBrand: getArrayParam("gpuBrand"),
+      graphicsType: getArrayParam("graphicsType"),
+      backlightType: getArrayParam("backlightType"),
+      refreshRate: getArrayParam("refreshRate"),
+      vram: getArrayParam("vram"),
+      year: getArrayParam("year"),
+      model: getArrayParam("model"),
+      shortDesc: getArrayParam("shortDesc"),
+      tags: getArrayParam("tags"),
+    };
+  }, [getArrayParam]);
 
-    if (currentValues.includes(value)) {
-      // Remove value if it exists
-      newValues = currentValues.filter((v) => v !== value);
-    } else {
-      // Add value if it doesn't exist
-      newValues = [...currentValues, value];
-    }
+  // Function to toggle a filter value in or out - wrapped in useCallback to maintain reference stability
+  const toggleFilter = useCallback(
+    (category: FilterCategory, value: string) => {
+      const currentValues = getArrayParam(category);
+      let newValues: string[];
 
-    // Update search params with new values
-    navigate({
-      search: (prev) => ({
-        ...prev,
-        [category]: newValues.length > 0 ? newValues : undefined,
-      }),
-      replace: false,
-    });
-  };
+      if (currentValues.includes(value)) {
+        // Remove value if it exists
+        newValues = currentValues.filter((v) => v !== value);
+      } else {
+        // Add value if it doesn't exist
+        newValues = [...currentValues, value];
+      }
 
-  // Function to set search term
-  const setSearchTerm = (term: string) => {
-    navigate({
-      search: (prev) => ({
-        ...prev,
-        term: term || undefined,
-      }),
-      replace: true,
-    });
-  };
+      // Update search params with new values
+      navigate({
+        search: (prev) => ({
+          ...prev,
+          [category]: newValues.length > 0 ? newValues : undefined,
+        }),
+        replace: false,
+      });
+    },
+    [getArrayParam, navigate]
+  );
 
-  // Reset all filters
-  const resetFilters = () => {
+  // Function to set search term - wrapped in useCallback
+  const setSearchTerm = useCallback(
+    (term: string) => {
+      navigate({
+        search: (prev) => ({
+          ...prev,
+          term: term || undefined,
+        }),
+        replace: true,
+      });
+    },
+    [navigate]
+  );
+
+  // Reset all filters - wrapped in useCallback
+  const resetFilters = useCallback(() => {
     navigate({
       search: {},
       replace: true,
     });
-  };
+  }, [navigate]);
 
-  // Prepare search params for API calls
-  const prepareSearchParams = () => {
+  // Prepare search params for API calls - memoized to avoid recreation on each render
+  const prepareSearchParams = useCallback(() => {
     const params = new URLSearchParams();
 
     if (search.term) params.append("term", search.term);
@@ -131,19 +167,11 @@ export function useNewSearch(userId?: number) {
     }
 
     return params;
-  };
+  }, [search, userId]);
 
-  // Query for filter options
-  const {
-    data: filterOptions,
-    isLoading: isLoadingFilters,
-    error: filterError,
-    refetch: refetchFilters,
-    isFetched: isFilterFetched,
-    isPending: isFilterPending,
-    isRefetching: isFilterRefetching,
-  } = useQuery<any, Error, FilterOptions>({
-    queryKey: [
+  // Memoize query key objects to prevent unnecessary refetches
+  const filterOptionsQueryKey = useMemo(() => {
+    return [
       "filterOptions",
       {
         term: search.term,
@@ -154,7 +182,35 @@ export function useNewSearch(userId?: number) {
         ),
         userId,
       },
-    ],
+    ];
+  }, [search, userId]);
+
+  const laptopSearchQueryKey = useMemo(() => {
+    return [
+      "laptopSearch",
+      {
+        term: search.term,
+        filters: Object.fromEntries(
+          Object.entries(search).filter(
+            ([key, value]) => key !== "term" && value !== undefined
+          )
+        ),
+        userId,
+      },
+    ];
+  }, [search, userId]);
+
+  // Query for filter options - removed no-op select transformation
+  const {
+    data: filterOptions,
+    isLoading: isLoadingFilters,
+    error: filterError,
+    refetch: refetchFilters,
+    isFetched: isFilterFetched,
+    isPending: isFilterPending,
+    isRefetching: isFilterRefetching,
+  } = useQuery<FilterOptions, Error>({
+    queryKey: filterOptionsQueryKey,
     queryFn: async () => {
       const params = prepareSearchParams();
       const response = await fetch(
@@ -167,9 +223,7 @@ export function useNewSearch(userId?: number) {
 
       return response.json();
     },
-    select: (data: FilterOptions): FilterOptions => {
-      return data;
-    },
+    // Removed no-op select transformation
   });
 
   // Query for laptops
@@ -182,18 +236,7 @@ export function useNewSearch(userId?: number) {
     isPending,
     isRefetching,
   } = useQuery<LaptopT[], Error>({
-    queryKey: [
-      "laptopSearch",
-      {
-        term: search.term,
-        filters: Object.fromEntries(
-          Object.entries(search).filter(
-            ([key, value]) => key !== "term" && value !== undefined
-          )
-        ),
-        userId,
-      },
-    ],
+    queryKey: laptopSearchQueryKey,
     queryFn: async (): Promise<LaptopT[]> => {
       const params = prepareSearchParams();
       const response = await fetch(
@@ -214,28 +257,7 @@ export function useNewSearch(userId?: number) {
     setSearchTerm,
 
     // Filters
-    selectedFilters: {
-      brand: getArrayParam("brand"),
-      gpuModel: getArrayParam("gpuModel"),
-      processorModel: getArrayParam("processorModel"),
-      ramType: getArrayParam("ramType"),
-      ram: getArrayParam("ram"),
-      storageType: getArrayParam("storageType"),
-      storageCapacity: getArrayParam("storageCapacity"),
-      stockStatus: getArrayParam("stockStatus"),
-      screenSize: getArrayParam("screenSize"),
-      screenResolution: getArrayParam("screenResolution"),
-      processorBrand: getArrayParam("processorBrand"),
-      gpuBrand: getArrayParam("gpuBrand"),
-      graphicsType: getArrayParam("graphicsType"),
-      backlightType: getArrayParam("backlightType"),
-      refreshRate: getArrayParam("refreshRate"),
-      vram: getArrayParam("vram"),
-      year: getArrayParam("year"),
-      model: getArrayParam("model"),
-      shortDesc: getArrayParam("shortDesc"),
-      tags: getArrayParam("tags"),
-    },
+    selectedFilters,
     toggleFilter,
     resetFilters,
 
