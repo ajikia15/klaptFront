@@ -6,8 +6,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { SpinnerSVG } from "@/assets/SpinnerSVG";
 import { useAuth } from "@/context/AuthContext";
 import { useNewSearch } from "../hooks/useNewSearch";
-import { useDebounce } from "../hooks/useDebounce";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 import {
   X,
   Search,
@@ -116,8 +116,6 @@ function DebouncedInput({
 }
 
 export default function SearchPage() {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
   // Use the new URL-based search hook instead of the old one
   const {
     searchTerm,
@@ -135,6 +133,8 @@ export default function SearchPage() {
     isFetched,
     isPending,
   } = useNewSearch();
+
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   // Type-safe filter configuration
   type FilterKey = keyof typeof selectedFilters;
@@ -385,43 +385,6 @@ export default function SearchPage() {
                   </div>
                 ))
             ) : null}
-
-            {/* "Show more" link if needed */}
-            {displayFilters &&
-              optionsKey in displayFilters &&
-              displayFilters[optionsKey] &&
-              (displayFilters[optionsKey] as FilterOption[]).length >
-                maxItems &&
-              !inAccordion && (
-                <div className="border-neutral-700/30 mt-1 border-t pt-1">
-                  <Sheet>
-                    <SheetTrigger asChild>
-                      <Button
-                        variant="link"
-                        size="sm"
-                        className="h-6 p-0 text-xs text-neutral-400 hover:text-primary-400"
-                      >
-                        Show all{" "}
-                        {(displayFilters[optionsKey] as FilterOption[]).length}{" "}
-                        options...
-                      </Button>
-                    </SheetTrigger>
-                    <SheetContent
-                      side="right"
-                      className="border-neutral-700/50 w-[400px] bg-neutral-900"
-                    >
-                      <SheetHeader>
-                        <SheetTitle className="flex items-center justify-between text-white">
-                          <span>{section.title}</span>
-                        </SheetTitle>
-                      </SheetHeader>
-                      <div className="mt-4">
-                        <FilterSection section={section} inAccordion={true} />
-                      </div>
-                    </SheetContent>
-                  </Sheet>
-                </div>
-              )}
           </div>
         </ScrollArea>
       </div>
@@ -565,103 +528,104 @@ export default function SearchPage() {
                   </DropdownMenu>
 
                   {/* Mobile-only filter button - replaced Sheet with Drawer */}
-                  <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-                    <DrawerTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="bg-neutral-900/90 relative border-neutral-700 text-neutral-300 hover:bg-neutral-800 hover:text-white lg:hidden"
-                      >
-                        <Filter size={16} className="mr-2" />
-                        Filters
-                        {activeFiltersCount > 0 && (
-                          <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary-600 text-xs text-white">
-                            {activeFiltersCount}
-                          </span>
-                        )}
-                      </Button>
-                    </DrawerTrigger>
-                    <DrawerContent className="border-t border-neutral-700 bg-neutral-900 px-2">
-                      {/* Mobile filter drawer content */}
-                      <DrawerHeader>
-                        <DrawerTitle className="flex items-center justify-between text-white">
-                          <div className="flex items-center">
-                            <Filter
-                              size={16}
-                              className="mr-2 text-primary-400"
-                            />
-                            All Filters
-                          </div>
+                  {isMobile && (
+                    <Drawer>
+                      <DrawerTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className="bg-neutral-900/90 relative border-neutral-700 text-neutral-300 hover:bg-neutral-800 hover:text-white lg:hidden"
+                        >
+                          <Filter size={16} className="mr-2" />
+                          Filters
                           {activeFiltersCount > 0 && (
+                            <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary-600 text-xs text-white">
+                              {activeFiltersCount}
+                            </span>
+                          )}
+                        </Button>
+                      </DrawerTrigger>
+                      <DrawerContent className="border-t border-neutral-700 bg-neutral-900 px-2">
+                        {/* Mobile filter drawer content */}
+                        <DrawerHeader>
+                          <DrawerTitle className="flex items-center justify-between text-white">
+                            <div className="flex items-center">
+                              <Filter
+                                size={16}
+                                className="mr-2 text-primary-400"
+                              />
+                              All Filters
+                            </div>
+                            {activeFiltersCount > 0 && (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                  resetFilters();
+                                  setSearchTerm("");
+                                }}
+                                className="border-neutral-700 text-neutral-400 hover:bg-neutral-800 hover:text-white"
+                              >
+                                <X size={14} className="mr-1" />
+                                Reset All
+                              </Button>
+                            )}
+                          </DrawerTitle>
+                          <DrawerDescription className="text-neutral-400">
+                            Narrow down your search with these filters
+                          </DrawerDescription>
+                        </DrawerHeader>
+
+                        {/* Copy of the filter sheet content */}
+                        <div className="overflow-y-auto pb-20">
+                          <Accordion
+                            type="multiple"
+                            defaultValue={["brand"]}
+                            className="space-y-2"
+                          >
+                            {filterSections
+                              .filter(({ optionsKey }) =>
+                                hasOptions(optionsKey)
+                              )
+                              .map((section) => (
+                                <AccordionItem
+                                  key={section.filterKey}
+                                  value={section.filterKey}
+                                  className="border-neutral-700/50 overflow-hidden rounded-lg border"
+                                >
+                                  <AccordionTrigger className="bg-neutral-800/50 px-4 py-2 hover:bg-neutral-800 hover:no-underline data-[state=open]:bg-neutral-800">
+                                    <div className="flex w-full items-center justify-between">
+                                      <span className="font-bold text-neutral-200">
+                                        {section.title}
+                                      </span>
+                                    </div>
+                                  </AccordionTrigger>
+                                  <AccordionContent className="bg-neutral-900 px-4 py-3">
+                                    <FilterSection
+                                      section={section}
+                                      inAccordion={true}
+                                    />
+                                  </AccordionContent>
+                                </AccordionItem>
+                              ))}
+                          </Accordion>
+                        </div>
+
+                        <DrawerFooter className="border-neutral-700/30 mt-4 border-t pt-4">
+                          <Button className="bg-primary-600 text-white hover:bg-primary-700">
+                            Apply Filters
+                          </Button>
+                          <DrawerClose asChild>
                             <Button
                               variant="outline"
-                              size="sm"
-                              onClick={() => {
-                                resetFilters();
-                                setSearchTerm("");
-                              }}
-                              className="border-neutral-700 text-neutral-400 hover:bg-neutral-800 hover:text-white"
+                              className="border-neutral-700 text-neutral-300 hover:bg-neutral-800"
                             >
-                              <X size={14} className="mr-1" />
-                              Reset All
+                              Cancel
                             </Button>
-                          )}
-                        </DrawerTitle>
-                        <DrawerDescription className="text-neutral-400">
-                          Narrow down your search with these filters
-                        </DrawerDescription>
-                      </DrawerHeader>
-
-                      {/* Copy of the filter sheet content */}
-                      <div className="overflow-y-auto pb-20">
-                        <Accordion
-                          type="multiple"
-                          defaultValue={["brand"]}
-                          className="space-y-2"
-                        >
-                          {filterSections
-                            .filter(({ optionsKey }) => hasOptions(optionsKey))
-                            .map((section) => (
-                              <AccordionItem
-                                key={section.filterKey}
-                                value={section.filterKey}
-                                className="border-neutral-700/50 overflow-hidden rounded-lg border"
-                              >
-                                <AccordionTrigger className="bg-neutral-800/50 px-4 py-2 hover:bg-neutral-800 hover:no-underline data-[state=open]:bg-neutral-800">
-                                  <div className="flex w-full items-center justify-between">
-                                    <span className="font-bold text-neutral-200">
-                                      {section.title}
-                                    </span>
-                                  </div>
-                                </AccordionTrigger>
-                                <AccordionContent className="bg-neutral-900 px-4 py-3">
-                                  <FilterSection
-                                    section={section}
-                                    inAccordion={true}
-                                  />
-                                </AccordionContent>
-                              </AccordionItem>
-                            ))}
-                        </Accordion>
-                      </div>
-
-                      <DrawerFooter className="border-neutral-700/30 mt-4 border-t pt-4">
-                        <Button
-                          onClick={() => setIsDrawerOpen(false)}
-                          className="bg-primary-600 text-white hover:bg-primary-700"
-                        >
-                          Apply Filters
-                        </Button>
-                        <DrawerClose asChild>
-                          <Button
-                            variant="outline"
-                            className="border-neutral-700 text-neutral-300 hover:bg-neutral-800"
-                          >
-                            Cancel
-                          </Button>
-                        </DrawerClose>
-                      </DrawerFooter>
-                    </DrawerContent>
-                  </Drawer>
+                          </DrawerClose>
+                        </DrawerFooter>
+                      </DrawerContent>
+                    </Drawer>
+                  )}
                 </div>
               </div>
             </div>
