@@ -790,34 +790,47 @@ export default function SearchPage() {
                 </div>
               </div>
 
-              {/* Enhanced results count and active filters display */}
+              {/* Enhanced results display */}
               <div className="mt-4">
-                {!isLoading && laptops && (
-                  <div className="mb-2 flex items-center">
-                    {laptops.length > 0 ? (
-                      <div className="flex flex-col">
-                        <h2 className="text-lg font-semibold text-white">
-                          {laptops.length} laptop
-                          {laptops.length !== 1 ? "s" : ""} found
-                        </h2>
-                        {searchTerm && (
-                          <p className="text-sm text-neutral-400">
-                            Showing results for "{searchTerm}"
-                          </p>
+                <div className="mb-2 flex flex-wrap items-center gap-2">
+                  <p className="flex flex-wrap items-center gap-1 text-sm text-neutral-400">
+                    Showing results for{" "}
+                    {hasActiveFilters ? (
+                      <>
+                        filtered laptops:
+                        {Object.entries(selectedFilters).map(
+                          ([key, values]) =>
+                            values.length > 0 &&
+                            values.map((value: string) => (
+                              <Badge
+                                key={`${key}-${value}`}
+                                className="border-neutral-700/50 inline-flex items-center bg-neutral-800 px-1.5 py-0.5 text-white transition-all hover:bg-neutral-700 hover:shadow-md"
+                                variant="outline"
+                                onClick={() =>
+                                  toggleFilter(key as FilterKey, value)
+                                }
+                              >
+                                <X
+                                  size={10}
+                                  className="mr-0.5 text-neutral-400"
+                                />
+                                <span className="mr-0.5 text-xs text-neutral-400">
+                                  {
+                                    filterSections.find(
+                                      (f) => f.filterKey === key
+                                    )?.title
+                                  }
+                                  :
+                                </span>
+                                <span className="text-xs">{value}</span>
+                              </Badge>
+                            ))
                         )}
-                      </div>
+                      </>
                     ) : (
-                      <div className="flex items-center text-neutral-400">
-                        <Search size={16} className="mr-2 opacity-50" />
-                        <span>No results match your current criteria</span>
-                      </div>
+                      "all laptops"
                     )}
-                  </div>
-                )}
-
-                {/* Showing active filters in search section for better context */}
-                <div className="mt-2">
-                  <ActiveFiltersComponent />
+                  </p>
                 </div>
               </div>
             </div>
