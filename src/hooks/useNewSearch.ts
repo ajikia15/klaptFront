@@ -2,7 +2,7 @@ import { useSearch, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { LaptopT } from "../interfaces/laptopT";
 import { searchRoute } from "../router";
-import { useCallback, useMemo, useRef } from "react";
+import { useCallback, useMemo } from "react";
 
 interface FilterOption {
   value: string;
@@ -61,47 +61,26 @@ export function useNewSearch(userId?: number) {
   const search = useSearch({ from: searchRoute.id });
   const navigate = useNavigate({ from: searchRoute.id });
 
-  // Create a stable reference to the search params
-  const stableSearchRef = useRef(search);
+  // Extract term directly - much simpler
+  const term = search.term || "";
 
-  // Create a serialized version of search for stable comparison
-  const searchSerialized = useMemo(() => {
-    // Update the ref only if the serialized values are different
-    const newSerialized = JSON.stringify(search);
-    const oldSerialized = JSON.stringify(stableSearchRef.current);
+  // Extract filters once and reuse - more efficient
+  const filters = useMemo(
+    () =>
+      Object.fromEntries(
+        Object.entries(search).filter(
+          ([key, value]) => key !== "term" && value !== undefined
+        )
+      ),
+    [search]
+  );
 
-    if (newSerialized !== oldSerialized) {
-      stableSearchRef.current = search;
-    }
-
-    return newSerialized;
-  }, [search]);
-
-  // Use the stable reference for all derivations
-  const stableSearch = stableSearchRef.current;
-
-  // Extract term and filters just once
-  const { term, filters } = useMemo(() => {
-    // Extract term
-    const searchTerm = stableSearch.term || "";
-
-    // Extract all non-term filters into a single stable object
-    const filterEntries = Object.entries(stableSearch).filter(
-      ([key, value]) => key !== "term" && value !== undefined
-    );
-
-    return {
-      term: searchTerm,
-      filters: Object.fromEntries(filterEntries),
-    };
-  }, [searchSerialized]);
-
-  // Helper function to get array values from search params - now uses stableSearch
+  // Helper function to get array values from search params
   const getArrayParam = useCallback(
     (key: FilterCategory): string[] => {
-      return stableSearch[key] || [];
+      return search[key] || [];
     },
-    [searchSerialized] // Depend on serialized search for stability
+    [search]
   );
 
   // Create memoized selected filters object
@@ -200,15 +179,31 @@ export function useNewSearch(userId?: number) {
     return params.toString();
   }, [term, filters, userId]);
 
-  // Create unified query keys based on the same stable objects
-  const commonQueryKey = useMemo(
-    () => ({
+  // Simplified query keys - more efficient for React Query's cache comparison
+  const filterQueryKey = useMemo(
+    () => [
+      "filterOptions",
       term,
-      filters,
       userId,
-    }),
+      Object.entries(filters).sort((a, b) => a[0].localeCompare(b[0])),
+    ],
     [term, filters, userId]
   );
+
+  const laptopQueryKey = useMemo(
+    () => [
+      "laptopSearch",
+      term,
+      userId,
+      Object.entries(filters).sort((a, b) => a[0].localeCompare(b[0])),
+    ],
+    [term, filters, userId]
+  );
+
+  // Consistent caching settings for both queries
+  const cacheConfig = {
+    staleTime: 5000, // Keep data fresh for 5 seconds to prevent unnecessary refetches
+  };
 
   // Query for filter options
   const {
@@ -220,7 +215,7 @@ export function useNewSearch(userId?: number) {
     isPending: isFilterPending,
     isRefetching: isFilterRefetching,
   } = useQuery<FilterOptions, Error>({
-    queryKey: ["filterOptions", commonQueryKey],
+    queryKey: filterQueryKey,
     queryFn: async () => {
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/laptops/filters?${queryString}`
@@ -232,8 +227,7 @@ export function useNewSearch(userId?: number) {
 
       return response.json();
     },
-    staleTime: 10000, // Keep data fresh for 10 seconds
-    placeholderData: (prev) => prev,
+    ...cacheConfig,
   });
 
   // Query for laptops
@@ -246,7 +240,7 @@ export function useNewSearch(userId?: number) {
     isPending,
     isRefetching,
   } = useQuery<LaptopT[], Error>({
-    queryKey: ["laptopSearch", commonQueryKey],
+    queryKey: laptopQueryKey,
     queryFn: async (): Promise<LaptopT[]> => {
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/laptops/search?${queryString}`
@@ -258,21 +252,15 @@ export function useNewSearch(userId?: number) {
 
       return response.json();
     },
-    staleTime: 5000, // Keep data fresh for 5 seconds
-    placeholderData: (prev) => prev,
+    ...cacheConfig,
   });
 
   return {
-    // Search term
     searchTerm: term,
     setSearchTerm,
-
-    // Filters
     selectedFilters,
     toggleFilter,
     resetFilters,
-
-    // Data and status
     filterOptions,
     laptops,
     isLoadingFilters,
