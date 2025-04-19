@@ -403,7 +403,7 @@ export default function LaptopDetailPage() {
                           <span>Key Highlights</span>
                         </div>
                       </AccordionPrimitive.Trigger>
-                      <AccordionContent className="pl-7 pt-4">
+                      <AccordionContent className="pt-4">
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                           <div className="border-neutral-700/30 bg-neutral-700/20 rounded-lg border p-3">
                             <div className="flex items-center gap-2">

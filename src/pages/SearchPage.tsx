@@ -7,6 +7,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { SpinnerSVG } from "@/assets/SpinnerSVG";
 import { useAuth } from "@/context/AuthContext";
 import { useNewSearch } from "../hooks/useNewSearch";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import {
   X,
   Search,
@@ -20,7 +21,6 @@ import {
   Sheet,
   SheetContent,
   SheetDescription,
-  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -50,27 +50,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-
-// Define useMediaQuery hook inline
-const useMediaQuery = (query: string): boolean => {
-  const [matches, setMatches] = useState(false);
-
-  useEffect(() => {
-    const media = window.matchMedia(query);
-    if (media.matches !== matches) {
-      setMatches(media.matches);
-    }
-
-    const listener = () => {
-      setMatches(media.matches);
-    };
-
-    media.addEventListener("change", listener);
-    return () => media.removeEventListener("change", listener);
-  }, [matches, query]);
-
-  return matches;
-};
 
 interface FilterOption {
   value: string;
@@ -102,9 +81,6 @@ interface FilterOptionsType {
 }
 
 export default function SearchPage() {
-  const navigate = useNavigate();
-  const showMobileUI = useMediaQuery("(max-width: 768px)");
-  const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   // Use the new URL-based search hook instead of the old one
@@ -114,7 +90,6 @@ export default function SearchPage() {
     selectedFilters,
     filterOptions,
     laptops,
-    isLoadingFilters,
     filterError,
     isLoading,
     error,
@@ -124,7 +99,6 @@ export default function SearchPage() {
     isFilterRefetching,
     isFetched,
     isPending,
-    isRefetching,
   } = useNewSearch();
 
   // Type-safe filter configuration
@@ -132,7 +106,7 @@ export default function SearchPage() {
   type OptionsKey = keyof typeof displayFilters;
 
   // Define the most important filters to show on desktop sidebar
-  const primaryFilterKeys = ["brand", "processorBrand", "ram", "gpuBrand"];
+  const primaryFilterKeys = ["brand", "processorBrand", "ram", "gpuModel"];
 
   const filterSections = [
     {
@@ -449,9 +423,9 @@ export default function SearchPage() {
   // Active filters component with shadcn Badge components
   const ActiveFiltersComponent = () => {
     if (!hasActiveFilters) return null;
-
+    const [tagAnimationParent] = useAutoAnimate();
     return (
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2" ref={tagAnimationParent}>
         {Object.entries(selectedFilters).map(
           ([key, values]) =>
             values.length > 0 &&
@@ -635,27 +609,6 @@ export default function SearchPage() {
                     </div>
                   </SheetContent>
                 </Sheet>
-                {/* Display active filters */}
-                {hasActiveFilters && (
-                  <div className="border-neutral-700/30 mt-4 border-t pt-4">
-                    <h3 className="mb-2 flex items-center text-sm font-medium text-white">
-                      <span className="mr-2 h-1 w-4 rounded-full bg-primary-500"></span>
-                      Applied Filters
-                    </h3>
-                    <ActiveFiltersComponent />
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => {
-                        resetFilters();
-                        setSearchTerm("");
-                      }}
-                      className="hover:bg-neutral-800/70 mt-2 text-xs text-neutral-400 hover:text-white"
-                    >
-                      Clear All Filters
-                    </Button>
-                  </div>
-                )}
               </div>
             </div>
           </div>
@@ -876,11 +829,9 @@ export default function SearchPage() {
                 )}
 
                 {/* Showing active filters in search section for better context */}
-                {hasActiveFilters && (
-                  <div className="mt-2">
-                    <ActiveFiltersComponent />
-                  </div>
-                )}
+                <div className="mt-2">
+                  <ActiveFiltersComponent />
+                </div>
               </div>
             </div>
 
