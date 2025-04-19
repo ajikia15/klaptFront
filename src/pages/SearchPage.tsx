@@ -403,30 +403,14 @@ export default function SearchPage() {
     );
   };
 
-  const FilterHeader = () => (
-    <div className="mb-4 flex items-center justify-between">
-      <h2 className="text-xl font-semibold">Filters</h2>
-      <div className="flex items-center space-x-2">
-        {isFilterRefetching || isLoading ? (
-          <>
-            <p className="text-neutral-500">Updating...</p>
-            <SpinnerSVG className="animate-spin" />
-          </>
-        ) : null}
-      </div>
-    </div>
-  );
-
   const [tagAnimationParent] = useAutoAnimate();
 
   return (
     <div className="min-h-screen bg-neutral-900 text-neutral-200">
       {/* Header Area with page title and basic info */}
 
-      {/* Main Content with Sidebar */}
       <div className="container mx-auto py-8">
         <div className="flex flex-col gap-6 md:flex-row">
-          {/* Filters sidebar - only visible on desktop */}
           <div className="hidden md:block md:w-1/4 xl:w-1/5">
             <div className="sticky top-4 rounded-md bg-neutral-900">
               <div className="mb-4 flex items-center justify-between">
@@ -521,7 +505,7 @@ export default function SearchPage() {
               </Sheet>
 
               {/* Scrollable filters area */}
-              <div className="scrollbar-thin scrollbar-thumb-neutral-700 scrollbar-track-neutral-900 max-h-[calc(100vh-160px)] overflow-y-auto pr-1">
+              <div className="scrollbar-thin scrollbar-thumb-neutral-600 scrollbar-track-transparent max-h-[calc(100vh-160px)] overflow-y-auto pr-1">
                 <Accordion
                   type="multiple"
                   defaultValue={filterSections.map(

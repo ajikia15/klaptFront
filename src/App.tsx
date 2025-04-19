@@ -21,7 +21,7 @@ function App() {
       <AuthProvider>
         <div className="min-h-screen bg-neutral-900 text-neutral-100">
           <Navbar />
-          <main>
+          <main className="">
             <Outlet />
           </main>
           <Footer />
