@@ -75,40 +75,69 @@ export function useNewSearch(userId?: number) {
     [search]
   );
 
-  // Helper function to get array values from search params
-  const getArrayParam = useCallback(
-    (key: FilterCategory): string[] => {
-      return search[key] || [];
-    },
-    [search]
+  // Hoist the sorted filter entries to avoid duplicate sorting
+  const sortedFilterEntries = useMemo(
+    () => Object.entries(filters).sort((a, b) => a[0].localeCompare(b[0])),
+    [filters]
   );
 
-  // Create memoized selected filters object
-  const selectedFilters = useMemo(
-    () => ({
-      brand: getArrayParam("brand"),
-      gpuModel: getArrayParam("gpuModel"),
-      processorModel: getArrayParam("processorModel"),
-      ramType: getArrayParam("ramType"),
-      ram: getArrayParam("ram"),
-      storageType: getArrayParam("storageType"),
-      storageCapacity: getArrayParam("storageCapacity"),
-      stockStatus: getArrayParam("stockStatus"),
-      screenSize: getArrayParam("screenSize"),
-      screenResolution: getArrayParam("screenResolution"),
-      processorBrand: getArrayParam("processorBrand"),
-      gpuBrand: getArrayParam("gpuBrand"),
-      graphicsType: getArrayParam("graphicsType"),
-      backlightType: getArrayParam("backlightType"),
-      refreshRate: getArrayParam("refreshRate"),
-      vram: getArrayParam("vram"),
-      year: getArrayParam("year"),
-      model: getArrayParam("model"),
-      shortDesc: getArrayParam("shortDesc"),
-      tags: getArrayParam("tags"),
-    }),
-    [getArrayParam]
+  // Flatten sorted entries to a stable string for query keys
+  const filterEntriesKey = useMemo(
+    () =>
+      sortedFilterEntries
+        .map(([k, v]) =>
+          Array.isArray(v) ? `${k}:${v.join(",")}` : `${k}:${v}`
+        )
+        .join("|"),
+    [sortedFilterEntries]
   );
+
+  // Helper function to get array values from search params - now uses filters
+  const getArrayParam = useCallback(
+    (key: FilterCategory): string[] => {
+      return (filters[key] as string[]) || [];
+    },
+    [filters] // Depend on filters instead of search
+  );
+
+  // Create memoized selected filters object - DRY approach using FilterCategory type
+  const selectedFilters = useMemo(() => {
+    // Create an empty result object with default empty arrays for all categories
+    const result: Record<FilterCategory, string[]> = {
+      brand: [],
+      gpuModel: [],
+      processorModel: [],
+      ramType: [],
+      ram: [],
+      storageType: [],
+      storageCapacity: [],
+      stockStatus: [],
+      screenSize: [],
+      screenResolution: [],
+      processorBrand: [],
+      gpuBrand: [],
+      graphicsType: [],
+      backlightType: [],
+      refreshRate: [],
+      vram: [],
+      year: [],
+      model: [],
+      shortDesc: [],
+      tags: [],
+    };
+
+    if (filters && Object.keys(filters).length > 0) {
+      // Safely populate with available filter values
+      Object.keys(filters).forEach((key) => {
+        // Only set values for valid filter categories
+        if (key in result) {
+          result[key as FilterCategory] = getArrayParam(key as FilterCategory);
+        }
+      });
+    }
+
+    return result;
+  }, [filters, getArrayParam]);
 
   // Function to toggle a filter value in or out
   const toggleFilter = useCallback(
@@ -162,8 +191,8 @@ export function useNewSearch(userId?: number) {
       params.append("term", term);
     }
 
-    // Add all filter parameters
-    Object.entries(filters).forEach(([key, values]) => {
+    // Add all filter parameters - use sortedFilterEntries to avoid recomputing
+    sortedFilterEntries.forEach(([key, values]) => {
       if (Array.isArray(values)) {
         values.forEach((value) => {
           params.append(key, value);
@@ -177,32 +206,23 @@ export function useNewSearch(userId?: number) {
     }
 
     return params.toString();
-  }, [term, filters, userId]);
+  }, [term, sortedFilterEntries, userId]);
 
-  // Simplified query keys - more efficient for React Query's cache comparison
+  // Simplified and flattened query keys - more efficient for React Query's cache comparison
   const filterQueryKey = useMemo(
-    () => [
-      "filterOptions",
-      term,
-      userId,
-      Object.entries(filters).sort((a, b) => a[0].localeCompare(b[0])),
-    ],
-    [term, filters, userId]
+    () => ["filterOptions", term, userId, filterEntriesKey],
+    [term, userId, filterEntriesKey]
   );
 
   const laptopQueryKey = useMemo(
-    () => [
-      "laptopSearch",
-      term,
-      userId,
-      Object.entries(filters).sort((a, b) => a[0].localeCompare(b[0])),
-    ],
-    [term, filters, userId]
+    () => ["laptopSearch", term, userId, filterEntriesKey],
+    [term, userId, filterEntriesKey]
   );
 
   // Consistent caching settings for both queries
   const cacheConfig = {
     staleTime: 5000, // Keep data fresh for 5 seconds to prevent unnecessary refetches
+    // keepPreviousData: true, // Keep displaying previous results while fetching new ones
   };
 
   // Query for filter options
