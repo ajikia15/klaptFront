@@ -404,7 +404,7 @@ export default function SearchPage() {
   };
 
   const [tagAnimationParent] = useAutoAnimate();
-
+  const [cardAnimationParent] = useAutoAnimate();
   return (
     <div className="min-h-screen bg-neutral-900 text-neutral-200">
       {/* Header Area with page title and basic info */}
@@ -764,7 +764,10 @@ export default function SearchPage() {
               </div>
             )}
 
-            <div className="grid min-h-[200px] grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div
+              className="min-h-50 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
+              // ref={cardAnimationParent}
+            >
               {showSkeletons &&
                 Array(6)
                   .fill(0)
