@@ -1,8 +1,7 @@
-import { useNavigate } from "@tanstack/react-router";
 import { LaptopCard } from "../components/LaptopCard";
 import { Checkbox } from "@/components/ui/checkbox";
 import { SkeletonCard } from "../components/SkeletonCard";
-import { useState, useEffect, useDeferredValue } from "react";
+import { useState, useEffect, useDeferredValue, useMemo } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { SpinnerSVG } from "@/assets/SpinnerSVG";
 import { useAuth } from "@/context/AuthContext";
@@ -103,7 +102,7 @@ export default function SearchPage() {
 
   // Type-safe filter configuration
   type FilterKey = keyof typeof selectedFilters;
-  type OptionsKey = keyof typeof displayFilters;
+  type OptionsKey = keyof FilterOptionsType;
 
   // Define the most important filters to show on desktop sidebar
 
@@ -236,24 +235,17 @@ export default function SearchPage() {
     }
   }, [filterOptions]);
 
-  const displayFilters = filterOptions || cachedFilters;
+  const displayFilters: FilterOptionsType =
+    filterOptions || cachedFilters || {};
 
   const hasOptions = (optionsKey: OptionsKey): boolean => {
-    if (!displayFilters || !(optionsKey in displayFilters)) {
-      return false;
-    }
-
-    const options = displayFilters[optionsKey] as unknown as any[];
+    const options = displayFilters[optionsKey];
     return Array.isArray(options) && options.length > 0;
   };
 
   // Get the number of options for each filter section
   const getOptionsCount = (optionsKey: OptionsKey): number => {
-    if (!displayFilters || !(optionsKey in displayFilters)) {
-      return 0;
-    }
-
-    const options = displayFilters[optionsKey] as unknown as any[];
+    const options = displayFilters[optionsKey];
     return Array.isArray(options) ? options.length : 0;
   };
 
@@ -261,7 +253,7 @@ export default function SearchPage() {
   useEffect(() => {
     setIsTransitioning(true);
     refetch().finally(() => {
-      setTimeout(() => setIsTransitioning(false), 300);
+      setIsTransitioning(false);
     });
   }, [deferredSearchTerm, refetch]);
 
@@ -270,28 +262,38 @@ export default function SearchPage() {
     setSearchTerm(searchTerm);
   };
 
-  // Sort laptops based on current sort option
-  const sortedLaptops = laptops
-    ? [...laptops].sort((a, b) => {
-        if (sortOption === "priceLowToHigh") {
-          return a.price - b.price;
-        } else if (sortOption === "priceHighToLow") {
-          return b.price - a.price;
-        }
-        return 0;
-      })
-    : [];
+  // Sort laptops based on current sort option - now memoized
+  const sortedLaptops = useMemo(() => {
+    if (!laptops) return [];
+
+    return [...laptops].sort((a, b) => {
+      if (sortOption === "priceLowToHigh") {
+        return a.price - b.price;
+      } else if (sortOption === "priceHighToLow") {
+        return b.price - a.price;
+      }
+      return 0;
+    });
+  }, [laptops, sortOption]);
 
   const showSkeletons = isLoading || isTransitioning || isPending || !isFetched;
   const { isAuthenticated } = useAuth();
 
-  const activeFiltersCount = Object.values(selectedFilters).reduce(
-    (acc, filters) => acc + filters.length,
-    0
+  // Memoize derived values for better performance
+  const activeFiltersCount = useMemo(
+    () =>
+      Object.values(selectedFilters).reduce(
+        (acc, filters) => acc + filters.length,
+        0
+      ),
+    [selectedFilters]
   );
 
-  // Check if any filter is applied
-  const hasActiveFilters = activeFiltersCount > 0;
+  // Check if any filter is applied - now memoized
+  const hasActiveFilters = useMemo(
+    () => activeFiltersCount > 0,
+    [activeFiltersCount]
+  );
 
   const isValueSelected = (
     filterKey: FilterKey,
