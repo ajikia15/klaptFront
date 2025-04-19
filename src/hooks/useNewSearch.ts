@@ -2,7 +2,7 @@ import { useSearch, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { LaptopT } from "../interfaces/laptopT";
 import { searchRoute } from "../router";
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useRef } from "react";
 
 interface FilterOption {
   value: string;
@@ -61,17 +61,52 @@ export function useNewSearch(userId?: number) {
   const search = useSearch({ from: searchRoute.id });
   const navigate = useNavigate({ from: searchRoute.id });
 
-  // Helper function to get array values from search params - memoize to maintain stable references
+  // Create a stable reference to the search params
+  const stableSearchRef = useRef(search);
+
+  // Create a serialized version of search for stable comparison
+  const searchSerialized = useMemo(() => {
+    // Update the ref only if the serialized values are different
+    const newSerialized = JSON.stringify(search);
+    const oldSerialized = JSON.stringify(stableSearchRef.current);
+
+    if (newSerialized !== oldSerialized) {
+      stableSearchRef.current = search;
+    }
+
+    return newSerialized;
+  }, [search]);
+
+  // Use the stable reference for all derivations
+  const stableSearch = stableSearchRef.current;
+
+  // Extract term and filters just once
+  const { term, filters } = useMemo(() => {
+    // Extract term
+    const searchTerm = stableSearch.term || "";
+
+    // Extract all non-term filters into a single stable object
+    const filterEntries = Object.entries(stableSearch).filter(
+      ([key, value]) => key !== "term" && value !== undefined
+    );
+
+    return {
+      term: searchTerm,
+      filters: Object.fromEntries(filterEntries),
+    };
+  }, [searchSerialized]);
+
+  // Helper function to get array values from search params - now uses stableSearch
   const getArrayParam = useCallback(
     (key: FilterCategory): string[] => {
-      return search[key] || [];
+      return stableSearch[key] || [];
     },
-    [search]
+    [searchSerialized] // Depend on serialized search for stability
   );
 
-  // Create memoized selected filters object to avoid recreating on each render
-  const selectedFilters = useMemo(() => {
-    return {
+  // Create memoized selected filters object
+  const selectedFilters = useMemo(
+    () => ({
       brand: getArrayParam("brand"),
       gpuModel: getArrayParam("gpuModel"),
       processorModel: getArrayParam("processorModel"),
@@ -92,24 +127,20 @@ export function useNewSearch(userId?: number) {
       model: getArrayParam("model"),
       shortDesc: getArrayParam("shortDesc"),
       tags: getArrayParam("tags"),
-    };
-  }, [getArrayParam]);
+    }),
+    [getArrayParam]
+  );
 
-  // Function to toggle a filter value in or out - wrapped in useCallback to maintain reference stability
+  // Function to toggle a filter value in or out
   const toggleFilter = useCallback(
     (category: FilterCategory, value: string) => {
       const currentValues = getArrayParam(category);
-      let newValues: string[];
 
-      if (currentValues.includes(value)) {
-        // Remove value if it exists
-        newValues = currentValues.filter((v) => v !== value);
-      } else {
-        // Add value if it doesn't exist
-        newValues = [...currentValues, value];
-      }
+      // Create new array only once with a single operation
+      const newValues = currentValues.includes(value)
+        ? currentValues.filter((v) => v !== value)
+        : [...currentValues, value];
 
-      // Update search params with new values
       navigate({
         search: (prev) => ({
           ...prev,
@@ -121,7 +152,7 @@ export function useNewSearch(userId?: number) {
     [getArrayParam, navigate]
   );
 
-  // Function to set search term - wrapped in useCallback
+  // Function to set search term
   const setSearchTerm = useCallback(
     (term: string) => {
       navigate({
@@ -135,7 +166,7 @@ export function useNewSearch(userId?: number) {
     [navigate]
   );
 
-  // Reset all filters - wrapped in useCallback
+  // Reset all filters
   const resetFilters = useCallback(() => {
     navigate({
       search: {},
@@ -143,17 +174,17 @@ export function useNewSearch(userId?: number) {
     });
   }, [navigate]);
 
-  // Prepare search params for API calls - memoized to avoid recreation on each render
-  const prepareSearchParams = useCallback(() => {
+  // Prepare and memoize the query string for API calls
+  const queryString = useMemo(() => {
     const params = new URLSearchParams();
 
-    if (search.term) params.append("term", search.term);
+    // Add search term
+    if (term) {
+      params.append("term", term);
+    }
 
     // Add all filter parameters
-    Object.entries(search).forEach(([key, values]) => {
-      // Skip term as it's already handled
-      if (key === "term") return;
-
+    Object.entries(filters).forEach(([key, values]) => {
       if (Array.isArray(values)) {
         values.forEach((value) => {
           params.append(key, value);
@@ -166,41 +197,20 @@ export function useNewSearch(userId?: number) {
       params.append("userId", userId.toString());
     }
 
-    return params;
-  }, [search, userId]);
+    return params.toString();
+  }, [term, filters, userId]);
 
-  // Memoize query key objects to prevent unnecessary refetches
-  const filterOptionsQueryKey = useMemo(() => {
-    return [
-      "filterOptions",
-      {
-        term: search.term,
-        filters: Object.fromEntries(
-          Object.entries(search).filter(
-            ([key, value]) => key !== "term" && value !== undefined
-          )
-        ),
-        userId,
-      },
-    ];
-  }, [search, userId]);
+  // Create unified query keys based on the same stable objects
+  const commonQueryKey = useMemo(
+    () => ({
+      term,
+      filters,
+      userId,
+    }),
+    [term, filters, userId]
+  );
 
-  const laptopSearchQueryKey = useMemo(() => {
-    return [
-      "laptopSearch",
-      {
-        term: search.term,
-        filters: Object.fromEntries(
-          Object.entries(search).filter(
-            ([key, value]) => key !== "term" && value !== undefined
-          )
-        ),
-        userId,
-      },
-    ];
-  }, [search, userId]);
-
-  // Query for filter options - removed no-op select transformation
+  // Query for filter options
   const {
     data: filterOptions,
     isLoading: isLoadingFilters,
@@ -210,11 +220,10 @@ export function useNewSearch(userId?: number) {
     isPending: isFilterPending,
     isRefetching: isFilterRefetching,
   } = useQuery<FilterOptions, Error>({
-    queryKey: filterOptionsQueryKey,
+    queryKey: ["filterOptions", commonQueryKey],
     queryFn: async () => {
-      const params = prepareSearchParams();
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/laptops/filters?${params.toString()}`
+        `${import.meta.env.VITE_API_URL}/laptops/filters?${queryString}`
       );
 
       if (!response.ok) {
@@ -223,7 +232,8 @@ export function useNewSearch(userId?: number) {
 
       return response.json();
     },
-    // Removed no-op select transformation
+    staleTime: 10000, // Keep data fresh for 10 seconds
+    placeholderData: (prev) => prev,
   });
 
   // Query for laptops
@@ -236,11 +246,10 @@ export function useNewSearch(userId?: number) {
     isPending,
     isRefetching,
   } = useQuery<LaptopT[], Error>({
-    queryKey: laptopSearchQueryKey,
+    queryKey: ["laptopSearch", commonQueryKey],
     queryFn: async (): Promise<LaptopT[]> => {
-      const params = prepareSearchParams();
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/laptops/search?${params.toString()}`
+        `${import.meta.env.VITE_API_URL}/laptops/search?${queryString}`
       );
 
       if (!response.ok) {
@@ -249,11 +258,13 @@ export function useNewSearch(userId?: number) {
 
       return response.json();
     },
+    staleTime: 5000, // Keep data fresh for 5 seconds
+    placeholderData: (prev) => prev,
   });
 
   return {
     // Search term
-    searchTerm: search.term || "",
+    searchTerm: term,
     setSearchTerm,
 
     // Filters
