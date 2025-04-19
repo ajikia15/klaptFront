@@ -1,12 +1,6 @@
+import React from "react";
 import { Link } from "@tanstack/react-router";
-import {
-  CheckCircle,
-  XCircle,
-  Eye,
-  Trash2,
-  Archive,
-  MoreHorizontal,
-} from "lucide-react";
+import { Eye, Edit, Trash2, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -15,31 +9,24 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-interface Laptop {
+interface MyPostLaptopProps {
   id: number;
   title: string;
   price: number;
-  userId: string | number;
-  status: "pending" | "approved" | "rejected" | "archived";
+  status?: "pending" | "approved" | "rejected" | "archived";
   images?: string[];
-}
-
-interface ContentLaptopCardProps {
-  laptop: Laptop;
-  onApprove: (id: number) => void;
-  onReject: (id: number) => void;
   onDelete: (id: number) => void;
-  onArchive: (id: number) => void;
 }
 
-export default function ContentLaptopCard({
-  laptop,
-  onApprove,
-  onReject,
+export function MyPostsLaptopCard({
+  id,
+  title,
+  price,
+  status = "pending",
+  images,
   onDelete,
-  onArchive,
-}: ContentLaptopCardProps) {
-  // Status specific styling
+}: MyPostLaptopProps) {
+  // Status specific styling - borrowed from ContentLaptopCard
   const getStatusStyle = (status: string) => {
     switch (status) {
       case "approved":
@@ -73,17 +60,15 @@ export default function ContentLaptopCard({
               <span>View</span>
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => onApprove(laptopId)}>
-            <CheckCircle className="mr-2 h-4 w-4 text-green-400" />
-            <span>Approve</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => onReject(laptopId)}>
-            <XCircle className="mr-2 h-4 w-4 text-red-400" />
-            <span>Reject</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => onArchive(laptopId)}>
-            <Archive className="mr-2 h-4 w-4 text-amber-400" />
-            <span>Archive</span>
+          <DropdownMenuItem asChild>
+            <Link
+              to="/"
+              params={{ laptopId: laptopId.toString() }}
+              className="flex items-center"
+            >
+              <Edit className="mr-2 h-4 w-4 text-amber-400" />
+              <span>Edit</span>
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => onDelete(laptopId)}>
             <Trash2 className="mr-2 h-4 w-4 text-red-400" />
@@ -99,68 +84,60 @@ export default function ContentLaptopCard({
       {/* Mobile card view */}
       <div className="p-4 md:hidden">
         <div className="mb-3 flex items-start">
-          {laptop.images && laptop.images.length > 0 && (
+          {images && images.length > 0 && (
             <img
-              src={laptop.images[0]}
-              alt={laptop.title}
+              src={images[0]}
+              alt={title}
               className="mr-3 h-16 w-16 flex-shrink-0 rounded object-cover"
             />
           )}
           <div className="flex-1">
-            <h3 className="mb-1 font-medium">{laptop.title}</h3>
+            <h3 className="mb-1 font-medium">{title}</h3>
             <div className="mb-1 flex items-center justify-between">
-              <span className="font-medium text-amber-400">
-                ${laptop.price}
-              </span>
-              <span className="text-sm text-neutral-400">
-                User: {laptop.userId || "Unknown"}
-              </span>
+              <span className="font-medium text-amber-400">${price}</span>
             </div>
             <span
               className={`px-2.5 py-1 rounded-full text-xs font-medium inline-block ${getStatusStyle(
-                laptop.status
+                status
               )}`}
             >
-              {laptop.status || "pending"}
+              {status || "pending"}
             </span>
           </div>
         </div>
         <div className="mt-2 flex justify-end">
-          <ActionsDropdown laptopId={laptop.id} />
+          <ActionsDropdown laptopId={id} />
         </div>
       </div>
 
       {/* Desktop table view - hidden on mobile */}
-      <div className="col-span-4 hidden min-h-[72px] items-center px-6 py-4 md:flex">
+      <div className="col-span-6 hidden min-h-[72px] items-center px-6 py-4 md:flex">
         <div className="flex items-center">
-          {laptop.images && laptop.images.length > 0 && (
+          {images && images.length > 0 && (
             <img
-              src={laptop.images[0]}
-              alt={laptop.title}
+              src={images[0]}
+              alt={title}
               className="mr-3 h-10 w-10 flex-shrink-0 rounded object-cover"
             />
           )}
-          <span className="line-clamp-2 text-sm">{laptop.title}</span>
+          <span className="line-clamp-2 text-sm">{title}</span>
         </div>
       </div>
       <div className="col-span-2 hidden items-center px-6 py-4 font-medium text-amber-400 md:flex">
-        ${laptop.price}
-      </div>
-      <div className="col-span-2 hidden items-center px-6 py-4 text-sm md:flex">
-        {laptop.userId || "Unknown"}
+        ${price}
       </div>
       <div className="col-span-2 hidden items-center px-6 py-4 md:flex">
         <span
           className={`px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap ${getStatusStyle(
-            laptop.status
+            status
           )}`}
         >
-          {laptop.status || "pending"}
+          {status || "pending"}
         </span>
       </div>
       <div className="col-span-2 hidden items-center px-6 py-4 md:flex">
         <div className="flex justify-end">
-          <ActionsDropdown laptopId={laptop.id} />
+          <ActionsDropdown laptopId={id} />
         </div>
       </div>
     </div>

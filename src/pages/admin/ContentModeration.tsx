@@ -103,7 +103,6 @@ export default function ContentModeration() {
             Review and moderate user laptop listings
           </p>
 
-          {/* Filter buttons */}
           <div className="mb-6 flex flex-wrap gap-2">
             {["all", "pending", "approved", "rejected", "archived"].map(
               (status) => {

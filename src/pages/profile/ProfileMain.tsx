@@ -124,9 +124,9 @@ export default function ProfileMain() {
                 <div className="flex items-center gap-1">
                   {!editUsername && (
                     <Button
-                      variant={"outline"}
+                      variant={"ghost"}
                       onClick={handleEditUsername}
-                      className="rounded border-0 p-1 transition-colors hover:bg-neutral-700"
+                      className=" "
                       title="Edit Username"
                     >
                       <Pencil size={18} className="text-neutral-400" />
