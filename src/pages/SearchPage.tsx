@@ -427,9 +427,20 @@ export default function SearchPage() {
       <div className="container mx-auto py-8">
         <div className="flex flex-col gap-6 md:flex-row">
           {/* Filters sidebar - only visible on desktop */}
-          <div className="hidden overflow-y-auto md:block md:w-1/4 xl:w-1/5">
-            <div className="relative rounded-md bg-neutral-900">
-              <FilterHeader />
+          <div className="hidden md:block md:w-1/4 xl:w-1/5">
+            <div className="sticky top-4 rounded-md bg-neutral-900">
+              <div className="mb-4 flex items-center justify-between">
+                <h2 className="text-xl font-semibold">Filters</h2>
+                <div className="flex items-center space-x-2">
+                  {isFilterRefetching || isLoading ? (
+                    <>
+                      <p className="text-neutral-500">Updating...</p>
+                      <SpinnerSVG className="animate-spin" />
+                    </>
+                  ) : null}
+                </div>
+              </div>
+
               {/* desktop SHOW ALL FILTERS BUTTON */}
               <Sheet>
                 <SheetTrigger asChild>
@@ -508,34 +519,32 @@ export default function SearchPage() {
                   </div>
                 </SheetContent>
               </Sheet>
-              <div className="space-y-4">
-                {/* Filter accordions */}
+
+              {/* Scrollable filters area */}
+              <div className="scrollbar-thin scrollbar-thumb-neutral-700 scrollbar-track-neutral-900 max-h-[calc(100vh-160px)] overflow-y-auto pr-1">
                 <Accordion
                   type="multiple"
-                  defaultValue={filterSections
-                    // .filter((section) => section.isPrimary) // showing only prioretized filters
-                    .map((section) => section.filterKey)}
-                  className="space-y-2"
+                  defaultValue={filterSections.map(
+                    (section) => section.filterKey
+                  )}
+                  className="space-y-1.5"
                 >
                   {filterSections
-                    .filter((section) =>
-                      // section.isPrimary &&
-                      hasOptions(section.optionsKey)
-                    )
+                    .filter((section) => hasOptions(section.optionsKey))
                     .map((section) => (
                       <AccordionItem
                         key={section.filterKey}
                         value={section.filterKey}
-                        className="border-neutral-700/50 overflow-hidden rounded-lg border"
+                        className="border-neutral-800/50 overflow-hidden border-b"
                       >
-                        <AccordionTrigger className="bg-neutral-800/50 px-4 py-2 hover:bg-neutral-800 hover:no-underline data-[state=open]:bg-neutral-800">
+                        <AccordionTrigger className="group px-1 py-2 hover:no-underline">
                           <div className="flex w-full items-center justify-between">
-                            <span className="text-base font-bold text-neutral-200">
+                            <span className="text-sm font-medium text-neutral-300 transition-colors group-hover:text-white">
                               {section.title}
                             </span>
                           </div>
                         </AccordionTrigger>
-                        <AccordionContent className="bg-neutral-900 px-4 py-3">
+                        <AccordionContent className="px-1 pb-2 pt-1">
                           <FilterSection section={section} maxItems={5} />
                         </AccordionContent>
                       </AccordionItem>
