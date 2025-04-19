@@ -536,32 +536,6 @@ export default function SearchPage() {
                           </AccordionItem>
                         ))}
                     </Accordion>
-
-                    {/* Active Filters in Sheet */}
-                    {hasActiveFilters && (
-                      <div className="border-neutral-700/30 mt-6 border-t pt-6">
-                        <div className="mb-3 px-1">
-                          <h3 className="flex items-center text-sm font-medium text-white">
-                            <span className="mr-2 h-1 w-4 rounded-full bg-primary-500"></span>
-                            Applied Filters
-                          </h3>
-                        </div>
-                        <div className="px-1">
-                          <ActiveFiltersComponent />
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => {
-                              resetFilters();
-                              setSearchTerm("");
-                            }}
-                            className="hover:bg-neutral-800/70 mt-3 text-xs text-neutral-400 hover:text-white"
-                          >
-                            Clear All Filters
-                          </Button>
-                        </div>
-                      </div>
-                    )}
                   </div>
                 </SheetContent>
               </Sheet>
@@ -755,20 +729,6 @@ export default function SearchPage() {
                               </AccordionItem>
                             ))}
                         </Accordion>
-                        {/* Mobile active filters */}
-                        {hasActiveFilters && (
-                          <div className="border-neutral-700/30 mt-6 border-t pt-6">
-                            <div className="mb-3 px-1">
-                              <h3 className="flex items-center text-sm font-medium text-white">
-                                <span className="mr-2 h-1 w-4 rounded-full bg-primary-500"></span>
-                                Applied Filters
-                              </h3>
-                            </div>
-                            <div className="px-1">
-                              <ActiveFiltersComponent />
-                            </div>
-                          </div>
-                        )}
                       </div>
 
                       <DrawerFooter className="border-neutral-700/30 mt-4 border-t pt-4">
