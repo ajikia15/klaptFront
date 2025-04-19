@@ -1,7 +1,7 @@
 import { LaptopCard } from "../components/LaptopCard";
 import { Checkbox } from "@/components/ui/checkbox";
 import { SkeletonCard } from "../components/SkeletonCard";
-import { useState, useEffect, useDeferredValue, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { SpinnerSVG } from "@/assets/SpinnerSVG";
 import { useAuth } from "@/context/AuthContext";
@@ -19,7 +19,6 @@ import { Badge } from "@/components/ui/badge";
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -49,7 +48,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { useDebounce } from "@/hooks/useDebounce";
 
 interface FilterOption {
   value: string;
@@ -224,9 +222,6 @@ export default function SearchPage() {
     "default" | "priceLowToHigh" | "priceHighToLow"
   >("default");
 
-  const deferredSearchTerm = useDeferredValue(searchTerm);
-  const debouncedSearchTerm = useDebounce(deferredSearchTerm, 300); // 300ms delay
-
   const [cachedFilters, setCachedFilters] = useState<FilterOptionsType | null>(
     null
   );
@@ -251,15 +246,15 @@ export default function SearchPage() {
     return Array.isArray(options) ? options.length : 0;
   };
 
-  // Refetch data when search term changes
+  // Refetch data when search term changes - now using searchTerm directly
   useEffect(() => {
-    if (debouncedSearchTerm === "" || debouncedSearchTerm.length >= 2) {
+    if (searchTerm === "" || searchTerm.length >= 2) {
       setIsTransitioning(true);
       refetch().finally(() => {
         setIsTransitioning(false);
       });
     }
-  }, [debouncedSearchTerm, refetch]);
+  }, [searchTerm, refetch]);
 
   // Sort laptops based on current sort option - now memoized
   const sortedLaptops = useMemo(() => {
