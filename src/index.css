@@ -83,17 +83,16 @@ body {
 }
 
 .dark {
-  /* Shadcn theme variables mapped to custom colors - Dark mode */
   --background: var(--neutral-800);
   --foreground: white;
   --card: var(--neutral-700);
   --card-foreground: white;
   --popover: var(--neutral-700);
   --popover-foreground: white;
-  --primary: var(--primary-300);
-  --primary-foreground: var(--neutral-900);
-  --secondary: var(--secondary-300);
-  --secondary-foreground: var(--neutral-900);
+  --primary: var(--primary-400);
+  --primary-foreground: white;
+  --secondary: var(--secondary-400);
+  --secondary-foreground: white;
   --muted: var(--neutral-700);
   --muted-foreground: var(--neutral-400);
   --accent: var(--primary-900);
