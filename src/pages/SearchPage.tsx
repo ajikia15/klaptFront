@@ -1,11 +1,12 @@
 import { LaptopCard } from "../components/LaptopCard";
 import { Checkbox } from "@/components/ui/checkbox";
 import { SkeletonCard } from "../components/SkeletonCard";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, ChangeEvent } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { SpinnerSVG } from "@/assets/SpinnerSVG";
 import { useAuth } from "@/context/AuthContext";
 import { useNewSearch } from "../hooks/useNewSearch";
+import { useDebounce } from "../hooks/useDebounce";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import {
   X,
@@ -76,6 +77,42 @@ interface FilterOptionsType {
   years?: FilterOption[];
   models?: FilterOption[];
   tags?: FilterOption[];
+}
+
+// DebouncedInput component to handle search with debounce
+function DebouncedInput({
+  value: initialValue,
+  onChange,
+  debounceMs = 300,
+  ...props
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  debounceMs?: number;
+} & Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange">) {
+  const [value, setValue] = useState(initialValue);
+
+  useEffect(() => {
+    setValue(initialValue);
+  }, [initialValue]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (value !== initialValue) {
+        onChange(value);
+      }
+    }, debounceMs);
+
+    return () => clearTimeout(timeout);
+  }, [value, initialValue, onChange, debounceMs]);
+
+  return (
+    <input
+      {...props}
+      value={value}
+      onChange={(e: ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
+    />
+  );
 }
 
 export default function SearchPage() {
@@ -459,12 +496,14 @@ export default function SearchPage() {
                     <div className="pointer-events-none absolute inset-y-0 left-3 flex items-center">
                       <Search size={18} className="text-neutral-400" />
                     </div>
-                    <input
+                    {/* Replace standard input with debounced input */}
+                    <DebouncedInput
                       type="text"
                       value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
+                      onChange={setSearchTerm}
                       placeholder="Search for laptops by brand, model, or specs..."
                       className="bg-neutral-900/90 h-10 w-full rounded-lg border border-neutral-700 pl-10 pr-4 text-white shadow-inner focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      debounceMs={300}
                     />
                   </form>
                 </div>
