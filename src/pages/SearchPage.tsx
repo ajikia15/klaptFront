@@ -249,18 +249,13 @@ export default function SearchPage() {
     return Array.isArray(options) ? options.length : 0;
   };
 
-  // This effect is simplified since URL changes are now handled by the hook
+  // Refetch data when search term changes
   useEffect(() => {
     setIsTransitioning(true);
     refetch().finally(() => {
       setIsTransitioning(false);
     });
   }, [deferredSearchTerm, refetch]);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSearchTerm(searchTerm);
-  };
 
   // Sort laptops based on current sort option - now memoized
   const sortedLaptops = useMemo(() => {
@@ -404,34 +399,6 @@ export default function SearchPage() {
               )}
           </div>
         </ScrollArea>
-      </div>
-    );
-  };
-
-  // Active filters component with shadcn Badge components
-  const ActiveFiltersComponent = () => {
-    if (!hasActiveFilters) return null;
-    const [tagAnimationParent] = useAutoAnimate();
-    return (
-      <div className="flex flex-wrap gap-2" ref={tagAnimationParent}>
-        {Object.entries(selectedFilters).map(
-          ([key, values]) =>
-            values.length > 0 &&
-            values.map((value: string) => (
-              <Badge
-                key={`${key}-${value}`}
-                className="border-neutral-700/50 cursor-pointer bg-neutral-800 px-2 py-1 text-white transition-all hover:bg-neutral-700 hover:shadow-md"
-                variant="outline"
-                onClick={() => toggleFilter(key as FilterKey, value)}
-              >
-                <X size={12} className="text-neutral-400" />
-                <span className="mr-1 text-xs text-neutral-400">
-                  {filterSections.find((f) => f.filterKey === key)?.title}:
-                </span>
-                <span>{value}</span>
-              </Badge>
-            ))
-        )}
       </div>
     );
   };
@@ -583,7 +550,10 @@ export default function SearchPage() {
             <div className="border-neutral-700/50 bg-neutral-800/50 mb-4 rounded-lg border p-4">
               <div className="flex flex-col gap-4 md:flex-row">
                 <div className="flex-1">
-                  <form onSubmit={handleSubmit} className="relative">
+                  <form
+                    onSubmit={(e) => e.preventDefault()}
+                    className="relative"
+                  >
                     <div className="pointer-events-none absolute inset-y-0 left-3 flex items-center">
                       <Search size={18} className="text-neutral-400" />
                     </div>
