@@ -431,8 +431,8 @@ export default function SearchPage() {
                     </h3>
                     <DualRangeSlider
                       min={0}
-                      max={100}
-                      step={1}
+                      max={7000}
+                      step={100}
                       value={rangeValues}
                       onValueChange={(value) => {
                         setRangeValues(value);
