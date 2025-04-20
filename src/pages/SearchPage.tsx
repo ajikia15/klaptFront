@@ -1,13 +1,14 @@
 import { LaptopCard } from "../components/LaptopCard";
 import { Checkbox } from "@/components/ui/checkbox";
 import { SkeletonCard } from "../components/SkeletonCard";
-import { useState, useEffect, useMemo, ChangeEvent } from "react";
+import { useState, useEffect, useMemo, ChangeEvent, useCallback } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { SpinnerSVG } from "@/assets/SpinnerSVG";
 import { useAuth } from "@/context/AuthContext";
 import { useNewSearch } from "../hooks/useNewSearch";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { DualRangeSlider } from "@/components/ui/dual-range-slider";
 import {
   X,
   Search,
@@ -42,6 +43,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import React from "react";
 
 interface FilterOption {
   value: string;
@@ -308,84 +310,98 @@ export default function SearchPage() {
     [activeFiltersCount]
   );
 
-  const isValueSelected = (
-    filterKey: FilterKey,
-    optionValue: string
-  ): boolean => {
-    const selectedValues = selectedFilters[filterKey];
-    return selectedValues.map(String).includes(String(optionValue));
-  };
+  // Memoize sets for fast lookup
+  const selectedFilterSets = useMemo(() => {
+    const sets: Record<FilterKey, Set<string>> = {} as any;
+    (Object.keys(selectedFilters) as FilterKey[]).forEach((key) => {
+      sets[key] = new Set(selectedFilters[key].map(String));
+    });
+    return sets;
+  }, [selectedFilters]);
 
-  const FilterSection = ({
-    section,
-    inAccordion = false,
-    maxItems = 1000,
-  }: {
-    section: (typeof filterSections)[0];
-    inAccordion?: boolean;
-    maxItems?: number;
-  }) => {
-    const { filterKey, optionsKey } = section;
+  const isValueSelected = (filterKey: FilterKey, optionValue: string) =>
+    selectedFilterSets[filterKey].has(String(optionValue));
 
-    return (
-      <div className="transition-opacity duration-150 ease-in-out">
-        <ScrollArea className={getOptionsCount(optionsKey) > 5 ? "pr-1" : ""}>
-          <div className="py-1">
-            {filterError ? (
-              <p className="text-red-500">Error loading filters</p>
-            ) : displayFilters &&
-              optionsKey in displayFilters &&
-              displayFilters[optionsKey] ? (
-              (displayFilters[optionsKey] as FilterOption[])
-                .slice(0, maxItems) // Limit number of items shown
-                .map((option) => (
-                  <div
-                    key={option.value}
-                    className="flex items-center space-x-2 py-1.5"
-                  >
-                    <Checkbox
-                      id={`${filterKey}-${option.value}${
-                        inAccordion ? "-sheet" : ""
-                      }`}
-                      // Use our helper function to ensure consistent type comparison
-                      checked={isValueSelected(filterKey, option.value)}
-                      onCheckedChange={() =>
-                        toggleFilter(filterKey, option.value)
-                      }
-                      disabled={option.disabled}
-                      className={`${
-                        option.disabled ? "opacity-50 cursor-not-allowed" : ""
-                      } ${
-                        isValueSelected(filterKey, option.value)
-                          ? "border-primary-500"
-                          : ""
-                      }`}
-                    />
-                    <label
-                      htmlFor={`${filterKey}-${option.value}${
-                        inAccordion ? "-sheet" : ""
-                      }`}
-                      className={`text-sm leading-none ${
-                        option.disabled
-                          ? "text-neutral-500"
-                          : isValueSelected(filterKey, option.value)
-                          ? "text-white"
-                          : "text-neutral-400"
-                      } cursor-pointer hover:text-white transition-colors`}
+  const filterToggleHandlers = useMemo(() => {
+    const handlers: Record<FilterKey, (value: string) => void> = {} as any;
+    (Object.keys(selectedFilters) as FilterKey[]).forEach((key) => {
+      handlers[key] = (value: string) => toggleFilter(key, value);
+    });
+    return handlers;
+  }, [selectedFilters, toggleFilter]);
+
+  const FilterSection = React.memo(
+    ({
+      section,
+      inAccordion = false,
+      maxItems = 1000,
+    }: {
+      section: (typeof filterSections)[0];
+      inAccordion?: boolean;
+      maxItems?: number;
+    }) => {
+      const { filterKey, optionsKey } = section;
+      const handleToggle = filterToggleHandlers[filterKey];
+
+      return (
+        <div className="transition-opacity duration-150 ease-in-out">
+          <ScrollArea className={getOptionsCount(optionsKey) > 5 ? "pr-1" : ""}>
+            <div className="py-1">
+              {filterError ? (
+                <p className="text-red-500">Error loading filters</p>
+              ) : displayFilters &&
+                optionsKey in displayFilters &&
+                displayFilters[optionsKey] ? (
+                (displayFilters[optionsKey] as FilterOption[])
+                  .slice(0, maxItems)
+                  .map((option) => (
+                    <div
+                      key={option.value}
+                      className="flex items-center space-x-2 py-1.5"
                     >
-                      {option.value}
-                    </label>
-                  </div>
-                ))
-            ) : null}
-          </div>
-        </ScrollArea>
-      </div>
-    );
-  };
+                      <Checkbox
+                        id={`${filterKey}-${option.value}${
+                          inAccordion ? "-sheet" : ""
+                        }`}
+                        checked={isValueSelected(filterKey, option.value)}
+                        onCheckedChange={() => handleToggle(option.value)}
+                        disabled={option.disabled}
+                        className={`${
+                          option.disabled ? "opacity-50 cursor-not-allowed" : ""
+                        } ${
+                          isValueSelected(filterKey, option.value)
+                            ? "border-primary-500"
+                            : ""
+                        }`}
+                      />
+                      <label
+                        htmlFor={`${filterKey}-${option.value}${
+                          inAccordion ? "-sheet" : ""
+                        }`}
+                        className={`text-sm leading-none ${
+                          option.disabled
+                            ? "text-neutral-500"
+                            : isValueSelected(filterKey, option.value)
+                            ? "text-white"
+                            : "text-neutral-400"
+                        } cursor-pointer hover:text-white transition-colors`}
+                      >
+                        {option.value}
+                      </label>
+                    </div>
+                  ))
+              ) : null}
+            </div>
+          </ScrollArea>
+        </div>
+      );
+    }
+  );
 
   const [tagAnimationParent] = useAutoAnimate();
   const [cardAnimationParent] = useAutoAnimate();
+  const [rangeValues, setRangeValues] = useState([0, 100]);
+
   return (
     <div className="min-h-screen bg-neutral-900 text-neutral-200">
       {/* Header Area with page title and basic info */}
@@ -409,6 +425,25 @@ export default function SearchPage() {
 
                 {/* Scrollable filters area */}
                 <div className="scrollbar-thin scrollbar-thumb-neutral-600 scrollbar-track-transparent max-h-[calc(100vh-160px)] overflow-y-auto pr-1">
+                  <div className="mt-4">
+                    <h3 className="mb-2 text-sm font-semibold text-neutral-300">
+                      Price Range
+                    </h3>
+                    <DualRangeSlider
+                      min={0}
+                      max={100}
+                      step={1}
+                      value={rangeValues}
+                      onValueChange={(value) => {
+                        setRangeValues(value);
+                      }}
+                      className="w-full"
+                    />
+                    <div className="flex justify-between text-xs text-neutral-400">
+                      <span>${rangeValues[0]}</span>
+                      <span>${rangeValues[1]}</span>
+                    </div>
+                  </div>
                   <Accordion
                     type="multiple"
                     defaultValue={filterSections.map(
