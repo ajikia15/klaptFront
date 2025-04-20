@@ -110,6 +110,75 @@ function DebouncedInput({
   );
 }
 
+interface FilterSectionProps {
+  title: string;
+  options: FilterOption[];
+  selected: Set<string>;
+  onToggle: (value: string) => void;
+  maxItems?: number;
+  inAccordion?: boolean;
+  isLoading: boolean;
+}
+
+const FilterSection = React.memo(
+  ({
+    title,
+    options,
+    selected,
+    onToggle,
+    maxItems = 1000,
+    inAccordion = false,
+    isLoading,
+  }: FilterSectionProps) => (
+    <div className="transition-opacity duration-150 ease-in-out">
+      <ScrollArea className={options.length > 5 ? "pr-1" : ""}>
+        <div className="py-1">
+          {isLoading ? (
+            <p className="text-neutral-500">Loading...</p>
+          ) : options.length === 0 ? (
+            <p className="text-neutral-500">No options</p>
+          ) : (
+            options.slice(0, maxItems).map((option) => (
+              <div
+                key={option.value}
+                className="flex items-center space-x-2 py-1.5"
+              >
+                <Checkbox
+                  id={`${title}-${option.value}${inAccordion ? "-sheet" : ""}`}
+                  checked={selected.has(String(option.value))}
+                  onCheckedChange={() => onToggle(option.value)}
+                  disabled={option.disabled}
+                  className={`${
+                    option.disabled ? "opacity-50 cursor-not-allowed" : ""
+                  } ${
+                    selected.has(String(option.value))
+                      ? "border-primary-500"
+                      : ""
+                  }`}
+                />
+                <label
+                  htmlFor={`${title}-${option.value}${
+                    inAccordion ? "-sheet" : ""
+                  }`}
+                  className={`text-sm leading-none ${
+                    option.disabled
+                      ? "text-neutral-500"
+                      : selected.has(String(option.value))
+                      ? "text-white"
+                      : "text-neutral-400"
+                  } cursor-pointer hover:text-white transition-colors`}
+                >
+                  {option.value}
+                </label>
+              </div>
+            ))
+          )}
+        </div>
+      </ScrollArea>
+    </div>
+  )
+);
+
 export default function SearchPage() {
   // Use the new URL-based search hook instead of the old one
   const {
@@ -178,7 +247,7 @@ export default function SearchPage() {
     {
       title: "RAM Type",
       filterKey: "ramType" as FilterKey,
-      optionsKey: "ramTypes" as OptionsKey,
+      optionsKey: "ramType" as OptionsKey,
       isPrimary: false,
     },
     {
@@ -214,7 +283,7 @@ export default function SearchPage() {
     {
       title: "Screen Resolution",
       filterKey: "screenResolution" as FilterKey,
-      optionsKey: "screenResolutions" as OptionsKey,
+      optionsKey: "screenResolution" as OptionsKey,
       isPrimary: false,
     },
     {
@@ -226,7 +295,7 @@ export default function SearchPage() {
     {
       title: "Stock Status",
       filterKey: "stockStatus" as FilterKey,
-      optionsKey: "stockStatuses" as OptionsKey,
+      optionsKey: "stockStatus" as OptionsKey,
       isPrimary: false,
     },
     {
@@ -319,83 +388,9 @@ export default function SearchPage() {
     return sets;
   }, [selectedFilters]);
 
-  const isValueSelected = (filterKey: FilterKey, optionValue: string) =>
-    selectedFilterSets[filterKey].has(String(optionValue));
-
-  const filterToggleHandlers = useMemo(() => {
-    const handlers: Record<FilterKey, (value: string) => void> = {} as any;
-    (Object.keys(selectedFilters) as FilterKey[]).forEach((key) => {
-      handlers[key] = (value: string) => toggleFilter(key, value);
-    });
-    return handlers;
-  }, [selectedFilters, toggleFilter]);
-
-  const FilterSection = React.memo(
-    ({
-      section,
-      inAccordion = false,
-      maxItems = 1000,
-    }: {
-      section: (typeof filterSections)[0];
-      inAccordion?: boolean;
-      maxItems?: number;
-    }) => {
-      const { filterKey, optionsKey } = section;
-      const handleToggle = filterToggleHandlers[filterKey];
-
-      return (
-        <div className="transition-opacity duration-150 ease-in-out">
-          <ScrollArea className={getOptionsCount(optionsKey) > 5 ? "pr-1" : ""}>
-            <div className="py-1">
-              {filterError ? (
-                <p className="text-red-500">Error loading filters</p>
-              ) : displayFilters &&
-                optionsKey in displayFilters &&
-                displayFilters[optionsKey] ? (
-                (displayFilters[optionsKey] as FilterOption[])
-                  .slice(0, maxItems)
-                  .map((option) => (
-                    <div
-                      key={option.value}
-                      className="flex items-center space-x-2 py-1.5"
-                    >
-                      <Checkbox
-                        id={`${filterKey}-${option.value}${
-                          inAccordion ? "-sheet" : ""
-                        }`}
-                        checked={isValueSelected(filterKey, option.value)}
-                        onCheckedChange={() => handleToggle(option.value)}
-                        disabled={option.disabled}
-                        className={`${
-                          option.disabled ? "opacity-50 cursor-not-allowed" : ""
-                        } ${
-                          isValueSelected(filterKey, option.value)
-                            ? "border-primary-500"
-                            : ""
-                        }`}
-                      />
-                      <label
-                        htmlFor={`${filterKey}-${option.value}${
-                          inAccordion ? "-sheet" : ""
-                        }`}
-                        className={`text-sm leading-none ${
-                          option.disabled
-                            ? "text-neutral-500"
-                            : isValueSelected(filterKey, option.value)
-                            ? "text-white"
-                            : "text-neutral-400"
-                        } cursor-pointer hover:text-white transition-colors`}
-                      >
-                        {option.value}
-                      </label>
-                    </div>
-                  ))
-              ) : null}
-            </div>
-          </ScrollArea>
-        </div>
-      );
-    }
+  const handleToggle = useCallback(
+    (filterKey: FilterKey, value: string) => toggleFilter(filterKey, value),
+    [toggleFilter]
   );
 
   const [tagAnimationParent] = useAutoAnimate();
@@ -467,7 +462,21 @@ export default function SearchPage() {
                             </div>
                           </AccordionTrigger>
                           <AccordionContent className="px-1 pb-2 pt-1">
-                            <FilterSection section={section} maxItems={5} />
+                            <FilterSection
+                              title={section.title}
+                              options={
+                                (displayFilters[
+                                  section.optionsKey
+                                ] as FilterOption[]) || []
+                              }
+                              selected={selectedFilterSets[section.filterKey]}
+                              onToggle={(value) =>
+                                handleToggle(section.filterKey, value)
+                              }
+                              maxItems={5}
+                              inAccordion={false}
+                              isLoading={!!filterError}
+                            />
                           </AccordionContent>
                         </AccordionItem>
                       ))}
@@ -631,8 +640,20 @@ export default function SearchPage() {
                                   </AccordionTrigger>
                                   <AccordionContent className="bg-neutral-900 px-4 py-3">
                                     <FilterSection
-                                      section={section}
+                                      title={section.title}
+                                      options={
+                                        (displayFilters[
+                                          section.optionsKey
+                                        ] as FilterOption[]) || []
+                                      }
+                                      selected={
+                                        selectedFilterSets[section.filterKey]
+                                      }
+                                      onToggle={(value) =>
+                                        handleToggle(section.filterKey, value)
+                                      }
                                       inAccordion={true}
+                                      isLoading={!!filterError}
                                     />
                                   </AccordionContent>
                                 </AccordionItem>
