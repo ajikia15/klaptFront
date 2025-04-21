@@ -2,7 +2,6 @@ import { LaptopCard } from "../components/LaptopCard";
 import { Checkbox } from "@/components/ui/checkbox";
 import { SkeletonCard } from "../components/SkeletonCard";
 import { useState, useEffect, useMemo, ChangeEvent, useCallback } from "react";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { SpinnerSVG } from "@/assets/SpinnerSVG";
 import { useAuth } from "@/context/AuthContext";
 import { useNewSearch } from "../hooks/useNewSearch";
@@ -44,6 +43,12 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import React from "react";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { Label } from "@/components/ui/label";
 
 interface FilterOption {
   value: string;
@@ -125,7 +130,7 @@ const FilterSection = React.memo(
     options,
     selected,
     onToggle,
-    maxItems = 1000,
+    maxItems,
     isLoading,
   }: FilterSectionProps) => (
     <div className="transition-opacity duration-150 ease-in-out">
@@ -135,36 +140,66 @@ const FilterSection = React.memo(
         ) : options.length === 0 ? (
           <p className="text-neutral-500">No options</p>
         ) : (
-          options.slice(0, maxItems).map((option) => (
-            <div
-              key={option.value}
-              className="flex items-center space-x-2 py-1.5"
-            >
-              <Checkbox
-                id={`${title}-${option.value}`}
-                checked={selected.has(String(option.value))}
-                onCheckedChange={() => onToggle(option.value)}
-                disabled={option.disabled}
-                className={`${
-                  option.disabled ? "opacity-50 cursor-not-allowed" : ""
-                } ${
-                  selected.has(String(option.value)) ? "border-primary-500" : ""
-                }`}
-              />
-              <label
-                htmlFor={`${title}-${option.value}`}
-                className={`text-sm leading-none ${
-                  option.disabled
-                    ? "text-neutral-500"
-                    : selected.has(String(option.value))
-                    ? "text-white"
-                    : "text-neutral-400"
-                } cursor-pointer hover:text-white transition-colors`}
+          <Collapsible>
+            {options.slice(0, maxItems).map((option) => (
+              <div
+                key={option.value}
+                className="flex items-center space-x-2 py-1.5"
               >
-                {option.value}
-              </label>
-            </div>
-          ))
+                <Checkbox
+                  id={`${title}-${option.value}`}
+                  checked={selected.has(String(option.value))}
+                  onCheckedChange={() => onToggle(option.value)}
+                  disabled={option.disabled}
+                />
+                <label
+                  htmlFor={`${title}-${option.value}`}
+                  className={`text-sm leading-none ${
+                    option.disabled
+                      ? "text-neutral-500"
+                      : selected.has(String(option.value))
+                      ? "text-white"
+                      : "text-neutral-400"
+                  } cursor-pointer hover:text-white transition-colors`}
+                >
+                  {/* <Label htmlFor={`${title}-${option.value}`}>
+                  {option.value}
+                </Label> */}
+                  {option.value}
+                </label>
+              </div>
+            ))}
+            <CollapsibleContent>
+              {options.slice(maxItems).map((option) => (
+                <div
+                  key={option.value}
+                  className="flex items-center space-x-2 py-1.5"
+                >
+                  <Checkbox
+                    id={`${title}-${option.value}`}
+                    checked={selected.has(String(option.value))}
+                    onCheckedChange={() => onToggle(option.value)}
+                    disabled={option.disabled}
+                  />
+                  <label
+                    htmlFor={`${title}-${option.value}`}
+                    className={`text-sm leading-none ${
+                      option.disabled
+                        ? "text-neutral-500"
+                        : selected.has(String(option.value))
+                        ? "text-white"
+                        : "text-neutral-400"
+                    } cursor-pointer hover:text-white transition-colors`}
+                  >
+                    {option.value}
+                  </label>
+                </div>
+              ))}
+            </CollapsibleContent>
+            <CollapsibleTrigger>
+              <div>Load More</div>
+            </CollapsibleTrigger>
+          </Collapsible>
         )}
       </div>
     </div>
@@ -182,11 +217,9 @@ export default function SearchPage() {
     isLoading,
     error,
     toggleFilter,
-    refetch,
     resetFilters,
     isFilterRefetching,
     isFetched,
-    isPending,
   } = useNewSearch();
 
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -219,7 +252,6 @@ export default function SearchPage() {
       optionsKey: "gpuBrands" as OptionsKey,
       isPrimary: true,
     },
-
     {
       title: "VRAM",
       filterKey: "vram" as FilterKey,
@@ -328,16 +360,9 @@ export default function SearchPage() {
     return Array.isArray(options) && options.length > 0;
   };
 
-  // Get the number of options for each filter section
-  const getOptionsCount = (optionsKey: OptionsKey): number => {
-    const options = displayFilters[optionsKey];
-    return Array.isArray(options) ? options.length : 0;
-  };
-
   // Sort laptops based on current sort option - now memoized
   const sortedLaptops = useMemo(() => {
     if (!laptops) return [];
-
     return [...laptops].sort((a, b) => {
       if (sortOption === "priceLowToHigh") {
         return a.price - b.price;
@@ -382,13 +407,10 @@ export default function SearchPage() {
   );
 
   const [tagAnimationParent] = useAutoAnimate();
-  const [cardAnimationParent] = useAutoAnimate();
   const [rangeValues, setRangeValues] = useState([0, 100]);
 
   return (
     <div className="min-h-screen bg-neutral-900 text-neutral-200">
-      {/* Header Area with page title and basic info */}
-
       <div className="container mx-auto py-8">
         <div className="flex flex-col gap-6 md:flex-row">
           {!isMobile && (
@@ -405,8 +427,6 @@ export default function SearchPage() {
                     ) : null}
                   </div>
                 </div>
-
-                {/* Scrollable filters area */}
                 <div className="scrollbar-thin scrollbar-thumb-neutral-600 scrollbar-track-transparent max-h-[calc(100vh-160px)] overflow-y-auto pr-1">
                   <div className="mt-4">
                     <h3 className="mb-2 text-sm font-semibold text-neutral-300">
@@ -454,7 +474,7 @@ export default function SearchPage() {
                               onToggle={(value) =>
                                 handleToggle(section.filterKey, value)
                               }
-                              maxItems={5}
+                              maxItems={3}
                               isLoading={!!filterError}
                             />
                           </div>
@@ -467,7 +487,6 @@ export default function SearchPage() {
           )}
 
           <div className="w-full md:w-3/4">
-            {/* Search, sort and filter controls */}
             <div className="border-neutral-700/50 bg-neutral-800/50 mb-4 rounded-lg border p-4">
               <div className="flex flex-col gap-4 md:flex-row">
                 <div className="flex-1">
@@ -478,7 +497,6 @@ export default function SearchPage() {
                     <div className="pointer-events-none absolute inset-y-0 left-3 flex items-center">
                       <Search size={18} className="text-neutral-400" />
                     </div>
-                    {/* Replace standard input with debounced input */}
                     <DebouncedInput
                       type="text"
                       value={searchTerm}
@@ -489,7 +507,6 @@ export default function SearchPage() {
                     />
                   </form>
                 </div>
-
                 <div className="flex gap-2">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -545,8 +562,6 @@ export default function SearchPage() {
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
-
-                  {/* Mobile-only filter button - replaced Sheet with Drawer */}
                   {isMobile && (
                     <Drawer>
                       <DrawerTrigger asChild>
@@ -564,7 +579,6 @@ export default function SearchPage() {
                         </Button>
                       </DrawerTrigger>
                       <DrawerContent className="border-t border-neutral-700 bg-neutral-900 px-2">
-                        {/* Mobile filter drawer content */}
                         <DrawerHeader>
                           <DrawerTitle className="flex items-center justify-between text-white">
                             <div className="flex items-center">
@@ -593,8 +607,6 @@ export default function SearchPage() {
                             Narrow down your search with these filters
                           </DrawerDescription>
                         </DrawerHeader>
-
-                        {/* Copy of the filter sheet content */}
                         <div className="overflow-y-auto pb-20">
                           <Accordion
                             type="multiple"
@@ -639,7 +651,6 @@ export default function SearchPage() {
                               ))}
                           </Accordion>
                         </div>
-
                         <DrawerFooter className="border-neutral-700/30 mt-4 border-t pt-4">
                           <Button className="bg-primary-600 text-white hover:bg-primary-700">
                             Apply Filters
@@ -659,7 +670,6 @@ export default function SearchPage() {
                 </div>
               </div>
             </div>
-
             <div className="mb-5 px-1">
               <div
                 className="flex flex-wrap items-center gap-1 text-sm text-neutral-400"
@@ -699,24 +709,18 @@ export default function SearchPage() {
                 )}
               </div>
             </div>
-
             {error && (
               <div className="mb-4 p-4 text-center text-red-500">
                 Error searching laptops: {error.toString()}
               </div>
             )}
-
-            <div
-              className="min-h-50 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
-              // ref={cardAnimationParent}
-            >
+            <div className="min-h-50 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
               {showSkeletons &&
                 Array(6)
                   .fill(0)
                   .map((_, index) => (
                     <SkeletonCard key={`skeleton-${index}`} />
                   ))}
-
               {!showSkeletons &&
                 laptops &&
                 laptops.length > 0 &&
@@ -727,14 +731,12 @@ export default function SearchPage() {
                     {...laptop}
                   />
                 ))}
-
               <div
                 className="pointer-events-none h-0 opacity-0 md:col-span-2 lg:col-span-3"
                 aria-hidden="true"
                 key="ghost-element"
               />
             </div>
-
             {!showSkeletons &&
               laptops &&
               laptops.length === 0 &&
