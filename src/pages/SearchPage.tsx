@@ -802,26 +802,76 @@ export default function SearchPage() {
                     {Object.entries(selectedFilters).map(
                       ([key, values]) =>
                         values.length > 0 &&
-                        values.map((value: string) => (
-                          <Badge
-                            key={`${key}-${value}`}
-                            className="border-neutral-700/50 inline-flex items-center bg-neutral-800 !py-1 px-1.5 text-white transition-all hover:bg-neutral-700 hover:shadow-md"
-                            variant="outline"
-                            onClick={() =>
-                              toggleFilter(key as FilterKey, value)
-                            }
-                          >
-                            <X size={10} className="mr-0.5 text-neutral-400" />
-                            <span className="mr-0.5 text-xs text-neutral-400">
-                              {
-                                filterSections.find((f) => f.filterKey === key)
-                                  ?.title
+                        values.map((value: string) => {
+                          // Special formatting for priceMin and priceMax
+                          if (key === "priceMin") {
+                            return (
+                              <Badge
+                                key={`${key}-${value}`}
+                                className="border-neutral-700/50 inline-flex items-center bg-neutral-800 !py-1 px-1.5 text-white transition-all hover:bg-neutral-700 hover:shadow-md"
+                                variant="outline"
+                                onClick={() =>
+                                  toggleFilter(key as FilterKey, value)
+                                }
+                              >
+                                <X
+                                  size={10}
+                                  className="mr-0.5 text-neutral-400"
+                                />
+                                <span className="mr-0.5 text-xs text-neutral-400">
+                                  min:
+                                </span>
+                                <span className="text-xs">{value}</span>
+                              </Badge>
+                            );
+                          }
+                          if (key === "priceMax") {
+                            return (
+                              <Badge
+                                key={`${key}-${value}`}
+                                className="border-neutral-700/50 inline-flex items-center bg-neutral-800 !py-1 px-1.5 text-white transition-all hover:bg-neutral-700 hover:shadow-md"
+                                variant="outline"
+                                onClick={() =>
+                                  toggleFilter(key as FilterKey, value)
+                                }
+                              >
+                                <X
+                                  size={10}
+                                  className="mr-0.5 text-neutral-400"
+                                />
+                                <span className="mr-0.5 text-xs text-neutral-400">
+                                  max:
+                                </span>
+                                <span className="text-xs">{value}</span>
+                              </Badge>
+                            );
+                          }
+                          // Default for other filters
+                          return (
+                            <Badge
+                              key={`${key}-${value}`}
+                              className="border-neutral-700/50 inline-flex items-center bg-neutral-800 !py-1 px-1.5 text-white transition-all hover:bg-neutral-700 hover:shadow-md"
+                              variant="outline"
+                              onClick={() =>
+                                toggleFilter(key as FilterKey, value)
                               }
-                              :
-                            </span>
-                            <span className="text-xs">{value}</span>
-                          </Badge>
-                        ))
+                            >
+                              <X
+                                size={10}
+                                className="mr-0.5 text-neutral-400"
+                              />
+                              <span className="mr-0.5 text-xs text-neutral-400">
+                                {
+                                  filterSections.find(
+                                    (f) => f.filterKey === key
+                                  )?.title
+                                }
+                                :
+                              </span>
+                              <span className="text-xs">{value}</span>
+                            </Badge>
+                          );
+                        })
                     )}
                   </>
                 ) : (
