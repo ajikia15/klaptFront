@@ -501,10 +501,6 @@ export default function SearchPage() {
                       }}
                       className="w-full"
                     />
-                    <div className="mt-1 flex justify-between text-xs text-neutral-400">
-                      <span>${rangeValues[0]}</span>
-                      <span>${rangeValues[1]}</span>
-                    </div>
                   </section>
                   {/* Filter Sections */}
                   <div>
