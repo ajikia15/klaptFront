@@ -44,28 +44,28 @@ export default {
           800: "var(--neutral-800)",
           900: "var(--neutral-900)",
         },
-        // Shadcn color mappings
-        background: "var(--background)",
-        foreground: "var(--foreground)",
-        card: "var(--card)",
-        "card-foreground": "var(--card-foreground)",
-        popover: "var(--popover)",
-        "popover-foreground": "var(--popover-foreground)",
+        // Shadcn color mappings (improved for dark UI)
+        background: "#18181b", // dark neutral
+        foreground: "#f4f4f5", // light neutral
+        card: "#232329", // slightly lighter than background
+        "card-foreground": "#f4f4f5",
+        popover: "#232329",
+        "popover-foreground": "#f4f4f5",
         muted: {
-          DEFAULT: "var(--muted)",
-          foreground: "var(--muted-foreground)",
+          DEFAULT: "#27272a", // dark muted
+          foreground: "#a1a1aa", // muted text
         },
         accent: {
-          DEFAULT: "var(--accent)",
-          foreground: "var(--accent-foreground)",
+          DEFAULT: "#27272a", // accent for dark
+          foreground: "#f4f4f5",
         },
         destructive: {
-          DEFAULT: "var(--destructive)",
-          foreground: "var(--destructive-foreground)",
+          DEFAULT: "#ef4444", // red-500
+          foreground: "#fff",
         },
-        border: "var(--border)",
-        input: "var(--input)",
-        ring: "var(--ring)",
+        border: "#27272a", // dark border
+        input: "#232329", // input bg
+        ring: "#6366f1", // indigo-500 for focus ring
       },
       animation: {
         flip: "flip 0.8s ease-in-out",

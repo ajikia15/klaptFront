@@ -405,7 +405,7 @@ export default function SearchPage() {
   );
 
   const [tagAnimationParent] = useAutoAnimate();
-  const [rangeValues, setRangeValues] = useState([0, 100]);
+  const [rangeValues, setRangeValues] = useState([0, 5000]);
 
   // --- Price Range State ---
   const [minInput, setMinInput] = useState(rangeValues[0]);
@@ -423,7 +423,7 @@ export default function SearchPage() {
     setRangeValues([val, maxInput]);
   };
   const handleMaxInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = Math.min(7000, Math.max(Number(e.target.value), minInput));
+    const val = Math.min(5000, Math.max(Number(e.target.value), minInput));
     setMaxInput(val);
     setRangeValues([minInput, val]);
   };
@@ -482,7 +482,7 @@ export default function SearchPage() {
                       <input
                         type="number"
                         min={minInput}
-                        max={7000}
+                        max={5000}
                         value={maxInput}
                         onChange={handleMaxInput}
                         className="w-16 rounded border border-neutral-700 bg-neutral-900 px-2 py-1 text-xs text-white focus:border-primary-500 focus:outline-none"
@@ -491,7 +491,7 @@ export default function SearchPage() {
                     </div>
                     <DualRangeSlider
                       min={0}
-                      max={7000}
+                      max={5000}
                       step={100}
                       value={rangeValues}
                       onValueChange={(value) => {
