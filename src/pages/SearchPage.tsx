@@ -431,29 +431,22 @@ export default function SearchPage() {
                       <span>${rangeValues[1]}</span>
                     </div>
                   </div>
-                  <Accordion
-                    type="multiple"
-                    defaultValue={filterSections.map(
-                      (section) => section.filterKey
-                    )}
-                    className="space-y-1.5"
-                  >
+                  <div className="space-y-1.5">
                     {filterSections
                       .filter((section) => hasOptions(section.optionsKey))
                       .map((section) => (
-                        <AccordionItem
+                        <div
                           key={section.filterKey}
-                          value={section.filterKey}
                           className="border-neutral-800/50 overflow-hidden border-b"
                         >
-                          <AccordionTrigger className="group px-1 py-2 hover:no-underline">
+                          <div className="group px-1 py-2 hover:no-underline">
                             <div className="flex w-full items-center justify-between">
                               <span className="text-sm font-medium text-neutral-300 transition-colors group-hover:text-white">
                                 {section.title}
                               </span>
                             </div>
-                          </AccordionTrigger>
-                          <AccordionContent className="px-1 pb-2 pt-1">
+                          </div>
+                          <div className="px-1 pb-2 pt-1">
                             <FilterSection
                               title={section.title}
                               options={
@@ -469,10 +462,10 @@ export default function SearchPage() {
                               inAccordion={false}
                               isLoading={!!filterError}
                             />
-                          </AccordionContent>
-                        </AccordionItem>
+                          </div>
+                        </div>
                       ))}
-                  </Accordion>
+                  </div>
                 </div>
               </div>
             </div>
