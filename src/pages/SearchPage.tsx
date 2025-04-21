@@ -116,7 +116,6 @@ interface FilterSectionProps {
   selected: Set<string>;
   onToggle: (value: string) => void;
   maxItems?: number;
-  inAccordion?: boolean;
   isLoading: boolean;
 }
 
@@ -127,7 +126,6 @@ const FilterSection = React.memo(
     selected,
     onToggle,
     maxItems = 1000,
-    inAccordion = false,
     isLoading,
   }: FilterSectionProps) => (
     <div className="transition-opacity duration-150 ease-in-out">
@@ -143,7 +141,7 @@ const FilterSection = React.memo(
               className="flex items-center space-x-2 py-1.5"
             >
               <Checkbox
-                id={`${title}-${option.value}${inAccordion ? "-sheet" : ""}`}
+                id={`${title}-${option.value}`}
                 checked={selected.has(String(option.value))}
                 onCheckedChange={() => onToggle(option.value)}
                 disabled={option.disabled}
@@ -154,9 +152,7 @@ const FilterSection = React.memo(
                 }`}
               />
               <label
-                htmlFor={`${title}-${option.value}${
-                  inAccordion ? "-sheet" : ""
-                }`}
+                htmlFor={`${title}-${option.value}`}
                 className={`text-sm leading-none ${
                   option.disabled
                     ? "text-neutral-500"
@@ -459,7 +455,6 @@ export default function SearchPage() {
                                 handleToggle(section.filterKey, value)
                               }
                               maxItems={5}
-                              inAccordion={false}
                               isLoading={!!filterError}
                             />
                           </div>
@@ -637,7 +632,6 @@ export default function SearchPage() {
                                       onToggle={(value) =>
                                         handleToggle(section.filterKey, value)
                                       }
-                                      inAccordion={true}
                                       isLoading={!!filterError}
                                     />
                                   </AccordionContent>
