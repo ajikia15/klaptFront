@@ -107,11 +107,29 @@ function DebouncedInput({
   }, [value, initialValue, onChange, debounceMs]);
 
   return (
-    <input
-      {...props}
-      value={value}
-      onChange={(e: ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
-    />
+    <div className="relative">
+      <input
+        {...props}
+        value={value}
+        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+          setValue(e.target.value)
+        }
+      />
+      {value && (
+        <button
+          type="button"
+          className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1 transition-colors hover:bg-neutral-700"
+          aria-label="Clear search"
+          onClick={() => {
+            setValue("");
+            onChange("");
+          }}
+          tabIndex={0}
+        >
+          <X size={16} className="text-neutral-400" />
+        </button>
+      )}
+    </div>
   );
 }
 
@@ -529,14 +547,14 @@ export default function SearchPage() {
           )}
 
           <div className="w-full md:w-3/4">
-            <div className="border-neutral-700/50 bg-neutral-800/50 mb-4 rounded-lg border p-4">
+            <div className="border-neutral-700/50 mb-4 rounded-lg border p-4">
               <div className="flex flex-col gap-4 md:flex-row">
                 <div className="flex-1">
                   <form
                     onSubmit={(e) => e.preventDefault()}
                     className="relative"
                   >
-                    <div className="pointer-events-none absolute inset-y-0 left-3 flex items-center">
+                    <div className="absolute inset-y-0 left-3 z-20 flex items-center">
                       <Search size={18} className="text-neutral-400" />
                     </div>
                     <DebouncedInput
