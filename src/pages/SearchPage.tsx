@@ -544,9 +544,21 @@ export default function SearchPage() {
                       value={searchTerm}
                       onChange={setSearchTerm}
                       placeholder="Search for laptops by brand, model, or specs..."
-                      className="bg-neutral-900/90 h-10 w-full rounded-lg border border-neutral-700 pl-10 pr-4 text-white shadow-inner focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      className="bg-neutral-900/90 h-10 w-full rounded-lg border border-neutral-700 pl-10 pr-10 text-white shadow-inner focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary-500"
                       debounceMs={300}
                     />
+                    {/* X button to clear searchTerm */}
+                    {searchTerm && (
+                      <button
+                        type="button"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1 transition-colors hover:bg-neutral-700"
+                        aria-label="Clear search"
+                        onClick={() => setSearchTerm("")}
+                        tabIndex={0}
+                      >
+                        <X size={16} className="text-neutral-400" />
+                      </button>
+                    )}
                   </form>
                 </div>
                 <div className="flex gap-2">
@@ -630,20 +642,6 @@ export default function SearchPage() {
                               />
                               All Filters
                             </div>
-                            {activeFiltersCount > 0 && (
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => {
-                                  resetFilters();
-                                  setSearchTerm("");
-                                }}
-                                className="border-neutral-700 text-neutral-400 hover:bg-neutral-800 hover:text-white"
-                              >
-                                <X size={14} className="mr-1" />
-                                Reset All
-                              </Button>
-                            )}
                           </DrawerTitle>
                           <DrawerDescription className="text-neutral-400">
                             Narrow down your search with these filters
@@ -693,16 +691,26 @@ export default function SearchPage() {
                               ))}
                           </Accordion>
                         </div>
-                        <DrawerFooter className="border-neutral-700/30 mt-4 border-t pt-4">
-                          <Button className="bg-primary-600 text-white hover:bg-primary-700">
-                            Apply Filters
-                          </Button>
+                        <DrawerFooter className="border-neutral-700/30 mt-4 flex flex-col gap-2 border-t pt-4">
+                          {activeFiltersCount > 0 && (
+                            <Button
+                              variant="outline"
+                              className="border-neutral-700 text-neutral-400 hover:bg-neutral-800 hover:text-white"
+                              onClick={() => {
+                                resetFilters();
+                                setSearchTerm("");
+                              }}
+                            >
+                              <X size={14} className="mr-1" />
+                              Reset All
+                            </Button>
+                          )}
                           <DrawerClose asChild>
                             <Button
                               variant="outline"
                               className="border-neutral-700 text-neutral-300 hover:bg-neutral-800"
                             >
-                              Cancel
+                              Close
                             </Button>
                           </DrawerClose>
                         </DrawerFooter>
