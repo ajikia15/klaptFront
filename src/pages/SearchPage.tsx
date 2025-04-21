@@ -131,56 +131,51 @@ const FilterSection = React.memo(
     isLoading,
   }: FilterSectionProps) => (
     <div className="transition-opacity duration-150 ease-in-out">
-      <ScrollArea className={options.length > 5 ? "pr-1" : ""}>
-        <div className="py-1">
-          {isLoading ? (
-            <p className="text-neutral-500">Loading...</p>
-          ) : options.length === 0 ? (
-            <p className="text-neutral-500">No options</p>
-          ) : (
-            options.slice(0, maxItems).map((option) => (
-              <div
-                key={option.value}
-                className="flex items-center space-x-2 py-1.5"
+      <div className="py-1">
+        {isLoading ? (
+          <p className="text-neutral-500">Loading...</p>
+        ) : options.length === 0 ? (
+          <p className="text-neutral-500">No options</p>
+        ) : (
+          options.slice(0, maxItems).map((option) => (
+            <div
+              key={option.value}
+              className="flex items-center space-x-2 py-1.5"
+            >
+              <Checkbox
+                id={`${title}-${option.value}${inAccordion ? "-sheet" : ""}`}
+                checked={selected.has(String(option.value))}
+                onCheckedChange={() => onToggle(option.value)}
+                disabled={option.disabled}
+                className={`${
+                  option.disabled ? "opacity-50 cursor-not-allowed" : ""
+                } ${
+                  selected.has(String(option.value)) ? "border-primary-500" : ""
+                }`}
+              />
+              <label
+                htmlFor={`${title}-${option.value}${
+                  inAccordion ? "-sheet" : ""
+                }`}
+                className={`text-sm leading-none ${
+                  option.disabled
+                    ? "text-neutral-500"
+                    : selected.has(String(option.value))
+                    ? "text-white"
+                    : "text-neutral-400"
+                } cursor-pointer hover:text-white transition-colors`}
               >
-                <Checkbox
-                  id={`${title}-${option.value}${inAccordion ? "-sheet" : ""}`}
-                  checked={selected.has(String(option.value))}
-                  onCheckedChange={() => onToggle(option.value)}
-                  disabled={option.disabled}
-                  className={`${
-                    option.disabled ? "opacity-50 cursor-not-allowed" : ""
-                  } ${
-                    selected.has(String(option.value))
-                      ? "border-primary-500"
-                      : ""
-                  }`}
-                />
-                <label
-                  htmlFor={`${title}-${option.value}${
-                    inAccordion ? "-sheet" : ""
-                  }`}
-                  className={`text-sm leading-none ${
-                    option.disabled
-                      ? "text-neutral-500"
-                      : selected.has(String(option.value))
-                      ? "text-white"
-                      : "text-neutral-400"
-                  } cursor-pointer hover:text-white transition-colors`}
-                >
-                  {option.value}
-                </label>
-              </div>
-            ))
-          )}
-        </div>
-      </ScrollArea>
+                {option.value}
+              </label>
+            </div>
+          ))
+        )}
+      </div>
     </div>
   )
 );
 
 export default function SearchPage() {
-  // Use the new URL-based search hook instead of the old one
   const {
     searchTerm,
     setSearchTerm,
@@ -200,11 +195,8 @@ export default function SearchPage() {
 
   const isMobile = useMediaQuery("(max-width: 768px)");
 
-  // Type-safe filter configuration
   type FilterKey = keyof typeof selectedFilters;
   type OptionsKey = keyof FilterOptionsType;
-
-  // Define the most important filters to show on desktop sidebar
 
   const filterSections = [
     {
