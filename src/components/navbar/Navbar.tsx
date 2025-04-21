@@ -71,8 +71,8 @@ export default function Navbar() {
             }
             title={isAuthenticated ? "Create Post" : "Login to create a post"}
           >
-            <Button className="font-bold" variant={"outline"}>
-              <span>Create post</span>
+            <Button className="" variant={"outline"}>
+              Create post
               <Plus />
             </Button>
           </Link>
@@ -125,7 +125,7 @@ export default function Navbar() {
           ) : (
             <>
               <Link to="/login">
-                <Button variant={"outline"} className="font-bold">
+                <Button variant={"outline"} className="">
                   Sign In
                 </Button>
               </Link>
