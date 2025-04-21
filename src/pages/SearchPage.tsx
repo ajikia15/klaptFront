@@ -130,50 +130,25 @@ const FilterSection = React.memo(
     options,
     selected,
     onToggle,
-    maxItems,
+    maxItems = 3,
     isLoading,
-  }: FilterSectionProps) => (
-    <div className="transition-opacity duration-150 ease-in-out">
+  }: FilterSectionProps) => {
+    const [open, setOpen] = useState(false);
+    const hasMore = options.length > maxItems;
+    return (
       <div className="py-1">
         {isLoading ? (
           <p className="text-neutral-500">Loading...</p>
         ) : options.length === 0 ? (
           <p className="text-neutral-500">No options</p>
         ) : (
-          <Collapsible>
-            {options.slice(0, maxItems).map((option) => (
-              <div
-                key={option.value}
-                className="flex items-center space-x-2 py-1.5"
-              >
-                <Checkbox
-                  id={`${title}-${option.value}`}
-                  checked={selected.has(String(option.value))}
-                  onCheckedChange={() => onToggle(option.value)}
-                  disabled={option.disabled}
-                />
-                <label
-                  htmlFor={`${title}-${option.value}`}
-                  className={`text-sm leading-none ${
-                    option.disabled
-                      ? "text-neutral-500"
-                      : selected.has(String(option.value))
-                      ? "text-white"
-                      : "text-neutral-400"
-                  } cursor-pointer hover:text-white transition-colors`}
-                >
-                  {/* <Label htmlFor={`${title}-${option.value}`}>
-                  {option.value}
-                </Label> */}
-                  {option.value}
-                </label>
-              </div>
-            ))}
-            <CollapsibleContent>
-              {options.slice(maxItems).map((option) => (
+          <div>
+            {options
+              .slice(0, open ? options.length : maxItems)
+              .map((option) => (
                 <div
                   key={option.value}
-                  className="flex items-center space-x-2 py-1.5"
+                  className="flex items-center space-x-2 py-1"
                 >
                   <Checkbox
                     id={`${title}-${option.value}`}
@@ -183,27 +158,32 @@ const FilterSection = React.memo(
                   />
                   <label
                     htmlFor={`${title}-${option.value}`}
-                    className={`text-sm leading-none ${
+                    className={`text-sm ${
                       option.disabled
                         ? "text-neutral-500"
                         : selected.has(String(option.value))
-                        ? "text-white"
-                        : "text-neutral-400"
-                    } cursor-pointer hover:text-white transition-colors`}
+                        ? "text-primary-400"
+                        : "text-neutral-200"
+                    } cursor-pointer hover:text-primary-300 transition-colors`}
                   >
                     {option.value}
                   </label>
                 </div>
               ))}
-            </CollapsibleContent>
-            <CollapsibleTrigger>
-              <div>Load More</div>
-            </CollapsibleTrigger>
-          </Collapsible>
+            {hasMore && (
+              <button
+                type="button"
+                className="mt-1 text-xs text-primary-400 hover:underline"
+                onClick={() => setOpen((v) => !v)}
+              >
+                {open ? "Show Less" : "Show More"}
+              </button>
+            )}
+          </div>
         )}
       </div>
-    </div>
-  )
+    );
+  }
 );
 
 export default function SearchPage() {
@@ -409,29 +389,88 @@ export default function SearchPage() {
   const [tagAnimationParent] = useAutoAnimate();
   const [rangeValues, setRangeValues] = useState([0, 100]);
 
+  // --- Price Range State ---
+  const [minInput, setMinInput] = useState(rangeValues[0]);
+  const [maxInput, setMaxInput] = useState(rangeValues[1]);
+
+  // Sync slider and input fields
+  useEffect(() => {
+    setMinInput(rangeValues[0]);
+    setMaxInput(rangeValues[1]);
+  }, [rangeValues]);
+
+  const handleMinInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = Math.max(0, Math.min(Number(e.target.value), maxInput));
+    setMinInput(val);
+    setRangeValues([val, maxInput]);
+  };
+  const handleMaxInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = Math.min(7000, Math.max(Number(e.target.value), minInput));
+    setMaxInput(val);
+    setRangeValues([minInput, val]);
+  };
+
   return (
     <div className="min-h-screen bg-neutral-900 text-neutral-200">
       <div className="container mx-auto py-8">
         <div className="flex flex-col gap-6 md:flex-row">
           {!isMobile && (
-            <div className="hidden md:block md:w-1/4 xl:w-1/5">
-              <div className="sticky top-4 rounded-md bg-neutral-900">
+            <aside className="hidden md:block md:w-1/4 xl:w-1/5">
+              <div className="sticky top-4 p-0">
                 <div className="mb-4 flex items-center justify-between">
-                  <h2 className="text-xl font-semibold">Filters</h2>
+                  <h2 className="py-2 text-lg font-bold">Filters</h2>
                   <div className="flex items-center space-x-2">
+                    {/* Clear Filters Button for Desktop */}
+                    {activeFiltersCount > 0 && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          resetFilters();
+                          setSearchTerm("");
+                        }}
+                        className="border-neutral-700 text-neutral-400 hover:bg-neutral-800 hover:text-white"
+                      >
+                        <X size={14} className="mr-1" />
+                        Clear Filters
+                      </Button>
+                    )}
                     {isFilterRefetching || isLoading ? (
                       <>
-                        <p className="text-neutral-500">Updating...</p>
+                        <p className="text-xs text-neutral-500">Updating...</p>
                         <SpinnerSVG className="animate-spin" />
                       </>
                     ) : null}
                   </div>
                 </div>
-                <div className="scrollbar-thin scrollbar-thumb-neutral-600 scrollbar-track-transparent max-h-[calc(100vh-160px)] overflow-y-auto pr-1">
-                  <div className="mt-4">
-                    <h3 className="mb-2 text-sm font-semibold text-neutral-300">
+                {/* Add scrollbar style here */}
+                <div className="scrollbar-thin scrollbar-thumb-neutral-800 scrollbar-track-neutral-900 max-h-[calc(100vh-160px)] overflow-y-auto pr-1">
+                  {/* Price Range */}
+                  <section className="mb-4">
+                    <h3 className="mb-2 text-sm font-medium text-neutral-300">
                       Price Range
                     </h3>
+                    <div className="mb-2 flex items-center gap-2">
+                      <input
+                        type="number"
+                        min={0}
+                        max={maxInput}
+                        value={minInput}
+                        onChange={handleMinInput}
+                        className="w-16 rounded border border-neutral-700 bg-neutral-900 px-2 py-1 text-xs text-white focus:border-primary-500 focus:outline-none"
+                        aria-label="Minimum price"
+                      />
+                      <span className="mx-1 text-neutral-400">–</span>
+                      <input
+                        type="number"
+                        min={minInput}
+                        max={7000}
+                        value={maxInput}
+                        onChange={handleMaxInput}
+                        className="w-16 rounded border border-neutral-700 bg-neutral-900 px-2 py-1 text-xs text-white focus:border-primary-500 focus:outline-none"
+                        aria-label="Maximum price"
+                      />
+                    </div>
                     <DualRangeSlider
                       min={0}
                       max={7000}
@@ -439,51 +478,54 @@ export default function SearchPage() {
                       value={rangeValues}
                       onValueChange={(value) => {
                         setRangeValues(value);
+                        setMinInput(value[0]);
+                        setMaxInput(value[1]);
                       }}
                       className="w-full"
                     />
-                    <div className="flex justify-between text-xs text-neutral-400">
+                    <div className="mt-1 flex justify-between text-xs text-neutral-400">
                       <span>${rangeValues[0]}</span>
                       <span>${rangeValues[1]}</span>
                     </div>
-                  </div>
-                  <div className="space-y-1.5">
+                  </section>
+                  {/* Filter Sections */}
+                  <div>
                     {filterSections
                       .filter((section) => hasOptions(section.optionsKey))
-                      .map((section) => (
-                        <div
+                      .map((section, idx) => (
+                        <section
                           key={section.filterKey}
-                          className="border-neutral-800/50 overflow-hidden border-b"
+                          className={
+                            idx !== 0
+                              ? "mt-4 pt-4 border-t border-neutral-800"
+                              : ""
+                          }
                         >
-                          <div className="group px-1 py-2 hover:no-underline">
-                            <div className="flex w-full items-center justify-between">
-                              <span className="text-sm font-medium text-neutral-300 transition-colors group-hover:text-white">
-                                {section.title}
-                              </span>
-                            </div>
-                          </div>
-                          <div className="px-1 pb-2 pt-1">
-                            <FilterSection
-                              title={section.title}
-                              options={
-                                (displayFilters[
-                                  section.optionsKey
-                                ] as FilterOption[]) || []
-                              }
-                              selected={selectedFilterSets[section.filterKey]}
-                              onToggle={(value) =>
-                                handleToggle(section.filterKey, value)
-                              }
-                              maxItems={3}
-                              isLoading={!!filterError}
-                            />
-                          </div>
-                        </div>
+                          <header className="mb-1">
+                            <span className="text-sm font-medium text-neutral-300">
+                              {section.title}
+                            </span>
+                          </header>
+                          <FilterSection
+                            title={section.title}
+                            options={
+                              (displayFilters[
+                                section.optionsKey
+                              ] as FilterOption[]) || []
+                            }
+                            selected={selectedFilterSets[section.filterKey]}
+                            onToggle={(value) =>
+                              handleToggle(section.filterKey, value)
+                            }
+                            maxItems={3}
+                            isLoading={!!filterError}
+                          />
+                        </section>
                       ))}
                   </div>
                 </div>
               </div>
-            </div>
+            </aside>
           )}
 
           <div className="w-full md:w-3/4">
