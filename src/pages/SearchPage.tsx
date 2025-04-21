@@ -405,25 +405,29 @@ export default function SearchPage() {
   );
 
   const [tagAnimationParent] = useAutoAnimate();
-  const [rangeValues, setRangeValues] = useState([0, 5000]);
+
+  // --- Price Range Constants ---
+  const PRICE_MIN = 500;
+  const PRICE_MAX = 5000;
+
+  const [rangeValues, setRangeValues] = useState([PRICE_MIN, PRICE_MAX]);
 
   // --- Price Range State ---
   const [minInput, setMinInput] = useState(rangeValues[0]);
   const [maxInput, setMaxInput] = useState(rangeValues[1]);
 
-  // Sync slider and input fields
   useEffect(() => {
     setMinInput(rangeValues[0]);
     setMaxInput(rangeValues[1]);
   }, [rangeValues]);
 
   const handleMinInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = Math.max(0, Math.min(Number(e.target.value), maxInput));
+    const val = Math.max(PRICE_MIN, Math.min(Number(e.target.value), maxInput));
     setMinInput(val);
     setRangeValues([val, maxInput]);
   };
   const handleMaxInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = Math.min(5000, Math.max(Number(e.target.value), minInput));
+    const val = Math.min(PRICE_MAX, Math.max(Number(e.target.value), minInput));
     setMaxInput(val);
     setRangeValues([minInput, val]);
   };
@@ -468,10 +472,22 @@ export default function SearchPage() {
                     <h3 className="mb-2 text-sm font-medium text-neutral-300">
                       Price Range
                     </h3>
-                    <div className="mb-2 flex items-center gap-2">
+                    <DualRangeSlider
+                      min={PRICE_MIN}
+                      max={PRICE_MAX}
+                      step={100}
+                      value={rangeValues}
+                      onValueChange={(value) => {
+                        setRangeValues(value);
+                        setMinInput(value[0]);
+                        setMaxInput(value[1]);
+                      }}
+                      className="mb-2 w-full"
+                    />
+                    <div className="flex items-center justify-between gap-2">
                       <input
                         type="number"
-                        min={0}
+                        min={PRICE_MIN}
                         max={maxInput}
                         value={minInput}
                         onChange={handleMinInput}
@@ -482,25 +498,13 @@ export default function SearchPage() {
                       <input
                         type="number"
                         min={minInput}
-                        max={5000}
+                        max={PRICE_MAX}
                         value={maxInput}
                         onChange={handleMaxInput}
                         className="w-16 rounded border border-neutral-700 bg-neutral-900 px-2 py-1 text-xs text-white focus:border-primary-500 focus:outline-none"
                         aria-label="Maximum price"
                       />
                     </div>
-                    <DualRangeSlider
-                      min={0}
-                      max={5000}
-                      step={100}
-                      value={rangeValues}
-                      onValueChange={(value) => {
-                        setRangeValues(value);
-                        setMinInput(value[0]);
-                        setMaxInput(value[1]);
-                      }}
-                      className="w-full"
-                    />
                   </section>
                   {/* Filter Sections */}
                   <div>
