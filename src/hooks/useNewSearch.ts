@@ -55,7 +55,9 @@ type FilterCategory =
   | "year"
   | "model"
   | "shortDesc"
-  | "tags";
+  | "tags"
+  | "priceMin"
+  | "priceMax";
 
 export function useNewSearch(userId?: number) {
   const search = useSearch({ from: searchRoute.id });
@@ -95,9 +97,12 @@ export function useNewSearch(userId?: number) {
   // Helper function to get array values from search params - now uses filters
   const getArrayParam = useCallback(
     (key: FilterCategory): string[] => {
-      return (filters[key] as string[]) || [];
+      const value = filters[key];
+      if (Array.isArray(value)) return value;
+      if (typeof value === "string") return [value];
+      return [];
     },
-    [filters] // Depend on filters instead of search
+    [filters]
   );
 
   // Create memoized selected filters object - DRY approach using FilterCategory type
@@ -124,6 +129,8 @@ export function useNewSearch(userId?: number) {
       model: [],
       shortDesc: [],
       tags: [],
+      priceMin: [],
+      priceMax: [],
     };
 
     if (filters && Object.keys(filters).length > 0) {
@@ -182,6 +189,21 @@ export function useNewSearch(userId?: number) {
     });
   }, [navigate]);
 
+  // Add this function inside useNewSearch:
+  const setPriceRange = useCallback(
+    (min: number, max: number) => {
+      navigate({
+        search: (prev) => ({
+          ...prev,
+          priceMin: min !== 500 ? String(min) : undefined,
+          priceMax: max !== 5000 ? String(max) : undefined,
+        }),
+        replace: false,
+      });
+    },
+    [navigate]
+  );
+
   // Prepare and memoize the query string for API calls
   const queryString = useMemo(() => {
     const params = new URLSearchParams();
@@ -205,8 +227,12 @@ export function useNewSearch(userId?: number) {
       params.append("userId", userId.toString());
     }
 
+    // Add priceMin and priceMax if present in filters
+    if (filters.priceMin) params.set("priceMin", filters.priceMin as string);
+    if (filters.priceMax) params.set("priceMax", filters.priceMax as string);
+
     return params.toString();
-  }, [term, sortedFilterEntries, userId]);
+  }, [term, sortedFilterEntries, userId, filters]);
 
   // Simplified and flattened query keys - more efficient for React Query's cache comparison
   const filterQueryKey = useMemo(
@@ -294,5 +320,6 @@ export function useNewSearch(userId?: number) {
     isFetched,
     isPending,
     isRefetching,
+    setPriceRange,
   };
 }

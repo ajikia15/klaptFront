@@ -212,6 +212,7 @@ export default function SearchPage() {
     resetFilters,
     isFilterRefetching,
     isFetched,
+    setPriceRange,
   } = useNewSearch();
 
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -404,26 +405,45 @@ export default function SearchPage() {
   const PRICE_MIN = 500;
   const PRICE_MAX = 5000;
 
-  const [rangeValues, setRangeValues] = useState([PRICE_MIN, PRICE_MAX]);
+  // Read initial values from selectedFilters (if present)
+  const initialMin =
+    selectedFilters.priceMin && selectedFilters.priceMin[0]
+      ? Number(selectedFilters.priceMin[0])
+      : PRICE_MIN;
+  const initialMax =
+    selectedFilters.priceMax && selectedFilters.priceMax[0]
+      ? Number(selectedFilters.priceMax[0])
+      : PRICE_MAX;
 
-  // --- Price Range State ---
-  const [minInput, setMinInput] = useState(rangeValues[0]);
-  const [maxInput, setMaxInput] = useState(rangeValues[1]);
+  const [rangeValues, setRangeValues] = useState([initialMin, initialMax]);
+  const [minInput, setMinInput] = useState(initialMin);
+  const [maxInput, setMaxInput] = useState(initialMax);
 
+  // Update local state if filters change (e.g. after reset)
   useEffect(() => {
-    setMinInput(rangeValues[0]);
-    setMaxInput(rangeValues[1]);
-  }, [rangeValues]);
+    setRangeValues([initialMin, initialMax]);
+    setMinInput(initialMin);
+    setMaxInput(initialMax);
+  }, [initialMin, initialMax]);
+
+  // Handler to update price range in filters
+  const handlePriceRangeChange = (min: number, max: number) => {
+    setRangeValues([min, max]);
+    setMinInput(min);
+    setMaxInput(max);
+    // Update filters in URL
+    setPriceRange(min, max);
+  };
 
   const handleMinInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = Math.max(PRICE_MIN, Math.min(Number(e.target.value), maxInput));
     setMinInput(val);
-    setRangeValues([val, maxInput]);
+    handlePriceRangeChange(val, maxInput);
   };
   const handleMaxInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = Math.min(PRICE_MAX, Math.max(Number(e.target.value), minInput));
     setMaxInput(val);
-    setRangeValues([minInput, val]);
+    handlePriceRangeChange(minInput, val);
   };
 
   return (
@@ -471,32 +491,46 @@ export default function SearchPage() {
                       max={PRICE_MAX}
                       step={100}
                       value={rangeValues}
-                      onValueChange={(value) => {
-                        setRangeValues(value);
-                        setMinInput(value[0]);
-                        setMaxInput(value[1]);
-                      }}
+                      onValueChange={(value) =>
+                        handlePriceRangeChange(value[0], value[1])
+                      }
                       className="mb-2 w-full"
                     />
                     <div className="flex items-center justify-between gap-2">
-                      <input
+                      <DebouncedInput
                         type="number"
                         min={PRICE_MIN}
                         max={maxInput}
-                        value={minInput}
-                        onChange={handleMinInput}
+                        value={minInput.toString()}
+                        onChange={(val) => {
+                          const num = Math.max(
+                            PRICE_MIN,
+                            Math.min(Number(val), maxInput)
+                          );
+                          setMinInput(num);
+                          handlePriceRangeChange(num, maxInput);
+                        }}
                         className="w-16 rounded border border-neutral-700 bg-neutral-900 px-2 py-1 text-xs text-white focus:border-primary-500 focus:outline-none"
                         aria-label="Minimum price"
+                        debounceMs={300}
                       />
                       <span className="mx-1 text-neutral-400">–</span>
-                      <input
+                      <DebouncedInput
                         type="number"
                         min={minInput}
                         max={PRICE_MAX}
-                        value={maxInput}
-                        onChange={handleMaxInput}
+                        value={maxInput.toString()}
+                        onChange={(val) => {
+                          const num = Math.min(
+                            PRICE_MAX,
+                            Math.max(Number(val), minInput)
+                          );
+                          setMaxInput(num);
+                          handlePriceRangeChange(minInput, num);
+                        }}
                         className="w-16 rounded border border-neutral-700 bg-neutral-900 px-2 py-1 text-xs text-white focus:border-primary-500 focus:outline-none"
                         aria-label="Maximum price"
+                        debounceMs={300}
                       />
                     </div>
                   </section>
