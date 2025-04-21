@@ -63,38 +63,71 @@ export const LaptopCard: FC<LaptopCardProps> = (laptop) => {
           <div className="mb-4 space-x-2 space-y-1">
             {laptop.gpuBrand.toLowerCase().includes("nvidia") && (
               <Badge className="border-neutral-700/20 cursor-pointer border bg-neutral-800 font-bold text-neutral-200 shadow-sm transition-all hover:bg-green-600/80 hover:text-neutral-100">
-                {laptop.gpuModel}
+                <Link to="/search" search={{ gpuModel: [laptop.gpuModel] }}>
+                  {laptop.gpuModel}
+                </Link>
               </Badge>
             )}
             {laptop.gpuBrand.toLowerCase().includes("AMD") && (
               <Badge className="border-neutral-700/20 cursor-pointer border bg-neutral-800 font-bold text-neutral-200 shadow-sm transition-all hover:bg-red-500/80 hover:text-neutral-100">
-                {laptop.gpuModel}
+                <Link to="/search" search={{ gpuModel: [laptop.gpuModel] }}>
+                  {laptop.gpuModel}
+                </Link>
               </Badge>
             )}
             {laptop.processorBrand.includes("Intel") && (
               <Badge className="border-neutral-700/20 cursor-pointer border bg-neutral-800 font-bold text-neutral-200 shadow-sm transition-all hover:bg-blue-500/80 hover:text-neutral-100">
-                {laptop.processorModel}
+                <Link
+                  to="/search"
+                  search={{ processorModel: [laptop.processorModel] }}
+                >
+                  {laptop.processorModel}
+                </Link>
               </Badge>
             )}
             {laptop.processorBrand.toLowerCase().includes("amd") && (
               <Badge className="border-neutral-700/20 cursor-pointer border bg-neutral-800 font-bold text-neutral-200 shadow-sm transition-all hover:bg-red-500/80 hover:text-neutral-100">
-                {laptop.processorModel}
+                <Link
+                  to="/search"
+                  search={{ processorModel: [laptop.processorModel] }}
+                >
+                  {laptop.processorModel}
+                </Link>
               </Badge>
             )}
             <Badge className="border-neutral-700/20 cursor-pointer border bg-neutral-800 font-bold text-neutral-200 shadow-sm transition-all hover:bg-neutral-700 hover:text-neutral-100">
-              {laptop.refreshRate}Hz
+              <Link
+                to="/search"
+                search={{ refreshRate: [laptop.refreshRate.toString()] }}
+              >
+                {laptop.refreshRate}Hz
+              </Link>
             </Badge>
             <Badge className="border-neutral-700/20 cursor-pointer border bg-neutral-800 font-bold text-neutral-200 shadow-sm transition-all hover:bg-neutral-700 hover:text-neutral-100">
-              {laptop.storageCapacity}
+              <Link
+                to="/search"
+                search={{ storageCapacity: [laptop.storageCapacity] }}
+              >
+                {laptop.storageCapacity}
+              </Link>
             </Badge>
             <Badge className="border-neutral-700/20 cursor-pointer border bg-neutral-800 font-bold text-neutral-200 shadow-sm transition-all hover:bg-neutral-700 hover:text-neutral-100">
-              {laptop.ram}GB
+              <Link to="/search" search={{ ram: [laptop.ram.toString()] }}>
+                {laptop.ram}GB
+              </Link>
             </Badge>
             <Badge className="border-neutral-700/20 cursor-pointer border bg-neutral-800 font-bold text-neutral-200 shadow-sm transition-all hover:bg-neutral-700 hover:text-neutral-100">
-              {laptop.ramType}
+              <Link to="/search" search={{ ramType: [laptop.ramType] }}>
+                {laptop.ramType}
+              </Link>
             </Badge>
             <Badge className="border-neutral-700/20 cursor-pointer border bg-neutral-800 font-bold text-neutral-200 shadow-sm transition-all hover:bg-neutral-700 hover:text-neutral-100">
-              {laptop.screenResolution}
+              <Link
+                to="/search"
+                search={{ screenResolution: [laptop.screenResolution] }}
+              >
+                {laptop.screenResolution}
+              </Link>
             </Badge>
 
             {/* <Badge className="bg-blue-600/80 font-bold">Intel Core</Badge> */}
