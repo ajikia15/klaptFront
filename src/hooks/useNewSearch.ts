@@ -56,8 +56,8 @@ type FilterCategory =
   | "model"
   | "shortDesc"
   | "tags"
-  | "priceMin"
-  | "priceMax";
+  | "minPrice"
+  | "maxPrice"; // <-- changed from priceMin/priceMax
 
 export function useNewSearch(userId?: number) {
   const search = useSearch({ from: searchRoute.id });
@@ -129,8 +129,8 @@ export function useNewSearch(userId?: number) {
       model: [],
       shortDesc: [],
       tags: [],
-      priceMin: [],
-      priceMax: [],
+      minPrice: [], // <-- changed
+      maxPrice: [], // <-- changed
     };
 
     if (filters && Object.keys(filters).length > 0) {
@@ -195,8 +195,8 @@ export function useNewSearch(userId?: number) {
       navigate({
         search: (prev) => ({
           ...prev,
-          priceMin: min !== 500 ? String(min) : undefined,
-          priceMax: max !== 5000 ? String(max) : undefined,
+          minPrice: min !== 500 ? String(min) : undefined,
+          maxPrice: max !== 5000 ? String(max) : undefined,
         }),
         replace: false,
       });
@@ -227,9 +227,9 @@ export function useNewSearch(userId?: number) {
       params.append("userId", userId.toString());
     }
 
-    // Add priceMin and priceMax if present in filters
-    if (filters.priceMin) params.set("priceMin", filters.priceMin as string);
-    if (filters.priceMax) params.set("priceMax", filters.priceMax as string);
+    // Use minPrice/maxPrice instead of priceMin/priceMax
+    if (filters.minPrice) params.set("minPrice", filters.minPrice as string);
+    if (filters.maxPrice) params.set("maxPrice", filters.maxPrice as string);
 
     return params.toString();
   }, [term, sortedFilterEntries, userId, filters]);

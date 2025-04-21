@@ -416,12 +416,12 @@ export default function SearchPage() {
 
   // Read initial values from selectedFilters (if present)
   const initialMin =
-    selectedFilters.priceMin && selectedFilters.priceMin[0]
-      ? Number(selectedFilters.priceMin[0])
+    selectedFilters.minPrice && selectedFilters.minPrice[0]
+      ? Number(selectedFilters.minPrice[0])
       : PRICE_MIN;
   const initialMax =
-    selectedFilters.priceMax && selectedFilters.priceMax[0]
-      ? Number(selectedFilters.priceMax[0])
+    selectedFilters.maxPrice && selectedFilters.maxPrice[0]
+      ? Number(selectedFilters.maxPrice[0])
       : PRICE_MAX;
 
   const [rangeValues, setRangeValues] = useState([initialMin, initialMax]);
@@ -803,8 +803,9 @@ export default function SearchPage() {
                       ([key, values]) =>
                         values.length > 0 &&
                         values.map((value: string) => {
-                          // Special formatting for priceMin and priceMax
-                          if (key === "priceMin") {
+                          // Special formatting for minPrice and maxPrice
+                          if (key === "minPrice" || key === "maxPrice") {
+                            const label = key === "minPrice" ? "min" : "max";
                             return (
                               <Badge
                                 key={`${key}-${value}`}
@@ -819,28 +820,7 @@ export default function SearchPage() {
                                   className="mr-0.5 text-neutral-400"
                                 />
                                 <span className="mr-0.5 text-xs text-neutral-400">
-                                  min:
-                                </span>
-                                <span className="text-xs">{value}</span>
-                              </Badge>
-                            );
-                          }
-                          if (key === "priceMax") {
-                            return (
-                              <Badge
-                                key={`${key}-${value}`}
-                                className="border-neutral-700/50 inline-flex items-center bg-neutral-800 !py-1 px-1.5 text-white transition-all hover:bg-neutral-700 hover:shadow-md"
-                                variant="outline"
-                                onClick={() =>
-                                  toggleFilter(key as FilterKey, value)
-                                }
-                              >
-                                <X
-                                  size={10}
-                                  className="mr-0.5 text-neutral-400"
-                                />
-                                <span className="mr-0.5 text-xs text-neutral-400">
-                                  max:
+                                  {label}:
                                 </span>
                                 <span className="text-xs">{value}</span>
                               </Badge>
