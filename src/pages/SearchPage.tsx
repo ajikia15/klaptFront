@@ -1,7 +1,14 @@
 import { LaptopCard } from "../components/LaptopCard";
 import { Checkbox } from "@/components/ui/checkbox";
 import { SkeletonCard } from "../components/SkeletonCard";
-import { useState, useEffect, useMemo, ChangeEvent, useCallback } from "react";
+import {
+  useState,
+  useEffect,
+  useMemo,
+  ChangeEvent,
+  useCallback,
+  useRef,
+} from "react";
 import { SpinnerSVG } from "@/assets/SpinnerSVG";
 import { useAuth } from "@/context/AuthContext";
 import { useNewSearch } from "../hooks/useNewSearch";
@@ -78,11 +85,13 @@ function DebouncedInput({
   value: initialValue,
   onChange,
   debounceMs = 300,
+  showClearButton = true,
   ...props
 }: {
   value: string;
   onChange: (value: string) => void;
   debounceMs?: number;
+  showClearButton?: boolean;
 } & Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange">) {
   const [value, setValue] = useState(initialValue);
 
@@ -109,7 +118,7 @@ function DebouncedInput({
           setValue(e.target.value)
         }
       />
-      {value && (
+      {showClearButton && value && (
         <button
           type="button"
           className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1 transition-colors hover:bg-neutral-700"
@@ -446,6 +455,19 @@ export default function SearchPage() {
     handlePriceRangeChange(minInput, val);
   };
 
+  // Debounce for slider
+  const sliderTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  const debouncedSliderChange = (min: number, max: number) => {
+    setRangeValues([min, max]);
+    setMinInput(min);
+    setMaxInput(max);
+    if (sliderTimeout.current) clearTimeout(sliderTimeout.current);
+    sliderTimeout.current = setTimeout(() => {
+      setPriceRange(min, max);
+    }, 300); // match your DebouncedInput debounceMs
+  };
+
   return (
     <div className="min-h-screen bg-neutral-900 text-neutral-200">
       <div className="container mx-auto py-8">
@@ -492,7 +514,7 @@ export default function SearchPage() {
                       step={100}
                       value={rangeValues}
                       onValueChange={(value) =>
-                        handlePriceRangeChange(value[0], value[1])
+                        debouncedSliderChange(value[0], value[1])
                       }
                       className="mb-2 w-full"
                     />
@@ -513,6 +535,7 @@ export default function SearchPage() {
                         className="w-16 rounded border border-neutral-700 bg-neutral-900 px-2 py-1 text-xs text-white focus:border-primary-500 focus:outline-none"
                         aria-label="Minimum price"
                         debounceMs={300}
+                        showClearButton={false}
                       />
                       <span className="mx-1 text-neutral-400">–</span>
                       <DebouncedInput
@@ -531,6 +554,7 @@ export default function SearchPage() {
                         className="w-16 rounded border border-neutral-700 bg-neutral-900 px-2 py-1 text-xs text-white focus:border-primary-500 focus:outline-none"
                         aria-label="Maximum price"
                         debounceMs={300}
+                        showClearButton={false}
                       />
                     </div>
                   </section>
