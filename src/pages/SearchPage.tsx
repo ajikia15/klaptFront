@@ -444,17 +444,6 @@ export default function SearchPage() {
     setPriceRange(min, max);
   };
 
-  const handleMinInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = Math.max(PRICE_MIN, Math.min(Number(e.target.value), maxInput));
-    setMinInput(val);
-    handlePriceRangeChange(val, maxInput);
-  };
-  const handleMaxInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = Math.min(PRICE_MAX, Math.max(Number(e.target.value), minInput));
-    setMaxInput(val);
-    handlePriceRangeChange(minInput, val);
-  };
-
   // Debounce for slider
   const sliderTimeout = useRef<NodeJS.Timeout | null>(null);
 

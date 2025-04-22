@@ -34,9 +34,51 @@ const TAG_OPTIONS = [
   "creative",
   "ultrabook",
 ];
-const vramOptions = ["2", "3", "4", "6", "8", "10", "12", "16", "24", "48"];
+const vramOptions = [
+  "2GB",
+  "3GB",
+  "4GB",
+  "6GB",
+  "8GB",
+  "10GB",
+  "12GB",
+  "16GB",
+  "24GB",
+  "32GB",
+];
 const backlightTypeOptions = ["RGB", "Single-color", "None"];
-const ramOptions = ["4", "8", "12", "16", "24", "32", "64", "96", "128"];
+const ramOptions = [
+  "4GB",
+  "8GB",
+  "12GB",
+  "16GB",
+  "24GB",
+  "32GB",
+  "64GB",
+  "96GB",
+  "128GB",
+];
+const refreshRateOptions = [
+  "60Hz",
+  "90Hz",
+  "120Hz",
+  "144Hz",
+  "165Hz",
+  "240Hz",
+  "250Hz",
+  "300Hz",
+  "360Hz",
+];
+const screenSizeOptions = [
+  '13.3"',
+  '14.0"',
+  '15.0"',
+  '15.6"',
+  '16.0"',
+  '17.0"',
+  '17.3"',
+  '18.0"',
+];
 
 export default function AddListingPage() {
   const [graphicsType, setGraphicsType] = useState<string>("");
@@ -117,14 +159,14 @@ export default function AddListingPage() {
       graphicsType: "Dedicated",
       gpuBrand: "NVIDIA",
       gpuModel: "RTX 4080",
-      vram: "12",
-      ram: "32",
+      vram: "12GB",
+      ram: "32GB",
       ramType: "DDR5",
       storageType: "SSD",
       storageCapacity: "512GB",
-      screenSize: "16",
+      screenSize: '16.0"',
       screenResolution: "2560x1600",
-      refreshRate: "250",
+      refreshRate: "250Hz",
       weight: "2.7",
       backlightType: "RGB",
       tag: ["gaming", "productivity"],
@@ -805,7 +847,7 @@ export default function AddListingPage() {
                       htmlFor="vram"
                       className="mb-1 block text-sm font-medium text-neutral-200"
                     >
-                      VRAM{" "}
+                      VRAM
                       {graphicsType === "Dedicated" && (
                         <span className="text-red-400">*</span>
                       )}
@@ -823,7 +865,7 @@ export default function AddListingPage() {
                       <option value="">Select VRAM</option>
                       {vramOptions.map((v) => (
                         <option key={v} value={v}>
-                          {v} GB
+                          {v}
                         </option>
                       ))}
                     </select>
@@ -860,7 +902,7 @@ export default function AddListingPage() {
                       <option value="">Select RAM</option>
                       {ramOptions.map((r) => (
                         <option key={r} value={r}>
-                          {r} GB
+                          {r}
                         </option>
                       ))}
                     </select>
@@ -992,13 +1034,20 @@ export default function AddListingPage() {
                       Screen Size (inches){" "}
                       <span className="text-red-400">*</span>
                     </label>
-                    <input
+                    <select
                       id="screenSize"
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       disabled={formStatus === "submitting"}
-                    />
+                    >
+                      <option value="">Select Screen Size</option>
+                      {screenSizeOptions.map((size) => (
+                        <option key={size} value={size}>
+                          {size}
+                        </option>
+                      ))}
+                    </select>
                     {field.state.meta.errors && (
                       <div className="mt-1 text-sm text-red-300">
                         {field.state.meta.errors.join(", ")}
@@ -1057,14 +1106,20 @@ export default function AddListingPage() {
                     >
                       Refresh Rate (Hz) <span className="text-red-400">*</span>
                     </label>
-                    <input
+                    <select
                       id="refreshRate"
-                      type="number"
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       disabled={formStatus === "submitting"}
-                    />
+                    >
+                      <option value="">Select Refresh Rate</option>
+                      {refreshRateOptions.map((rate) => (
+                        <option key={rate} value={rate}>
+                          {rate}
+                        </option>
+                      ))}
+                    </select>
                     {field.state.meta.errors && (
                       <div className="mt-1 text-sm text-red-300">
                         {field.state.meta.errors.join(", ")}

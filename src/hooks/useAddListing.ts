@@ -41,9 +41,7 @@ export function useAddListing() {
         threads: parseInt(value.threads),
         graphicsType,
         vram:
-          graphicsType === "Dedicated" && value.vram
-            ? parseInt(value.vram)
-            : undefined,
+          graphicsType === "Dedicated" && value.vram ? value.vram : undefined,
         gpuBrand:
           graphicsType === "Dedicated" && value.gpuBrand
             ? value.gpuBrand
@@ -52,10 +50,10 @@ export function useAddListing() {
           graphicsType === "Dedicated" && value.gpuModel
             ? value.gpuModel
             : undefined,
-        ram: parseInt(value.ram),
+        ram: value.ram,
         ramType,
         storageType,
-        refreshRate: parseInt(value.refreshRate),
+        refreshRate: value.refreshRate,
         year: parseInt(value.year),
         images:
           value.images && value.images.length > 0

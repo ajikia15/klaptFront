@@ -176,7 +176,7 @@ export default function LaptopDetailPage() {
         },
         {
           label: "Refresh Rate",
-          value: `${laptop.refreshRate} Hz`,
+          value: `${laptop.refreshRate}`,
           Icon: DisplayIcon,
         },
         {
@@ -214,13 +214,13 @@ export default function LaptopDetailPage() {
       title: "Graphics",
       value: `${laptop.gpuBrand} ${laptop.gpuModel}`,
       details: laptop.vram
-        ? `${laptop.graphicsType}, ${laptop.vram}GB VRAM`
+        ? `${laptop.graphicsType}, ${laptop.vram}`
         : laptop.graphicsType,
       Icon: GpuIcon,
     },
     {
       title: "Memory",
-      value: `${laptop.ram}GB ${laptop.ramType}`,
+      value: `${laptop.ram} ${laptop.ramType}`,
       details: null,
       Icon: RamIcon,
     },
@@ -233,7 +233,7 @@ export default function LaptopDetailPage() {
     {
       title: "Display",
       value: `${laptop.screenSize}" ${laptop.screenResolution}`,
-      details: `${laptop.refreshRate}Hz Refresh Rate`,
+      details: `${laptop.refreshRate} Refresh Rate`,
       Icon: DisplayIcon,
     },
   ];
