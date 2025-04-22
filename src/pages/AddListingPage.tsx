@@ -1086,16 +1086,10 @@ export default function AddListingPage() {
                   </div>
                 )}
               </form.Field>
-              {/* Refresh Rate (required) */}
               <form.Field
                 name="refreshRate"
                 validators={{
-                  onChange: ({ value }) =>
-                    !value
-                      ? "Required"
-                      : isNaN(Number(value))
-                      ? "Must be a number"
-                      : undefined,
+                  onChange: ({ value }) => (!value ? "Required" : undefined),
                 }}
               >
                 {(field) => (
