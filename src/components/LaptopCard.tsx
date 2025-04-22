@@ -3,7 +3,6 @@ import { Link } from "@tanstack/react-router";
 import { ArrowRight, Maximize2 } from "@deemlol/next-icons";
 import { Badge } from "@/components/ui/badge";
 import HeartBtn from "./HeartBtn";
-import LaptopTags from "./LaptopTags";
 import { LaptopT } from "@/interfaces/laptopT";
 import { Button } from "./ui/button";
 
@@ -14,7 +13,7 @@ interface LaptopCardProps extends LaptopT {
 
 export const LaptopCard: FC<LaptopCardProps> = (laptop) => {
   return (
-    <div className="group/card border-neutral-700/30 group relative flex h-full flex-col overflow-hidden rounded-2xl border bg-gradient-to-br from-neutral-800 via-neutral-900 to-neutral-950 transition-all duration-300">
+    <div className="group/card border-neutral-700/30 group relative mx-4 flex h-full flex-col overflow-hidden rounded-2xl border bg-gradient-to-br from-neutral-800 via-neutral-900 to-neutral-950 transition-all duration-300 md:mx-0">
       <div className="relative w-full px-6 pb-4 pt-6">
         <div className="absolute inset-0 bg-gradient-to-b from-purple-500/5 to-transparent"></div>
         {/* overlay is behind the image */}
@@ -60,7 +59,7 @@ export const LaptopCard: FC<LaptopCardProps> = (laptop) => {
             </h3>
           </Link>
 
-          <div className="mb-4 space-x-2 space-y-1">
+          <div className="mb-4 line-clamp-2 space-x-2 space-y-1">
             {laptop.gpuBrand.toLowerCase().includes("nvidia") && (
               <Badge className="border-neutral-700/20 cursor-pointer border bg-neutral-800 font-bold text-neutral-200 shadow-sm transition-all hover:bg-green-600/80 hover:text-neutral-100">
                 <Link to="/search" search={{ gpuModel: [laptop.gpuModel] }}>
