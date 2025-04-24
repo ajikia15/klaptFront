@@ -1,9 +1,14 @@
+import { useEffect } from "react";
 import { useForm } from "@tanstack/react-form";
 import { SpinnerSVG } from "@/assets/SpinnerSVG";
 import { Button } from "@/components/ui/button";
-import { useAddListing } from "@/hooks/useAddListing";
+import { useParams, useNavigate } from "@tanstack/react-router";
 import { useImageManagement } from "@/hooks/useImageManagement";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { LaptopT } from "@/interfaces/laptopT";
+import { LaptopDetailSkeleton } from "./LaptopDetailSkeleton";
 
+// Constants remain unchanged
 const LAPTOP_BRANDS = [
   "ASUS",
   "Dell",
@@ -80,8 +85,10 @@ const SCREEN_SIZE_OPTIONS = [
   '18.0"',
 ];
 
-export default function AddListingPage() {
-  const { formStatus, errorMessage, addListing } = useAddListing();
+export default function EditListingPage() {
+  const { laptopId } = useParams({ from: "/edit-listing/$laptopId" });
+  const navigate = useNavigate();
+
   const {
     uploadedImages,
     uploadingImages,
@@ -91,94 +98,216 @@ export default function AddListingPage() {
     removeImage,
     handleImageLinkSubmit,
     clearImages,
+    setUploadedImages,
   } = useImageManagement();
 
-  const form = useForm({
-    defaultValues: {
-      title: "",
-      price: "",
-      brand: "",
-      model: "",
-      shortDesc: "",
-      gpuBrand: "",
-      gpuModel: "",
-      graphicsType: "",
-      vram: "",
-      backlightType: "",
-      processorBrand: "",
-      processorModel: "",
-      cores: "",
-      threads: "",
-      ram: "",
-      ramType: "",
-      storageType: "",
-      storageCapacity: "",
-      screenSize: "",
-      screenResolution: "",
-      refreshRate: "",
-      weight: "",
-      year: new Date().getFullYear().toString(),
-      description: "",
-      tag: [] as string[],
-      condition: "",
-      stockStatus: "in stock",
+  // Fetch laptop data using TanStack Query
+  const {
+    data: laptop,
+    isLoading,
+    error,
+  } = useQuery<LaptopT>({
+    queryKey: ["laptop", laptopId],
+    queryFn: async () => {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/laptops/${laptopId}`,
+        { credentials: "include" }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch laptop details");
+      }
+      return response.json();
     },
+  });
+
+  // Update mutation
+  const updateMutation = useMutation({
+    mutationFn: async (updatedData: any) => {
+      try {
+        // Create a clean copy of data for modification
+        const formattedData: Record<string, any> = { ...updatedData };
+
+        // Convert numeric fields
+        if (formattedData.price)
+          formattedData.price = parseFloat(formattedData.price);
+        if (formattedData.cores)
+          formattedData.cores = parseInt(formattedData.cores);
+        if (formattedData.threads)
+          formattedData.threads = parseInt(formattedData.threads);
+        if (formattedData.year)
+          formattedData.year = parseInt(formattedData.year);
+
+        // Handle status fields - ensure they are strings
+        formattedData.stockStatus = String(
+          formattedData.stockStatus || "in stock"
+        );
+
+        // Set status field explicitly to match stockStatus (this is key)
+        formattedData.status = String(formattedData.stockStatus || "in stock");
+
+        // Handle images
+        formattedData.images =
+          uploadedImages.length > 0
+            ? uploadedImages
+            : ["https://placehold.co/800x600/111827/444?text=No+Image"];
+
+        // Cleanup: Remove undefined and null fields
+        Object.keys(formattedData).forEach((key) => {
+          if (formattedData[key] === undefined || formattedData[key] === null) {
+            delete formattedData[key];
+          }
+        });
+
+        console.log("Sending update data:", formattedData);
+
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/laptops/${laptopId}`,
+          {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify(formattedData),
+          }
+        );
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          let errorMessage = "Failed to update listing";
+
+          try {
+            const errorData = JSON.parse(errorText);
+            errorMessage = errorData.message || errorMessage;
+          } catch (e) {
+            console.error("Error parsing error response:", errorText);
+          }
+
+          throw new Error(errorMessage);
+        }
+
+        return response.json();
+      } catch (error) {
+        console.error("Update error:", error);
+        throw error;
+      }
+    },
+    onSuccess: (data) => {
+      // Redirect after successful update
+      setTimeout(() => navigate({ to: `/laptop/${data.id}` }), 1500);
+    },
+  });
+
+  // Initialize form only after data is loaded
+  const form = useForm({
+    defaultValues: laptop
+      ? {
+          title: laptop.title || "",
+          price: laptop.price?.toString() || "",
+          brand: laptop.brand || "",
+          model: laptop.model || "",
+          shortDesc: laptop.shortDesc || "",
+          gpuBrand: laptop.gpuBrand || "",
+          gpuModel: laptop.gpuModel || "",
+          graphicsType: laptop.graphicsType || "",
+          vram: laptop.vram || "",
+          backlightType: laptop.backlightType || "",
+          processorBrand: laptop.processorBrand || "",
+          processorModel: laptop.processorModel || "",
+          cores: laptop.cores?.toString() || "",
+          threads: laptop.threads?.toString() || "",
+          ram: laptop.ram || "",
+          ramType: laptop.ramType || "",
+          storageType: laptop.storageType || "",
+          storageCapacity: laptop.storageCapacity || "",
+          screenSize: laptop.screenSize || "",
+          screenResolution: laptop.screenResolution || "",
+          refreshRate: laptop.refreshRate || "",
+          weight: laptop.weight || "",
+          year: laptop.year?.toString() || new Date().getFullYear().toString(),
+          description: laptop.description || "",
+          tag: laptop.tag || [],
+          condition: laptop.condition || "",
+          stockStatus: laptop.stockStatus || "in stock",
+        }
+      : {
+          // Default empty values
+          title: "",
+          price: "",
+          brand: "",
+          model: "",
+          shortDesc: "",
+          gpuBrand: "",
+          gpuModel: "",
+          graphicsType: "",
+          vram: "",
+          backlightType: "",
+          processorBrand: "",
+          processorModel: "",
+          cores: "",
+          threads: "",
+          ram: "",
+          ramType: "",
+          storageType: "",
+          storageCapacity: "",
+          screenSize: "",
+          screenResolution: "",
+          refreshRate: "",
+          weight: "",
+          year: new Date().getFullYear().toString(),
+          description: "",
+          tag: [] as string[],
+          condition: "",
+          stockStatus: "in stock",
+        },
     onSubmit: async ({ value }) => {
       try {
-        await addListing({
-          ...value,
-          images: uploadedImages,
-        });
+        // Simply pass the form values - all processing happens in the mutation
+        updateMutation.mutate(value);
       } catch (error) {
-        // Error is already handled in the hook
+        console.error("Form submission error:", error);
       }
     },
   });
 
-  function handleFillTestData() {
-    const testData = {
-      title: "Acer Predator Helios 16",
-      price: "2299",
-      brand: "Acer",
-      model: "Predator Helios 16",
-      shortDesc:
-        "High-performance gaming laptop with RTX 4080 and 13th Gen Intel Core i9",
-      description:
-        "Experience unrivaled gaming performance with the latest Acer Predator Helios 16, featuring NVIDIA GeForce RTX 4080 graphics and a powerful Intel Core i9-13900HX processor. Mini-LED display with 250Hz refresh rate provides stunning visuals.",
-      year: "2023",
-      stockStatus: "in stock",
-      condition: "new",
-      processorBrand: "Intel",
-      processorModel: "Core i9-13900HX",
-      cores: "24",
-      threads: "32",
-      graphicsType: "Dedicated",
-      gpuBrand: "NVIDIA",
-      gpuModel: "RTX 4080",
-      vram: "12GB",
-      ram: "32GB",
-      ramType: "DDR5",
-      storageType: "SSD",
-      storageCapacity: "512GB",
-      screenSize: '16.0"',
-      screenResolution: "2560x1600",
-      refreshRate: "250Hz",
-      weight: "2.7",
-      backlightType: "RGB",
-      tag: ["gaming", "productivity"],
-    };
+  // Set uploaded images when data is loaded
+  useEffect(() => {
+    if (laptop?.images && laptop.images.length > 0) {
+      setUploadedImages(laptop.images);
+    }
+  }, [laptop, setUploadedImages]);
 
-    form.reset({
-      ...form.state.values,
-      ...testData,
-    });
+  // Show loading skeleton while fetching data
+  if (isLoading) {
+    return <LaptopDetailSkeleton />;
   }
 
+  // Show error message if fetch failed
+  if (error) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-neutral-900">
+        <div className="max-w-md rounded-lg bg-red-900/50 p-6 text-center">
+          <h1 className="text-2xl font-bold text-white">Error</h1>
+          <p className="mt-2 text-red-200">
+            {error instanceof Error
+              ? error.message
+              : "Failed to load laptop data"}
+          </p>
+          <Button
+            onClick={() => window.history.back()}
+            className="mt-4 bg-white/10 px-4 py-2 hover:bg-white/20"
+          >
+            Go Back
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  // Main form rendering
   return (
     <div className="min-h-screen bg-neutral-900 py-10 text-neutral-200">
       <div className="container mx-auto px-4">
         <h1 className="mb-2 text-3xl font-bold text-white md:text-4xl">
-          Add New Laptop Listing
+          Edit Laptop Listing
         </h1>
         <p className="mb-8 text-neutral-400">
           Fields marked <span className="text-red-400">*</span> are required.
@@ -191,16 +320,20 @@ export default function AddListingPage() {
               form.handleSubmit();
             }}
           >
-            {formStatus === "error" && (
+            {updateMutation.isError && (
               <div className="mb-6 rounded-md bg-red-900/50 p-4 text-red-200">
-                {errorMessage}
+                {updateMutation.error instanceof Error
+                  ? updateMutation.error.message
+                  : "Failed to update listing"}
               </div>
             )}
-            {formStatus === "success" && (
+            {updateMutation.isSuccess && (
               <div className="mb-6 rounded-md bg-green-900/50 p-4 text-green-200">
-                Listing created successfully! Redirecting...
+                Listing updated successfully! Redirecting...
               </div>
             )}
+
+            {/* Form fields remain the same - title, price, etc. */}
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               {/* Title (required) */}
               <form.Field
@@ -222,7 +355,7 @@ export default function AddListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={formStatus === "submitting"}
+                      disabled={updateMutation.isPending}
                     />
                     {field.state.meta.errors && (
                       <div className="mt-1 text-sm text-red-300">
@@ -261,7 +394,7 @@ export default function AddListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={formStatus === "submitting"}
+                      disabled={updateMutation.isPending}
                     />
                     {field.state.meta.errors && (
                       <div className="mt-1 text-sm text-red-300">
@@ -292,7 +425,7 @@ export default function AddListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={formStatus === "submitting"}
+                      disabled={updateMutation.isPending}
                     >
                       <option value="">Select Brand</option>
                       {LAPTOP_BRANDS.map((b) => (
@@ -330,7 +463,7 @@ export default function AddListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={formStatus === "submitting"}
+                      disabled={updateMutation.isPending}
                     />
                     {field.state.meta.errors && (
                       <div className="mt-1 text-sm text-red-300">
@@ -367,7 +500,7 @@ export default function AddListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={formStatus === "submitting"}
+                      disabled={updateMutation.isPending}
                     />
                     {field.state.meta.errors && (
                       <div className="mt-1 text-sm text-red-300">
@@ -399,7 +532,7 @@ export default function AddListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={formStatus === "submitting"}
+                      disabled={updateMutation.isPending}
                     />
                     {field.state.meta.errors && (
                       <div className="mt-1 text-sm text-red-300">
@@ -436,7 +569,7 @@ export default function AddListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={formStatus === "submitting"}
+                      disabled={updateMutation.isPending}
                     />
                     {field.state.meta.errors && (
                       <div className="mt-1 text-sm text-red-300">
@@ -462,7 +595,7 @@ export default function AddListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={formStatus === "submitting"}
+                      disabled={updateMutation.isPending}
                     >
                       {STOCK_STATUSES.map((s) => (
                         <option key={s} value={s}>
@@ -494,7 +627,7 @@ export default function AddListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={formStatus === "submitting"}
+                      disabled={updateMutation.isPending}
                     >
                       <option value="">Select Condition</option>
                       {CONDITION_TYPES.map((c) => (
@@ -544,7 +677,7 @@ export default function AddListingPage() {
                                   currentTags.filter((t) => t !== tag)
                                 );
                             }}
-                            disabled={formStatus === "submitting"}
+                            disabled={updateMutation.isPending}
                             className="rounded text-secondary-600 focus:ring-secondary-500"
                           />
                           <span className="text-neutral-200">
@@ -577,7 +710,7 @@ export default function AddListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={formStatus === "submitting"}
+                      disabled={updateMutation.isPending}
                     >
                       <option value="">Select Processor Brand</option>
                       {PROCESSOR_BRANDS.map((b) => (
@@ -615,7 +748,7 @@ export default function AddListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={formStatus === "submitting"}
+                      disabled={updateMutation.isPending}
                     />
                     {field.state.meta.errors && (
                       <div className="mt-1 text-sm text-red-300">
@@ -652,7 +785,7 @@ export default function AddListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={formStatus === "submitting"}
+                      disabled={updateMutation.isPending}
                     />
                     {field.state.meta.errors && (
                       <div className="mt-1 text-sm text-red-300">
@@ -689,7 +822,7 @@ export default function AddListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={formStatus === "submitting"}
+                      disabled={updateMutation.isPending}
                     />
                     {field.state.meta.errors && (
                       <div className="mt-1 text-sm text-red-300">
@@ -722,7 +855,7 @@ export default function AddListingPage() {
                       onChange={(e) => {
                         field.handleChange(e.target.value);
                       }}
-                      disabled={formStatus === "submitting"}
+                      disabled={updateMutation.isPending}
                     >
                       <option value="">Select Graphics Type</option>
                       {GRAPHICS_TYPES.map((g) => (
@@ -740,7 +873,7 @@ export default function AddListingPage() {
                 )}
               </form.Field>
 
-              {/* GPU Brand - only enabled if graphicsType is "Dedicated" */}
+              {/* GPU Brand */}
               <form.Field
                 name="gpuBrand"
                 validators={{
@@ -760,7 +893,7 @@ export default function AddListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={formStatus === "submitting"}
+                      disabled={updateMutation.isPending}
                     >
                       <option value="">Select GPU Brand</option>
                       {GPU_BRANDS.map((b) => (
@@ -778,7 +911,7 @@ export default function AddListingPage() {
                 )}
               </form.Field>
 
-              {/* GPU Model - only enabled if graphicsType is "Dedicated" */}
+              {/* GPU Model */}
               <form.Field
                 name="gpuModel"
                 validators={{
@@ -798,7 +931,7 @@ export default function AddListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={formStatus === "submitting"}
+                      disabled={updateMutation.isPending}
                     />
                     {field.state.meta.errors && (
                       <div className="mt-1 text-sm text-red-300">
@@ -809,7 +942,7 @@ export default function AddListingPage() {
                 )}
               </form.Field>
 
-              {/* VRAM - only enabled if graphicsType is "Dedicated" */}
+              {/* VRAM */}
               <form.Field
                 name="vram"
                 validators={{
@@ -829,7 +962,7 @@ export default function AddListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={formStatus === "submitting"}
+                      disabled={updateMutation.isPending}
                     >
                       <option value="">Select VRAM</option>
                       {VRAM_OPTIONS.map((v) => (
@@ -867,7 +1000,7 @@ export default function AddListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={formStatus === "submitting"}
+                      disabled={updateMutation.isPending}
                     >
                       <option value="">Select RAM</option>
                       {RAM_OPTIONS.map((r) => (
@@ -905,7 +1038,7 @@ export default function AddListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={formStatus === "submitting"}
+                      disabled={updateMutation.isPending}
                     >
                       <option value="">Select RAM Type</option>
                       {RAM_TYPES.map((t) => (
@@ -943,7 +1076,7 @@ export default function AddListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={formStatus === "submitting"}
+                      disabled={updateMutation.isPending}
                     >
                       <option value="">Select Storage Type</option>
                       {STORAGE_TYPES.map((s) => (
@@ -981,7 +1114,7 @@ export default function AddListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={formStatus === "submitting"}
+                      disabled={updateMutation.isPending}
                     />
                     {field.state.meta.errors && (
                       <div className="mt-1 text-sm text-red-300">
@@ -1012,7 +1145,7 @@ export default function AddListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={formStatus === "submitting"}
+                      disabled={updateMutation.isPending}
                     >
                       <option value="">Select Screen Size</option>
                       {SCREEN_SIZE_OPTIONS.map((size) => (
@@ -1050,7 +1183,7 @@ export default function AddListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={formStatus === "submitting"}
+                      disabled={updateMutation.isPending}
                     />
                     {field.state.meta.errors && (
                       <div className="mt-1 text-sm text-red-300">
@@ -1081,7 +1214,7 @@ export default function AddListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={formStatus === "submitting"}
+                      disabled={updateMutation.isPending}
                     >
                       <option value="">Select Refresh Rate</option>
                       {REFRESH_RATE_OPTIONS.map((rate) => (
@@ -1117,7 +1250,7 @@ export default function AddListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={formStatus === "submitting"}
+                      disabled={updateMutation.isPending}
                     />
                   </div>
                 )}
@@ -1144,7 +1277,7 @@ export default function AddListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={formStatus === "submitting"}
+                      disabled={updateMutation.isPending}
                     >
                       <option value="">Select Backlight Type</option>
                       {BACKLIGHT_OPTIONS.map((b) => (
@@ -1172,17 +1305,7 @@ export default function AddListingPage() {
               {/* Add Image Link Form */}
               <div className="mb-4">
                 <label className="mb-2 block text-sm font-medium text-neutral-200">
-                  Add Image URL{" "}
-                  <span
-                    className="cursor-pointer text-neutral-500"
-                    onClick={() => {
-                      navigator.clipboard.writeText(
-                        "https://i.ibb.co/DgTvz43f/predator.png"
-                      );
-                    }}
-                  >
-                    https://i.ibb.co/DgTvz43f/predator.png
-                  </span>
+                  Add Image URL
                 </label>
                 <div className="flex gap-2">
                   <input
@@ -1235,7 +1358,7 @@ export default function AddListingPage() {
                     if (
                       e.dataTransfer.files &&
                       e.dataTransfer.files.length > 0 &&
-                      formStatus !== "submitting"
+                      updateMutation.isPending
                     ) {
                       const fileList = e.dataTransfer.files;
                       const event = {
@@ -1283,7 +1406,7 @@ export default function AddListingPage() {
                     accept="image/*"
                     multiple
                     onChange={handleImageUpload}
-                    disabled={formStatus === "submitting" || uploadingImages}
+                    disabled={updateMutation.isPending || uploadingImages}
                   />
                 </div>
 
@@ -1348,13 +1471,13 @@ export default function AddListingPage() {
             <div className="mt-8 flex justify-end">
               <Button
                 type="submit"
-                disabled={formStatus === "submitting"}
+                disabled={updateMutation.isPending}
                 className="flex items-center justify-center gap-3 rounded-lg bg-gradient-to-r from-purple-600 to-primary-600 px-8 py-3 font-semibold text-white shadow-lg hover:from-purple-700 hover:to-primary-700 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {formStatus === "submitting" ? (
+                {updateMutation.isPending ? (
                   <>
                     <SpinnerSVG className="h-5 w-5" />
-                    <span>Creating Listing...</span>
+                    <span>Updating Listing...</span>
                   </>
                 ) : (
                   <>
@@ -1369,18 +1492,13 @@ export default function AddListingPage() {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     >
-                      <path d="M12 5v14M5 12h14" />
+                      <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z" />
+                      <polyline points="17 21 17 13 7 13 7 21" />
+                      <polyline points="7 3 7 8 15 8" />
                     </svg>
-                    <span>Create Listing</span>
+                    <span>Update Listing</span>
                   </>
                 )}
-              </Button>
-              <Button
-                type="button"
-                onClick={handleFillTestData}
-                className="ml-4 rounded-md bg-blue-600 px-4 py-2 text-white"
-              >
-                Fill with Test Data
               </Button>
             </div>
           </form>

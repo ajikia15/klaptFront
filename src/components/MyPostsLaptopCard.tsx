@@ -62,7 +62,7 @@ export function MyPostsLaptopCard({
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link
-              to="/"
+              to="/edit-listing/$laptopId"
               params={{ laptopId: laptopId.toString() }}
               className="flex items-center"
             >

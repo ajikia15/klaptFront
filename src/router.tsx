@@ -15,6 +15,7 @@ import ProfilePage from "./pages/ProfilePage";
 import { useRequireAuth } from "./hooks/useRequireAuth";
 import { ReactNode } from "react";
 import AddListingPage from "./pages/AddListingPage";
+import EditListingPage from "./pages/EditListingPage";
 import UserManagement from "./pages/admin/UserManagement";
 import ContentModeration from "./pages/admin/ContentModeration";
 import Statistics from "./pages/admin/Statistics";
@@ -73,6 +74,17 @@ const laptopRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/laptop/$laptopId",
   component: LaptopDetailPage,
+});
+
+// Add edit laptop route
+const editLaptopRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/edit-listing/$laptopId",
+  component: () => (
+    <ProtectedRoute>
+      <EditListingPage />
+    </ProtectedRoute>
+  ),
 });
 
 // Add search route
@@ -311,6 +323,7 @@ const adminSystemSettingsRoute = createRoute({
 const routeTree = rootRoute.addChildren([
   indexRoute,
   laptopRoute,
+  editLaptopRoute,
   searchRoute,
   authRoute,
   loginRoute,

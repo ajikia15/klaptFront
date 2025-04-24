@@ -9,76 +9,56 @@ export function useAddListing() {
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
-  const addListing = async (value: Record<string, any>) => {
+  const addListing = async (formData: Record<string, any>) => {
     try {
       setFormStatus("submitting");
-      // Allowed values for union types
-      const processorBrands = ["Intel", "AMD", "Apple"];
-      const ramTypes = ["DDR3", "DDR4", "DDR5"];
-      const storageTypes = ["HDD", "SSD", "HDD + SSD"];
-      const stockStatuses = ["reserved", "sold", "in stock"];
-      const graphicsTypes = ["Dedicated", "Integrated"];
-      const conditionTypes = ["new", "like-new", "used", "damaged"];
-      const backlightTypes = ["RGB", "Single-color", "None"];
 
-      // Helper to cast or undefined
-      const castOrUndef = (val: string, allowed: string[]) =>
-        allowed.includes(val) ? (val as any) : undefined;
-
-      const graphicsType = castOrUndef(value.graphicsType, graphicsTypes);
-      const processorBrand = castOrUndef(value.processorBrand, processorBrands);
-      const ramType = castOrUndef(value.ramType, ramTypes);
-      const storageType = castOrUndef(value.storageType, storageTypes);
-      const stockStatus = castOrUndef(value.stockStatus, stockStatuses);
-      const condition = castOrUndef(value.condition, conditionTypes);
-      const backlightType = castOrUndef(value.backlightType, backlightTypes);
-
+      // Create a clean data object from form values
       const laptopData: Partial<LaptopT> = {
-        ...value,
-        processorBrand: processorBrand,
-        price: parseFloat(value.price),
-        cores: parseInt(value.cores),
-        threads: parseInt(value.threads),
-        graphicsType,
-        vram:
-          graphicsType === "Dedicated" && value.vram ? value.vram : undefined,
-        gpuBrand:
-          graphicsType === "Dedicated" && value.gpuBrand
-            ? value.gpuBrand
-            : undefined,
-        gpuModel:
-          graphicsType === "Dedicated" && value.gpuModel
-            ? value.gpuModel
-            : undefined,
-        ram: value.ram,
-        ramType,
-        storageType,
-        refreshRate: value.refreshRate,
-        year: parseInt(value.year),
+        ...formData,
+        price: parseFloat(formData.price),
+        cores: parseInt(formData.cores),
+        threads: parseInt(formData.threads),
+        year: parseInt(formData.year),
+
+        // Direct assignments without conditionals
+        gpuBrand: formData.gpuBrand,
+        gpuModel: formData.gpuModel,
+        vram: formData.vram,
+
+        // Default image if none provided
         images:
-          value.images && value.images.length > 0
-            ? value.images
+          formData.images && formData.images.length > 0
+            ? formData.images
             : ["https://placehold.co/800x600/111827/444?text=No+Image"],
-        tag: value.tag && value.tag.length > 0 ? value.tag : undefined,
-        stockStatus,
-        condition,
-        backlightType,
+
+        // Optional tags
+        tag: formData.tag && formData.tag.length > 0 ? formData.tag : undefined,
       };
-      // Remove any keys with value undefined (optional, but keeps payload clean)
-      Object.keys(laptopData).forEach(
-        (k) =>
-          laptopData[k as keyof typeof laptopData] === undefined &&
-          delete laptopData[k as keyof typeof laptopData]
-      );
+
+      // Remove undefined properties for a clean API payload
+      Object.keys(laptopData).forEach((key) => {
+        if (laptopData[key as keyof typeof laptopData] === undefined) {
+          delete laptopData[key as keyof typeof laptopData];
+        }
+      });
+
       const response = await fetch(`${import.meta.env.VITE_API_URL}/laptops`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify(laptopData),
       });
-      if (!response.ok) throw new Error("Failed to add listing");
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || "Failed to add listing");
+      }
+
       setFormStatus("success");
       const data = await response.json();
+
+      // Redirect to the new laptop page after successful creation
       setTimeout(() => navigate({ to: `/laptop/${data.id}` }), 1500);
       return data;
     } catch (error) {
