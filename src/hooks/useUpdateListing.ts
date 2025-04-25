@@ -1,61 +1,40 @@
-import { useState, useEffect } from "react";
+import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { LaptopT } from "@/interfaces/laptopT";
 
-type FormStatus = "idle" | "loading" | "submitting" | "success" | "error";
-
 export function useUpdateListing(laptopId: string) {
-  const [formStatus, setFormStatus] = useState<FormStatus>("loading"); // Start with loading state
-  const [errorMessage, setErrorMessage] = useState("");
-  const [laptopData, setLaptopData] = useState<LaptopT | null>(null);
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
-  // Fetch the existing laptop data
-  useEffect(() => {
-    async function fetchLaptopData() {
-      if (!laptopId) return;
+  // Fetch the existing laptop data using TanStack Query
+  const {
+    data: laptopData,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["laptop", laptopId],
+    queryFn: async () => {
+      if (!laptopId) throw new Error("Laptop ID is missing");
 
-      try {
-        setFormStatus("loading");
-        console.log("Fetching laptop data for ID:", laptopId);
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/laptops/${laptopId}`,
+        { credentials: "include" }
+      );
 
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/laptops/${laptopId}`,
-          {
-            credentials: "include",
-          }
-        );
-
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({}));
-          throw new Error(errorData.message || "Failed to fetch laptop data");
-        }
-
-        const data = await response.json();
-        console.log("Laptop data fetched:", data);
-        setLaptopData(data);
-        setFormStatus("idle");
-      } catch (error) {
-        console.error("Error fetching laptop:", error);
-        setFormStatus("error");
-        setErrorMessage(
-          error instanceof Error ? error.message : "Failed to fetch laptop data"
-        );
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || "Failed to fetch laptop data");
       }
-    }
 
-    fetchLaptopData();
-  }, [laptopId]);
+      return response.json();
+    },
+    enabled: Boolean(laptopId),
+  });
 
-  const updateListing = async (formData: Record<string, any>) => {
-    if (!laptopId) {
-      setErrorMessage("Laptop ID is missing");
-      setFormStatus("error");
-      return;
-    }
-
-    try {
-      setFormStatus("submitting");
+  // Update mutation using TanStack Query
+  const updateMutation = useMutation({
+    mutationFn: async (formData: Record<string, any>) => {
+      if (!laptopId) throw new Error("Laptop ID is missing");
 
       const updatedLaptopData: Partial<LaptopT> = {
         ...formData,
@@ -73,7 +52,7 @@ export function useUpdateListing(laptopId: string) {
         tag: formData.tag && formData.tag.length > 0 ? formData.tag : undefined,
       };
 
-      // Remove undefined properties for a clean API payload
+      // Remove undefined properties
       Object.keys(updatedLaptopData).forEach((key) => {
         if (
           updatedLaptopData[key as keyof typeof updatedLaptopData] === undefined
@@ -97,20 +76,34 @@ export function useUpdateListing(laptopId: string) {
         throw new Error(errorData.message || "Failed to update listing");
       }
 
-      setFormStatus("success");
-      const data = await response.json();
+      return response.json();
+    },
+    onSuccess: async (data) => {
+      // Invalidate AND refetch queries before navigating
+      await queryClient.invalidateQueries({ queryKey: ["laptop", laptopId] });
+      await queryClient.invalidateQueries({ queryKey: ["laptops"] });
 
-      // Redirect to the laptop page after successful update
-      setTimeout(() => navigate({ to: `/laptop/${data.id}` }), 1500);
-      return data;
-    } catch (error) {
-      setFormStatus("error");
-      setErrorMessage(
-        error instanceof Error ? error.message : "Failed to update listing"
-      );
-      throw error;
-    }
+      // Additionally force a direct refetch of the specific laptop
+      await queryClient.refetchQueries({ queryKey: ["laptop", laptopId] });
+
+      // Now navigate after the fresh data has been fetched
+      navigate({ to: `/laptop/${data.id}` });
+    },
+  });
+
+  return {
+    laptopData,
+    isLoading,
+    isError: !!error,
+    errorMessage: error instanceof Error ? error.message : "An error occurred",
+    updateListing: updateMutation.mutate,
+    isUpdating: updateMutation.isPending,
+    isUpdateSuccess: updateMutation.isSuccess,
+    updateError:
+      updateMutation.error instanceof Error
+        ? updateMutation.error.message
+        : updateMutation.error
+        ? "Failed to update listing"
+        : null,
   };
-
-  return { formStatus, errorMessage, laptopData, updateListing };
 }
