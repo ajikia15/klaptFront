@@ -4,8 +4,7 @@ import { SpinnerSVG } from "@/assets/SpinnerSVG";
 import { Button } from "@/components/ui/button";
 import { useParams, useNavigate } from "@tanstack/react-router";
 import { useImageManagement } from "@/hooks/useImageManagement";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { LaptopT } from "@/interfaces/laptopT";
+import { useUpdateListing } from "@/hooks/useUpdateListing";
 import { LaptopDetailSkeleton } from "./LaptopDetailSkeleton";
 
 // Constants remain unchanged
@@ -87,8 +86,20 @@ const SCREEN_SIZE_OPTIONS = [
 
 export default function EditListingPage() {
   const { laptopId } = useParams({ from: "/edit-listing/$laptopId" });
-  const navigate = useNavigate();
 
+  // Use the hook instead of creating your own mutation
+  const {
+    laptopData: laptop,
+    isLoading,
+    isError,
+    errorMessage,
+    updateListing,
+    isUpdating,
+    isUpdateSuccess,
+    updateError,
+  } = useUpdateListing(laptopId);
+
+  // Rest of your image handling logic
   const {
     uploadedImages,
     uploadingImages,
@@ -100,98 +111,6 @@ export default function EditListingPage() {
     clearImages,
     setUploadedImages,
   } = useImageManagement();
-
-  // Fetch laptop data using TanStack Query
-  const {
-    data: laptop,
-    isLoading,
-    error,
-  } = useQuery<LaptopT>({
-    queryKey: ["laptop", laptopId],
-    queryFn: async () => {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/laptops/${laptopId}`,
-        { credentials: "include" }
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch laptop details");
-      }
-      return response.json();
-    },
-  });
-
-  // Update mutation
-  const updateMutation = useMutation({
-    mutationFn: async (updatedData: any) => {
-      try {
-        // Create a clean copy of data for modification
-        const formattedData: Record<string, any> = { ...updatedData };
-
-        // Convert numeric fields
-        if (formattedData.price)
-          formattedData.price = parseFloat(formattedData.price);
-        if (formattedData.cores)
-          formattedData.cores = parseInt(formattedData.cores);
-        if (formattedData.threads)
-          formattedData.threads = parseInt(formattedData.threads);
-        if (formattedData.year)
-          formattedData.year = parseInt(formattedData.year);
-
-        // Handle status fields - ensure they are strings
-        formattedData.stockStatus = String(
-          formattedData.stockStatus || "in stock"
-        );
-
-        // Handle images
-        formattedData.images =
-          uploadedImages.length > 0
-            ? uploadedImages
-            : ["https://placehold.co/800x600/111827/444?text=No+Image"];
-
-        // Cleanup: Remove undefined and null fields
-        Object.keys(formattedData).forEach((key) => {
-          if (formattedData[key] === undefined || formattedData[key] === null) {
-            delete formattedData[key];
-          }
-        });
-
-        console.log("Sending update data:", formattedData);
-
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/laptops/${laptopId}`,
-          {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-            body: JSON.stringify(formattedData),
-          }
-        );
-
-        if (!response.ok) {
-          const errorText = await response.text();
-          let errorMessage = "Failed to update listing";
-
-          try {
-            const errorData = JSON.parse(errorText);
-            errorMessage = errorData.message || errorMessage;
-          } catch (e) {
-            console.error("Error parsing error response:", errorText);
-          }
-
-          throw new Error(errorMessage);
-        }
-
-        return response.json();
-      } catch (error) {
-        console.error("Update error:", error);
-        throw error;
-      }
-    },
-    onSuccess: (data) => {
-      // Redirect after successful update
-      setTimeout(() => navigate({ to: `/laptop/${data.id}` }), 1500);
-    },
-  });
 
   // Initialize form only after data is loaded
   const form = useForm({
@@ -257,8 +176,14 @@ export default function EditListingPage() {
         },
     onSubmit: async ({ value }) => {
       try {
-        // Simply pass the form values - all processing happens in the mutation
-        updateMutation.mutate(value);
+        // Add images to the form data
+        const formDataWithImages = {
+          ...value,
+          images: uploadedImages,
+        };
+
+        // Just call the hook's function - all logic is handled there
+        updateListing(formDataWithImages);
       } catch (error) {
         console.error("Form submission error:", error);
       }
@@ -278,16 +203,12 @@ export default function EditListingPage() {
   }
 
   // Show error message if fetch failed
-  if (error) {
+  if (isError) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-neutral-900">
         <div className="max-w-md rounded-lg bg-red-900/50 p-6 text-center">
           <h1 className="text-2xl font-bold text-white">Error</h1>
-          <p className="mt-2 text-red-200">
-            {error instanceof Error
-              ? error.message
-              : "Failed to load laptop data"}
-          </p>
+          <p className="mt-2 text-red-200">{errorMessage}</p>
           <Button
             onClick={() => window.history.back()}
             className="mt-4 bg-white/10 px-4 py-2 hover:bg-white/20"
@@ -317,14 +238,12 @@ export default function EditListingPage() {
               form.handleSubmit();
             }}
           >
-            {updateMutation.isError && (
+            {updateError && (
               <div className="mb-6 rounded-md bg-red-900/50 p-4 text-red-200">
-                {updateMutation.error instanceof Error
-                  ? updateMutation.error.message
-                  : "Failed to update listing"}
+                {updateError || "Failed to update listing"}
               </div>
             )}
-            {updateMutation.isSuccess && (
+            {isUpdateSuccess && (
               <div className="mb-6 rounded-md bg-green-900/50 p-4 text-green-200">
                 Listing updated successfully! Redirecting...
               </div>
@@ -352,7 +271,7 @@ export default function EditListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={updateMutation.isPending}
+                      disabled={isUpdating}
                     />
                     {field.state.meta.errors && (
                       <div className="mt-1 text-sm text-red-300">
@@ -391,7 +310,7 @@ export default function EditListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={updateMutation.isPending}
+                      disabled={isUpdating}
                     />
                     {field.state.meta.errors && (
                       <div className="mt-1 text-sm text-red-300">
@@ -422,7 +341,7 @@ export default function EditListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={updateMutation.isPending}
+                      disabled={isUpdating}
                     >
                       <option value="">Select Brand</option>
                       {LAPTOP_BRANDS.map((b) => (
@@ -460,7 +379,7 @@ export default function EditListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={updateMutation.isPending}
+                      disabled={isUpdating}
                     />
                     {field.state.meta.errors && (
                       <div className="mt-1 text-sm text-red-300">
@@ -497,7 +416,7 @@ export default function EditListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={updateMutation.isPending}
+                      disabled={isUpdating}
                     />
                     {field.state.meta.errors && (
                       <div className="mt-1 text-sm text-red-300">
@@ -529,7 +448,7 @@ export default function EditListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={updateMutation.isPending}
+                      disabled={isUpdating}
                     />
                     {field.state.meta.errors && (
                       <div className="mt-1 text-sm text-red-300">
@@ -566,7 +485,7 @@ export default function EditListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={updateMutation.isPending}
+                      disabled={isUpdating}
                     />
                     {field.state.meta.errors && (
                       <div className="mt-1 text-sm text-red-300">
@@ -592,7 +511,7 @@ export default function EditListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={updateMutation.isPending}
+                      disabled={isUpdating}
                     >
                       {STOCK_STATUSES.map((s) => (
                         <option key={s} value={s}>
@@ -624,7 +543,7 @@ export default function EditListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={updateMutation.isPending}
+                      disabled={isUpdating}
                     >
                       <option value="">Select Condition</option>
                       {CONDITION_TYPES.map((c) => (
@@ -671,10 +590,10 @@ export default function EditListingPage() {
                                 field.handleChange([...currentTags, tag]);
                               else
                                 field.handleChange(
-                                  currentTags.filter((t) => t !== tag)
+                                  currentTags.filter((t: any) => t !== tag)
                                 );
                             }}
-                            disabled={updateMutation.isPending}
+                            disabled={isUpdating}
                             className="rounded text-secondary-600 focus:ring-secondary-500"
                           />
                           <span className="text-neutral-200">
@@ -707,7 +626,7 @@ export default function EditListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={updateMutation.isPending}
+                      disabled={isUpdating}
                     >
                       <option value="">Select Processor Brand</option>
                       {PROCESSOR_BRANDS.map((b) => (
@@ -745,7 +664,7 @@ export default function EditListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={updateMutation.isPending}
+                      disabled={isUpdating}
                     />
                     {field.state.meta.errors && (
                       <div className="mt-1 text-sm text-red-300">
@@ -782,7 +701,7 @@ export default function EditListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={updateMutation.isPending}
+                      disabled={isUpdating}
                     />
                     {field.state.meta.errors && (
                       <div className="mt-1 text-sm text-red-300">
@@ -819,7 +738,7 @@ export default function EditListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={updateMutation.isPending}
+                      disabled={isUpdating}
                     />
                     {field.state.meta.errors && (
                       <div className="mt-1 text-sm text-red-300">
@@ -852,7 +771,7 @@ export default function EditListingPage() {
                       onChange={(e) => {
                         field.handleChange(e.target.value);
                       }}
-                      disabled={updateMutation.isPending}
+                      disabled={isUpdating}
                     >
                       <option value="">Select Graphics Type</option>
                       {GRAPHICS_TYPES.map((g) => (
@@ -890,7 +809,7 @@ export default function EditListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={updateMutation.isPending}
+                      disabled={isUpdating}
                     >
                       <option value="">Select GPU Brand</option>
                       {GPU_BRANDS.map((b) => (
@@ -928,7 +847,7 @@ export default function EditListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={updateMutation.isPending}
+                      disabled={isUpdating}
                     />
                     {field.state.meta.errors && (
                       <div className="mt-1 text-sm text-red-300">
@@ -959,7 +878,7 @@ export default function EditListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={updateMutation.isPending}
+                      disabled={isUpdating}
                     >
                       <option value="">Select VRAM</option>
                       {VRAM_OPTIONS.map((v) => (
@@ -997,7 +916,7 @@ export default function EditListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={updateMutation.isPending}
+                      disabled={isUpdating}
                     >
                       <option value="">Select RAM</option>
                       {RAM_OPTIONS.map((r) => (
@@ -1035,7 +954,7 @@ export default function EditListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={updateMutation.isPending}
+                      disabled={isUpdating}
                     >
                       <option value="">Select RAM Type</option>
                       {RAM_TYPES.map((t) => (
@@ -1073,7 +992,7 @@ export default function EditListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={updateMutation.isPending}
+                      disabled={isUpdating}
                     >
                       <option value="">Select Storage Type</option>
                       {STORAGE_TYPES.map((s) => (
@@ -1111,7 +1030,7 @@ export default function EditListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={updateMutation.isPending}
+                      disabled={isUpdating}
                     />
                     {field.state.meta.errors && (
                       <div className="mt-1 text-sm text-red-300">
@@ -1142,7 +1061,7 @@ export default function EditListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={updateMutation.isPending}
+                      disabled={isUpdating}
                     >
                       <option value="">Select Screen Size</option>
                       {SCREEN_SIZE_OPTIONS.map((size) => (
@@ -1180,7 +1099,7 @@ export default function EditListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={updateMutation.isPending}
+                      disabled={isUpdating}
                     />
                     {field.state.meta.errors && (
                       <div className="mt-1 text-sm text-red-300">
@@ -1211,7 +1130,7 @@ export default function EditListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={updateMutation.isPending}
+                      disabled={isUpdating}
                     >
                       <option value="">Select Refresh Rate</option>
                       {REFRESH_RATE_OPTIONS.map((rate) => (
@@ -1247,7 +1166,7 @@ export default function EditListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={updateMutation.isPending}
+                      disabled={isUpdating}
                     />
                   </div>
                 )}
@@ -1274,7 +1193,7 @@ export default function EditListingPage() {
                       className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={updateMutation.isPending}
+                      disabled={isUpdating}
                     >
                       <option value="">Select Backlight Type</option>
                       {BACKLIGHT_OPTIONS.map((b) => (
@@ -1355,7 +1274,7 @@ export default function EditListingPage() {
                     if (
                       e.dataTransfer.files &&
                       e.dataTransfer.files.length > 0 &&
-                      updateMutation.isPending
+                      isUpdating
                     ) {
                       const fileList = e.dataTransfer.files;
                       const event = {
@@ -1403,7 +1322,7 @@ export default function EditListingPage() {
                     accept="image/*"
                     multiple
                     onChange={handleImageUpload}
-                    disabled={updateMutation.isPending || uploadingImages}
+                    disabled={isUpdating || uploadingImages}
                   />
                 </div>
 
@@ -1468,10 +1387,10 @@ export default function EditListingPage() {
             <div className="mt-8 flex justify-end">
               <Button
                 type="submit"
-                disabled={updateMutation.isPending}
+                disabled={isUpdating}
                 className="flex items-center justify-center gap-3 rounded-lg bg-gradient-to-r from-purple-600 to-primary-600 px-8 py-3 font-semibold text-white shadow-lg hover:from-purple-700 hover:to-primary-700 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {updateMutation.isPending ? (
+                {isUpdating ? (
                   <>
                     <SpinnerSVG className="h-5 w-5" />
                     <span>Updating Listing...</span>

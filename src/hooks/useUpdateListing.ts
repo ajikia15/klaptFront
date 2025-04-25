@@ -79,15 +79,20 @@ export function useUpdateListing(laptopId: string) {
       return response.json();
     },
     onSuccess: async (data) => {
-      // Invalidate AND refetch queries before navigating
+      // Keep cache invalidation in the hook
       await queryClient.invalidateQueries({ queryKey: ["laptop", laptopId] });
       await queryClient.invalidateQueries({ queryKey: ["laptops"] });
 
-      // Additionally force a direct refetch of the specific laptop
-      await queryClient.refetchQueries({ queryKey: ["laptop", laptopId] });
+      // Force a refetch to ensure fresh data is available
+      await queryClient.refetchQueries({
+        queryKey: ["laptop", laptopId],
+        exact: true,
+      });
 
-      // Now navigate after the fresh data has been fetched
-      navigate({ to: `/laptop/${data.id}` });
+      // Keep navigation logic here since it's consistent across all usages
+      setTimeout(() => {
+        navigate({ to: `/laptop/${data.id}` });
+      }, 1500);
     },
   });
 
