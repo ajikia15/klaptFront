@@ -1,6 +1,6 @@
 import { useAuth } from "@/context/AuthContext";
 import { Link } from "@tanstack/react-router";
-import { Cpu, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useSearchLaptops } from "@/hooks/useSearch";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";

@@ -131,7 +131,7 @@ export default function LaptopDetailPage() {
         },
         {
           label: "VRAM",
-          value: laptop.vram ? `${laptop.vram} GB` : "N/A",
+          value: laptop.vram ? `${laptop.vram}` : "N/A",
           Icon: GpuIcon,
         },
       ],
@@ -166,7 +166,7 @@ export default function LaptopDetailPage() {
       items: [
         {
           label: "Screen Size",
-          value: `${laptop.screenSize}"`,
+          value: `${laptop.screenSize}`,
           Icon: DisplayIcon,
         },
         {
@@ -232,7 +232,7 @@ export default function LaptopDetailPage() {
     },
     {
       title: "Display",
-      value: `${laptop.screenSize}" ${laptop.screenResolution}`,
+      value: `${laptop.screenSize} ${laptop.screenResolution}`,
       details: `${laptop.refreshRate} Refresh Rate`,
       Icon: DisplayIcon,
     },
@@ -445,7 +445,7 @@ export default function LaptopDetailPage() {
                                 className="text-secondary-400"
                               />
                               <span className="text-neutral-200">
-                                {laptop.screenSize}" {laptop.refreshRate}Hz
+                                {laptop.screenSize} {laptop.refreshRate}
                                 Display
                               </span>
                             </div>
