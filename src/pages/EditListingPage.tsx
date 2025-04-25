@@ -142,9 +142,6 @@ export default function EditListingPage() {
           formattedData.stockStatus || "in stock"
         );
 
-        // Set status field explicitly to match stockStatus (this is key)
-        formattedData.status = String(formattedData.stockStatus || "in stock");
-
         // Handle images
         formattedData.images =
           uploadedImages.length > 0
