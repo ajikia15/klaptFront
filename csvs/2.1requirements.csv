@@ -1,0 +1,9 @@
+Task Name,Status,Details
+Conduct Stakeholder Interviews,Complete,"Met with stakeholders to gather business and technical requirements. Used simple questionnaires and notes."
+Document Functional Requirements,Complete,"Created detailed list of required features and user stories. Included must-haves and nice-to-haves."
+Document Non-Functional Requirements,Complete,"Outlined performance, security, and scalability needs. Included browser/device support and uptime targets."
+Prioritize Requirements,Complete,"Ranked requirements by business value, feasibility, and dependencies. Used MoSCoW method for clarity."
+Create Requirements Specification,Complete,"Compiled all requirements into a formal document. Shared with all teams for reference."
+Review and Approve Requirements,In Progress,"Stakeholders reviewing requirements for sign-off. Collecting feedback and clarifications."
+Update Requirements as Needed,Planned,"Revise requirements based on feedback, technical constraints, or market changes. Keep a change log."
+Create User Flows,Complete,"Mapped out basic user journeys for buyers and sellers."

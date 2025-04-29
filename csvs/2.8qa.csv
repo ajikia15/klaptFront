@@ -1,0 +1,9 @@
+Task Name,Status,Details
+Develop Test Plan,Complete,"Outlined test strategy, scope, and resources. Focused on core user flows and edge cases."
+Write Test Cases,Complete,"Created detailed test cases for all features. Used spreadsheets for tracking."
+Set Up Test Environment,Complete,"Configured staging environment for QA. Used production-like data for realism."
+Conduct Manual Testing,In Progress,"Performing manual tests on new features. Logging bugs and unexpected behaviors."
+Automate Regression Tests,Planned,"Develop automated tests for critical flows. Use open-source tools where possible."
+Log and Track Bugs,In Progress,"Recording and managing defects found during testing. Prioritizing by severity."
+Review Test Results,Planned,"Analyze test outcomes and report to team. Discuss fixes and retest as needed."
+Share QA Learnings,Planned,"Document common issues and share with dev team."

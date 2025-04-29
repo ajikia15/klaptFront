@@ -1,0 +1,8 @@
+Task Name,Status,Details
+Map Shipping Workflow,Complete,"Outlined steps from order placement to delivery. Included packaging, handoff to courier, and delivery confirmation."
+Select Delivery Partners,Complete,"Chose local couriers and delivery services. Compared speed, cost, and reliability."
+Integrate Shipping Tracking,In Progress,"Adding tracking features to platform for buyers and staff. Using courier APIs or manual updates."
+Define Shipping Policies,Planned,"Set rules for shipping times, costs, and conditions. Include free shipping thresholds and regional restrictions."
+Communicate Shipping Status,Planned,"Automate notifications for shipping updates via email or SMS."
+Handle Shipping Issues,Planned,"Develop process for lost or delayed shipments. Assign staff for customer support."
+Collect Delivery Feedback,Planned,"Ask buyers for feedback on delivery experience."

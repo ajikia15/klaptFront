@@ -1,0 +1,7 @@
+Task Name,Status,Details
+Define Listing Fee Structure,Complete,"Determined pricing model for listing laptops. Compared with local competitors and considered free trial period."
+Integrate Fee Collection,In Progress,"Adding payment step to listing creation process. Testing with sandbox payments and error handling."
+Communicate Fees to Users,Planned,"Display fee information clearly on the platform. Add FAQ and support contact."
+Monitor Fee Payments,Planned,"Track and report on listing fee transactions. Set up alerts for failed or disputed payments."
+Adjust Fee Structure,Planned,"Review and update fees based on market feedback and platform costs."
+Document Fee Policy,Planned,"Write clear documentation on how fees are charged and refunded."

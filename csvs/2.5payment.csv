@@ -1,0 +1,8 @@
+Task Name,Status,Details
+Research Payment Providers,Complete,"Evaluated payment gateway options suitable for Georgia, focusing on transaction fees, support, and integration documentation."
+Select Payment Gateway,Complete,"Chose preferred provider based on fees, reliability, and integration ease. Documented decision and backup options."
+Integrate Payment API,In Progress,"Implementing payment gateway API in backend and frontend. Testing with sandbox accounts and handling error cases."
+Test Payment Flows,Planned,"Verify all payment scenarios including success, failure, and refunds. Document test cases and edge cases."
+Document Payment Process,Planned,"Create documentation for payment setup, troubleshooting, and user support."
+Monitor Transactions,Planned,"Set up monitoring and alerts for payment issues. Review failed transactions and user complaints."
+Handle Chargebacks,Planned,"Define process for managing chargebacks and disputes with payment provider."

@@ -1,0 +1,8 @@
+Task Name,Status,Details
+Research Testing Standards,Complete,"Reviewed industry standards for laptop testing. Looked at manufacturer and refurbisher guidelines."
+Develop Testing Procedures,Complete,"Created step-by-step procedures for hardware and software checks. Included battery, display, and port tests."
+Select Testing Tools,Complete,"Identified tools and software needed for verification. Used open-source utilities where possible."
+Draft Testing Protocols,In Progress,"Writing detailed protocols for each test type. Including pass/fail criteria and troubleshooting tips."
+Pilot Testing,Planned,"Run pilot tests to validate procedures and protocols. Adjust based on real-world results."
+Refine Protocols,Planned,"Update protocols based on pilot results and staff feedback."
+Document Test Results,Planned,"Create a template for recording and archiving test outcomes."
