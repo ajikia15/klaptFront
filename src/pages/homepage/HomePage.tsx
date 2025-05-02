@@ -22,6 +22,7 @@ import AnimatedStatsSection from "@/pages/homepage/AnimatedStatsSection";
 import SpecialDealsSection from "@/pages/homepage/SpecialDealsSection";
 import BrandShowcaseSection from "@/pages/homepage/BrandShowcaseSection";
 import TestimonialsSection from "@/pages/homepage/TestimonialsSection";
+import { PaginatedLaptops } from "@/interfaces/PaginatedLaptops";
 
 // Brand logos - replace with actual brand logo paths
 
@@ -58,10 +59,10 @@ const categories = [
 
 export default function HomePage() {
   const {
-    data: laptops,
+    data: paginated,
     isLoading,
     error,
-  } = useQuery<LaptopT[]>({
+  } = useQuery<PaginatedLaptops>({
     queryKey: ["laptops"],
     queryFn: async () => {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/laptops`);
@@ -72,6 +73,7 @@ export default function HomePage() {
     },
   });
 
+  const laptops = paginated?.data ?? [];
   const { isAuthenticated } = useAuth();
 
   return (

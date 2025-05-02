@@ -50,6 +50,14 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import React from "react";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationPrevious,
+  PaginationNext,
+} from "@/components/ui/pagination";
 
 interface FilterOption {
   value: string;
@@ -80,7 +88,6 @@ interface FilterOptionsType {
   tags?: FilterOption[];
 }
 
-// DebouncedInput component to handle search with debounce
 function DebouncedInput({
   value: initialValue,
   onChange,
@@ -222,6 +229,12 @@ export default function SearchPage() {
     isFilterRefetching,
     isFetched,
     setPriceRange,
+    total,
+    page,
+    setPage,
+    limit,
+    setLimit,
+    pageCount,
   } = useNewSearch();
 
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -362,7 +375,6 @@ export default function SearchPage() {
     return Array.isArray(options) && options.length > 0;
   };
 
-  // Sort laptops based on current sort option - now memoized
   const sortedLaptops = useMemo(() => {
     if (!laptops) return [];
     return [...laptops].sort((a, b) => {
@@ -378,7 +390,6 @@ export default function SearchPage() {
   const showSkeletons = !isFetched;
   const { isAuthenticated } = useAuth();
 
-  // Memoize derived values for better performance
   const activeFiltersCount = useMemo(
     () =>
       Object.values(selectedFilters).reduce(
@@ -388,13 +399,11 @@ export default function SearchPage() {
     [selectedFilters]
   );
 
-  // Check if any filter is applied - now memoized
   const hasActiveFilters = useMemo(
     () => activeFiltersCount > 0,
     [activeFiltersCount]
   );
 
-  // Memoize sets for fast lookup
   const selectedFilterSets = useMemo(() => {
     const sets: Record<FilterKey, Set<string>> = {} as any;
     (Object.keys(selectedFilters) as FilterKey[]).forEach((key) => {
@@ -410,11 +419,9 @@ export default function SearchPage() {
 
   const [tagAnimationParent] = useAutoAnimate();
 
-  // --- Price Range Constants ---
   const PRICE_MIN = 500;
   const PRICE_MAX = 5000;
 
-  // Read initial values from selectedFilters (if present)
   const initialMin =
     selectedFilters.minPrice && selectedFilters.minPrice[0]
       ? Number(selectedFilters.minPrice[0])
@@ -428,19 +435,16 @@ export default function SearchPage() {
   const [minInput, setMinInput] = useState(initialMin);
   const [maxInput, setMaxInput] = useState(initialMax);
 
-  // Update local state if filters change (e.g. after reset)
   useEffect(() => {
     setRangeValues([initialMin, initialMax]);
     setMinInput(initialMin);
     setMaxInput(initialMax);
   }, [initialMin, initialMax]);
 
-  // Handler to update price range in filters
   const handlePriceRangeChange = (min: number, max: number) => {
     setRangeValues([min, max]);
     setMinInput(min);
     setMaxInput(max);
-    // Update filters in URL
     setPriceRange(min, max);
   };
 
@@ -454,7 +458,7 @@ export default function SearchPage() {
     if (sliderTimeout.current) clearTimeout(sliderTimeout.current);
     sliderTimeout.current = setTimeout(() => {
       setPriceRange(min, max);
-    }, 300); // match your DebouncedInput debounceMs
+    }, 300);
   };
 
   return (
@@ -465,7 +469,7 @@ export default function SearchPage() {
             <aside className="hidden md:block md:w-1/4 xl:w-1/5">
               <div className="sticky top-4 p-0">
                 <div className="mb-4 flex items-center justify-between">
-                  <h2 className="py-2 text-lg font-bold">Filters</h2>
+                  <h2 className="text-lg font-bold">Filters</h2>
                   <div className="flex items-center space-x-2">
                     {/* Clear Filters Button for Desktop */}
                     {activeFiltersCount > 0 && (
@@ -876,36 +880,59 @@ export default function SearchPage() {
                 key="ghost-element"
               />
             </div>
-            {!showSkeletons &&
-              laptops &&
-              laptops.length === 0 &&
-              (searchTerm ||
-                Object.values(selectedFilters).some(
-                  (arr) => arr.length > 0
-                )) && (
-                <div className="mt-6 rounded-lg bg-neutral-800 p-8 text-center">
-                  <h2 className="mb-2 text-xl font-semibold text-white">
-                    No results found
-                  </h2>
-                  <p className="text-neutral-400">
-                    We couldn't find any laptops matching your criteria.
-                  </p>
-                  <p className="mt-2 text-neutral-400">
-                    Try adjusting your filters or search term.
-                  </p>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => {
-                      resetFilters();
-                      setSearchTerm("");
-                    }}
-                    className="mt-4 border-neutral-700 text-neutral-300 hover:bg-neutral-700"
-                  >
-                    Clear all filters
-                  </Button>
-                </div>
-              )}
+            {!isLoading && pageCount > 1 && (
+              <div className="mt-8 flex items-center justify-center">
+                <Pagination>
+                  <PaginationContent>
+                    <PaginationItem>
+                      <PaginationPrevious
+                        href="#"
+                        aria-disabled={page === 1}
+                        tabIndex={page === 1 ? -1 : 0}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          if (page > 1) setPage(page - 1);
+                        }}
+                        className={
+                          page === 1 ? "pointer-events-none opacity-50" : ""
+                        }
+                      />
+                    </PaginationItem>
+                    {Array.from({ length: pageCount }, (_, i) => (
+                      <PaginationItem key={i + 1}>
+                        <PaginationLink
+                          href="#"
+                          isActive={page === i + 1}
+                          aria-current={page === i + 1 ? "page" : undefined}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setPage(i + 1);
+                          }}
+                        >
+                          {i + 1}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ))}
+                    <PaginationItem>
+                      <PaginationNext
+                        href="#"
+                        aria-disabled={page === pageCount}
+                        tabIndex={page === pageCount ? -1 : 0}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          if (page < pageCount) setPage(page + 1);
+                        }}
+                        className={
+                          page === pageCount
+                            ? "pointer-events-none opacity-50"
+                            : ""
+                        }
+                      />
+                    </PaginationItem>
+                  </PaginationContent>
+                </Pagination>
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -99,7 +99,7 @@ export const LaptopCard: FC<LaptopCardProps> = (laptop) => {
                 to="/search"
                 search={{ refreshRate: [laptop.refreshRate.toString()] }}
               >
-                {laptop.refreshRate}Hz
+                {laptop.refreshRate}
               </Link>
             </Badge>
             <Badge className="border-neutral-700/20 cursor-pointer border bg-neutral-800 font-bold text-neutral-200 shadow-sm transition-all hover:bg-neutral-700 hover:text-neutral-100">
@@ -112,7 +112,7 @@ export const LaptopCard: FC<LaptopCardProps> = (laptop) => {
             </Badge>
             <Badge className="border-neutral-700/20 cursor-pointer border bg-neutral-800 font-bold text-neutral-200 shadow-sm transition-all hover:bg-neutral-700 hover:text-neutral-100">
               <Link to="/search" search={{ ram: [laptop.ram.toString()] }}>
-                {laptop.ram}GB
+                {laptop.ram}
               </Link>
             </Badge>
             <Badge className="border-neutral-700/20 cursor-pointer border bg-neutral-800 font-bold text-neutral-200 shadow-sm transition-all hover:bg-neutral-700 hover:text-neutral-100">

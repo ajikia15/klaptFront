@@ -1,8 +1,8 @@
 import { useSearch, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { LaptopT } from "../interfaces/laptopT";
+import { PaginatedLaptops } from "../interfaces/PaginatedLaptops";
 import { searchRoute } from "../router";
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 interface FilterOption {
   value: string;
@@ -57,11 +57,14 @@ type FilterCategory =
   | "shortDesc"
   | "tags"
   | "minPrice"
-  | "maxPrice"; // <-- changed from priceMin/priceMax
+  | "maxPrice";
 
 export function useNewSearch(userId?: number) {
   const search = useSearch({ from: searchRoute.id });
   const navigate = useNavigate({ from: searchRoute.id });
+
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(9); // Set limit to 9
 
   // Extract term directly - much simpler
   const term = search.term || "";
@@ -231,8 +234,11 @@ export function useNewSearch(userId?: number) {
     if (filters.minPrice) params.set("minPrice", filters.minPrice as string);
     if (filters.maxPrice) params.set("maxPrice", filters.maxPrice as string);
 
+    params.set("page", String(page));
+    params.set("limit", String(limit));
+
     return params.toString();
-  }, [term, sortedFilterEntries, userId, filters]);
+  }, [term, sortedFilterEntries, userId, filters, page, limit]);
 
   // Simplified and flattened query keys - more efficient for React Query's cache comparison
   const filterQueryKey = useMemo(
@@ -276,18 +282,18 @@ export function useNewSearch(userId?: number) {
     ...cacheConfig,
   });
 
-  // Query for laptops
+  // Query for laptops (now paginated)
   const {
-    data: laptops,
+    data: paginated,
     isLoading,
     error,
     refetch,
     isFetched,
     isPending,
     isRefetching,
-  } = useQuery<LaptopT[], Error>({
-    queryKey: laptopQueryKey,
-    queryFn: async (): Promise<LaptopT[]> => {
+  } = useQuery<PaginatedLaptops, Error>({
+    queryKey: laptopQueryKey.concat([page, limit]),
+    queryFn: async (): Promise<PaginatedLaptops> => {
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/laptops/search?${queryString}`
       );
@@ -301,6 +307,10 @@ export function useNewSearch(userId?: number) {
     ...cacheConfig,
   });
 
+  const laptops = paginated?.data ?? [];
+  const total = paginated?.total ?? 0;
+  const pageCount = paginated?.pageCount ?? 1;
+
   return {
     searchTerm: term,
     setSearchTerm,
@@ -309,6 +319,12 @@ export function useNewSearch(userId?: number) {
     resetFilters,
     filterOptions,
     laptops,
+    total,
+    page,
+    setPage,
+    limit,
+    setLimit,
+    pageCount,
     isLoadingFilters,
     filterError,
     isLoading,
