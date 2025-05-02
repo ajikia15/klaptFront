@@ -1,6 +1,6 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
-import { LaptopT } from "../interfaces/laptopT";
+import { PaginatedLaptops } from "../interfaces/PaginatedLaptops";
 
 interface FilterOption {
   value: string;
@@ -58,6 +58,8 @@ interface SelectedFilters {
 
 export function useSearchLaptops(initialTerm: string = "", userId?: number) {
   const [searchTerm, setSearchTerm] = useState(initialTerm);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10); // Default limit, adjust as needed
 
   // Initialize selected filters
   const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({
@@ -129,21 +131,23 @@ export function useSearchLaptops(initialTerm: string = "", userId?: number) {
   });
 
   const {
-    data: laptops,
+    data: paginated,
     isLoading,
     error,
     refetch,
     isFetched,
     isPending,
     isRefetching,
-  } = useQuery<LaptopT[], Error>({
+  } = useQuery<PaginatedLaptops, Error>({
     queryKey: [
       "laptopSearch",
       searchTerm,
       JSON.stringify(selectedFilters),
       userId,
+      page,
+      limit,
     ],
-    queryFn: async (): Promise<LaptopT[]> => {
+    queryFn: async (): Promise<PaginatedLaptops> => {
       const params = new URLSearchParams();
       if (searchTerm) params.append("term", searchTerm);
 
@@ -156,6 +160,8 @@ export function useSearchLaptops(initialTerm: string = "", userId?: number) {
       if (userId !== undefined) {
         params.append("userId", userId.toString());
       }
+      params.append("page", page.toString());
+      params.append("limit", limit.toString());
 
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/laptops/search?${params.toString()}`
@@ -184,6 +190,7 @@ export function useSearchLaptops(initialTerm: string = "", userId?: number) {
 
       return newFilters;
     });
+    setPage(1); // Reset to first page on filter change
   };
 
   const resetFilters = () => {
@@ -210,6 +217,7 @@ export function useSearchLaptops(initialTerm: string = "", userId?: number) {
       tags: [],
     });
     setSearchTerm("");
+    setPage(1);
   };
 
   // This is critical - we need to refetch when filters change
@@ -230,7 +238,13 @@ export function useSearchLaptops(initialTerm: string = "", userId?: number) {
     setSearchTerm,
     selectedFilters,
     filterOptions,
-    laptops,
+    laptops: paginated?.data ?? [],
+    total: paginated?.total ?? 0,
+    page: paginated?.page ?? page,
+    setPage,
+    limit,
+    setLimit,
+    pageCount: paginated?.pageCount ?? 1,
     isLoadingFilters,
     filterError,
     isLoading,
