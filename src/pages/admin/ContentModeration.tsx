@@ -14,11 +14,21 @@ import { useChangeStatus } from "@/hooks/useModeration";
 import { useDeleteLaptop } from "@/hooks/useModeration";
 import { Button } from "@/components/ui/button";
 import ContentLaptopCard from "@/components/ContentLaptopCard";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationPrevious,
+  PaginationNext,
+} from "@/components/ui/pagination";
 
 export default function ContentModeration() {
   useRequireAuth();
 
-  const { laptops, isLoading, error } = useSearchLaptops();
+  const { laptops, isLoading, error, page, setPage, pageCount } =
+    useSearchLaptops();
+
   const { mutate: changeStatus } = useChangeStatus();
   const { mutate: deleteLaptop } = useDeleteLaptop();
 
@@ -106,8 +116,7 @@ export default function ContentModeration() {
           <div className="mb-6 flex flex-wrap gap-2">
             {["all", "pending", "approved", "rejected", "archived"].map(
               (status) => {
-                let activeClass = "";
-                let inactiveClass = "";
+                let activeClass = ""; let inactiveClass ="";
 
                 switch (status) {
                   case "approved":
@@ -219,6 +228,60 @@ export default function ContentModeration() {
               )}
             </div>
           </div>
+
+          {pageCount > 1 && (
+            <div className="mt-8 flex items-center justify-center">
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious
+                      href="#"
+                      aria-disabled={page === 1}
+                      tabIndex={page === 1 ? -1 : 0}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (page > 1) setPage(page - 1);
+                      }}
+                      className={
+                        page === 1 ? "pointer-events-none opacity-50" : ""
+                      }
+                    />
+                  </PaginationItem>
+                  {Array.from({ length: pageCount }, (_, i) => (
+                    <PaginationItem key={i + 1}>
+                      <PaginationLink
+                        href="#"
+                        isActive={page === i + 1}
+                        aria-current={page === i + 1 ? "page" : undefined}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setPage(i + 1);
+                        }}
+                      >
+                        {i + 1}
+                      </PaginationLink>
+                    </PaginationItem>
+                  ))}
+                  <PaginationItem>
+                    <PaginationNext
+                      href="#"
+                      aria-disabled={page === pageCount}
+                      tabIndex={page === pageCount ? -1 : 0}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (page < pageCount) setPage(page + 1);
+                      }}
+                      className={
+                        page === pageCount
+                          ? "pointer-events-none opacity-50"
+                          : ""
+                      }
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </div>
+          )}
         </div>
       </div>
 

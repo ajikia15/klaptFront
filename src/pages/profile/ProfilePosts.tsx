@@ -7,6 +7,14 @@ import { useState } from "react";
 import { useDeleteLaptop } from "@/hooks/useModeration";
 import { MyPostsLaptopCard } from "@/components/MyPostsLaptopCard";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationPrevious,
+  PaginationNext,
+} from "@/components/ui/pagination";
 
 export default function ProfilePosts() {
   const { user } = useAuth();
@@ -14,6 +22,9 @@ export default function ProfilePosts() {
     laptops: userLaptops,
     isLoading,
     error,
+    page,
+    setPage,
+    pageCount,
   } = useSearchLaptops("", user?.id);
 
   const { mutate: deleteLaptop } = useDeleteLaptop();
@@ -105,6 +116,57 @@ export default function ProfilePosts() {
           )}
         </div>
       </div>
+
+      {/* Pagination */}
+      {pageCount > 1 && (
+        <div className="mt-6 flex justify-center">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  href="#"
+                  aria-disabled={page === 1}
+                  tabIndex={page === 1 ? -1 : 0}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (page > 1) setPage(page - 1);
+                  }}
+                  className={page === 1 ? "pointer-events-none opacity-50" : ""}
+                />
+              </PaginationItem>
+              {Array.from({ length: pageCount }, (_, i) => (
+                <PaginationItem key={i + 1}>
+                  <PaginationLink
+                    href="#"
+                    isActive={page === i + 1}
+                    aria-current={page === i + 1 ? "page" : undefined}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setPage(i + 1);
+                    }}
+                  >
+                    {i + 1}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+              <PaginationItem>
+                <PaginationNext
+                  href="#"
+                  aria-disabled={page === pageCount}
+                  tabIndex={page === pageCount ? -1 : 0}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (page < pageCount) setPage(page + 1);
+                  }}
+                  className={
+                    page === pageCount ? "pointer-events-none opacity-50" : ""
+                  }
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
+      )}
     </div>
   );
 }
