@@ -436,3 +436,17 @@
   animation: paths 20s step-end infinite, opacity 20s step-end infinite,
     font 28s step-end infinite, movement 32s step-end infinite;
 }
+
+/* Vertical marquee animation for feature cards */
+.marquee-vertical {
+  animation: marquee-vertical 12s linear infinite;
+}
+
+@keyframes marquee-vertical {
+  0% {
+    transform: translateY(0%);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
+}

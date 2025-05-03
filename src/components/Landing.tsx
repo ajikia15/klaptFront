@@ -61,29 +61,33 @@ export default function Landing() {
             </Button>
           </Link>
         </div>
-        {/* Right: Feature Cards (no animation, just 3D rotation) */}
-        <div className="flex flex-1 items-center justify-center gap-6 p-8">
-          <div className="flex flex-col gap-8" style={{ perspective: "900px" }}>
-            {features.map((feature, i) => (
-              <div
-                key={feature.label}
-                className={`bg-neutral-900/80 relative flex flex-col items-center rounded-2xl border border-neutral-700 px-8 py-6 shadow-xl transition-transform duration-300 hover:scale-105`}
-                style={{
-                  minWidth: 180,
-                  transform: "rotateY(-18deg) rotateX(4deg)", // All cards same rotation
-                }}
-              >
-                <div className="mb-3 flex items-center justify-center">
-                  {feature.icon}
-                </div>
-                <div className="mb-1 text-center text-lg font-bold text-white">
-                  {feature.label}
-                </div>
+        {/* Right: Feature Cards with vertical marquee */}
+        <div className="flex flex-1 items-center justify-center p-8">
+          <div
+            className="relative h-[420px] w-[220px] overflow-hidden"
+            style={{ perspective: "900px" }}
+          >
+            <div className="marquee-vertical absolute left-0 top-0 flex w-full flex-col gap-8">
+              {features.concat(features).map((feature, i) => (
                 <div
-                  className={`absolute -z-10 left-1/2 top-1/2 h-24 w-24 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br ${feature.color} opacity-30 blur-2xl`}
-                />
-              </div>
-            ))}
+                  key={feature.label + "-" + i}
+                  className="bg-neutral-900/80 rotate-y-[-18deg] rotate-x-[4deg] relative flex flex-col items-center rounded-2xl border border-neutral-700 px-8 py-6 shadow-xl"
+                  style={{
+                    minWidth: 180,
+                  }}
+                >
+                  <div className="mb-3 flex items-center justify-center">
+                    {feature.icon}
+                  </div>
+                  <div className="mb-1 text-center text-lg font-bold text-white">
+                    {feature.label}
+                  </div>
+                  <div
+                    className={`absolute -z-10 left-1/2 top-1/2 h-24 w-24 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br ${feature.color} opacity-30 blur-2xl`}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
