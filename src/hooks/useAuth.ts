@@ -113,7 +113,7 @@ export const useUpdateUser = () => {
 
       return { previousUser };
     },
-    onError: (err, newData, context: any) => {
+    onError: (context: any) => {
       queryClient.setQueryData([USER_QUERY_KEY], context.previousUser);
     },
   });

@@ -262,7 +262,6 @@ export function useNewSearch(userId?: number) {
     data: filterOptions,
     isLoading: isLoadingFilters,
     error: filterError,
-    refetch: refetchFilters,
     isFetched: isFilterFetched,
     isPending: isFilterPending,
     isRefetching: isFilterRefetching,

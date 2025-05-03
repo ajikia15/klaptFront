@@ -23,7 +23,7 @@ import {
   DrawerDescription,
 } from "@/components/ui/drawer";
 import { Button } from "../ui/button";
-import { Book, Plus, User } from "lucide-react";
+import { Plus, User } from "lucide-react";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -47,7 +47,7 @@ export default function Navbar() {
         <Link to="/" className="flex-shrink-0 text-2xl font-bold text-white">
           Kaido
           {/* for performance testing */}
-          <Book className="inline-block h-8 w-8 animate-spin text-primary-600" />
+          {/* <Book className="inline-block h-8 w-8 animate-spin text-primary-600" /> */}
         </Link>
 
         {/* Mobile Search - Full width when visible */}

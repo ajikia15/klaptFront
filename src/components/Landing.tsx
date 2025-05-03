@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
-import FlashSection from "./FlashSection";
 import { Button } from "./ui/button";
 
 export default function Landing() {

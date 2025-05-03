@@ -5,7 +5,6 @@ import {
   Facebook,
   Instagram,
   Youtube,
-  Linkedin,
   Mail,
   Phone,
   MapPin,

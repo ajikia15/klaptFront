@@ -6,7 +6,6 @@ import {
   UserX,
   Eye,
   Trash2,
-  Shield,
   Users,
   ShieldAlert,
   UserCog,
@@ -290,10 +289,10 @@ export default function UserManagement() {
     setBanDialogOpen(true);
   };
 
-  const openUnbanDialog = (id: number) => {
-    setSelectedUserId(id);
-    setUnbanDialogOpen(true);
-  };
+  // const openUnbanDialog = (id: number) => {
+  //   setSelectedUserId(id);
+  //   setUnbanDialogOpen(true);
+  // };
 
   const openDeleteDialog = (id: number) => {
     setSelectedUserId(id);

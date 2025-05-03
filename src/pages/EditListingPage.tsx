@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useForm } from "@tanstack/react-form";
 import { SpinnerSVG } from "@/assets/SpinnerSVG";
 import { Button } from "@/components/ui/button";
-import { useParams, useNavigate } from "@tanstack/react-router";
+import { useParams } from "@tanstack/react-router";
 import { useImageManagement } from "@/hooks/useImageManagement";
 import { useUpdateListing } from "@/hooks/useUpdateListing";
 import { LaptopDetailSkeleton } from "./LaptopDetailSkeleton";

@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { LaptopCard } from "../../components/LaptopCard";
-import { LaptopT } from "../../interfaces/laptopT";
 import Landing from "../../components/Landing";
 import { useAuth } from "@/context/AuthContext";
 import { Link } from "@tanstack/react-router";

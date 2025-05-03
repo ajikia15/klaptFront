@@ -229,11 +229,8 @@ export default function SearchPage() {
     isFilterRefetching,
     isFetched,
     setPriceRange,
-    total,
     page,
     setPage,
-    limit,
-    setLimit,
     pageCount,
   } = useNewSearch();
 

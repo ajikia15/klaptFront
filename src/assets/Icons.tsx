@@ -1,5 +1,3 @@
-import { SVGProps } from "react";
-
 // Icons
 export const CpuIcon = ({ size = 20, className = "" }) => (
   <svg
@@ -131,7 +129,7 @@ export function GpuIcon({ size = 20, className = "" }) {
   );
 }
 
-export const HeartIcon = ({ size = 24, className = "" }) => (
+export const HeartIcon = ({ size = 24 }) => (
   <svg viewBox="0 0 256 256" width={size} height={size}>
     <rect fill="none" height="128" width="128"></rect>
     <path
