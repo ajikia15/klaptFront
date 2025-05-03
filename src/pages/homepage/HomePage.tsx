@@ -15,15 +15,12 @@ import {
 } from "lucide-react";
 import { SkeletonCard } from "@/components/SkeletonCard";
 
-// Import section components
 import CategorySection from "@/pages/homepage/CategorySection";
 import AnimatedStatsSection from "@/pages/homepage/AnimatedStatsSection";
 import SpecialDealsSection from "@/pages/homepage/SpecialDealsSection";
 import BrandShowcaseSection from "@/pages/homepage/BrandShowcaseSection";
 import TestimonialsSection from "@/pages/homepage/TestimonialsSection";
 import { PaginatedLaptops } from "@/interfaces/PaginatedLaptops";
-
-// Brand logos - replace with actual brand logo paths
 
 const categories = [
   {
