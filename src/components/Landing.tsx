@@ -1,9 +1,30 @@
 import { Button } from "./ui/button";
-import { Sparkles, ShieldCheck, Truck, Cpu, Monitor, Zap } from "lucide-react";
+import {
+  Sparkles,
+  ShieldCheck,
+  Truck,
+  Cpu,
+  Monitor,
+  Zap,
+  Battery,
+  Wifi,
+  HardDrive,
+  Headphones,
+  MousePointer,
+} from "lucide-react";
 import { Link } from "@tanstack/react-router";
+import { useMemo } from "react";
 import "./Landing.css";
 
-const features = [
+// Define proper TypeScript interface for features
+interface FeatureCard {
+  icon: React.ReactNode;
+  label: string;
+  color: string;
+}
+
+// Expanded list of features - add more options for variety
+const features: FeatureCard[] = [
   {
     icon: <Zap size={32} className="text-purple-400" />,
     label: "RTX 4090",
@@ -19,17 +40,59 @@ const features = [
     label: "2-Year Warranty",
     color: "from-green-500 to-emerald-400",
   },
+  {
+    icon: <Cpu size={32} className="text-orange-400" />,
+    label: "Intel i9 14th Gen",
+    color: "from-orange-500 to-yellow-500",
+  },
+  {
+    icon: <Battery size={32} className="text-yellow-400" />,
+    label: "6h Battery Life",
+    color: "from-yellow-400 to-amber-500",
+  },
+  {
+    icon: <Wifi size={32} className="text-sky-400" />,
+    label: "WiFi 6E",
+    color: "from-sky-400 to-blue-500",
+  },
+
+  {
+    icon: <HardDrive size={32} className="text-emerald-400" />,
+    label: "2TB SSD",
+    color: "from-emerald-500 to-green-400",
+  },
+  {
+    icon: <Headphones size={32} className="text-indigo-400" />,
+    label: "Hi-Fi Audio",
+    color: "from-indigo-500 to-purple-400",
+  },
 ];
+
+// Utility function to shuffle array
+function shuffleArray<T>(array: T[]): T[] {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
+// Define proper types for MarqueeColumn props
+interface MarqueeColumnProps {
+  features: FeatureCard[];
+  duration?: number;
+  reverse?: boolean;
+}
 
 function MarqueeColumn({
   features,
   duration = 10,
   reverse = false,
-}: {
-  features: typeof features;
-  duration?: number;
-  reverse?: boolean;
-}) {
+}: MarqueeColumnProps) {
+  // Use useMemo to create a shuffled array that doesn't change on re-renders
+  const shuffledFeatures = useMemo(() => shuffleArray(features), [features]);
+
   return (
     <div
       className={`marquee marquee--vertical ${
@@ -45,7 +108,7 @@ function MarqueeColumn({
       }
     >
       <div className="marquee__group">
-        {features.map((feature, i) => (
+        {shuffledFeatures.map((feature, i) => (
           <div
             key={`card-${feature.label}-${i}`}
             className="feature-card bg-neutral-900/80 relative flex flex-col items-center rounded-2xl border border-neutral-700 px-4 py-4 shadow-xl"
@@ -67,9 +130,9 @@ function MarqueeColumn({
         ))}
       </div>
 
-      {/* Duplicated group for seamless scrolling */}
+      {/* Duplicated group using the same shuffled order */}
       <div aria-hidden="true" className="marquee__group">
-        {features.map((feature, i) => (
+        {shuffledFeatures.map((feature, i) => (
           <div
             key={`clone-${feature.label}-${i}`}
             className="feature-card bg-neutral-900/80 relative flex flex-col items-center rounded-2xl border border-neutral-700 px-4 py-4 shadow-xl"
@@ -136,7 +199,7 @@ export default function Landing() {
         <div className="flex flex-1 items-center justify-center gap-2 p-8">
           <MarqueeColumn features={features} duration={15} />
           <MarqueeColumn features={features} duration={20} reverse={true} />
-          <MarqueeColumn features={features} duration={10} />
+          <MarqueeColumn features={features} duration={12} />
         </div>
       </div>
       <div className="mt-12 flex flex-wrap items-center justify-center gap-8 opacity-90">
