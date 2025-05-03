@@ -87,9 +87,14 @@ interface MarqueeColumnProps {
 
 function MarqueeColumn({
   features,
-  duration = 10,
+  duration = 25, // Increased base duration
   reverse = false,
-}: MarqueeColumnProps) {
+  perspective = "rotateX(-30deg) rotateY(-30deg) rotateZ(0deg)",
+  scale = 1,
+}: MarqueeColumnProps & {
+  perspective?: string;
+  scale?: number;
+}) {
   // Use useMemo to create a shuffled array that doesn't change on re-renders
   const shuffledFeatures = useMemo(() => shuffleArray(features), [features]);
 
@@ -103,7 +108,7 @@ function MarqueeColumn({
           "--duration": `${duration}s`,
           height: "420px",
           width: "120px",
-          perspective: "900px",
+          perspective: "1200px",
         } as React.CSSProperties
       }
     >
@@ -111,16 +116,15 @@ function MarqueeColumn({
         {shuffledFeatures.map((feature, i) => (
           <div
             key={`card-${feature.label}-${i}`}
-            className="feature-card bg-neutral-900/80 relative flex flex-col items-center rounded-2xl border border-neutral-700 px-4 py-4 shadow-xl"
+            className="feature-card bg-neutral-900/80 relative flex h-[120px] min-w-[90px] flex-col items-center justify-center rounded-2xl border border-neutral-700 px-4 py-4 shadow-xl"
             style={{
-              minWidth: 90,
-              transform: "rotateX(-30deg) rotateY(-30deg) rotateZ(0deg)",
+              transform: perspective + (scale !== 1 ? ` scale(${scale})` : ""),
             }}
           >
             <div className="mb-2 flex items-center justify-center">
               {feature.icon}
             </div>
-            <div className="mb-1 text-center text-base font-bold text-white">
+            <div className="flex h-[2.5em] items-center justify-center text-center text-base font-bold text-white">
               {feature.label}
             </div>
             <div
@@ -135,16 +139,15 @@ function MarqueeColumn({
         {shuffledFeatures.map((feature, i) => (
           <div
             key={`clone-${feature.label}-${i}`}
-            className="feature-card bg-neutral-900/80 relative flex flex-col items-center rounded-2xl border border-neutral-700 px-4 py-4 shadow-xl"
+            className="feature-card bg-neutral-900/80 relative flex h-[120px] min-w-[90px] flex-col items-center justify-center rounded-2xl border border-neutral-700 px-4 py-4 shadow-xl"
             style={{
-              minWidth: 90,
-              transform: "rotateX(-30deg) rotateY(-30deg) rotateZ(0deg)",
+              transform: perspective + (scale !== 1 ? ` scale(${scale})` : ""),
             }}
           >
             <div className="mb-2 flex items-center justify-center">
               {feature.icon}
             </div>
-            <div className="mb-1 text-center text-base font-bold text-white">
+            <div className="flex h-[2.5em] items-center justify-center text-center text-base font-bold text-white">
               {feature.label}
             </div>
             <div
@@ -197,9 +200,28 @@ export default function Landing() {
           </Link>
         </div>
         <div className="flex flex-1 items-center justify-center gap-2 p-8">
-          <MarqueeColumn features={features} duration={15} />
-          <MarqueeColumn features={features} duration={20} reverse={true} />
-          <MarqueeColumn features={features} duration={12} />
+          {/* First column appears furthest away (smaller) */}
+          <MarqueeColumn
+            features={features}
+            duration={35}
+            perspective="rotateX(-30deg) rotateY(-30deg) rotateZ(0deg)" // Reverted to original value
+            scale={0.85} // Keep the new scale
+          />
+          {/* Middle column has medium perspective */}
+          <MarqueeColumn
+            features={features}
+            duration={40}
+            reverse={true}
+            perspective="rotateX(-30deg) rotateY(-30deg) rotateZ(0deg)" // This was already correct
+            scale={0.92} // Keep the new scale
+          />
+          {/* Last column appears closest (larger) */}
+          <MarqueeColumn
+            features={features}
+            duration={30}
+            perspective="rotateX(-30deg) rotateY(-30deg) rotateZ(0deg)" // Reverted to original value
+            scale={1.0} // Keep the new scale
+          />
         </div>
       </div>
       <div className="mt-12 flex flex-wrap items-center justify-center gap-8 opacity-90">
