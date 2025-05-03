@@ -62,13 +62,31 @@ export default function Landing() {
           </Link>
         </div>
         {/* Right: Feature Cards with vertical marquee */}
-        <div className="flex flex-1 items-center justify-center p-8">
+        <div className="flex flex-1 items-center justify-center p-0">
           <div
-            className="relative h-[420px] w-[220px] overflow-hidden"
+            className="relative h-[420px] w-[260px] overflow-hidden px-2 py-8"
             style={{ perspective: "900px" }}
           >
             <div className="marquee-vertical absolute left-0 top-0 flex w-full flex-col gap-8">
-              {features.concat(features).map((feature, i) => (
+              {[
+                ...features,
+                {
+                  icon: <Cpu size={32} className="text-orange-400" />,
+                  label: "Intel i9 14th Gen",
+                  color: "from-orange-500 to-yellow-500",
+                },
+                {
+                  icon: <Monitor size={32} className="text-pink-400" />,
+                  label: "OLED Display",
+                  color: "from-pink-500 to-fuchsia-400",
+                },
+                {
+                  icon: <Zap size={32} className="text-yellow-400" />,
+                  label: "165Hz Panel",
+                  color: "from-yellow-400 to-orange-400",
+                },
+                ...features,
+              ].map((feature, i) => (
                 <div
                   key={feature.label + "-" + i}
                   className="bg-neutral-900/80 rotate-y-[-18deg] rotate-x-[4deg] relative flex flex-col items-center rounded-2xl border border-neutral-700 px-8 py-6 shadow-xl"
