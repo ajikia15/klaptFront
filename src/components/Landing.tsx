@@ -2,7 +2,7 @@ import { Button } from "./ui/button";
 import { Sparkles, ShieldCheck, Truck, Cpu, Monitor, Zap } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
-
+import "./Landing.css";
 const features = [
   {
     icon: <Zap size={32} className="text-purple-400" />, // RTX 4090
@@ -45,20 +45,17 @@ export default function Landing() {
   }, [cardRefs]);
 
   return (
-    <section className="flex min-h-[420px] w-full flex-col items-center justify-center px-4 py-16">
-      <div className="mx-auto flex w-full flex-col-reverse items-center gap-8 md:flex-row md:items-end md:gap-0">
+    <section className="relative flex min-h-[420px] w-full flex-col items-center justify-center overflow-hidden px-4 py-16">
+      <div className="relative z-20 mx-auto flex w-full max-w-5xl flex-col-reverse items-center gap-8 md:flex-row md:items-end md:gap-0">
         {/* Left: Headline & CTA */}
         <div className="flex flex-1 flex-col items-center p-8 md:items-start">
-          <h1 className="mb-4 text-center text-5xl font-black leading-[1.05] tracking-tight md:text-left md:text-6xl lg:text-7xl">
-            <span className="block bg-gradient-to-r from-purple-400 via-blue-400 to-fuchsia-400 bg-clip-text text-transparent">
-              UNLEASH
+          <h1 className="relative mb-4 text-center text-5xl font-black leading-[1.05] tracking-tight md:text-left md:text-6xl lg:text-7xl">
+            <span className="glitch layers" data-text="UNLOCK">
+              <span>UNLOCK</span>
             </span>
-            <span className="block font-extralight text-neutral-400">
-              THE FUTURE OF
-            </span>
-            <span className="relative block">
-              <span className="pr-4 text-white">LAPTOPS</span>
-              <span className="absolute bottom-0 left-0 h-2 w-2/3 rounded-full bg-gradient-to-r from-purple-500 via-blue-500 to-fuchsia-500 blur-md" />
+            <span className="block"> UNPARALLELED </span>
+            <span className="glitch layers" data-text="PERFORMANCE">
+              <span>PERFORMANCE</span>
             </span>
           </h1>
           <p className="mb-8 mt-6 max-w-lg text-center text-lg text-neutral-200 md:text-left">
@@ -66,11 +63,25 @@ export default function Landing() {
             speed—beyond ordinary.
           </p>
           <Link to="/search">
-            <Button className="group rounded-xl bg-gradient-to-r from-purple-500 via-blue-500 to-fuchsia-500 px-8 py-4 text-lg font-bold text-white shadow-xl transition-all duration-300 hover:scale-105 hover:from-fuchsia-500 hover:to-purple-500">
+            <Button
+              className="relative mt-6 flex items-center justify-center gap-3 rounded-xl border border-fuchsia-500/40 bg-neutral-900 px-10 py-4 text-lg font-extrabold uppercase tracking-wider text-fuchsia-200 shadow-[0_2px_24px_0_rgba(236,72,153,0.10)] transition-all duration-300 hover:border-fuchsia-400 hover:bg-fuchsia-900/20 hover:text-fuchsia-100 focus:outline-none focus:ring-2 focus:ring-fuchsia-500/60"
+              style={{ boxShadow: "0 0 16px 0 #e0287d55, 0 0 2px 0 #1bc7fb55" }}
+            >
               Shop Now
-              <span className="ml-3 inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-                →
-              </span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+                className="ml-2 h-6 w-6 transition-transform duration-200 group-hover:translate-x-1"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M17.25 12H6.75m0 0l4.5-4.5m-4.5 4.5l4.5 4.5"
+                />
+              </svg>
             </Button>
           </Link>
         </div>
