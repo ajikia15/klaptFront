@@ -61,13 +61,11 @@ export default function Landing() {
             </Button>
           </Link>
         </div>
-        {/* Right: Feature Cards with vertical marquee */}
-        <div className="flex flex-1 items-center justify-center p-0">
-          <div
-            className="relative h-[420px] w-[260px] overflow-hidden px-2 py-8"
-            style={{ perspective: "900px" }}
-          >
-            <div className="marquee-vertical absolute left-0 top-0 flex w-full flex-col gap-8">
+        {/* Right: Feature Cards with three vertical marquees */}
+        <div className="flex flex-1 items-center justify-center p-8 gap-2">
+          {/* Left column - normal speed, no rotation */}
+          <div className="relative h-[420px] w-[120px] overflow-hidden flex flex-col items-center" style={{ perspective: "900px" }}>
+            <div className="marquee-vertical absolute top-0 left-0 w-full flex flex-col gap-8 px-2">
               {[
                 ...features,
                 {
@@ -75,11 +73,63 @@ export default function Landing() {
                   label: "Intel i9 14th Gen",
                   color: "from-orange-500 to-yellow-500",
                 },
+                ...features,
+              ].map((feature, i) => (
+                <div
+                  key={feature.label + '-left-' + i}
+                  className="bg-neutral-900/80 relative flex flex-col items-center rounded-2xl border border-neutral-700 px-4 py-4 shadow-xl"
+                  style={{
+                    minWidth: 90,
+                    // No rotation for left column
+                  }}
+                >
+                  <div className="mb-2 flex items-center justify-center">
+                    {feature.icon}
+                  </div>
+                  <div className="mb-1 text-center text-base font-bold text-white">
+                    {feature.label}
+                  </div>
+                  <div className={`absolute -z-10 left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br ${feature.color} opacity-30 blur-2xl`} />
+                </div>
+              ))}
+            </div>
+          </div>
+          {/* Middle column - slowest, rotated */}
+          <div className="relative h-[420px] w-[120px] overflow-hidden flex flex-col items-center" style={{ perspective: "900px" }}>
+            <div className="marquee-vertical-slow absolute top-0 left-0 w-full flex flex-col gap-8 px-2">
+              {[
+                ...features,
                 {
                   icon: <Monitor size={32} className="text-pink-400" />,
                   label: "OLED Display",
                   color: "from-pink-500 to-fuchsia-400",
                 },
+                ...features,
+              ].map((feature, i) => (
+                <div
+                  key={feature.label + '-mid-' + i}
+                  className="bg-neutral-900/80 relative flex flex-col items-center rounded-2xl border border-neutral-700 px-4 py-4 shadow-xl"
+                  style={{
+                    minWidth: 90,
+                    transform: "rotateY(0deg) rotateX(4deg)", // Only middle column rotated
+                  }}
+                >
+                  <div className="mb-2 flex items-center justify-center">
+                    {feature.icon}
+                  </div>
+                  <div className="mb-1 text-center text-base font-bold text-white">
+                    {feature.label}
+                  </div>
+                  <div className={`absolute -z-10 left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br ${feature.color} opacity-30 blur-2xl`} />
+                </div>
+              ))}
+            </div>
+          </div>
+          {/* Right column - fastest, no rotation */}
+          <div className="relative h-[420px] w-[120px] overflow-hidden flex flex-col items-center" style={{ perspective: "900px" }}>
+            <div className="marquee-vertical-fast absolute top-0 left-0 w-full flex flex-col gap-8 px-2">
+              {[
+                ...features,
                 {
                   icon: <Zap size={32} className="text-yellow-400" />,
                   label: "165Hz Panel",
@@ -88,21 +138,20 @@ export default function Landing() {
                 ...features,
               ].map((feature, i) => (
                 <div
-                  key={feature.label + "-" + i}
-                  className="bg-neutral-900/80 rotate-y-[-18deg] rotate-x-[4deg] relative flex flex-col items-center rounded-2xl border border-neutral-700 px-8 py-6 shadow-xl"
+                  key={feature.label + '-right-' + i}
+                  className="bg-neutral-900/80 relative flex flex-col items-center rounded-2xl border border-neutral-700 px-4 py-4 shadow-xl"
                   style={{
-                    minWidth: 180,
+                    minWidth: 90,
+                    // No rotation for right column
                   }}
                 >
-                  <div className="mb-3 flex items-center justify-center">
+                  <div className="mb-2 flex items-center justify-center">
                     {feature.icon}
                   </div>
-                  <div className="mb-1 text-center text-lg font-bold text-white">
+                  <div className="mb-1 text-center text-base font-bold text-white">
                     {feature.label}
                   </div>
-                  <div
-                    className={`absolute -z-10 left-1/2 top-1/2 h-24 w-24 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br ${feature.color} opacity-30 blur-2xl`}
-                  />
+                  <div className={`absolute -z-10 left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br ${feature.color} opacity-30 blur-2xl`} />
                 </div>
               ))}
             </div>
