@@ -50,10 +50,11 @@ export default function Landing() {
         {/* Left: Headline & CTA */}
         <div className="flex flex-1 flex-col items-center p-8 md:items-start">
           <h1 className="relative mb-4 text-center text-5xl font-black leading-[1.05] tracking-tight md:text-left md:text-6xl lg:text-7xl">
-            <span className="glitch layers" data-text="UNLOCK">
-              <span>UNLOCK</span>
+            <span className="block font-light">UNLOCK</span>
+            <span className="glitch layers" data-text="UNPARALLELED">
+              {" "}
+              UNPARALLELED{" "}
             </span>
-            <span className="block"> UNPARALLELED </span>
             <span className="glitch layers" data-text="PERFORMANCE">
               <span>PERFORMANCE</span>
             </span>
@@ -63,18 +64,15 @@ export default function Landing() {
             speed—beyond ordinary.
           </p>
           <Link to="/search">
-            <Button
-              className="relative mt-6 flex items-center justify-center gap-3 rounded-xl border border-fuchsia-500/40 bg-neutral-900 px-10 py-4 text-lg font-extrabold uppercase tracking-wider text-fuchsia-200 shadow-[0_2px_24px_0_rgba(236,72,153,0.10)] transition-all duration-300 hover:border-fuchsia-400 hover:bg-fuchsia-900/20 hover:text-fuchsia-100 focus:outline-none focus:ring-2 focus:ring-fuchsia-500/60"
-              style={{ boxShadow: "0 0 16px 0 #e0287d55, 0 0 2px 0 #1bc7fb55" }}
-            >
-              Shop Now
+            <Button className="relative z-20 flex cursor-pointer select-none items-center justify-center gap-3 overflow-hidden rounded-2xl bg-neutral-900 px-10 py-5 text-lg font-bold text-white shadow-lg transition-all duration-300 hover:bg-neutral-800 hover:shadow-[0_0_24px_0_rgba(236,72,153,0.18)] focus:outline-none focus:ring-2 focus:ring-fuchsia-500/60">
+              <span className="relative z-10">SHOP NOW</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth={2}
                 stroke="currentColor"
-                className="ml-2 h-6 w-6 transition-transform duration-200 group-hover:translate-x-1"
+                className="relative z-10 ml-4 h-7 w-7"
               >
                 <path
                   strokeLinecap="round"
