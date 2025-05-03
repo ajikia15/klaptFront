@@ -22,31 +22,9 @@ const features = [
 ];
 
 export default function Landing() {
-  // Floating animation for feature cards
-  const cardRefs = [useRef(null), useRef(null), useRef(null)];
-  useEffect(() => {
-    cardRefs.forEach((ref, i) => {
-      if (!ref.current) return;
-      ref.current.animate(
-        [
-          { transform: "translateY(0px) rotate(-2deg)" },
-          { transform: `translateY(-12px) rotate(${i === 1 ? 2 : -2}deg)` },
-          { transform: "translateY(0px) rotate(-2deg)" },
-        ],
-        {
-          duration: 3200 + i * 300,
-          iterations: Infinity,
-          direction: "alternate",
-          easing: "ease-in-out",
-          delay: i * 200,
-        }
-      );
-    });
-  }, [cardRefs]);
-
   return (
     <section className="relative flex min-h-[420px] w-full flex-col items-center justify-center overflow-hidden px-4 py-16">
-      <div className="relative z-20 mx-auto flex w-full max-w-5xl flex-col-reverse items-center gap-8 md:flex-row md:items-end md:gap-0">
+      <div className="relative z-20 mx-auto flex w-full flex-col-reverse items-center gap-8 md:flex-row md:items-end md:gap-0">
         {/* Left: Headline & CTA */}
         <div className="flex flex-1 flex-col items-center p-8 md:items-start">
           <h1 className="relative mb-4 text-center text-5xl font-black leading-[1.05] tracking-tight md:text-left md:text-6xl lg:text-7xl">
@@ -83,15 +61,17 @@ export default function Landing() {
             </Button>
           </Link>
         </div>
-        {/* Right: Floating Feature Cards */}
+        {/* Right: Feature Cards (no animation, just 3D rotation) */}
         <div className="flex flex-1 items-center justify-center gap-6 p-8">
-          <div className="flex flex-col gap-8">
+          <div className="flex flex-col gap-8" style={{ perspective: "900px" }}>
             {features.map((feature, i) => (
               <div
                 key={feature.label}
-                ref={cardRefs[i]}
                 className={`bg-neutral-900/80 relative flex flex-col items-center rounded-2xl border border-neutral-700 px-8 py-6 shadow-xl transition-transform duration-300 hover:scale-105`}
-                style={{ minWidth: 180 }}
+                style={{
+                  minWidth: 180,
+                  transform: "rotateY(-18deg) rotateX(4deg)", // All cards same rotation
+                }}
               >
                 <div className="mb-3 flex items-center justify-center">
                   {feature.icon}
