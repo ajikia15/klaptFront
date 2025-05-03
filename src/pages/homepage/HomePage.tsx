@@ -14,7 +14,6 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { SkeletonCard } from "@/components/SkeletonCard";
-
 import CategorySection from "@/pages/homepage/CategorySection";
 import AnimatedStatsSection from "@/pages/homepage/AnimatedStatsSection";
 import SpecialDealsSection from "@/pages/homepage/SpecialDealsSection";
@@ -202,9 +201,7 @@ export default function HomePage() {
       </section>
 
       <SpecialDealsSection />
-
       <BrandShowcaseSection />
-
       <TestimonialsSection />
     </div>
   );

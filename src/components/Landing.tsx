@@ -1,31 +1,103 @@
 import { Button } from "./ui/button";
 import { Sparkles, ShieldCheck, Truck, Cpu, Monitor, Zap } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { useEffect, useRef } from "react";
 import "./Landing.css";
+
 const features = [
   {
-    icon: <Zap size={32} className="text-purple-400" />, // RTX 4090
+    icon: <Zap size={32} className="text-purple-400" />,
     label: "RTX 4090",
     color: "from-purple-500 to-blue-500",
   },
   {
-    icon: <Monitor size={32} className="text-blue-400" />, // 240Hz
+    icon: <Monitor size={32} className="text-blue-400" />,
     label: "240Hz Display",
     color: "from-blue-500 to-cyan-400",
   },
   {
-    icon: <ShieldCheck size={32} className="text-green-400" />, // Warranty
+    icon: <ShieldCheck size={32} className="text-green-400" />,
     label: "2-Year Warranty",
     color: "from-green-500 to-emerald-400",
   },
 ];
 
+function MarqueeColumn({
+  features,
+  duration = 10,
+  reverse = false,
+}: {
+  features: typeof features;
+  duration?: number;
+  reverse?: boolean;
+}) {
+  return (
+    <div
+      className={`marquee marquee--vertical ${
+        reverse ? "marquee--reverse" : ""
+      }`}
+      style={
+        {
+          "--duration": `${duration}s`,
+          height: "420px",
+          width: "120px",
+          perspective: "900px",
+        } as React.CSSProperties
+      }
+    >
+      <div className="marquee__group">
+        {features.map((feature, i) => (
+          <div
+            key={`card-${feature.label}-${i}`}
+            className="feature-card bg-neutral-900/80 relative flex flex-col items-center rounded-2xl border border-neutral-700 px-4 py-4 shadow-xl"
+            style={{
+              minWidth: 90,
+              transform: "rotateX(-30deg) rotateY(-30deg) rotateZ(0deg)",
+            }}
+          >
+            <div className="mb-2 flex items-center justify-center">
+              {feature.icon}
+            </div>
+            <div className="mb-1 text-center text-base font-bold text-white">
+              {feature.label}
+            </div>
+            <div
+              className={`absolute -z-10 left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br ${feature.color} opacity-30 blur-2xl`}
+            />
+          </div>
+        ))}
+      </div>
+
+      {/* Duplicated group for seamless scrolling */}
+      <div aria-hidden="true" className="marquee__group">
+        {features.map((feature, i) => (
+          <div
+            key={`clone-${feature.label}-${i}`}
+            className="feature-card bg-neutral-900/80 relative flex flex-col items-center rounded-2xl border border-neutral-700 px-4 py-4 shadow-xl"
+            style={{
+              minWidth: 90,
+              transform: "rotateX(-30deg) rotateY(-30deg) rotateZ(0deg)",
+            }}
+          >
+            <div className="mb-2 flex items-center justify-center">
+              {feature.icon}
+            </div>
+            <div className="mb-1 text-center text-base font-bold text-white">
+              {feature.label}
+            </div>
+            <div
+              className={`absolute -z-10 left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br ${feature.color} opacity-30 blur-2xl`}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function Landing() {
   return (
     <section className="relative flex min-h-[420px] w-full flex-col items-center justify-center overflow-hidden px-4 py-16">
       <div className="relative z-20 mx-auto flex w-full flex-col-reverse items-center gap-8 md:flex-row md:items-end md:gap-0">
-        {/* Left: Headline & CTA */}
         <div className="flex flex-1 flex-col items-center p-8 md:items-start">
           <h1 className="relative mb-4 text-center text-5xl font-black leading-[1.05] tracking-tight md:text-left md:text-6xl lg:text-7xl">
             <span className="block font-light">UNLOCK</span>
@@ -61,104 +133,12 @@ export default function Landing() {
             </Button>
           </Link>
         </div>
-        {/* Right: Feature Cards with three vertical marquees */}
-        <div className="flex flex-1 items-center justify-center p-8 gap-2">
-          {/* Left column - normal speed, no rotation */}
-          <div className="relative h-[420px] w-[120px] overflow-hidden flex flex-col items-center" style={{ perspective: "900px" }}>
-            <div className="marquee-vertical absolute top-0 left-0 w-full flex flex-col gap-8 px-2">
-              {[
-                ...features,
-                {
-                  icon: <Cpu size={32} className="text-orange-400" />,
-                  label: "Intel i9 14th Gen",
-                  color: "from-orange-500 to-yellow-500",
-                },
-                ...features,
-              ].map((feature, i) => (
-                <div
-                  key={feature.label + '-left-' + i}
-                  className="bg-neutral-900/80 relative flex flex-col items-center rounded-2xl border border-neutral-700 px-4 py-4 shadow-xl"
-                  style={{
-                    minWidth: 90,
-                    // No rotation for left column
-                  }}
-                >
-                  <div className="mb-2 flex items-center justify-center">
-                    {feature.icon}
-                  </div>
-                  <div className="mb-1 text-center text-base font-bold text-white">
-                    {feature.label}
-                  </div>
-                  <div className={`absolute -z-10 left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br ${feature.color} opacity-30 blur-2xl`} />
-                </div>
-              ))}
-            </div>
-          </div>
-          {/* Middle column - slowest, rotated */}
-          <div className="relative h-[420px] w-[120px] overflow-hidden flex flex-col items-center" style={{ perspective: "900px" }}>
-            <div className="marquee-vertical-slow absolute top-0 left-0 w-full flex flex-col gap-8 px-2">
-              {[
-                ...features,
-                {
-                  icon: <Monitor size={32} className="text-pink-400" />,
-                  label: "OLED Display",
-                  color: "from-pink-500 to-fuchsia-400",
-                },
-                ...features,
-              ].map((feature, i) => (
-                <div
-                  key={feature.label + '-mid-' + i}
-                  className="bg-neutral-900/80 relative flex flex-col items-center rounded-2xl border border-neutral-700 px-4 py-4 shadow-xl"
-                  style={{
-                    minWidth: 90,
-                    transform: "rotateY(0deg) rotateX(4deg)", // Only middle column rotated
-                  }}
-                >
-                  <div className="mb-2 flex items-center justify-center">
-                    {feature.icon}
-                  </div>
-                  <div className="mb-1 text-center text-base font-bold text-white">
-                    {feature.label}
-                  </div>
-                  <div className={`absolute -z-10 left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br ${feature.color} opacity-30 blur-2xl`} />
-                </div>
-              ))}
-            </div>
-          </div>
-          {/* Right column - fastest, no rotation */}
-          <div className="relative h-[420px] w-[120px] overflow-hidden flex flex-col items-center" style={{ perspective: "900px" }}>
-            <div className="marquee-vertical-fast absolute top-0 left-0 w-full flex flex-col gap-8 px-2">
-              {[
-                ...features,
-                {
-                  icon: <Zap size={32} className="text-yellow-400" />,
-                  label: "165Hz Panel",
-                  color: "from-yellow-400 to-orange-400",
-                },
-                ...features,
-              ].map((feature, i) => (
-                <div
-                  key={feature.label + '-right-' + i}
-                  className="bg-neutral-900/80 relative flex flex-col items-center rounded-2xl border border-neutral-700 px-4 py-4 shadow-xl"
-                  style={{
-                    minWidth: 90,
-                    // No rotation for right column
-                  }}
-                >
-                  <div className="mb-2 flex items-center justify-center">
-                    {feature.icon}
-                  </div>
-                  <div className="mb-1 text-center text-base font-bold text-white">
-                    {feature.label}
-                  </div>
-                  <div className={`absolute -z-10 left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br ${feature.color} opacity-30 blur-2xl`} />
-                </div>
-              ))}
-            </div>
-          </div>
+        <div className="flex flex-1 items-center justify-center gap-2 p-8">
+          <MarqueeColumn features={features} duration={15} />
+          <MarqueeColumn features={features} duration={20} reverse={true} />
+          <MarqueeColumn features={features} duration={10} />
         </div>
       </div>
-      {/* Trust row */}
       <div className="mt-12 flex flex-wrap items-center justify-center gap-8 opacity-90">
         <div className="flex items-center gap-2 text-sm text-neutral-200">
           <ShieldCheck size={18} className="text-blue-400" />
