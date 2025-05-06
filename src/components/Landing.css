@@ -530,10 +530,35 @@
 }
 
 .marquee {
-  display: flex;
-  overflow: hidden;
+  /* display: flex; // Not strictly needed if main content is absolute */
+  /* overflow: hidden; // REMOVE THIS to allow content to flow out for z-index layering */
   user-select: none;
-  gap: var(--gap);
+  /* gap: var(--gap); // Groups handle their own gap or items do */
+  position: relative; /* Crucial for z-index and absolute positioning of children */
+  transform-style: preserve-3d; /* If children are 3D transformed */
+  background-color: transparent; /* Ensure it's a see-through viewport */
+}
+
+.marquee--vertical {
+  /* flex-direction: column; // Not strictly needed if main content is absolute */
+}
+
+/* Styles for the content wrapper that scrolls */
+.marquee__content-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  /* Height is implicit from its content (two groups) */
+  z-index: -1; /* Places it behind the parent's plane */
+  display: flex;
+  flex-direction: column;
+  animation: scroll-y-wrapper var(--duration) linear infinite; /* Or your existing animation name */
+  transform-style: preserve-3d; /* As it contains 3D transformed cards */
+}
+
+.marquee--reverse .marquee__content-wrapper {
+  animation-direction: reverse;
 }
 
 .marquee__group {
@@ -542,44 +567,22 @@
   align-items: center;
   justify-content: space-around;
   gap: var(--gap);
-  min-width: 100%;
-  animation: scroll-x var(--duration) linear infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .marquee__group {
-    animation-play-state: paused;
-  }
-}
-
-.marquee--vertical {
-  flex-direction: column;
+  /* min-width: 100%; // More for horizontal */
+  animation: none; /* Animation is now on the wrapper */
 }
 
 .marquee--vertical .marquee__group {
   flex-direction: column;
-  animation-name: scroll-y;
 }
 
-.marquee--reverse .marquee__group {
-  animation-direction: reverse;
-}
-
-@keyframes scroll-x {
-  from {
-    transform: translateX(var(--scroll-start));
+/* Ensure your keyframes for vertical scroll are defined, e.g., scroll-y-wrapper */
+@keyframes scroll-y-wrapper {
+  /* Rename if your animation is different */
+  0% {
+    transform: translateY(0%);
   }
-  to {
-    transform: translateX(var(--scroll-end));
-  }
-}
-
-@keyframes scroll-y {
-  from {
-    transform: translateY(var(--scroll-start));
-  }
-  to {
-    transform: translateY(var(--scroll-end));
+  100% {
+    transform: translateY(-50%); /* Scrolls one full group height */
   }
 }
 

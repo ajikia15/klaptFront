@@ -87,7 +87,7 @@ interface MarqueeColumnProps {
 
 function MarqueeColumn({
   features,
-  duration = 25, // Increased base duration
+  duration = 25,
   reverse = false,
   perspective = "rotateX(-30deg) rotateY(-30deg) rotateZ(0deg)",
   scale = 1,
@@ -95,12 +95,12 @@ function MarqueeColumn({
   perspective?: string;
   scale?: number;
 }) {
-  // Use useMemo to create a shuffled array that doesn't change on re-renders
   const shuffledFeatures = useMemo(() => shuffleArray(features), [features]);
 
   return (
     <div
-      className={`marquee marquee--vertical ${
+      className={`marquee marquee--vertical relative ${
+        // Added relative
         reverse ? "marquee--reverse" : ""
       }`}
       style={
@@ -109,52 +109,58 @@ function MarqueeColumn({
           height: "420px",
           width: "120px",
           perspective: "1200px",
+          transformStyle: "preserve-3d", // Added transform-style
+          backgroundColor: "transparent", // Ensure transparent background
         } as React.CSSProperties
       }
     >
-      <div className="marquee__group">
-        {shuffledFeatures.map((feature, i) => (
-          <div
-            key={`card-${feature.label}-${i}`}
-            className="feature-card bg-neutral-900/80 relative flex h-[120px] min-w-[90px] flex-col items-center justify-center rounded-2xl border border-neutral-700 px-4 py-4 shadow-xl"
-            style={{
-              transform: perspective + (scale !== 1 ? ` scale(${scale})` : ""),
-            }}
-          >
-            <div className="mb-2 flex items-center justify-center">
-              {feature.icon}
-            </div>
-            <div className="flex h-[2.5em] items-center justify-center text-center text-base font-bold text-white">
-              {feature.label}
-            </div>
+      {/* This wrapper will be positioned absolutely and scroll behind the parent */}
+      <div className="marquee__content-wrapper">
+        <div className="marquee__group">
+          {shuffledFeatures.map((feature, i) => (
             <div
-              className={`absolute -z-10 left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br ${feature.color} opacity-30 blur-2xl`}
-            />
-          </div>
-        ))}
-      </div>
+              key={`card-${feature.label}-${i}`}
+              className="feature-card bg-neutral-900/80 relative flex h-[120px] min-w-[90px] flex-col items-center justify-center rounded-2xl border border-neutral-700 px-4 py-4 shadow-xl"
+              style={{
+                transform:
+                  perspective + (scale !== 1 ? ` scale(${scale})` : ""),
+              }}
+            >
+              <div className="mb-2 flex items-center justify-center">
+                {feature.icon}
+              </div>
+              <div className="flex h-[2.5em] items-center justify-center text-center text-base font-bold text-white">
+                {feature.label}
+              </div>
+              <div
+                className={`absolute -z-10 left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br ${feature.color} opacity-30 blur-2xl`}
+              />
+            </div>
+          ))}
+        </div>
 
-      {/* Duplicated group using the same shuffled order */}
-      <div aria-hidden="true" className="marquee__group">
-        {shuffledFeatures.map((feature, i) => (
-          <div
-            key={`clone-${feature.label}-${i}`}
-            className="feature-card bg-neutral-900/80 relative flex h-[120px] min-w-[90px] flex-col items-center justify-center rounded-2xl border border-neutral-700 px-4 py-4 shadow-xl"
-            style={{
-              transform: perspective + (scale !== 1 ? ` scale(${scale})` : ""),
-            }}
-          >
-            <div className="mb-2 flex items-center justify-center">
-              {feature.icon}
-            </div>
-            <div className="flex h-[2.5em] items-center justify-center text-center text-base font-bold text-white">
-              {feature.label}
-            </div>
+        <div aria-hidden="true" className="marquee__group">
+          {shuffledFeatures.map((feature, i) => (
             <div
-              className={`absolute -z-10 left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br ${feature.color} opacity-30 blur-2xl`}
-            />
-          </div>
-        ))}
+              key={`clone-${feature.label}-${i}`}
+              className="feature-card bg-neutral-900/80 relative flex h-[120px] min-w-[90px] flex-col items-center justify-center rounded-2xl border border-neutral-700 px-4 py-4 shadow-xl"
+              style={{
+                transform:
+                  perspective + (scale !== 1 ? ` scale(${scale})` : ""),
+              }}
+            >
+              <div className="mb-2 flex items-center justify-center">
+                {feature.icon}
+              </div>
+              <div className="flex h-[2.5em] items-center justify-center text-center text-base font-bold text-white">
+                {feature.label}
+              </div>
+              <div
+                className={`absolute -z-10 left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br ${feature.color} opacity-30 blur-2xl`}
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
