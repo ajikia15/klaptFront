@@ -522,7 +522,6 @@
   margin-bottom: 0;
 }
 
-/* New Marquee Implementation - Adapted from the provided code */
 :root {
   --gap: 1rem;
   --duration: 20s;

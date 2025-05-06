@@ -162,9 +162,9 @@ function MarqueeColumn({
 
 export default function Landing() {
   return (
-    <section className="relative flex min-h-[420px] w-full flex-col items-center justify-center overflow-hidden px-4 py-16">
-      <div className="relative z-20 mx-auto flex w-full flex-col-reverse items-center gap-8 md:flex-row md:items-end md:gap-0">
-        <div className="flex flex-1 flex-col items-center p-8 md:items-start">
+    <section className="relative flex min-h-[420px] w-full flex-col items-center justify-center overflow-hidden px-0">
+      <div className="relative z-20 mx-auto flex w-full flex-col-reverse items-center gap-8 md:flex-row md:items-start md:gap-0">
+        <div className="flex flex-1 flex-col items-center py-24 md:items-start">
           <h1 className="relative mb-4 text-center text-5xl font-black leading-[1.05] tracking-tight md:text-left md:text-6xl lg:text-7xl">
             <span className="block font-light">UNLOCK</span>
             <span className="glitch layers" data-text="UNPARALLELED">
@@ -199,7 +199,7 @@ export default function Landing() {
             </Button>
           </Link>
         </div>
-        <div className="flex flex-1 items-center justify-center gap-2 p-8">
+        <div className="flex flex-1 items-center justify-center gap-2">
           {/* First column appears furthest away (smaller) */}
           <MarqueeColumn
             features={features}
