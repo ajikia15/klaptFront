@@ -1,54 +1,69 @@
-# React + TypeScript + Vite
+# Kaido Laptops: Modern React Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Kaido Laptops** is a feature-rich, modern React + TypeScript frontend for the [Kaido Laptop Marketplace API](https://github.com/ajikia15/klaptBack). This project provides a beautiful, responsive UI for browsing, filtering, and managing laptops, with advanced admin and user features. Built with [React](https://react.dev/), [Vite](https://vitejs.dev/), [TanStack Router](https://tanstack.com/router), and [Tailwind CSS](https://tailwindcss.com/).
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## Expanding the ESLint configuration
+### 1. **User Experience**
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Modern UI:** Clean, responsive design with dark mode and smooth animations.
+- **Authentication:** Secure login, signup, and session management.
+- **Profile Management:** Edit profile, view your listings, and manage favorites.
+- **Favorites:** Easily favorite/unfavorite laptops and view your collection.
+- **Toasts & Feedback:** Instant feedback for actions, errors, and successes.
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### 2. **Laptop Marketplace**
+
+- **Advanced Search & Filtering:** Filter laptops by brand, price, CPU, GPU, RAM, storage, year, and more.
+- **Dynamic Filter Options:** Filter panel updates options based on current selections for a seamless experience.
+- **Detailed Listings:** View all key specs—GPU, CPU, VRAM, refresh rate, and more.
+- **Add/Edit Listings:** Authenticated users can create and manage their own laptop listings.
+- **Image Uploads:** Upload multiple images per listing.
+
+### 3. **Admin Dashboard**
+
+- **Content Moderation:** Approve, reject, archive, or delete laptop listings.
+- **User Management:** Promote, ban, or manage users (admin only).
+- **Site Statistics:** View analytics and site usage (coming soon).
+
+### 4. **Developer Experience**
+
+- **TypeScript First:** Strong typing and interfaces throughout.
+- **Hooks & Context:** Modern React patterns for state and data fetching.
+- **Modular Components:** Reusable, well-structured component library.
+- **Vite-Powered:** Fast HMR and build times.
+- **Easy Theming:** Customizable via Tailwind CSS variables.
+
+---
+
+## 🛠️ Getting Started
+
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- The app runs on `http://localhost:5173` by default.
+- Make sure the [backend API](https://github.com/ajikia15/klaptBack) is running for full functionality.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🧩 Tech Stack
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+- **React** (with hooks & context)
+- **TypeScript**
+- **Vite**
+- **Tailwind CSS**
+- **TanStack Router & Query**
+- **Radix UI & Lucide Icons**
+- **FormKit, Sonner, and more**
+
+---
+
+## 📄 License
+
+MIT
+
+---
+
+**Kaido Laptops** – The modern marketplace for laptop enthusiasts.
