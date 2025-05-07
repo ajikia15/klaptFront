@@ -101,7 +101,7 @@ export default function LandingCarousel() {
     <div className="relative overflow-hidden rounded-lg">
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex transition-transform">
-          {slides.map((slide, idx) => (
+          {slides.map((slide) => (
             <div key={slide.id} className="relative min-w-full">
               <div className="relative flex h-[340px] items-center justify-center overflow-hidden md:h-[400px]">
                 {/* Background image */}

@@ -10,7 +10,6 @@ import {
   Wifi,
   HardDrive,
   Headphones,
-  MousePointer,
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useMemo } from "react";
