@@ -1,8 +1,8 @@
-import { useSearch, useNavigate } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { PaginatedLaptops } from "../interfaces/PaginatedLaptops";
-import { searchRoute } from "../router";
-import { useCallback, useMemo, useState } from "react";
+import { useSearch, useNavigate } from '@tanstack/react-router';
+import { useQuery } from '@tanstack/react-query';
+import { PaginatedLaptops } from '../interfaces/PaginatedLaptops';
+import { searchRoute } from '../router';
+import { useCallback, useMemo, useState } from 'react';
 
 interface FilterOption {
   value: string;
@@ -36,28 +36,28 @@ interface FilterOptions {
 }
 
 type FilterCategory =
-  | "brand"
-  | "gpuModel"
-  | "processorModel"
-  | "ramType"
-  | "ram"
-  | "storageType"
-  | "storageCapacity"
-  | "stockStatus"
-  | "screenSize"
-  | "screenResolution"
-  | "processorBrand"
-  | "gpuBrand"
-  | "graphicsType"
-  | "backlightType"
-  | "refreshRate"
-  | "vram"
-  | "year"
-  | "model"
-  | "shortDesc"
-  | "tags"
-  | "minPrice"
-  | "maxPrice";
+  | 'brand'
+  | 'gpuModel'
+  | 'processorModel'
+  | 'ramType'
+  | 'ram'
+  | 'storageType'
+  | 'storageCapacity'
+  | 'stockStatus'
+  | 'screenSize'
+  | 'screenResolution'
+  | 'processorBrand'
+  | 'gpuBrand'
+  | 'graphicsType'
+  | 'backlightType'
+  | 'refreshRate'
+  | 'vram'
+  | 'year'
+  | 'model'
+  | 'shortDesc'
+  | 'tags'
+  | 'minPrice'
+  | 'maxPrice';
 
 export function useNewSearch(userId?: number) {
   const search = useSearch({ from: searchRoute.id });
@@ -67,23 +67,23 @@ export function useNewSearch(userId?: number) {
   const [limit, setLimit] = useState(9); // Set limit to 9
 
   // Extract term directly - much simpler
-  const term = search.term || "";
+  const term = search.term || '';
 
   // Extract filters once and reuse - more efficient
   const filters = useMemo(
     () =>
       Object.fromEntries(
         Object.entries(search).filter(
-          ([key, value]) => key !== "term" && value !== undefined
-        )
+          ([key, value]) => key !== 'term' && value !== undefined,
+        ),
       ),
-    [search]
+    [search],
   );
 
   // Hoist the sorted filter entries to avoid duplicate sorting
   const sortedFilterEntries = useMemo(
     () => Object.entries(filters).sort((a, b) => a[0].localeCompare(b[0])),
-    [filters]
+    [filters],
   );
 
   // Flatten sorted entries to a stable string for query keys
@@ -91,10 +91,10 @@ export function useNewSearch(userId?: number) {
     () =>
       sortedFilterEntries
         .map(([k, v]) =>
-          Array.isArray(v) ? `${k}:${v.join(",")}` : `${k}:${v}`
+          Array.isArray(v) ? `${k}:${v.join(',')}` : `${k}:${v}`,
         )
-        .join("|"),
-    [sortedFilterEntries]
+        .join('|'),
+    [sortedFilterEntries],
   );
 
   // Helper function to get array values from search params - now uses filters
@@ -102,10 +102,10 @@ export function useNewSearch(userId?: number) {
     (key: FilterCategory): string[] => {
       const value = filters[key];
       if (Array.isArray(value)) return value;
-      if (typeof value === "string") return [value];
+      if (typeof value === 'string') return [value];
       return [];
     },
-    [filters]
+    [filters],
   );
 
   // Create memoized selected filters object - DRY approach using FilterCategory type
@@ -167,7 +167,7 @@ export function useNewSearch(userId?: number) {
         replace: false,
       });
     },
-    [getArrayParam, navigate]
+    [getArrayParam, navigate],
   );
 
   // Function to set search term
@@ -181,7 +181,7 @@ export function useNewSearch(userId?: number) {
         replace: true,
       });
     },
-    [navigate]
+    [navigate],
   );
 
   // Reset all filters
@@ -204,7 +204,7 @@ export function useNewSearch(userId?: number) {
         replace: false,
       });
     },
-    [navigate]
+    [navigate],
   );
 
   // Prepare and memoize the query string for API calls
@@ -213,7 +213,7 @@ export function useNewSearch(userId?: number) {
 
     // Add search term
     if (term) {
-      params.append("term", term);
+      params.append('term', term);
     }
 
     // Add all filter parameters - use sortedFilterEntries to avoid recomputing
@@ -227,28 +227,28 @@ export function useNewSearch(userId?: number) {
 
     // Add userId if provided
     if (userId !== undefined) {
-      params.append("userId", userId.toString());
+      params.append('userId', userId.toString());
     }
 
     // Use minPrice/maxPrice instead of priceMin/priceMax
-    if (filters.minPrice) params.set("minPrice", filters.minPrice as string);
-    if (filters.maxPrice) params.set("maxPrice", filters.maxPrice as string);
+    if (filters.minPrice) params.set('minPrice', filters.minPrice as string);
+    if (filters.maxPrice) params.set('maxPrice', filters.maxPrice as string);
 
-    params.set("page", String(page));
-    params.set("limit", String(limit));
+    params.set('page', String(page));
+    params.set('limit', String(limit));
 
     return params.toString();
   }, [term, sortedFilterEntries, userId, filters, page, limit]);
 
   // Simplified and flattened query keys - more efficient for React Query's cache comparison
   const filterQueryKey = useMemo(
-    () => ["filterOptions", term, userId, filterEntriesKey],
-    [term, userId, filterEntriesKey]
+    () => ['filterOptions', term, userId, filterEntriesKey],
+    [term, userId, filterEntriesKey],
   );
 
   const laptopQueryKey = useMemo(
-    () => ["laptopSearch", term, userId, filterEntriesKey],
-    [term, userId, filterEntriesKey]
+    () => ['laptopSearch', term, userId, filterEntriesKey],
+    [term, userId, filterEntriesKey],
   );
 
   // Consistent caching settings for both queries
@@ -269,11 +269,12 @@ export function useNewSearch(userId?: number) {
     queryKey: filterQueryKey,
     queryFn: async () => {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/laptops/filters?${queryString}`
+        `${import.meta.env.VITE_API_URL}/laptops/filters?${queryString}`,
+        { credentials: 'include' },
       );
 
       if (!response.ok) {
-        throw new Error("Failed to fetch filter options");
+        throw new Error('Failed to fetch filter options');
       }
 
       return response.json();
@@ -294,11 +295,12 @@ export function useNewSearch(userId?: number) {
     queryKey: laptopQueryKey.concat([page, limit]),
     queryFn: async (): Promise<PaginatedLaptops> => {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/laptops/search?${queryString}`
+        `${import.meta.env.VITE_API_URL}/laptops/search?${queryString}`,
+        { credentials: 'include' },
       );
 
       if (!response.ok) {
-        throw new Error("Failed to search laptops");
+        throw new Error('Failed to search laptops');
       }
 
       return response.json();

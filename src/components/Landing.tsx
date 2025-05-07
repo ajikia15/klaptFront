@@ -1,4 +1,4 @@
-import { Button } from "./ui/button";
+import { Button } from './ui/button';
 import {
   ShieldCheck,
   Cpu,
@@ -8,10 +8,11 @@ import {
   Wifi,
   HardDrive,
   Headphones,
-} from "lucide-react";
-import { Link } from "@tanstack/react-router";
-import { useMemo } from "react";
-import "./Landing.css";
+} from 'lucide-react';
+import { Link } from '@tanstack/react-router';
+import { useMemo } from 'react';
+import './Landing.css';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 
 // Define proper TypeScript interface for features
 interface FeatureCard {
@@ -24,44 +25,44 @@ interface FeatureCard {
 const features: FeatureCard[] = [
   {
     icon: <Zap size={32} className="text-purple-400" />,
-    label: "RTX 4090",
-    color: "from-purple-500 to-blue-500",
+    label: 'RTX 4090',
+    color: 'from-purple-500 to-blue-500',
   },
   {
     icon: <Monitor size={32} className="text-blue-400" />,
-    label: "240Hz Display",
-    color: "from-blue-500 to-cyan-400",
+    label: '240Hz Display',
+    color: 'from-blue-500 to-cyan-400',
   },
   {
     icon: <ShieldCheck size={32} className="text-green-400" />,
-    label: "2-Year Warranty",
-    color: "from-green-500 to-emerald-400",
+    label: '2-Year Warranty',
+    color: 'from-green-500 to-emerald-400',
   },
   {
     icon: <Cpu size={32} className="text-orange-400" />,
-    label: "Intel i9 14th Gen",
-    color: "from-orange-500 to-yellow-500",
+    label: 'Intel i9 14th Gen',
+    color: 'from-orange-500 to-yellow-500',
   },
   {
     icon: <Battery size={32} className="text-yellow-400" />,
-    label: "6h Battery Life",
-    color: "from-yellow-400 to-amber-500",
+    label: '6h Battery Life',
+    color: 'from-yellow-400 to-amber-500',
   },
   {
     icon: <Wifi size={32} className="text-sky-400" />,
-    label: "WiFi 6E",
-    color: "from-sky-400 to-blue-500",
+    label: 'WiFi 6E',
+    color: 'from-sky-400 to-blue-500',
   },
 
   {
     icon: <HardDrive size={32} className="text-emerald-400" />,
-    label: "2TB SSD",
-    color: "from-emerald-500 to-green-400",
+    label: '2TB SSD',
+    color: 'from-emerald-500 to-green-400',
   },
   {
     icon: <Headphones size={32} className="text-indigo-400" />,
-    label: "Hi-Fi Audio",
-    color: "from-indigo-500 to-purple-400",
+    label: 'Hi-Fi Audio',
+    color: 'from-indigo-500 to-purple-400',
   },
 ];
 
@@ -86,7 +87,7 @@ function MarqueeColumn({
   features,
   duration = 25,
   reverse = false,
-  perspective = "rotateX(-30deg) rotateY(-30deg) rotateZ(0deg)",
+  perspective = 'rotateX(-30deg) rotateY(-30deg) rotateZ(0deg)',
   scale = 1,
 }: MarqueeColumnProps & {
   perspective?: string;
@@ -97,16 +98,16 @@ function MarqueeColumn({
   return (
     <div
       className={`marquee marquee--vertical relative ${
-        reverse ? "marquee--reverse" : ""
+        reverse ? 'marquee--reverse' : ''
       }`}
       style={
         {
-          "--duration": `${duration}s`,
-          height: "420px",
-          width: "120px",
-          perspective: "1200px",
-          transformStyle: "preserve-3d", // Added transform-style
-          backgroundColor: "transparent", // Ensure transparent background
+          '--duration': `${duration}s`,
+          height: '420px',
+          width: '120px',
+          perspective: '1200px',
+          transformStyle: 'preserve-3d', // Added transform-style
+          backgroundColor: 'transparent', // Ensure transparent background
         } as React.CSSProperties
       }
     >
@@ -119,7 +120,7 @@ function MarqueeColumn({
               className="feature-card bg-neutral-900/80 relative flex h-[120px] min-w-[90px] flex-col items-center justify-center rounded-2xl border border-neutral-700 px-4 py-4 shadow-xl"
               style={{
                 transform:
-                  perspective + (scale !== 1 ? ` scale(${scale})` : ""),
+                  perspective + (scale !== 1 ? ` scale(${scale})` : ''),
               }}
             >
               <div className="mb-2 flex items-center justify-center">
@@ -142,7 +143,7 @@ function MarqueeColumn({
               className="feature-card bg-neutral-900/80 relative flex h-[120px] min-w-[90px] flex-col items-center justify-center rounded-2xl border border-neutral-700 px-4 py-4 shadow-xl"
               style={{
                 transform:
-                  perspective + (scale !== 1 ? ` scale(${scale})` : ""),
+                  perspective + (scale !== 1 ? ` scale(${scale})` : ''),
               }}
             >
               <div className="mb-2 flex items-center justify-center">
@@ -163,6 +164,8 @@ function MarqueeColumn({
 }
 
 export default function Landing() {
+  const isMobile = useMediaQuery('(max-width: 768px)');
+
   return (
     <section className="relative flex min-h-[420px] w-full flex-col items-center justify-center overflow-hidden px-0">
       <div className="relative z-20 mx-auto flex w-full flex-col-reverse items-center gap-8 md:flex-row md:items-start md:gap-0">
@@ -170,8 +173,8 @@ export default function Landing() {
           <h1 className="relative mb-4 text-center text-5xl font-black leading-[1.05] tracking-tight md:text-left md:text-5xl lg:text-6xl">
             <span className="block font-light">UNLOCK</span>
             <span className="glitch layers" data-text="UNPARALLELED">
-              {" "}
-              UNPARALLELED{" "}
+              {' '}
+              UNPARALLELED{' '}
             </span>
             <span className="glitch layers" data-text="PERFORMANCE">
               <span>PERFORMANCE</span>
@@ -187,30 +190,32 @@ export default function Landing() {
             </Button>
           </Link>
         </div>
-        <div className="flex flex-1 items-center justify-center">
-          {/* First column appears furthest away (smaller) */}
-          <MarqueeColumn
-            features={features}
-            duration={35}
-            perspective="rotateX(-30deg) rotateY(-30deg) rotateZ(0deg)" // Reverted to original value
-            scale={0.85} // Keep the new scale
-          />
-          {/* Middle column has medium perspective */}
-          <MarqueeColumn
-            features={features}
-            duration={40}
-            reverse={true}
-            perspective="rotateX(-30deg) rotateY(-30deg) rotateZ(0deg)" // This was already correct
-            scale={0.92} // Keep the new scale
-          />
-          {/* Last column appears closest (larger) */}
-          <MarqueeColumn
-            features={features}
-            duration={30}
-            perspective="rotateX(-30deg) rotateY(-30deg) rotateZ(0deg)" // Reverted to original value
-            scale={1.0} // Keep the new scale
-          />
-        </div>
+        {!isMobile && (
+          <div className="flex flex-1 items-center justify-center">
+            {/* First column appears furthest away (smaller) */}
+            <MarqueeColumn
+              features={features}
+              duration={35}
+              perspective="rotateX(-30deg) rotateY(-30deg) rotateZ(0deg)" // Reverted to original value
+              scale={0.85} // Keep the new scale
+            />
+            {/* Middle column has medium perspective */}
+            <MarqueeColumn
+              features={features}
+              duration={40}
+              reverse={true}
+              perspective="rotateX(-30deg) rotateY(-30deg) rotateZ(0deg)" // This was already correct
+              scale={0.92} // Keep the new scale
+            />
+            {/* Last column appears closest (larger) */}
+            <MarqueeColumn
+              features={features}
+              duration={30}
+              perspective="rotateX(-30deg) rotateY(-30deg) rotateZ(0deg)" // Reverted to original value
+              scale={1.0} // Keep the new scale
+            />
+          </div>
+        )}
       </div>
     </section>
   );

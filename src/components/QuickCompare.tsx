@@ -1,9 +1,12 @@
-import { useEffect, useState } from "react";
-import { LaptopCard } from "./LaptopCard";
+import { useEffect, useState } from 'react';
+import { LaptopCard } from './LaptopCard';
 
 async function fetchLaptop(id: number) {
-  const response = await fetch(`${import.meta.env.VITE_API_URL}/laptops/${id}`);
-  if (!response.ok) throw new Error("Failed to fetch laptop");
+  const response = await fetch(
+    `${import.meta.env.VITE_API_URL}/laptops/${id}`,
+    { credentials: 'include' },
+  );
+  if (!response.ok) throw new Error('Failed to fetch laptop');
   return response.json();
 }
 

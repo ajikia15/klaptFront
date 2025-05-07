@@ -1,17 +1,17 @@
-import { useQuery } from "@tanstack/react-query";
-import { Link, useParams } from "@tanstack/react-router";
-import { LaptopT } from "../interfaces/laptopT";
-import { useState } from "react";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { CpuIcon } from "../assets/Icons";
-import { GpuIcon } from "../assets/Icons";
-import { RamIcon } from "../assets/Icons";
-import { StorageIcon } from "../assets/Icons";
-import { DisplayIcon } from "../assets/Icons";
-import { InfoIcon } from "../assets/Icons";
-import { useMediaQuery } from "../hooks/useMediaQuery";
+import { useQuery } from '@tanstack/react-query';
+import { Link, useParams } from '@tanstack/react-router';
+import { LaptopT } from '../interfaces/laptopT';
+import { useState } from 'react';
+import { useAutoAnimate } from '@formkit/auto-animate/react';
+import { CpuIcon } from '../assets/Icons';
+import { GpuIcon } from '../assets/Icons';
+import { RamIcon } from '../assets/Icons';
+import { StorageIcon } from '../assets/Icons';
+import { DisplayIcon } from '../assets/Icons';
+import { InfoIcon } from '../assets/Icons';
+import { useMediaQuery } from '../hooks/useMediaQuery';
 
-import "./laptopDetailPage.css";
+import './laptopDetailPage.css';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -19,36 +19,37 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { PhoneIcon } from "lucide-react";
-import KeySpecsCard from "./LaptopDetailPageCard";
+} from '@/components/ui/breadcrumb';
+import { PhoneIcon } from 'lucide-react';
+import KeySpecsCard from './LaptopDetailPageCard';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
-} from "@/components/ui/accordion";
-import * as AccordionPrimitive from "@radix-ui/react-accordion";
-import { LaptopDetailSkeleton } from "./LaptopDetailSkeleton";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/accordion';
+import * as AccordionPrimitive from '@radix-ui/react-accordion';
+import { LaptopDetailSkeleton } from './LaptopDetailSkeleton';
+import { Button } from '@/components/ui/button';
 
 export default function LaptopDetailPage() {
-  const { laptopId } = useParams({ from: "/laptop/$laptopId" });
+  const { laptopId } = useParams({ from: '/laptop/$laptopId' });
   const [animationParent] = useAutoAnimate();
   const [selectedImage, setSelectedImage] = useState(0);
-  const isMobile = useMediaQuery("(max-width: 1023px)");
+  const isMobile = useMediaQuery('(max-width: 1023px)');
 
   const {
     data: laptop,
     isLoading,
     error,
   } = useQuery<LaptopT>({
-    queryKey: ["laptop", laptopId],
+    queryKey: ['laptop', laptopId],
     queryFn: async () => {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/laptops/${laptopId}`
+        `${import.meta.env.VITE_API_URL}/laptops/${laptopId}`,
+        { credentials: 'include' },
       );
       if (!response.ok) {
-        throw new Error("Failed to fetch laptop details");
+        throw new Error('Failed to fetch laptop details');
       }
       return response.json();
     },
@@ -87,115 +88,115 @@ export default function LaptopDetailPage() {
 
   const specGroups = [
     {
-      title: "Processor",
+      title: 'Processor',
       items: [
         {
-          label: "CPU Brand",
+          label: 'CPU Brand',
           value: laptop.processorBrand,
           Icon: CpuIcon,
         },
         {
-          label: "CPU Model",
+          label: 'CPU Model',
           value: laptop.processorModel,
           Icon: CpuIcon,
         },
         {
-          label: "Cores",
+          label: 'Cores',
           value: laptop.cores,
           Icon: CpuIcon,
         },
         {
-          label: "Threads",
+          label: 'Threads',
           value: laptop.threads,
           Icon: CpuIcon,
         },
       ],
     },
     {
-      title: "Graphics",
+      title: 'Graphics',
       items: [
         {
-          label: "GPU Type",
+          label: 'GPU Type',
           value: laptop.graphicsType,
           Icon: GpuIcon,
         },
         {
-          label: "GPU Brand",
+          label: 'GPU Brand',
           value: laptop.gpuBrand,
           Icon: GpuIcon,
         },
         {
-          label: "GPU Model",
+          label: 'GPU Model',
           value: laptop.gpuModel,
           Icon: GpuIcon,
         },
         {
-          label: "VRAM",
-          value: laptop.vram ? `${laptop.vram}` : "N/A",
+          label: 'VRAM',
+          value: laptop.vram ? `${laptop.vram}` : 'N/A',
           Icon: GpuIcon,
         },
       ],
     },
     {
-      title: "Memory & Storage",
+      title: 'Memory & Storage',
       items: [
         {
-          label: "RAM",
+          label: 'RAM',
           value: `${laptop.ram} GB`,
           Icon: RamIcon,
         },
         {
-          label: "RAM Type",
+          label: 'RAM Type',
           value: laptop.ramType,
           Icon: RamIcon,
         },
         {
-          label: "Storage Type",
+          label: 'Storage Type',
           value: laptop.storageType,
           Icon: StorageIcon,
         },
         {
-          label: "Storage Capacity",
+          label: 'Storage Capacity',
           value: laptop.storageCapacity,
           Icon: StorageIcon,
         },
       ],
     },
     {
-      title: "Display",
+      title: 'Display',
       items: [
         {
-          label: "Screen Size",
+          label: 'Screen Size',
           value: `${laptop.screenSize}`,
           Icon: DisplayIcon,
         },
         {
-          label: "Resolution",
+          label: 'Resolution',
           value: laptop.screenResolution,
           Icon: DisplayIcon,
         },
         {
-          label: "Refresh Rate",
+          label: 'Refresh Rate',
           value: `${laptop.refreshRate}`,
           Icon: DisplayIcon,
         },
         {
-          label: "Backlight Type",
-          value: laptop.backlightType || "N/A",
+          label: 'Backlight Type',
+          value: laptop.backlightType || 'N/A',
           Icon: DisplayIcon,
         },
       ],
     },
     {
-      title: "Physical",
+      title: 'Physical',
       items: [
         {
-          label: "Weight",
-          value: laptop.weight || "N/A",
+          label: 'Weight',
+          value: laptop.weight || 'N/A',
           Icon: InfoIcon,
         },
         {
-          label: "Year",
+          label: 'Year',
           value: laptop.year.toString(),
           Icon: InfoIcon,
         },
@@ -205,13 +206,13 @@ export default function LaptopDetailPage() {
 
   const keySpecs = [
     {
-      title: "Processor",
+      title: 'Processor',
       value: `${laptop.processorBrand} ${laptop.processorModel}`,
       details: `${laptop.cores} Cores, ${laptop.threads} Threads`,
       Icon: CpuIcon,
     },
     {
-      title: "Graphics",
+      title: 'Graphics',
       value: `${laptop.gpuBrand} ${laptop.gpuModel}`,
       details: laptop.vram
         ? `${laptop.graphicsType}, ${laptop.vram}`
@@ -219,19 +220,19 @@ export default function LaptopDetailPage() {
       Icon: GpuIcon,
     },
     {
-      title: "Memory",
+      title: 'Memory',
       value: `${laptop.ram} ${laptop.ramType}`,
       details: null,
       Icon: RamIcon,
     },
     {
-      title: "Storage",
+      title: 'Storage',
       value: laptop.storageCapacity,
       details: laptop.storageType,
       Icon: StorageIcon,
     },
     {
-      title: "Display",
+      title: 'Display',
       value: `${laptop.screenSize} ${laptop.screenResolution}`,
       details: `${laptop.refreshRate} Refresh Rate`,
       Icon: DisplayIcon,
@@ -240,12 +241,12 @@ export default function LaptopDetailPage() {
 
   const getStockStatusColor = (status: any) => {
     switch (status) {
-      case "in stock":
-        return "text-green-500 bg-green-900/20 border-green-900/30";
-      case "reserved":
-        return "text-yellow-500 bg-yellow-900/20 border-yellow-900/30";
+      case 'in stock':
+        return 'text-green-500 bg-green-900/20 border-green-900/30';
+      case 'reserved':
+        return 'text-yellow-500 bg-yellow-900/20 border-yellow-900/30';
       default:
-        return "text-red-500 bg-red-900/20 border-red-900/30";
+        return 'text-red-500 bg-red-900/20 border-red-900/30';
     }
   };
 
@@ -310,8 +311,8 @@ export default function LaptopDetailPage() {
                     key={index}
                     className={`flex-shrink-0 h-20 w-20 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
                       selectedImage === index
-                        ? "border-secondary-500 shadow-[0_0_10px_rgba(147,112,219,0.3)]"
-                        : "border-neutral-700 opacity-70 hover:opacity-100"
+                        ? 'border-secondary-500 shadow-[0_0_10px_rgba(147,112,219,0.3)]'
+                        : 'border-neutral-700 opacity-70 hover:opacity-100'
                     }`}
                     onClick={() => setSelectedImage(index)}
                   >
@@ -341,7 +342,7 @@ export default function LaptopDetailPage() {
                 <div className="mb-6 flex flex-wrap gap-3">
                   <span
                     className={`px-3 py-1 text-xs font-medium rounded-full border ${getStockStatusColor(
-                      laptop.stockStatus
+                      laptop.stockStatus,
                     )}`}
                   >
                     {laptop.stockStatus.charAt(0).toUpperCase() +
@@ -370,7 +371,7 @@ export default function LaptopDetailPage() {
                   <div className="border-neutral-700/30 bg-neutral-800/80 inline-block rounded-md border px-3 py-2">
                     <span className="bg-gradient-to-r from-purple-400 to-secondary-300 bg-clip-text text-3xl font-bold text-transparent md:text-4xl">
                       ₾
-                      {laptop.price.toLocaleString("en-US", {
+                      {laptop.price.toLocaleString('en-US', {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
                       })}
@@ -389,7 +390,7 @@ export default function LaptopDetailPage() {
                 <div className="mb-8">
                   <Accordion
                     type="single"
-                    defaultValue={isMobile ? "key-highlights" : undefined}
+                    defaultValue={isMobile ? 'key-highlights' : undefined}
                     collapsible
                     className="bg-transparent"
                   >
