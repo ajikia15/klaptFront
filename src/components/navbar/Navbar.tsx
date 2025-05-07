@@ -42,10 +42,14 @@ export default function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 w-full bg-neutral-900 shadow-lg">
-      <div className="container mx-auto flex items-center justify-between px-4 py-3">
+      <div className="container mx-auto flex items-center justify-between py-3">
         {/* Logo */}
-        <Link to="/" className="flex-shrink-0 text-2xl font-bold text-white">
-          Kaido
+        <Link
+          to="/"
+          className="flex flex-row items-end gap-3 text-2xl font-bold text-neutral-100"
+        >
+          <img src="/logo-white.svg" className="h-10 w-10 fill-black" alt="" />
+          <p>Kaido</p>
           {/* for performance testing */}
           {/* <Book className="inline-block h-8 w-8 animate-spin text-primary-600" /> */}
         </Link>
