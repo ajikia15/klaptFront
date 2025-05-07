@@ -100,7 +100,6 @@ function MarqueeColumn({
   return (
     <div
       className={`marquee marquee--vertical relative ${
-        // Added relative
         reverse ? "marquee--reverse" : ""
       }`}
       style={
@@ -171,7 +170,7 @@ export default function Landing() {
     <section className="relative flex min-h-[420px] w-full flex-col items-center justify-center overflow-hidden px-0">
       <div className="relative z-20 mx-auto flex w-full flex-col-reverse items-center gap-8 md:flex-row md:items-start md:gap-0">
         <div className="flex flex-1 flex-col items-center py-24 md:items-start">
-          <h1 className="relative mb-4 text-center text-5xl font-black leading-[1.05] tracking-tight md:text-left md:text-6xl lg:text-7xl">
+          <h1 className="relative mb-4 text-center text-5xl font-black leading-[1.05] tracking-tight md:text-left md:text-5xl lg:text-6xl">
             <span className="block font-light">UNLOCK</span>
             <span className="glitch layers" data-text="UNPARALLELED">
               {" "}
@@ -186,26 +185,12 @@ export default function Landing() {
             speed—beyond ordinary.
           </p>
           <Link to="/search">
-            <Button className="relative z-20 flex cursor-pointer select-none items-center justify-center gap-3 overflow-hidden rounded-2xl bg-neutral-900 px-10 py-5 text-lg font-bold text-white shadow-lg transition-all duration-300 hover:bg-neutral-800 hover:shadow-[0_0_24px_0_rgba(236,72,153,0.18)] focus:outline-none focus:ring-2 focus:ring-fuchsia-500/60">
+            <Button className="relative z-20">
               <span className="relative z-10">SHOP NOW</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-                stroke="currentColor"
-                className="relative z-10 ml-4 h-7 w-7"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M17.25 12H6.75m0 0l4.5-4.5m-4.5 4.5l4.5 4.5"
-                />
-              </svg>
             </Button>
           </Link>
         </div>
-        <div className="flex flex-1 items-center justify-center gap-2">
+        <div className="flex flex-1 items-center justify-center">
           {/* First column appears furthest away (smaller) */}
           <MarqueeColumn
             features={features}
@@ -228,20 +213,6 @@ export default function Landing() {
             perspective="rotateX(-30deg) rotateY(-30deg) rotateZ(0deg)" // Reverted to original value
             scale={1.0} // Keep the new scale
           />
-        </div>
-      </div>
-      <div className="mt-12 flex flex-wrap items-center justify-center gap-8 opacity-90">
-        <div className="flex items-center gap-2 text-sm text-neutral-200">
-          <ShieldCheck size={18} className="text-blue-400" />
-          Secure Payments
-        </div>
-        <div className="flex items-center gap-2 text-sm text-neutral-200">
-          <Truck size={18} className="text-fuchsia-400" />
-          Fast Delivery
-        </div>
-        <div className="flex items-center gap-2 text-sm text-neutral-200">
-          <Sparkles size={18} className="text-purple-400" />
-          Trusted by Gamers
         </div>
       </div>
     </section>
