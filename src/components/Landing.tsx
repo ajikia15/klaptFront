@@ -1,8 +1,6 @@
 import { Button } from "./ui/button";
 import {
-  Sparkles,
   ShieldCheck,
-  Truck,
   Cpu,
   Monitor,
   Zap,
