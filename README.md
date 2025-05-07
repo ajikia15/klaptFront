@@ -1,6 +1,6 @@
 # Kaido Laptops: Modern React Frontend
 
-**Kaido Laptops** is a feature-rich, modern React + TypeScript frontend for the [Kaido Laptop Marketplace API](https://github.com/ajikia15/klaptBack). This project provides a beautiful, responsive UI for browsing, filtering, and managing laptops, with advanced admin and user features. Built with [React](https://react.dev/), [Vite](https://vitejs.dev/), [TanStack Router](https://tanstack.com/router), and [Tailwind CSS](https://tailwindcss.com/).
+**Kaido Laptops** is a modern React + TypeScript frontend for the [Kaido Laptop Marketplace API](https://github.com/ajikia15/klaptBack). This project provides a beautiful, responsive UI for browsing, filtering, and managing laptops, with advanced admin and user features. Built with [React](https://react.dev/), [Vite](https://vitejs.dev/), [TanStack Router](https://tanstack.com/router), and [Tailwind CSS](https://tailwindcss.com/).
 
 ---
 
@@ -33,7 +33,6 @@
 - **TypeScript First:** Strong typing and interfaces throughout.
 - **Hooks & Context:** Modern React patterns for state and data fetching.
 - **Modular Components:** Reusable, well-structured component library.
-- **Vite-Powered:** Fast HMR and build times.
 - **Easy Theming:** Customizable via Tailwind CSS variables.
 
 ---
@@ -55,8 +54,7 @@ npm run dev
 - **Vite**
 - **Tailwind CSS**
 - **TanStack Router & Query**
-- **Radix UI & Lucide Icons**
-- **FormKit, Sonner, and more**
+- **ShadcnUI & Lucide Icons**
 
 ---
 
@@ -65,5 +63,3 @@ npm run dev
 MIT
 
 ---
-
-**Kaido Laptops** – The modern marketplace for laptop enthusiasts.
