@@ -1,16 +1,16 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { FavoriteT } from "@/interfaces/favoriteT";
 import { useAuth } from "@/context/AuthContext";
+import { fetchWithAuth } from "@/services/authService";
 
 export function useFavoriteStatus(laptopId: number) {
   return useQuery<FavoriteT | null>({
     queryKey: ["favorites", laptopId],
     queryFn: async () => {
-      const response = await fetch(
+      const response = await fetchWithAuth(
         `${import.meta.env.VITE_API_URL}/favorites/${encodeURIComponent(
           laptopId
-        )}`,
-        { credentials: "include" }
+        )}`
       );
       if (!response.ok) {
         if (response.status === 404) {
@@ -35,11 +35,8 @@ export function useListFavorites() {
   return useQuery<FavoriteT[]>({
     queryKey: ["favorites"],
     queryFn: async () => {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/favorites`,
-        {
-          credentials: "include",
-        }
+      const response = await fetchWithAuth(
+        `${import.meta.env.VITE_API_URL}/favorites`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch favorites");
@@ -55,11 +52,10 @@ export function useAddToFavorites() {
 
   return useMutation({
     mutationFn: async (laptopId: number) => {
-      const response = await fetch(
+      const response = await fetchWithAuth(
         `${import.meta.env.VITE_API_URL}/favorites`,
         {
           method: "POST",
-          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },
@@ -83,13 +79,12 @@ export function useRemoveFromFavorites() {
 
   return useMutation({
     mutationFn: async (laptopId: number) => {
-      const response = await fetch(
+      const response = await fetchWithAuth(
         `${import.meta.env.VITE_API_URL}/favorites/${encodeURIComponent(
           laptopId
         )}`,
         {
           method: "DELETE",
-          credentials: "include",
         }
       );
       if (!response.ok) {

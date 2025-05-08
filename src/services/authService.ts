@@ -18,35 +18,81 @@ export interface LoginCredentials {
   password: string;
 }
 
+// Token management helpers
+const TOKEN_KEY = "jwt_token";
+
+export function setToken(token: string) {
+  localStorage.setItem(TOKEN_KEY, token);
+}
+
+export function getToken() {
+  return localStorage.getItem(TOKEN_KEY);
+}
+
+export function removeToken() {
+  localStorage.removeItem(TOKEN_KEY);
+}
+
+// Wrapper for fetch with Authorization header
+export async function fetchWithAuth(
+  input: RequestInfo,
+  init: RequestInit = {}
+) {
+  const token = getToken();
+  const headers = new Headers(init.headers || {});
+  if (token) {
+    headers.set("Authorization", `Bearer ${token}`);
+  }
+  return fetch(input, { ...init, headers });
+}
+
 export const authService = {
   register: async (credentials: RegisterCredentials) => {
-    return apiRequest<User>("/auth/signup", {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/signup`, {
       method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(credentials),
     });
+    const data = await res.json();
+    if (data.token) setToken(data.token);
+    return data;
   },
 
   login: async (credentials: LoginCredentials) => {
-    return apiRequest<User>("/auth/signin", {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/signin`, {
       method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(credentials),
     });
+    const data = await res.json();
+    if (data.token) setToken(data.token);
+    return data;
   },
 
   getCurrentUser: async () => {
-    return apiRequest<User>("/auth/whoami");
+    const res = await fetchWithAuth(
+      `${import.meta.env.VITE_API_URL}/auth/whoami`
+    );
+    return await res.json();
   },
 
   logout: async () => {
-    return apiRequest("/auth/signout", {
+    removeToken();
+    // Optionally notify backend
+    await fetchWithAuth(`${import.meta.env.VITE_API_URL}/auth/signout`, {
       method: "POST",
     });
   },
 
   updateUser: async (userId: string, data: Partial<User>) => {
-    return apiRequest<User>(`/auth/${userId}`, {
-      method: "PATCH",
-      body: JSON.stringify(data),
-    });
+    const res = await fetchWithAuth(
+      `${import.meta.env.VITE_API_URL}/auth/${userId}`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      }
+    );
+    return await res.json();
   },
 };

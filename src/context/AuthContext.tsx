@@ -1,17 +1,21 @@
-import { ReactNode, createContext, useContext } from "react";
 import {
-  useCurrentUser,
-  useLogin,
-  useLogout,
-  useRegister,
-} from "../hooks/useAuth";
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { useLogin, useLogout, useRegister } from "../hooks/useAuth";
 import {
   LoginCredentials,
   RegisterCredentials,
   User,
+  getToken,
+  setToken,
+  removeToken,
+  authService,
 } from "../services/authService";
 
-// Define the shape of our auth context
 interface AuthContextType {
   user: User | null | undefined;
   isLoading: boolean;
@@ -21,45 +25,61 @@ interface AuthContextType {
   logout: () => Promise<void>;
 }
 
-// Create the context
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Create a provider component
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  // Use our custom hooks
-  const { data: user, isLoading } = useCurrentUser();
-  const registerMutation = useRegister();
-  const loginMutation = useLogin();
-  const logoutMutation = useLogout();
+  const [user, setUser] = useState<User | null | undefined>(undefined);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Derived state
+  // On mount, check for token and fetch user if present
+  useEffect(() => {
+    const token = getToken();
+    if (token) {
+      authService
+        .getCurrentUser()
+        .then((data) => {
+          setUser(data);
+          setIsLoading(false);
+        })
+        .catch(() => {
+          setUser(null);
+          setIsLoading(false);
+          removeToken();
+        });
+    } else {
+      setUser(null);
+      setIsLoading(false);
+    }
+  }, []);
+
   const isAuthenticated = !!user;
 
-  // Handler functions
   const register = async (credentials: RegisterCredentials) => {
-    const result = await registerMutation.mutateAsync(credentials);
-    if (result.error) {
-      throw new Error(result.error);
+    const data = await authService.register(credentials);
+    if (data.user && data.token) {
+      setUser(data.user);
+      setToken(data.token);
+    } else {
+      throw new Error(data.error || "Registration failed");
     }
   };
 
   const login = async (credentials: LoginCredentials) => {
-    const result = await loginMutation.mutateAsync(credentials);
-    if (result.error) {
-      throw new Error(result.error);
+    const data = await authService.login(credentials);
+    if (data.user && data.token) {
+      setUser(data.user);
+      setToken(data.token);
+    } else {
+      throw new Error(data.error || "Login failed");
     }
   };
 
   const logout = async () => {
-    try {
-      await logoutMutation.mutateAsync();
-    } catch (error) {
-      console.error("Logout failed:", error);
-      throw error;
-    }
+    await authService.logout();
+    setUser(null);
+    removeToken();
   };
 
-  // Context value
   const value = {
     user,
     isLoading,
@@ -72,7 +92,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-// Custom hook to use the auth context
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
