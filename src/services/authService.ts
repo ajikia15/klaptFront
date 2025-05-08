@@ -1,5 +1,3 @@
-import { apiRequest } from "./api";
-
 export interface User {
   id: number;
   email: string;

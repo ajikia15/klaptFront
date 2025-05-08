@@ -5,7 +5,6 @@ import {
   useEffect,
   useState,
 } from "react";
-import { useLogin, useLogout, useRegister } from "../hooks/useAuth";
 import {
   LoginCredentials,
   RegisterCredentials,

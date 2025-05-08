@@ -6,6 +6,7 @@ import { useParams } from "@tanstack/react-router";
 import { useImageManagement } from "@/hooks/useImageManagement";
 import { useUpdateListing } from "@/hooks/useUpdateListing";
 import { LaptopDetailSkeleton } from "./LaptopDetailSkeleton";
+import type { LaptopT } from "@/interfaces/laptopT";
 
 // Constants remain unchanged
 const LAPTOP_BRANDS = [
@@ -89,7 +90,7 @@ export default function EditListingPage() {
 
   // Use the hook instead of creating your own mutation
   const {
-    laptopData: laptop,
+    laptopData,
     isLoading,
     isError,
     errorMessage,
@@ -98,6 +99,9 @@ export default function EditListingPage() {
     isUpdateSuccess,
     updateError,
   } = useUpdateListing(laptopId);
+
+  // Explicitly type laptop as LaptopT | undefined
+  const laptop = laptopData as LaptopT | undefined;
 
   // Rest of your image handling logic
   const {
