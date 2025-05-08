@@ -17,7 +17,9 @@ export function useChangeStatus() {
         body: JSON.stringify({ status }),
       });
       if (result.error) {
-        throw new Error(`Failed to change laptop status to ${status}: ${result.error}`);
+        throw new Error(
+          `Failed to change laptop status to ${status}: ${result.error}`
+        );
       }
       return result.data;
     },
@@ -38,7 +40,9 @@ export function useDeleteLaptop() {
         method: "DELETE",
       });
       if (result.error) {
-        throw new Error(`Failed to delete laptop with id ${laptopId}: ${result.error}`);
+        throw new Error(
+          `Failed to delete laptop with id ${laptopId}: ${result.error}`
+        );
       }
     },
     onSuccess: () => {
@@ -58,7 +62,9 @@ export function useDeleteUser() {
         method: "DELETE",
       });
       if (result.error) {
-        throw new Error(`Failed to delete user with id ${userId}: ${result.error}`);
+        throw new Error(
+          `Failed to delete user with id ${userId}: ${result.error}`
+        );
       }
     },
     onSuccess: () => {
@@ -85,7 +91,9 @@ export function useUserRole() {
         body: JSON.stringify({ admin }),
       });
       if (result.error) {
-        throw new Error(`Failed to change user role with id ${userId}: ${result.error}`);
+        throw new Error(
+          `Failed to change user role with id ${userId}: ${result.error}`
+        );
       }
       return { success: true };
     },

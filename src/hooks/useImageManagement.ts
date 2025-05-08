@@ -24,7 +24,10 @@ export function useImageManagement() {
         body: formData,
       });
       if (result.error) throw new Error("Upload failed: " + result.error);
-      setUploadedImages((prev) => [...prev, ...((result.data as { urls: string[] }).urls)]);
+      setUploadedImages((prev) => [
+        ...prev,
+        ...(result.data as { urls: string[] }).urls,
+      ]);
     } catch (error) {
       console.error("Error uploading images:", error);
       // Could add error state management here

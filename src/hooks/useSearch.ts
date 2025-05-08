@@ -1,6 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
-import { useState, useEffect } from 'react';
-import { PaginatedLaptops } from '../interfaces/PaginatedLaptops';
+import { useQuery } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
+import { PaginatedLaptops } from "../interfaces/PaginatedLaptops";
 import { apiRequest } from "@/services/api";
 
 interface FilterOption {
@@ -57,7 +57,7 @@ interface SelectedFilters {
   tags: string[];
 }
 
-export function useSearchLaptops(initialTerm: string = '', userId?: number) {
+export function useSearchLaptops(initialTerm: string = "", userId?: number) {
   const [searchTerm, setSearchTerm] = useState(initialTerm);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10); // Default limit, adjust as needed
@@ -95,7 +95,7 @@ export function useSearchLaptops(initialTerm: string = '', userId?: number) {
     isPending: isFilterPending,
     isRefetching: isFilterRefetching,
   } = useQuery<any, Error, FilterOptions>({
-    queryKey: ['filterOptions', JSON.stringify(selectedFilters), userId],
+    queryKey: ["filterOptions", JSON.stringify(selectedFilters), userId],
     queryFn: async () => {
       const params = new URLSearchParams();
 
@@ -106,24 +106,26 @@ export function useSearchLaptops(initialTerm: string = '', userId?: number) {
       });
 
       if (searchTerm) {
-        params.append('term', searchTerm);
+        params.append("term", searchTerm);
       }
 
       // Only append userId if it's defined
       if (userId !== undefined) {
-        params.append('userId', userId.toString());
+        params.append("userId", userId.toString());
       }
 
-      const response = await apiRequest(`/laptops/filters?${params.toString()}`);
+      const response = await apiRequest(
+        `/laptops/filters?${params.toString()}`
+      );
       if (response.error) {
-        throw new Error('Failed to fetch filter options: ' + response.error);
+        throw new Error("Failed to fetch filter options: " + response.error);
       }
       return response.data;
     },
     select: (data: FilterOptions): FilterOptions => {
       return data;
     },
-    notifyOnChangeProps: ['data', 'error', 'isLoading'],
+    notifyOnChangeProps: ["data", "error", "isLoading"],
   });
 
   const {
@@ -136,7 +138,7 @@ export function useSearchLaptops(initialTerm: string = '', userId?: number) {
     isRefetching,
   } = useQuery<PaginatedLaptops, Error>({
     queryKey: [
-      'laptopSearch',
+      "laptopSearch",
       searchTerm,
       JSON.stringify(selectedFilters),
       userId,
@@ -145,7 +147,7 @@ export function useSearchLaptops(initialTerm: string = '', userId?: number) {
     ],
     queryFn: async (): Promise<PaginatedLaptops> => {
       const params = new URLSearchParams();
-      if (searchTerm) params.append('term', searchTerm);
+      if (searchTerm) params.append("term", searchTerm);
 
       Object.entries(selectedFilters).forEach(([key, values]) => {
         values.forEach((value: any) => {
@@ -154,18 +156,18 @@ export function useSearchLaptops(initialTerm: string = '', userId?: number) {
       });
 
       if (userId !== undefined) {
-        params.append('userId', userId.toString());
+        params.append("userId", userId.toString());
       }
-      params.append('page', page.toString());
-      params.append('limit', limit.toString());
+      params.append("page", page.toString());
+      params.append("limit", limit.toString());
 
       const response = await apiRequest(`/laptops/search?${params.toString()}`);
       if (response.error) {
-        throw new Error('Failed to search laptops: ' + response.error);
+        throw new Error("Failed to search laptops: " + response.error);
       }
       return response.data as PaginatedLaptops;
     },
-    notifyOnChangeProps: ['data', 'error', 'isLoading'],
+    notifyOnChangeProps: ["data", "error", "isLoading"],
   });
 
   // Toggle filter - add delay before refetching to allow for UI updates
@@ -210,7 +212,7 @@ export function useSearchLaptops(initialTerm: string = '', userId?: number) {
       shortDesc: [],
       tags: [],
     });
-    setSearchTerm('');
+    setSearchTerm("");
     setPage(1);
   };
 

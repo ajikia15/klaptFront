@@ -58,7 +58,11 @@ export function useAddListing() {
       const data = result.data;
 
       // Redirect to the new laptop page after successful creation
-      setTimeout(() => navigate({ to: `/laptop/${(data as { id: string | number }).id}` }), 1500);
+      setTimeout(
+        () =>
+          navigate({ to: `/laptop/${(data as { id: string | number }).id}` }),
+        1500
+      );
       return data;
     } catch (error) {
       setFormStatus("error");

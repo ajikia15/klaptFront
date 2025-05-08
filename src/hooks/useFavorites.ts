@@ -7,7 +7,9 @@ export function useFavoriteStatus(laptopId: number) {
   return useQuery<FavoriteT | null>({
     queryKey: ["favorites", laptopId],
     queryFn: async () => {
-      const response = await apiRequest(`/favorites/${encodeURIComponent(laptopId)}`);
+      const response = await apiRequest(
+        `/favorites/${encodeURIComponent(laptopId)}`
+      );
       if (response.error) {
         if (response.statusCode === 404) {
           return null;
@@ -16,6 +18,9 @@ export function useFavoriteStatus(laptopId: number) {
       }
       return response.data as FavoriteT | null;
     },
+    staleTime: 0,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
   });
 }
 
@@ -48,10 +53,9 @@ export function useAddToFavorites() {
         throw new Error("Failed to add to favorites: " + response.error);
       }
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["favorites"],
-      });
+    onSuccess: (_, laptopId) => {
+      queryClient.invalidateQueries({ queryKey: ["favorites"] });
+      queryClient.invalidateQueries({ queryKey: ["favorites", laptopId] });
     },
   });
 }
@@ -61,17 +65,19 @@ export function useRemoveFromFavorites() {
 
   return useMutation({
     mutationFn: async (laptopId: number) => {
-      const response = await apiRequest(`/favorites/${encodeURIComponent(laptopId)}`, {
-        method: "DELETE",
-      });
+      const response = await apiRequest(
+        `/favorites/${encodeURIComponent(laptopId)}`,
+        {
+          method: "DELETE",
+        }
+      );
       if (response.error) {
         throw new Error("Failed to remove from favorites: " + response.error);
       }
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["favorites"],
-      });
+    onSuccess: (_, laptopId) => {
+      queryClient.setQueryData(["favorites", laptopId], null); // Set status to null immediately
+      queryClient.invalidateQueries({ queryKey: ["favorites"] });
     },
   });
 }
