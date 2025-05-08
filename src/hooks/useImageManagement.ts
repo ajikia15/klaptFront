@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { apiRequest } from "@/services/api";
 
 export function useImageManagement() {
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
@@ -17,16 +18,13 @@ export function useImageManagement() {
     });
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/upload`, {
+      // Use apiRequest for protected upload
+      const result = await apiRequest("/upload", {
         method: "POST",
-        credentials: "include",
         body: formData,
       });
-
-      if (!response.ok) throw new Error("Upload failed");
-
-      const data = await response.json();
-      setUploadedImages((prev) => [...prev, ...data.urls]);
+      if (result.error) throw new Error("Upload failed: " + result.error);
+      setUploadedImages((prev) => [...prev, ...((result.data as { urls: string[] }).urls)]);
     } catch (error) {
       console.error("Error uploading images:", error);
       // Could add error state management here

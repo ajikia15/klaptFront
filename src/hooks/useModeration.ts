@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiRequest } from "@/services/api";
 
 export function useChangeStatus() {
   const queryClient = useQueryClient();
@@ -11,23 +12,14 @@ export function useChangeStatus() {
       laptopId: number;
       status: "approved" | "pending" | "rejected" | "archived";
     }) => {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/laptops/${laptopId}`,
-        {
-          method: "PATCH",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ status }),
-        }
-      );
-      if (!response.ok) {
-        throw new Error(`Failed to change laptop status to ${status}`);
+      const result = await apiRequest(`/laptops/${laptopId}`, {
+        method: "PATCH",
+        body: JSON.stringify({ status }),
+      });
+      if (result.error) {
+        throw new Error(`Failed to change laptop status to ${status}: ${result.error}`);
       }
-
-      // Return the response data
-      return await response.json();
+      return result.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -42,15 +34,11 @@ export function useDeleteLaptop() {
 
   return useMutation({
     mutationFn: async (laptopId: number) => {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/laptops/${laptopId}`,
-        {
-          method: "DELETE",
-          credentials: "include",
-        }
-      );
-      if (!response.ok) {
-        throw new Error(`Failed to delete laptop with id ${laptopId}`);
+      const result = await apiRequest(`/laptops/${laptopId}`, {
+        method: "DELETE",
+      });
+      if (result.error) {
+        throw new Error(`Failed to delete laptop with id ${laptopId}: ${result.error}`);
       }
     },
     onSuccess: () => {
@@ -66,15 +54,11 @@ export function useDeleteUser() {
 
   return useMutation({
     mutationFn: async (userId: number) => {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/users/${userId}`,
-        {
-          method: "DELETE",
-          credentials: "include",
-        }
-      );
-      if (!response.ok) {
-        throw new Error(`Failed to delete user with id ${userId}`);
+      const result = await apiRequest(`/users/${userId}`, {
+        method: "DELETE",
+      });
+      if (result.error) {
+        throw new Error(`Failed to delete user with id ${userId}: ${result.error}`);
       }
     },
     onSuccess: () => {
@@ -84,6 +68,7 @@ export function useDeleteUser() {
     },
   });
 }
+
 export function useUserRole() {
   const queryClient = useQueryClient();
 
@@ -95,21 +80,13 @@ export function useUserRole() {
       userId: number;
       admin: boolean;
     }) => {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/users/${userId}/role`,
-        {
-          method: "PATCH",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ admin }),
-        }
-      );
-      if (!response.ok) {
-        throw new Error(`Failed to change user role with id ${userId}`);
+      const result = await apiRequest(`/users/${userId}/role`, {
+        method: "PATCH",
+        body: JSON.stringify({ admin }),
+      });
+      if (result.error) {
+        throw new Error(`Failed to change user role with id ${userId}: ${result.error}`);
       }
-
       return { success: true };
     },
     onSuccess: () => {

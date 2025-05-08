@@ -1,30 +1,20 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { FavoriteT } from "@/interfaces/favoriteT";
 import { useAuth } from "@/context/AuthContext";
-import { fetchWithAuth } from "@/services/authService";
+import { apiRequest } from "@/services/api";
 
 export function useFavoriteStatus(laptopId: number) {
   return useQuery<FavoriteT | null>({
     queryKey: ["favorites", laptopId],
     queryFn: async () => {
-      const response = await fetchWithAuth(
-        `${import.meta.env.VITE_API_URL}/favorites/${encodeURIComponent(
-          laptopId
-        )}`
-      );
-      if (!response.ok) {
-        if (response.status === 404) {
+      const response = await apiRequest(`/favorites/${encodeURIComponent(laptopId)}`);
+      if (response.error) {
+        if (response.statusCode === 404) {
           return null;
         }
-        throw new Error("Failed to fetch favorites");
+        throw new Error("Failed to fetch favorites: " + response.error);
       }
-
-      const text = await response.text();
-      if (!text) {
-        return null;
-      }
-
-      return JSON.parse(text);
+      return response.data as FavoriteT | null;
     },
   });
 }
@@ -35,13 +25,11 @@ export function useListFavorites() {
   return useQuery<FavoriteT[]>({
     queryKey: ["favorites"],
     queryFn: async () => {
-      const response = await fetchWithAuth(
-        `${import.meta.env.VITE_API_URL}/favorites`
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch favorites");
+      const response = await apiRequest(`/favorites`);
+      if (response.error) {
+        throw new Error("Failed to fetch favorites: " + response.error);
       }
-      return response.json();
+      return response.data as FavoriteT[];
     },
     enabled: isAuthenticated,
   });
@@ -52,18 +40,12 @@ export function useAddToFavorites() {
 
   return useMutation({
     mutationFn: async (laptopId: number) => {
-      const response = await fetchWithAuth(
-        `${import.meta.env.VITE_API_URL}/favorites`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ laptopId }),
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Failed to add to favorites");
+      const response = await apiRequest(`/favorites`, {
+        method: "POST",
+        body: JSON.stringify({ laptopId }),
+      });
+      if (response.error) {
+        throw new Error("Failed to add to favorites: " + response.error);
       }
     },
     onSuccess: () => {
@@ -79,16 +61,11 @@ export function useRemoveFromFavorites() {
 
   return useMutation({
     mutationFn: async (laptopId: number) => {
-      const response = await fetchWithAuth(
-        `${import.meta.env.VITE_API_URL}/favorites/${encodeURIComponent(
-          laptopId
-        )}`,
-        {
-          method: "DELETE",
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Failed to remove from favorites");
+      const response = await apiRequest(`/favorites/${encodeURIComponent(laptopId)}`, {
+        method: "DELETE",
+      });
+      if (response.error) {
+        throw new Error("Failed to remove from favorites: " + response.error);
       }
     },
     onSuccess: () => {

@@ -1,3 +1,5 @@
+import { getToken } from "./authService";
+
 // Base API configuration and helper functions
 const API_URL = `${import.meta.env.VITE_API_URL}`;
 
@@ -12,10 +14,12 @@ export async function apiRequest<T>(
   options: RequestInit = {}
 ): Promise<ApiResponse<T>> {
   const url = `${API_URL}${endpoint}`;
+  const token = getToken();
 
   const headers = {
     "Content-Type": "application/json",
     ...(options.headers || {}),
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
 
   try {

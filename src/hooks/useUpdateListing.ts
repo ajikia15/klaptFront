@@ -1,6 +1,7 @@
 import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { LaptopT } from "@/interfaces/laptopT";
+import { apiRequest } from "@/services/api";
 
 export function useUpdateListing(laptopId: string) {
   const navigate = useNavigate();
@@ -15,18 +16,9 @@ export function useUpdateListing(laptopId: string) {
     queryKey: ["laptop", laptopId],
     queryFn: async () => {
       if (!laptopId) throw new Error("Laptop ID is missing");
-
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/laptops/${laptopId}`,
-        { credentials: "include" }
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || "Failed to fetch laptop data");
-      }
-
-      return response.json();
+      const result = await apiRequest(`/laptops/${laptopId}`);
+      if (result.error) throw new Error(result.error);
+      return result.data;
     },
     enabled: Boolean(laptopId),
   });
@@ -61,22 +53,13 @@ export function useUpdateListing(laptopId: string) {
         }
       });
 
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/laptops/${laptopId}`,
-        {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify(updatedLaptopData),
-        }
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || "Failed to update listing");
-      }
-
-      return response.json();
+      // Use apiRequest for PATCH
+      const result = await apiRequest(`/laptops/${laptopId}`, {
+        method: "PATCH",
+        body: JSON.stringify(updatedLaptopData),
+      });
+      if (result.error) throw new Error(result.error);
+      return result.data;
     },
     onSuccess: async (data) => {
       // Keep cache invalidation in the hook
@@ -91,7 +74,7 @@ export function useUpdateListing(laptopId: string) {
 
       // Keep navigation logic here since it's consistent across all usages
       setTimeout(() => {
-        navigate({ to: `/laptop/${data.id}` });
+        navigate({ to: `/laptop/${(data as { id: string | number }).id}` });
       }, 1500);
     },
   });

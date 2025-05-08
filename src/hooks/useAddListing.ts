@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { LaptopT } from "@/interfaces/laptopT";
+import { apiRequest } from "@/services/api";
 
 type FormStatus = "idle" | "submitting" | "success" | "error";
 
@@ -43,23 +44,21 @@ export function useAddListing() {
         }
       });
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/laptops`, {
+      // Use apiRequest for protected POST
+      const result = await apiRequest("/laptops", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
         body: JSON.stringify(laptopData),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || "Failed to add listing");
+      if (result.error) {
+        throw new Error(result.error);
       }
 
       setFormStatus("success");
-      const data = await response.json();
+      const data = result.data;
 
       // Redirect to the new laptop page after successful creation
-      setTimeout(() => navigate({ to: `/laptop/${data.id}` }), 1500);
+      setTimeout(() => navigate({ to: `/laptop/${(data as { id: string | number }).id}` }), 1500);
       return data;
     } catch (error) {
       setFormStatus("error");

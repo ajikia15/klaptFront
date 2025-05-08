@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { PaginatedLaptops } from '../interfaces/PaginatedLaptops';
 import { searchRoute } from '../router';
 import { useCallback, useMemo, useState } from 'react';
+import { apiRequest } from "@/services/api";
 
 interface FilterOption {
   value: string;
@@ -268,16 +269,11 @@ export function useNewSearch(userId?: number) {
   } = useQuery<FilterOptions, Error>({
     queryKey: filterQueryKey,
     queryFn: async () => {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/laptops/filters?${queryString}`,
-        { credentials: 'include' },
-      );
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch filter options');
+      const response = await apiRequest(`/laptops/filters?${queryString}`);
+      if (response.error) {
+        throw new Error('Failed to fetch filter options: ' + response.error);
       }
-
-      return response.json();
+      return response.data as FilterOptions;
     },
     ...cacheConfig,
   });
@@ -294,16 +290,11 @@ export function useNewSearch(userId?: number) {
   } = useQuery<PaginatedLaptops, Error>({
     queryKey: laptopQueryKey.concat([page, limit]),
     queryFn: async (): Promise<PaginatedLaptops> => {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/laptops/search?${queryString}`,
-        { credentials: 'include' },
-      );
-
-      if (!response.ok) {
-        throw new Error('Failed to search laptops');
+      const response = await apiRequest(`/laptops/search?${queryString}`);
+      if (response.error) {
+        throw new Error('Failed to search laptops: ' + response.error);
       }
-
-      return response.json();
+      return response.data as PaginatedLaptops;
     },
     ...cacheConfig,
   });
