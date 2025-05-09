@@ -25,6 +25,8 @@ import {
 import { Button } from '../ui/button';
 import { Plus, User, Globe } from 'lucide-react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import i18n from '@/i18n';
 
 // Language options
 const LANGUAGES = [
@@ -50,6 +52,7 @@ export default function Navbar() {
     }
   };
   const { data: favorites, isLoading } = useListFavorites();
+  const { t } = useTranslation();
 
   return (
     <nav className="sticky top-0 z-50 w-full bg-neutral-900 px-2 shadow-lg">
@@ -87,7 +90,10 @@ export default function Navbar() {
               {LANGUAGES.map((l) => (
                 <DropdownMenuItem
                   key={l.code}
-                  onClick={() => setLang(l.code)}
+                  onClick={() => {
+                    setLang(l.code);
+                    i18n.changeLanguage(l.code);
+                  }}
                   className={`cursor-pointer focus:bg-neutral-700 focus:text-white ${lang === l.code ? 'font-bold' : ''}`}
                 >
                   <span className="mr-2">{l.emoji}</span>
@@ -107,7 +113,7 @@ export default function Navbar() {
             title={isAuthenticated ? 'Create Post' : 'Login to create a post'}
           >
             <Button className="" variant={'outline'}>
-              Create post
+              {t('createPost')}
               <Plus />
             </Button>
           </Link>
