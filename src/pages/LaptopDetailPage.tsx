@@ -22,12 +22,6 @@ import {
 } from '@/components/ui/breadcrumb';
 import { PhoneIcon } from 'lucide-react';
 import KeySpecsCard from './LaptopDetailPageCard';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-} from '@/components/ui/accordion';
-import * as AccordionPrimitive from '@radix-ui/react-accordion';
 import { LaptopDetailSkeleton } from './LaptopDetailSkeleton';
 import { Button } from '@/components/ui/button';
 
@@ -379,7 +373,7 @@ export default function LaptopDetailPage() {
                 </div>
 
                 {/* Description */}
-                <div className="prose prose-invert prose-sm mb-8 max-w-none">
+                <div className="prose prose-invert prose-sm mb-6 max-w-none">
                   <p
                     className={`leading-relaxed text-neutral-300 transition-all duration-300 ${
                       showFullDescription ? '' : 'line-clamp-5'
@@ -402,37 +396,45 @@ export default function LaptopDetailPage() {
 
                 {/* Key Highlights - only show on mobile/tablet */}
                 {isMobile && (
-                  <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2">
-                    <div className="border-neutral-700/30 bg-neutral-700/20 rounded-lg border p-3">
-                      <div className="flex items-center gap-2">
-                        <CpuIcon size={18} className="text-secondary-400" />
-                        <span className="text-neutral-200">
-                          {laptop.processorBrand} {laptop.processorModel}
-                        </span>
+                  <div>
+                    <h2 className="mb-6 text-2xl font-bold text-white md:text-3xl">
+                      Key Specs
+                    </h2>
+                    <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2">
+                      <div className="border-neutral-700/30 bg-neutral-700/20 rounded-lg border p-3">
+                        <div className="flex items-center gap-2">
+                          <CpuIcon size={18} className="text-secondary-400" />
+                          <span className="text-neutral-200">
+                            {laptop.processorBrand} {laptop.processorModel}
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                    <div className="border-neutral-700/30 bg-neutral-700/20 rounded-lg border p-3">
-                      <div className="flex items-center gap-2">
-                        <RamIcon size={18} className="text-secondary-400" />
-                        <span className="text-neutral-200">
-                          {laptop.ram} {laptop.ramType} RAM
-                        </span>
+                      <div className="border-neutral-700/30 bg-neutral-700/20 rounded-lg border p-3">
+                        <div className="flex items-center gap-2">
+                          <RamIcon size={18} className="text-secondary-400" />
+                          <span className="text-neutral-200">
+                            {laptop.ram} {laptop.ramType} RAM
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                    <div className="border-neutral-700/30 bg-neutral-700/20 rounded-lg border p-3">
-                      <div className="flex items-center gap-2">
-                        <GpuIcon size={18} className="text-secondary-400" />
-                        <span className="text-neutral-200">
-                          {laptop.gpuBrand} {laptop.gpuModel}
-                        </span>
+                      <div className="border-neutral-700/30 bg-neutral-700/20 rounded-lg border p-3">
+                        <div className="flex items-center gap-2">
+                          <GpuIcon size={18} className="text-secondary-400" />
+                          <span className="text-neutral-200">
+                            {laptop.gpuBrand} {laptop.gpuModel}
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                    <div className="border-neutral-700/30 bg-neutral-700/20 rounded-lg border p-3">
-                      <div className="flex items-center gap-2">
-                        <DisplayIcon size={18} className="text-secondary-400" />
-                        <span className="text-neutral-200">
-                          {laptop.screenSize} {laptop.refreshRate} Display
-                        </span>
+                      <div className="border-neutral-700/30 bg-neutral-700/20 rounded-lg border p-3">
+                        <div className="flex items-center gap-2">
+                          <DisplayIcon
+                            size={18}
+                            className="text-secondary-400"
+                          />
+                          <span className="text-neutral-200">
+                            {laptop.screenSize} {laptop.refreshRate} Display
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
