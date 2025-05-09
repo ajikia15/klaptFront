@@ -1,5 +1,5 @@
-import { FC } from "react";
-import { Link } from "@tanstack/react-router";
+import { FC } from 'react';
+import { Link } from '@tanstack/react-router';
 import {
   Twitter,
   Facebook,
@@ -9,10 +9,12 @@ import {
   Phone,
   MapPin,
   ArrowUpRight,
-} from "lucide-react";
-import { Button } from "./ui/button";
+} from 'lucide-react';
+import { Button } from './ui/button';
+import { useTranslation } from 'react-i18next';
 
 const Footer: FC = () => {
+  const { t } = useTranslation();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -29,8 +31,7 @@ const Footer: FC = () => {
             </div>
 
             <p className="text-sm leading-relaxed text-neutral-400">
-              Premium gaming and professional laptops with cutting-edge
-              technology. Find the perfect device for your computing needs.
+              {t('footerDesc')}
             </p>
 
             {/* Social Media Links */}
@@ -74,25 +75,29 @@ const Footer: FC = () => {
           <div>
             <h3 className="mb-6 flex items-center gap-2 text-lg font-semibold text-white">
               <div className="h-1 w-4 rounded-full bg-secondary-500"></div>
-              Quick Links
+              {t('quickLinks')}
             </h3>
             <ul className="space-y-3">
-              {["Home", "About Us", "Products", "Support", "Blog"].map(
-                (link) => (
-                  <li key={link}>
-                    <Link
-                      to="/"
-                      className="group flex items-center text-neutral-400 transition-colors hover:text-secondary-400"
-                    >
-                      <span>{link}</span>
-                      <ArrowUpRight
-                        size={14}
-                        className="ml-1.5 -translate-x-2 opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100"
-                      />
-                    </Link>
-                  </li>
-                )
-              )}
+              {[
+                t('home'),
+                t('aboutUs'),
+                t('products'),
+                t('support'),
+                t('blog'),
+              ].map((link) => (
+                <li key={link}>
+                  <Link
+                    to="/"
+                    className="group flex items-center text-neutral-400 transition-colors hover:text-secondary-400"
+                  >
+                    <span>{link}</span>
+                    <ArrowUpRight
+                      size={14}
+                      className="ml-1.5 -translate-x-2 opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100"
+                    />
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -100,15 +105,15 @@ const Footer: FC = () => {
           <div>
             <h3 className="mb-6 flex items-center gap-2 text-lg font-semibold text-white">
               <div className="h-1 w-4 rounded-full bg-secondary-500"></div>
-              Laptops
+              {t('laptops')}
             </h3>
             <ul className="space-y-3">
               {[
-                "Gaming Laptops",
-                "Business Laptops",
-                "Student Laptops",
-                "Creative Laptops",
-                "Budget Laptops",
+                t('gamingLaptops'),
+                t('businessLaptops'),
+                t('studentLaptops'),
+                t('creativeLaptops'),
+                t('budgetLaptops'),
               ].map((link) => (
                 <li key={link}>
                   <Link
@@ -130,7 +135,7 @@ const Footer: FC = () => {
           <div>
             <h3 className="mb-6 flex items-center gap-2 text-lg font-semibold text-white">
               <div className="h-1 w-4 rounded-full bg-secondary-500"></div>
-              Contact Us
+              {t('contactUs')}
             </h3>
             <ul className="space-y-4">
               <li className="flex items-start">
@@ -174,7 +179,7 @@ const Footer: FC = () => {
                 placeholder="Enter your email"
                 className="focus:ring-secondary-500/50 rounded-lg border border-neutral-700 bg-neutral-800 px-4 py-2.5 text-neutral-200 focus:border-secondary-400 focus:outline-none focus:ring-2"
               />
-              <Button variant={"secondary"}>Subscribe</Button>
+              <Button variant={'secondary'}>Subscribe</Button>
             </div>
           </div>
         </div>
@@ -184,7 +189,7 @@ const Footer: FC = () => {
       <div className="border-neutral-800/50 border-t bg-neutral-950/50 py-6 backdrop-blur-sm">
         <div className="container mx-auto flex flex-col items-center justify-between gap-4 md:flex-row">
           <div className="text-sm text-neutral-500">
-            © {currentYear} Klaptop. All rights reserved.
+            © {currentYear} Klaptop. {t('allRightsReserved')}
           </div>
 
           <div className="flex gap-6">

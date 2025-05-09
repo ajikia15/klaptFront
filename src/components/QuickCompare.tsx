@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { LaptopCard } from './LaptopCard';
+import { useTranslation } from 'react-i18next';
 
 async function fetchLaptop(id: number) {
   const response = await fetch(
@@ -11,6 +12,7 @@ async function fetchLaptop(id: number) {
 }
 
 export default function QuickCompare() {
+  const { t } = useTranslation();
   const [laptops, setLaptops] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -28,11 +30,11 @@ export default function QuickCompare() {
     <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
       {isLoading ? (
         <div className="col-span-full text-center text-neutral-400">
-          Loading...
+          {t('loading')}
         </div>
       ) : error ? (
         <div className="col-span-full text-center text-red-500">
-          Error loading laptops: {error}
+          {t('errorLoadingLaptops')}: {error}
         </div>
       ) : laptops && laptops.length > 0 ? (
         laptops.map((laptop) => (
@@ -40,7 +42,7 @@ export default function QuickCompare() {
         ))
       ) : (
         <div className="col-span-full text-center text-neutral-400">
-          No laptops to compare
+          {t('noLaptopsToCompare')}
         </div>
       )}
     </div>

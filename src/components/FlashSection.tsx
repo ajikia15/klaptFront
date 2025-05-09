@@ -1,47 +1,46 @@
-import useEmblaCarousel from "embla-carousel-react";
-import "./emblaflashcards.css";
-import { useCallback, useEffect, useState } from "react";
-import { ArrowLeft, ArrowRight } from "@deemlol/next-icons";
-import { FlashCard } from "./FlashCard";
-import { Button } from "./ui/button";
-const flashDeals = [
-  {
-    title: "Gaming Laptops",
-    discount: 30,
-    image: "/images/placeholder-gaming.jpg",
-  },
-  {
-    title: "Business Laptops",
-    discount: 25,
-    image: "/images/placeholder-business.jpg",
-  },
-  {
-    title: "Student Laptops",
-    discount: 20,
-    image: "/images/placeholder-student.jpg",
-  },
-  {
-    title: "Workstation Laptops",
-    discount: 15,
-    image: "/images/placeholder-workstation.jpg",
-  },
-  {
-    title: "Creative Workstations",
-    discount: 10,
-    image: "/images/placeholder-creative.jpg",
-  },
-  {
-    title: "Creative Workstations",
-    discount: 10,
-    image: "/images/placeholder-creative.jpg",
-  },
-];
+import useEmblaCarousel from 'embla-carousel-react';
+import './emblaflashcards.css';
+import { useCallback, useEffect, useState } from 'react';
+import { ArrowLeft, ArrowRight } from '@deemlol/next-icons';
+import { FlashCard } from './FlashCard';
+import { Button } from './ui/button';
+import { useTranslation } from 'react-i18next';
 
 export default function FlashSection() {
+  const { t } = useTranslation();
+
+  const flashDeals = [
+    {
+      title: t('gamingLaptops'),
+      discount: 30,
+      image: '/images/placeholder-gaming.jpg',
+    },
+    {
+      title: t('businessLaptops'),
+      discount: 25,
+      image: '/images/placeholder-business.jpg',
+    },
+    {
+      title: t('studentLaptops'),
+      discount: 20,
+      image: '/images/placeholder-student.jpg',
+    },
+    {
+      title: t('workstationLaptops'),
+      discount: 15,
+      image: '/images/placeholder-workstation.jpg',
+    },
+    {
+      title: t('creativeWorkstations'),
+      discount: 10,
+      image: '/images/placeholder-creative.jpg',
+    },
+  ];
+
   const [emblaRef, emblaApi] = useEmblaCarousel({
     dragFree: false,
-    containScroll: "trimSnaps",
-    align: "start",
+    containScroll: 'trimSnaps',
+    align: 'start',
   });
 
   const [prevBtnEnabled, setPrevBtnEnabled] = useState(false);
@@ -64,8 +63,8 @@ export default function FlashSection() {
   useEffect(() => {
     if (!emblaApi) return;
     onSelect();
-    emblaApi.on("select", onSelect);
-    emblaApi.on("reInit", onSelect);
+    emblaApi.on('select', onSelect);
+    emblaApi.on('reInit', onSelect);
   }, [emblaApi, onSelect]);
 
   return (
@@ -91,6 +90,7 @@ export default function FlashSection() {
         <Button
           className="absolute left-0 top-1/2 -translate-y-1/2 transform rounded-full border border-neutral-700 bg-neutral-800 p-2 transition-opacity hover:bg-neutral-700"
           onClick={scrollPrev}
+          aria-label={t('scrollPrev')}
         >
           <ArrowLeft size={24} className="text-white" />
         </Button>
@@ -100,6 +100,7 @@ export default function FlashSection() {
         <Button
           className="absolute right-0 top-1/2 -translate-y-1/2 transform rounded-full border border-neutral-700 bg-neutral-800 p-2 transition-opacity hover:bg-neutral-700"
           onClick={scrollNext}
+          aria-label={t('scrollNext')}
         >
           <ArrowRight size={24} className="text-white" />
         </Button>

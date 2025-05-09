@@ -1,9 +1,12 @@
+import { useTranslation } from 'react-i18next';
+
 const TestimonialsSection = () => {
+  const { t } = useTranslation();
   return (
     <section className="bg-neutral-800 px-2 py-12">
       <div className="container mx-auto">
         <h2 className="mb-8 text-center text-3xl font-bold text-white">
-          What Our Customers Say
+          {t('testimonials.heading')}
         </h2>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
@@ -26,30 +29,18 @@ const TestimonialsSection = () => {
                   ))}
               </div>
               <p className="mb-4 italic text-neutral-300">
-                "
-                {
-                  [
-                    'Amazing selection of gaming laptops with competitive prices.',
-                    'The support team was incredibly helpful in helping me choose the right laptop for my needs.',
-                    'Fast shipping and the laptop was exactly as described. Highly recommend!',
-                  ][i - 1]
-                }
-                "
+                "{t(`testimonials.review${i}`)}"
               </p>
               <div className="flex items-center">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-neutral-700 font-bold text-white">
-                  {['JD', 'AM', 'RK'][i - 1]}
+                  {t(`testimonials.initials${i}`)}
                 </div>
                 <div className="ml-3">
                   <p className="font-medium text-white">
-                    {['John D.', 'Alex M.', 'Rachel K.'][i - 1]}
+                    {t(`testimonials.name${i}`)}
                   </p>
                   <p className="text-sm text-neutral-500">
-                    {
-                      ['Gaming Enthusiast', 'Designer', 'Software Developer'][
-                        i - 1
-                      ]
-                    }
+                    {t(`testimonials.role${i}`)}
                   </p>
                 </div>
               </div>

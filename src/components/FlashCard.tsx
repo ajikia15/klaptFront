@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 interface FlashCardProps {
   title: string;
   discount: number;
@@ -5,14 +7,15 @@ interface FlashCardProps {
 }
 
 export const FlashCard = ({ title, discount, image }: FlashCardProps) => {
+  const { t } = useTranslation();
   return (
     <div className="bg-primary-900 p-4 rounded-lg aspect-[4/5] md:aspect-square relative flex flex-col gap-2">
-      <span className="text-lg">Up to</span>
+      <span className="text-lg">{t('upTo')}</span>
       <p className="text-xl font-semibold text-white">
         <span className="text-6xl font-bold bg-gradient-to-r inline  text-transparent bg-clip-text from-secondary-400 to-white">
           {discount}%
         </span>
-        &nbsp;off
+        &nbsp;{t('off')}
       </p>
 
       <h3 className="font-bold text-2xl">{title}</h3>

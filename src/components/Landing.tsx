@@ -13,6 +13,7 @@ import { Link } from '@tanstack/react-router';
 import { useMemo } from 'react';
 import './Landing.css';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { useTranslation } from 'react-i18next';
 
 // Define proper TypeScript interface for features
 interface FeatureCard {
@@ -20,51 +21,6 @@ interface FeatureCard {
   label: string;
   color: string;
 }
-
-// Expanded list of features - add more options for variety
-const features: FeatureCard[] = [
-  {
-    icon: <Zap size={32} className="text-purple-400" />,
-    label: 'RTX 4090',
-    color: 'from-purple-500 to-blue-500',
-  },
-  {
-    icon: <Monitor size={32} className="text-blue-400" />,
-    label: '240Hz Display',
-    color: 'from-blue-500 to-cyan-400',
-  },
-  {
-    icon: <ShieldCheck size={32} className="text-green-400" />,
-    label: '2-Year Warranty',
-    color: 'from-green-500 to-emerald-400',
-  },
-  {
-    icon: <Cpu size={32} className="text-orange-400" />,
-    label: 'Intel i9 14th Gen',
-    color: 'from-orange-500 to-yellow-500',
-  },
-  {
-    icon: <Battery size={32} className="text-yellow-400" />,
-    label: '6h Battery Life',
-    color: 'from-yellow-400 to-amber-500',
-  },
-  {
-    icon: <Wifi size={32} className="text-sky-400" />,
-    label: 'WiFi 6E',
-    color: 'from-sky-400 to-blue-500',
-  },
-
-  {
-    icon: <HardDrive size={32} className="text-emerald-400" />,
-    label: '2TB SSD',
-    color: 'from-emerald-500 to-green-400',
-  },
-  {
-    icon: <Headphones size={32} className="text-indigo-400" />,
-    label: 'Hi-Fi Audio',
-    color: 'from-indigo-500 to-purple-400',
-  },
-];
 
 // Utility function to shuffle array
 function shuffleArray<T>(array: T[]): T[] {
@@ -93,6 +49,7 @@ function MarqueeColumn({
   perspective?: string;
   scale?: number;
 }) {
+  const { t } = useTranslation();
   const shuffledFeatures = useMemo(() => shuffleArray(features), [features]);
 
   return (
@@ -127,7 +84,7 @@ function MarqueeColumn({
                 {feature.icon}
               </div>
               <div className="flex h-[2.5em] items-center justify-center text-center text-base font-bold text-white">
-                {feature.label}
+                {t(feature.label)}
               </div>
               <div
                 className={`absolute -z-10 left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br ${feature.color} opacity-30 blur-2xl`}
@@ -150,7 +107,7 @@ function MarqueeColumn({
                 {feature.icon}
               </div>
               <div className="flex h-[2.5em] items-center justify-center text-center text-base font-bold text-white">
-                {feature.label}
+                {t(feature.label)}
               </div>
               <div
                 className={`absolute -z-10 left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br ${feature.color} opacity-30 blur-2xl`}
@@ -164,29 +121,73 @@ function MarqueeColumn({
 }
 
 export default function Landing() {
+  const { t } = useTranslation();
   const isMobile = useMediaQuery('(max-width: 768px)');
+
+  // Move features array here so t is in scope
+  const features: FeatureCard[] = [
+    {
+      icon: <Zap size={32} className="text-purple-400" />,
+      label: t('rtx4090'),
+      color: 'from-purple-500 to-blue-500',
+    },
+    {
+      icon: <Monitor size={32} className="text-blue-400" />,
+      label: t('display240hz'),
+      color: 'from-blue-500 to-cyan-400',
+    },
+    {
+      icon: <ShieldCheck size={32} className="text-green-400" />,
+      label: t('warranty2year'),
+      color: 'from-green-500 to-emerald-400',
+    },
+    {
+      icon: <Cpu size={32} className="text-orange-400" />,
+      label: t('intelI9'),
+      color: 'from-orange-500 to-yellow-500',
+    },
+    {
+      icon: <Battery size={32} className="text-yellow-400" />,
+      label: t('battery6h'),
+      color: 'from-yellow-400 to-amber-500',
+    },
+    {
+      icon: <Wifi size={32} className="text-sky-400" />,
+      label: t('wifi6e'),
+      color: 'from-sky-400 to-blue-500',
+    },
+    {
+      icon: <HardDrive size={32} className="text-emerald-400" />,
+      label: t('ssd2tb'),
+      color: 'from-emerald-500 to-green-400',
+    },
+    {
+      icon: <Headphones size={32} className="text-indigo-400" />,
+      label: t('hifiAudio'),
+      color: 'from-indigo-500 to-purple-400',
+    },
+  ];
 
   return (
     <section className="relative flex min-h-[420px] w-full flex-col items-center justify-center overflow-hidden px-0">
       <div className="relative z-20 mx-auto flex w-full flex-col-reverse items-center gap-8 md:flex-row md:items-start md:gap-0">
         <div className="flex flex-1 flex-col items-center py-24 md:items-start">
           <h1 className="relative mb-4 text-center text-5xl font-black leading-[1.05] tracking-tight md:text-left md:text-5xl lg:text-6xl">
-            <span className="block font-light">UNLOCK</span>
+            <span className="block font-light">{t('unlock')}</span>
             <span className="glitch layers" data-text="UNPARALLELED">
               {' '}
-              UNPARALLELED{' '}
+              {t('unparalleled')}{' '}
             </span>
             <span className="glitch layers" data-text="PERFORMANCE">
-              <span>PERFORMANCE</span>
+              <span>{t('performance')}</span>
             </span>
           </h1>
           <p className="mb-8 mt-6 max-w-lg text-center text-lg text-neutral-200 md:text-left">
-            Experience gaming and creation like never before. Power, style, and
-            speed—beyond ordinary.
+            {t('landingDesc')}
           </p>
           <Link to="/search">
             <Button className="relative z-20">
-              <span className="relative z-10">SHOP NOW</span>
+              <span className="relative z-10">{t('shopNow')}</span>
             </Button>
           </Link>
         </div>

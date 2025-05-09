@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import HeartBtn from './HeartBtn';
 import { LaptopT } from '@/interfaces/laptopT';
 import { Button } from './ui/button';
+import { useTranslation } from 'react-i18next';
 
 interface LaptopCardProps extends LaptopT {
   isAuthenticated: boolean;
@@ -12,6 +13,8 @@ interface LaptopCardProps extends LaptopT {
 }
 
 export const LaptopCard: FC<LaptopCardProps> = (laptop) => {
+  const { t } = useTranslation();
+
   return (
     <div className="group/card border-neutral-700/30 group relative flex h-full flex-col overflow-hidden rounded-2xl border bg-gradient-to-br from-neutral-800 via-neutral-900 to-neutral-950 transition-all duration-300">
       <Link
@@ -31,7 +34,7 @@ export const LaptopCard: FC<LaptopCardProps> = (laptop) => {
           </div>
         ) : (
           <div className="flex h-36 w-full items-center justify-center rounded-lg border border-dashed border-neutral-700 text-neutral-500">
-            <span>No image available</span>
+            <span>{t('noImageAvailable')}</span>
           </div>
         )}
 
@@ -145,8 +148,10 @@ export const LaptopCard: FC<LaptopCardProps> = (laptop) => {
 
           <div className="border-neutral-700/50 mt-auto flex items-center justify-between border-t pt-3">
             <div className="font-bold text-purple-300">
-              <span className="block text-sm text-neutral-400">Price</span>$
-              {laptop.price.toLocaleString()}
+              <span className="block text-sm text-neutral-400">
+                {t('price')}
+              </span>
+              ${laptop.price.toLocaleString()}
             </div>
 
             <Link
@@ -154,7 +159,7 @@ export const LaptopCard: FC<LaptopCardProps> = (laptop) => {
               params={{ laptopId: laptop.id.toString() }}
             >
               <Button variant={'secondary'} className="group/btn font-bold">
-                Details
+                {t('details')}
                 <ArrowRight
                   size={16}
                   className="relative z-10 transition-all duration-300 group-hover/btn:translate-x-1"

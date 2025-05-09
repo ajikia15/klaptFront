@@ -20,39 +20,42 @@ import SpecialDealsSection from '@/pages/homepage/SpecialDealsSection';
 import BrandShowcaseSection from '@/pages/homepage/BrandShowcaseSection';
 import TestimonialsSection from '@/pages/homepage/TestimonialsSection';
 import { PaginatedLaptops } from '@/interfaces/PaginatedLaptops';
-
-const categories = [
-  {
-    title: 'Gaming',
-    description: 'High performance laptops for intense gaming sessions',
-    icon: <Zap size={24} className="text-purple-400" />,
-    gradient: 'from-purple-500/20 to-blue-600/20',
-    borderColor: 'border-purple-500/30',
-  },
-  {
-    title: 'Business',
-    description: 'Reliable laptops for productivity and business needs',
-    icon: <Server size={24} className="text-blue-400" />,
-    gradient: 'from-blue-500/20 to-cyan-600/20',
-    borderColor: 'border-blue-500/30',
-  },
-  {
-    title: 'Creative',
-    description: 'Color-accurate displays for design and content creation',
-    icon: <Monitor size={24} className="text-pink-400" />,
-    gradient: 'from-pink-500/20 to-red-600/20',
-    borderColor: 'border-pink-500/30',
-  },
-  {
-    title: 'Budget',
-    description: 'Affordable options without compromising on quality',
-    icon: <Cpu size={24} className="text-green-400" />,
-    gradient: 'from-green-500/20 to-emerald-600/20',
-    borderColor: 'border-green-500/30',
-  },
-];
+import { useTranslation } from 'react-i18next';
 
 export default function HomePage() {
+  const { t } = useTranslation();
+
+  const categories = [
+    {
+      title: t('category.gaming'),
+      description: t('category.gamingDesc'),
+      icon: <Zap size={24} className="text-purple-400" />,
+      gradient: 'from-purple-500/20 to-blue-600/20',
+      borderColor: 'border-purple-500/30',
+    },
+    {
+      title: t('category.business'),
+      description: t('category.businessDesc'),
+      icon: <Server size={24} className="text-blue-400" />,
+      gradient: 'from-blue-500/20 to-cyan-600/20',
+      borderColor: 'border-blue-500/30',
+    },
+    {
+      title: t('category.creative'),
+      description: t('category.creativeDesc'),
+      icon: <Monitor size={24} className="text-pink-400" />,
+      gradient: 'from-pink-500/20 to-red-600/20',
+      borderColor: 'border-pink-500/30',
+    },
+    {
+      title: t('category.budget'),
+      description: t('category.budgetDesc'),
+      icon: <Cpu size={24} className="text-green-400" />,
+      gradient: 'from-green-500/20 to-emerald-600/20',
+      borderColor: 'border-green-500/30',
+    },
+  ];
+
   const {
     data: paginated,
     isLoading,
@@ -86,13 +89,13 @@ export default function HomePage() {
         <div className="mb-6 flex items-center justify-between">
           <h2 className="flex items-center text-3xl font-bold text-white">
             <Star className="mr-3 text-secondary-400" size={28} />
-            Featured Laptops
+            {t('featuredLaptops')}
           </h2>
           <Link
             to="/search"
             className="flex items-center text-neutral-400 transition-all duration-300 hover:text-neutral-300"
           >
-            View All <ArrowRight size={16} className="ml-2" />
+            {t('viewAll')} <ArrowRight size={16} className="ml-2" />
           </Link>
         </div>
 
@@ -103,7 +106,7 @@ export default function HomePage() {
               .map((_, index) => <SkeletonCard key={`skeleton-${index}`} />)
           ) : error ? (
             <div className="col-span-full p-4 text-center text-red-500">
-              Error loading laptops: {error.toString()}
+              {t('errorLoadingLaptops')}: {error.toString()}
             </div>
           ) : (
             laptops
@@ -125,13 +128,13 @@ export default function HomePage() {
         <div className="mb-6 flex items-center justify-between">
           <h2 className="flex items-center text-3xl font-bold text-white">
             <Trophy className="mr-3 text-amber-400" size={28} />
-            Hot Cakes
+            {t('hotCakes')}
           </h2>
           <Link
             to="/search"
             className="flex items-center text-neutral-400 transition-all duration-300 hover:text-neutral-300"
           >
-            View All <ArrowRight size={16} className="ml-2" />
+            {t('viewAll')} <ArrowRight size={16} className="ml-2" />
           </Link>
         </div>
 
@@ -145,7 +148,7 @@ export default function HomePage() {
           </div>
         ) : error ? (
           <div className="p-4 text-center text-red-500">
-            Error loading laptops: {error.toString()}
+            {t('errorLoadingLaptops')}: {error.toString()}
           </div>
         ) : laptops && laptops.length > 0 ? (
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -159,7 +162,7 @@ export default function HomePage() {
           </div>
         ) : (
           <div className="py-12 text-center text-neutral-400">
-            No laptops available
+            {t('noLaptopsAvailable')}
           </div>
         )}
       </section>
@@ -172,13 +175,13 @@ export default function HomePage() {
           <div className="mb-6 flex items-center justify-between">
             <h2 className="flex items-center text-3xl font-bold text-white">
               <TrendingUp className="mr-3 text-primary-400" size={28} />
-              New Arrivals
+              {t('newArrivals')}
             </h2>
             <Link
               to="/search"
               className="flex items-center text-neutral-400 transition-all duration-300 hover:text-neutral-300"
             >
-              View All <ArrowRight size={16} className="ml-2" />
+              {t('viewAll')} <ArrowRight size={16} className="ml-2" />
             </Link>
           </div>
 

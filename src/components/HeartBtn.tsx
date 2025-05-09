@@ -1,12 +1,13 @@
-import { FC } from "react";
-import "./heartBtn.css";
+import { FC } from 'react';
+import './heartBtn.css';
 import {
   useAddToFavorites,
   useRemoveFromFavorites,
   useFavoriteStatus,
-} from "@/hooks/useFavorites";
-import { HeartIcon } from "@/assets/Icons";
-import { useToasts } from "@/assets/Toasts";
+} from '@/hooks/useFavorites';
+import { HeartIcon } from '@/assets/Icons';
+import { useToasts } from '@/assets/Toasts';
+import { useTranslation } from 'react-i18next';
 
 interface HeartBtnProps {
   laptopId?: number;
@@ -16,12 +17,13 @@ interface HeartBtnProps {
 
 const HeartBtn: FC<HeartBtnProps> = ({
   laptopId,
-  className = "",
+  className = '',
   isAuthenticated,
 }) => {
+  const { t } = useTranslation();
   const { unauthorizedToast } = useToasts();
   const { data: isFavorite, isLoading: isCheckingFavorite } = useFavoriteStatus(
-    laptopId || 0
+    laptopId || 0,
   );
   const addToFavorites = useAddToFavorites();
   const removeFromFavorites = useRemoveFromFavorites();
@@ -58,11 +60,13 @@ const HeartBtn: FC<HeartBtnProps> = ({
           checked={!!isFavorite}
           onChange={handleToggleFavorite}
           disabled={isDisabled}
-          aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+          aria-label={
+            isFavorite ? t('removeFromFavorites') : t('addToFavorites')
+          }
         />
         <div
-          className={`checkmark ${isLoading ? "loading" : ""} ${
-            isDisabled ? "disabled" : ""
+          className={`checkmark ${isLoading ? 'loading' : ''} ${
+            isDisabled ? 'disabled' : ''
           }`}
         >
           <HeartIcon />

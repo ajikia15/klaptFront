@@ -1,10 +1,11 @@
-import { FC } from "react";
-import { Link } from "@tanstack/react-router";
-import { ArrowRight, Maximize2 } from "@deemlol/next-icons";
-import { Badge } from "@/components/ui/badge";
-import HeartBtn from "./HeartBtn";
-import { LaptopT } from "@/interfaces/laptopT";
-import { Button } from "./ui/button";
+import { FC } from 'react';
+import { Link } from '@tanstack/react-router';
+import { ArrowRight, Maximize2 } from '@deemlol/next-icons';
+import { Badge } from '@/components/ui/badge';
+import HeartBtn from './HeartBtn';
+import { LaptopT } from '@/interfaces/laptopT';
+import { Button } from './ui/button';
+import { useTranslation } from 'react-i18next';
 
 interface LaptopCardProps extends LaptopT {
   isAuthenticated: boolean;
@@ -12,6 +13,8 @@ interface LaptopCardProps extends LaptopT {
 }
 
 export const LaptopCard: FC<LaptopCardProps> = (laptop) => {
+  const { t } = useTranslation();
+
   return (
     <div className="group/card border-neutral-700/30 group relative flex h-full flex-col overflow-hidden rounded-2xl border bg-gradient-to-br from-neutral-800 via-neutral-900 to-neutral-950 transition-all duration-300">
       <div className="relative w-full px-6 pb-4 pt-6">
@@ -29,7 +32,7 @@ export const LaptopCard: FC<LaptopCardProps> = (laptop) => {
           </div>
         ) : (
           <div className="flex h-36 w-full items-center justify-center rounded-lg border border-dashed border-neutral-700 text-neutral-500">
-            <span>No image available</span>
+            <span>{t('noImageAvailable')}</span>
           </div>
         )}
 
@@ -58,22 +61,22 @@ export const LaptopCard: FC<LaptopCardProps> = (laptop) => {
           </Link>
 
           <div className="mb-4 space-x-2 space-y-1">
-            {laptop.gpuBrand.toLowerCase().includes("nvidia") && (
+            {laptop.gpuBrand.toLowerCase().includes('nvidia') && (
               <Badge className="border-neutral-700/20 cursor-pointer border bg-green-700/80 font-bold shadow-sm transition-all hover:bg-green-600/80">
                 {laptop.gpuModel}
               </Badge>
             )}
-            {laptop.gpuBrand.toLowerCase().includes("AMD") && (
+            {laptop.gpuBrand.toLowerCase().includes('AMD') && (
               <Badge className="border-neutral-700/20 cursor-pointer border bg-red-600/80 font-bold shadow-sm transition-all hover:bg-red-500/80">
                 {laptop.gpuModel}
               </Badge>
             )}
-            {laptop.processorBrand.includes("Intel") && (
+            {laptop.processorBrand.includes('Intel') && (
               <Badge className="border-neutral-700/20 cursor-pointer border bg-blue-600/80 font-bold shadow-sm transition-all hover:bg-blue-500/80">
                 {laptop.processorModel}
               </Badge>
             )}
-            {laptop.processorBrand.toLowerCase().includes("amd") && (
+            {laptop.processorBrand.toLowerCase().includes('amd') && (
               <Badge className="border-neutral-700/20 cursor-pointer border bg-red-600/80 font-bold shadow-sm transition-all hover:bg-red-500/80">
                 {laptop.processorModel}
               </Badge>
@@ -101,8 +104,10 @@ export const LaptopCard: FC<LaptopCardProps> = (laptop) => {
 
           <div className="border-neutral-700/50 mt-auto flex items-center justify-between border-t pt-3">
             <div className="font-bold text-purple-300">
-              <span className="block text-sm text-neutral-400">Price</span>$
-              {laptop.price.toLocaleString()}
+              <span className="block text-sm text-neutral-400">
+                {t('price')}
+              </span>
+              ${laptop.price.toLocaleString()}
             </div>
 
             <Link
@@ -110,7 +115,9 @@ export const LaptopCard: FC<LaptopCardProps> = (laptop) => {
               params={{ laptopId: laptop.id.toString() }}
               className="group/btn before:from-primary-500/0 before:via-secondary-400/50 before:to-primary-500/0 relative flex cursor-pointer items-center gap-1.5 overflow-hidden rounded-md bg-secondary-700 px-4 py-2 text-base font-medium text-white transition-all duration-300 before:absolute before:inset-0 before:translate-x-[-100%] before:bg-gradient-to-r before:transition-transform before:duration-500 before:ease-in-out hover:bg-secondary-700 hover:before:translate-x-[100%]"
             >
-              <span className="relative z-10 font-bold">View Details</span>
+              <span className="relative z-10 font-bold">
+                {t('viewDetails')}
+              </span>
               <ArrowRight
                 size={16}
                 className="relative z-10 transition-all duration-300 group-hover/btn:translate-x-1"

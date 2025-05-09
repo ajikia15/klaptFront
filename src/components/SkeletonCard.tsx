@@ -1,7 +1,9 @@
-import { FC } from "react";
-import { ArrowRight } from "@deemlol/next-icons";
+import { FC } from 'react';
+import { ArrowRight } from '@deemlol/next-icons';
+import { useTranslation } from 'react-i18next';
 
 export const SkeletonCard: FC = () => {
+  const { t } = useTranslation();
   return (
     <div className="group relative flex flex-col h-full rounded-2xl transition-all duration-300 bg-gradient-to-br from-neutral-800 via-neutral-900 to-neutral-950 border border-neutral-700/30 overflow-hidden">
       <div className="relative w-full pt-6 pb-4 px-6">
@@ -29,7 +31,7 @@ export const SkeletonCard: FC = () => {
           <div className="flex items-center justify-between mt-auto pt-3 border-t border-neutral-700/50">
             <div className="flex flex-col">
               <div className="text-sm text-neutral-400 bg-neutral-700 animate-pulse rounded relative">
-                <span className="opacity-0">Price</span>
+                <span className="opacity-0">{t('price')}</span>
               </div>
               <div className="text-purple-300 font-bold bg-purple-600/40 animate-pulse rounded relative">
                 <span className="opacity-0">$1,299</span>
@@ -38,7 +40,7 @@ export const SkeletonCard: FC = () => {
 
             <div className="relative overflow-hidden bg-secondary-700/50 px-4 py-2 rounded-md text-white text-base font-medium flex items-center gap-1.5 animate-pulse">
               <span className="relative z-10 font-bold opacity-0">
-                View Details
+                {t('viewDetails')}
               </span>
               <ArrowRight size={16} className="relative z-10 opacity-0" />
               <div className="absolute inset-0 bg-secondary-700/50"></div>
