@@ -46,10 +46,10 @@ export default function Navbar() {
         {/* Logo */}
         <Link
           to="/"
-          className="flex flex-row items-end gap-3 text-2xl font-bold text-neutral-100"
+          className="flex flex-row items-center gap-2 text-2xl font-bold text-neutral-100"
         >
           <img src="/logo-white.svg" className="h-10 w-10 fill-black" alt="" />
-          <p>Kaido</p>
+          <p className="logo-text font-bold italic">dgpeaks</p>
           {/* for performance testing */}
           {/* <Book className="inline-block h-8 w-8 animate-spin text-primary-600" /> */}
         </Link>

@@ -162,7 +162,7 @@ body {
 
 @layer base {
   * {
-    @apply outline-ring/50 border-border;
+    @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;
@@ -203,4 +203,9 @@ body {
     rgb(38, 38, 38) 36%
   );
   background-size: 1000px 100%;
+}
+
+.logo-text {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
 }

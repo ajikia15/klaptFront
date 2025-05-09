@@ -1,8 +1,8 @@
-import { useQuery } from '@tanstack/react-query';
-import { LaptopCard } from '../../components/LaptopCard';
-import Landing from '../../components/Landing';
-import { useAuth } from '@/context/AuthContext';
-import { Link } from '@tanstack/react-router';
+import { useQuery } from "@tanstack/react-query";
+import { LaptopCard } from "../../components/LaptopCard";
+import Landing from "../../components/Landing";
+import { useAuth } from "@/context/AuthContext";
+import { Link } from "@tanstack/react-router";
 import {
   ArrowRight,
   Cpu,
@@ -12,43 +12,43 @@ import {
   Trophy,
   Star,
   TrendingUp,
-} from 'lucide-react';
-import { SkeletonCard } from '@/components/SkeletonCard';
-import CategorySection from '@/pages/homepage/CategorySection';
-import AnimatedStatsSection from '@/pages/homepage/AnimatedStatsSection';
-import SpecialDealsSection from '@/pages/homepage/SpecialDealsSection';
-import BrandShowcaseSection from '@/pages/homepage/BrandShowcaseSection';
-import TestimonialsSection from '@/pages/homepage/TestimonialsSection';
-import { PaginatedLaptops } from '@/interfaces/PaginatedLaptops';
+} from "lucide-react";
+import { SkeletonCard } from "@/components/SkeletonCard";
+import CategorySection from "@/pages/homepage/CategorySection";
+import AnimatedStatsSection from "@/pages/homepage/AnimatedStatsSection";
+import SpecialDealsSection from "@/pages/homepage/SpecialDealsSection";
+import BrandShowcaseSection from "@/pages/homepage/BrandShowcaseSection";
+import TestimonialsSection from "@/pages/homepage/TestimonialsSection";
+import { PaginatedLaptops } from "@/interfaces/PaginatedLaptops";
 
 const categories = [
   {
-    title: 'Gaming',
-    description: 'High performance laptops for intense gaming sessions',
+    title: "Gaming",
+    description: "High performance laptops for intense gaming sessions",
     icon: <Zap size={24} className="text-purple-400" />,
-    gradient: 'from-purple-500/20 to-blue-600/20',
-    borderColor: 'border-purple-500/30',
+    gradient: "from-purple-500/20 to-blue-600/20",
+    borderColor: "border-purple-500/30",
   },
   {
-    title: 'Business',
-    description: 'Reliable laptops for productivity and business needs',
+    title: "Business",
+    description: "Reliable laptops for productivity and business needs",
     icon: <Server size={24} className="text-blue-400" />,
-    gradient: 'from-blue-500/20 to-cyan-600/20',
-    borderColor: 'border-blue-500/30',
+    gradient: "from-blue-500/20 to-cyan-600/20",
+    borderColor: "border-blue-500/30",
   },
   {
-    title: 'Creative',
-    description: 'Color-accurate displays for design and content creation',
+    title: "Creative",
+    description: "Color-accurate displays for design and content creation",
     icon: <Monitor size={24} className="text-pink-400" />,
-    gradient: 'from-pink-500/20 to-red-600/20',
-    borderColor: 'border-pink-500/30',
+    gradient: "from-pink-500/20 to-red-600/20",
+    borderColor: "border-pink-500/30",
   },
   {
-    title: 'Budget',
-    description: 'Affordable options without compromising on quality',
+    title: "Budget",
+    description: "Affordable options without compromising on quality",
     icon: <Cpu size={24} className="text-green-400" />,
-    gradient: 'from-green-500/20 to-emerald-600/20',
-    borderColor: 'border-green-500/30',
+    gradient: "from-green-500/20 to-emerald-600/20",
+    borderColor: "border-green-500/30",
   },
 ];
 
@@ -58,13 +58,13 @@ export default function HomePage() {
     isLoading,
     error,
   } = useQuery<PaginatedLaptops>({
-    queryKey: ['laptops'],
+    queryKey: ["laptops"],
     queryFn: async () => {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/laptops`, {
-        credentials: 'include',
+        credentials: "include",
       });
       if (!response.ok) {
-        throw new Error('Failed to fetch laptops');
+        throw new Error("Failed to fetch laptops");
       }
       return response.json();
     },
@@ -79,6 +79,7 @@ export default function HomePage() {
       <div className="container mx-auto">
         <Landing />
       </div>
+      <BrandShowcaseSection />
 
       {/* Featured Laptops Section */}
       <section className="container relative mx-auto py-10">
@@ -203,7 +204,6 @@ export default function HomePage() {
       </section>
 
       <SpecialDealsSection />
-      <BrandShowcaseSection />
       <TestimonialsSection />
     </div>
   );

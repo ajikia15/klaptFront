@@ -46,7 +46,12 @@ const HeartBtn: FC<HeartBtnProps> = ({
   };
 
   return (
-    <div className={className}>
+    <div
+      className={className}
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+    >
       <label className="heart">
         <input
           type="checkbox"
