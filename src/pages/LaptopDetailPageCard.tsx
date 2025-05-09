@@ -40,12 +40,12 @@ const KeySpecsCard = ({ laptop, keySpecs }: KeySpecsCardProps) => {
   };
 
   return (
-    <div className="relative overflow-hidden bg-neutral-900 rounded-2xl border border-neutral-700/50 mb-10">
+    <div className="border-neutral-700/50 relative mb-10 overflow-hidden rounded-2xl border bg-neutral-900">
       {/* Background gradients with Tailwind */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(103,58,183,0.15),transparent_70%)]"></div>
-      <div className="absolute inset-0 opacity-5 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] opacity-5"></div>
 
-      <div className="grid grid-cols-1 md:grid-cols-5 relative z-10">
+      <div className="relative z-10 grid grid-cols-1 md:grid-cols-5">
         {keySpecs.map((spec, index) => (
           <div
             key={index}
@@ -54,38 +54,38 @@ const KeySpecsCard = ({ laptop, keySpecs }: KeySpecsCardProps) => {
             )}`}
           >
             {/* Corner accent with basic positioning in Tailwind */}
-            <div className="absolute -top-10 -right-10 w-20 h-20 opacity-0 corner-accent"></div>
+            <div className="corner-accent absolute -right-10 -top-10 h-20 w-20 opacity-0"></div>
 
-            <div className="flex items-center gap-3 mb-4">
+            <div className="mb-4 flex items-center gap-3">
               {/* Icon container with basic styling in Tailwind */}
-              <div className="w-12 h-12 rounded-full bg-neutral-800 border border-neutral-600/50 flex items-center justify-center relative transition-all duration-500 spec-icon-container">
-                <div className="absolute inset-0 rounded-full opacity-0 spec-icon-pulse"></div>
+              <div className="border-neutral-600/50 spec-icon-container relative flex h-12 w-12 items-center justify-center rounded-full border bg-neutral-800 transition-all duration-500">
+                <div className="spec-icon-pulse absolute inset-0 rounded-full opacity-0"></div>
                 <div className="flex items-center justify-center">
                   <spec.Icon
                     size={22}
-                    className="!text-secondary-400 spec-icon"
+                    className="spec-icon !text-secondary-400"
                   />
                 </div>
               </div>
-              <h3 className="text-sm font-medium text-neutral-400 uppercase tracking-wider group-hover:text-secondary-300 group-hover:translate-x-1 transition-all duration-300">
+              <h3 className="text-sm font-medium uppercase tracking-wider text-neutral-400 transition-all duration-300 group-hover:translate-x-1 group-hover:text-secondary-300">
                 {spec.title}
               </h3>
             </div>
 
             <div className="relative overflow-hidden">
-              <p className="text-white font-medium text-lg md:text-xl mb-2 transition-colors duration-300 group-hover:text-neutral-50 spec-value">
+              <p className="spec-value mb-2 text-lg font-medium text-white transition-colors duration-300 group-hover:text-neutral-50 md:text-xl">
                 {spec.value}
               </p>
 
               {spec.details && (
-                <p className="text-sm text-neutral-400 group-hover:text-neutral-300 transition-colors duration-300">
+                <p className="text-sm text-neutral-400 transition-colors duration-300 group-hover:text-neutral-300">
                   {spec.details}
                 </p>
               )}
             </div>
 
             {/* Underline effect with basic positioning in Tailwind */}
-            <div className="absolute bottom-0 left-0 w-0 h-0.5 underline-effect"></div>
+            <div className="underline-effect absolute bottom-0 left-0 h-0.5 w-0"></div>
           </div>
         ))}
       </div>

@@ -49,17 +49,17 @@ export default function Navbar() {
           className="flex flex-row items-center gap-2 text-2xl font-bold text-neutral-100"
         >
           <img src="/logo-white.svg" className="h-10 w-10 fill-black" alt="" />
-          <p className="logo-text font-bold italic">dgpeaks</p>
+          <p className="logo-text font-medium">Dgpeaks</p>
           {/* for performance testing */}
           {/* <Book className="inline-block h-8 w-8 animate-spin text-primary-600" /> */}
         </Link>
 
-        {/* Mobile Search - Full width when visible */}
+        {/* Mobile Search */}
         <div className="mx-2 w-full md:hidden">
           <Searchbar />
         </div>
 
-        {/* Desktop Search - Centered */}
+        {/* Desktop Search */}
         <div className="hidden md:mx-auto md:block md:max-w-md md:flex-1 md:px-8">
           <Searchbar />
         </div>
