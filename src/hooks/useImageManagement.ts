@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { apiRequest } from "@/services/api";
 
 export function useImageManagement() {
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
@@ -11,29 +10,31 @@ export function useImageManagement() {
 
     setUploadingImages(true);
     const files = Array.from(e.target.files);
-    const formData = new FormData();
-
-    files.forEach((file) => {
-      formData.append("image", file);
-    });
 
     try {
-      // Use apiRequest for protected upload
-      const result = await apiRequest("/upload", {
-        method: "POST",
-        body: formData,
-      });
-      if (result.error) throw new Error("Upload failed: " + result.error);
-      setUploadedImages((prev) => [
-        ...prev,
-        ...(result.data as { urls: string[] }).urls,
-      ]);
+      const uploadedUrls: string[] = [];
+      for (const file of files) {
+        const formData = new FormData();
+        formData.append("image", file);
+        formData.append("key", import.meta.env.VITE_IMGBB_API_KEY);
+
+        const response = await fetch("https://api.imgbb.com/1/upload", {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          uploadedUrls.push(data.data.url);
+        } else {
+          throw new Error(data.error?.message || "ImgBB upload failed");
+        }
+      }
+      setUploadedImages((prev) => [...prev, ...uploadedUrls]);
     } catch (error) {
       console.error("Error uploading images:", error);
-      // Could add error state management here
     } finally {
       setUploadingImages(false);
-      // Clear file input
       if (e.target) e.target.value = "";
     }
   };
