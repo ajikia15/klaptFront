@@ -23,12 +23,23 @@ import {
   DrawerDescription,
 } from '@/components/ui/drawer';
 import { Button } from '../ui/button';
-import { Plus, User } from 'lucide-react';
+import { Plus, User, Globe } from 'lucide-react';
+import { useState } from 'react';
+
+// Language options
+const LANGUAGES = [
+  { code: 'ka', label: 'Georgian', emoji: '🇬🇪' },
+  { code: 'en', label: 'English', emoji: '🇬🇧' },
+  { code: 'ru', label: 'Russian', emoji: '🇷🇺' },
+];
 
 export default function Navbar() {
   const navigate = useNavigate();
   const { isAuthenticated, user, logout } = useAuth();
   const { unauthorizedToast } = useToasts();
+
+  // Placeholder for language state (to be replaced with i18n logic)
+  const [lang, setLang] = useState('en');
 
   const handleLogout = async () => {
     try {
@@ -50,7 +61,6 @@ export default function Navbar() {
         >
           <img src="/logo-white.svg" className="h-10 w-10 fill-black" alt="" />
           <p className="logo-text hidden font-medium md:block">Dgpeaks</p>
-          {/* for performance testing */}
           {/* <Book className="inline-block h-8 w-8 animate-spin text-primary-600" /> */}
         </Link>
 
@@ -66,6 +76,27 @@ export default function Navbar() {
 
         {/* Desktop Navigation */}
         <div className="hidden items-center space-x-3 md:flex">
+          {/* Language Switcher Desktop */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="flex items-center px-2 py-2">
+                <Globe size={18} />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="min-w-36 border-neutral-700 bg-neutral-800 text-white">
+              {LANGUAGES.map((l) => (
+                <DropdownMenuItem
+                  key={l.code}
+                  onClick={() => setLang(l.code)}
+                  className={`cursor-pointer focus:bg-neutral-700 focus:text-white ${lang === l.code ? 'font-bold' : ''}`}
+                >
+                  <span className="mr-2">{l.emoji}</span>
+                  {l.label}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+
           <Link
             to={isAuthenticated ? '/add-listing' : '/'}
             onClick={isAuthenticated ? undefined : () => unauthorizedToast()}
@@ -140,8 +171,32 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Mobile Hamburger Menu */}
-        <div className="md:hidden">
+        {/* Mobile Language Switcher + Hamburger */}
+        <div className="flex items-center gap-2 md:hidden">
+          {/* Language Switcher Mobile */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="outline"
+                className="flex h-10 w-10 items-center justify-center rounded-full p-0"
+              >
+                <Globe size={20} className="text-neutral-100" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="min-w-36 border-neutral-700 bg-neutral-800 text-white">
+              {LANGUAGES.map((l) => (
+                <DropdownMenuItem
+                  key={l.code}
+                  onClick={() => setLang(l.code)}
+                  className={`cursor-pointer focus:bg-neutral-700 focus:text-white ${lang === l.code ? 'font-bold' : ''}`}
+                >
+                  <span className="mr-2">{l.emoji}</span>
+                  {l.label}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+          {/* Hamburger Menu */}
           <Drawer>
             <DrawerTrigger>
               <Button variant="outline" className="h-10 w-10 rounded-full p-0">
