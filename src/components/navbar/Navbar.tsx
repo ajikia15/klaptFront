@@ -1,17 +1,17 @@
-import { Heart, Menu } from "@deemlol/next-icons";
-import { Link, useNavigate } from "@tanstack/react-router";
-import { useAuth } from "../../context/AuthContext";
-import { useListFavorites } from "@/hooks/useFavorites";
-import Searchbar from "./Searchbar";
-import { SpinnerSVG } from "@/assets/SpinnerSVG";
+import { Heart, Menu } from '@deemlol/next-icons';
+import { Link, useNavigate } from '@tanstack/react-router';
+import { useAuth } from '../../context/AuthContext';
+import { useListFavorites } from '@/hooks/useFavorites';
+import Searchbar from './Searchbar';
+import { SpinnerSVG } from '@/assets/SpinnerSVG';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useToasts } from "@/assets/Toasts";
+} from '@/components/ui/dropdown-menu';
+import { useToasts } from '@/assets/Toasts';
 import {
   Drawer,
   DrawerClose,
@@ -21,9 +21,9 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerDescription,
-} from "@/components/ui/drawer";
-import { Button } from "../ui/button";
-import { Plus, User } from "lucide-react";
+} from '@/components/ui/drawer';
+import { Button } from '../ui/button';
+import { Plus, User } from 'lucide-react';
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -33,15 +33,15 @@ export default function Navbar() {
   const handleLogout = async () => {
     try {
       await logout();
-      navigate({ to: "/" });
+      navigate({ to: '/' });
     } catch (error) {
-      console.error("Logout failed:", error);
+      console.error('Logout failed:', error);
     }
   };
   const { data: favorites, isLoading } = useListFavorites();
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-neutral-900 shadow-lg">
+    <nav className="sticky top-0 z-50 w-full bg-neutral-900 px-2 shadow-lg">
       <div className="container mx-auto flex items-center justify-between py-3">
         {/* Logo */}
         <Link
@@ -49,7 +49,7 @@ export default function Navbar() {
           className="flex flex-row items-center gap-2 text-2xl font-bold text-neutral-100"
         >
           <img src="/logo-white.svg" className="h-10 w-10 fill-black" alt="" />
-          <p className="logo-text font-medium">Dgpeaks</p>
+          <p className="logo-text hidden font-medium md:block">Dgpeaks</p>
           {/* for performance testing */}
           {/* <Book className="inline-block h-8 w-8 animate-spin text-primary-600" /> */}
         </Link>
@@ -67,15 +67,15 @@ export default function Navbar() {
         {/* Desktop Navigation */}
         <div className="hidden items-center space-x-3 md:flex">
           <Link
-            to={isAuthenticated ? "/add-listing" : "/"}
+            to={isAuthenticated ? '/add-listing' : '/'}
             onClick={isAuthenticated ? undefined : () => unauthorizedToast()}
             className=""
             aria-label={
-              isAuthenticated ? "Create Post" : "Login to create a post"
+              isAuthenticated ? 'Create Post' : 'Login to create a post'
             }
-            title={isAuthenticated ? "Create Post" : "Login to create a post"}
+            title={isAuthenticated ? 'Create Post' : 'Login to create a post'}
           >
-            <Button className="" variant={"outline"}>
+            <Button className="" variant={'outline'}>
               Create post
               <Plus />
             </Button>
@@ -84,12 +84,12 @@ export default function Navbar() {
           {isAuthenticated ? (
             <>
               <Link to="/favorites" title="Favorites">
-                <Button className="relative aspect-square" variant={"outline"}>
+                <Button className="relative aspect-square" variant={'outline'}>
                   Favorites
                   <Heart size={20} />
                   {favorites && favorites.length > 0 && (
                     <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-secondary-400 text-xs text-neutral-100">
-                      {isLoading ? <SpinnerSVG /> : favorites?.length ?? 0}
+                      {isLoading ? <SpinnerSVG /> : (favorites?.length ?? 0)}
                     </span>
                   )}
                 </Button>
@@ -101,7 +101,7 @@ export default function Navbar() {
                     className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-gradient-to-r from-purple-600 to-primary-600 font-medium text-white transition-transform hover:scale-105"
                     title={user?.username}
                   >
-                    {user?.username ? user.username[0].toUpperCase() : "?"}
+                    {user?.username ? user.username[0].toUpperCase() : '?'}
                   </div>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="min-w-52 border-neutral-700 bg-neutral-800 text-white">
@@ -129,7 +129,7 @@ export default function Navbar() {
           ) : (
             <>
               <Link to="/login">
-                <Button variant={"outline"} className="">
+                <Button variant={'outline'} className="">
                   Sign In
                 </Button>
               </Link>
@@ -143,8 +143,10 @@ export default function Navbar() {
         {/* Mobile Hamburger Menu */}
         <div className="md:hidden">
           <Drawer>
-            <DrawerTrigger className="flex h-9 w-9 items-center justify-center rounded-full bg-neutral-800 hover:bg-neutral-700">
-              <Menu size={20} className="text-neutral-100" />
+            <DrawerTrigger>
+              <Button variant="outline" className="h-10 w-10 rounded-full p-0">
+                <Menu size={20} className="text-neutral-100" />
+              </Button>
             </DrawerTrigger>
             <DrawerHeader className="hidden">
               <DrawerTitle></DrawerTitle>
@@ -155,7 +157,7 @@ export default function Navbar() {
                 {isAuthenticated && (
                   <div className="mb-6 flex items-center space-x-3">
                     <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-purple-600 to-primary-600 font-medium text-white">
-                      {user?.username ? user.username[0].toUpperCase() : "?"}
+                      {user?.username ? user.username[0].toUpperCase() : '?'}
                     </div>
                     <div>
                       <div className="text-lg font-medium text-white">

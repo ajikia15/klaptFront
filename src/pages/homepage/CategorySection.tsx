@@ -1,6 +1,6 @@
-import { Link } from "@tanstack/react-router";
-import { ArrowRight } from "lucide-react";
-import { JSX } from "react";
+import { Link } from '@tanstack/react-router';
+import { ArrowRight } from 'lucide-react';
+import { JSX } from 'react';
 
 export interface CategoryItem {
   title: string;
@@ -16,20 +16,20 @@ interface CategorySectionProps {
 
 const CategorySection = ({ categories }: CategorySectionProps) => {
   return (
-    <section className="py-16 bg-neutral-800">
+    <section className="bg-neutral-800 px-2 py-16">
       <div className="container mx-auto px-4">
         <div className="mb-8 text-center">
-          <h2 className="text-3xl font-bold text-white mb-2 relative inline-block">
+          <h2 className="relative mb-2 inline-block text-3xl font-bold text-white">
             Browse by Category
-            <span className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 h-1 w-24 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full"></span>
+            <span className="absolute -bottom-2 left-1/2 h-1 w-24 -translate-x-1/2 transform rounded-full bg-gradient-to-r from-primary-500 to-secondary-500"></span>
           </h2>
-          <p className="text-neutral-400 max-w-2xl mx-auto mt-4">
+          <p className="mx-auto mt-4 max-w-2xl text-neutral-400">
             Find the perfect laptop for your specific needs, whether you're a
             gamer, professional, or student
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {categories.map((category) => (
             <Link
               to="/search"
@@ -40,17 +40,17 @@ const CategorySection = ({ categories }: CategorySectionProps) => {
               <div className="mb-4">{category.icon}</div>
 
               {/* Title */}
-              <h3 className="text-xl font-bold text-white mb-2">
+              <h3 className="mb-2 text-xl font-bold text-white">
                 {category.title}
               </h3>
 
               {/* Description */}
-              <p className="text-neutral-300 text-sm mb-4">
+              <p className="mb-4 text-sm text-neutral-300">
                 {category.description}
               </p>
 
               {/* Simple link */}
-              <div className="flex items-center text-sm text-white/80 font-medium group">
+              <div className="group flex items-center text-sm font-medium text-white/80">
                 <span>Explore</span>
                 <ArrowRight
                   size={14}

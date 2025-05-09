@@ -1,19 +1,19 @@
-import { Link } from "@tanstack/react-router";
+import { Link } from '@tanstack/react-router';
 
 const BrandShowcaseSection = () => {
   const brandLogos = [
-    { name: "Asus", logo: "/brands/asus.svg" },
-    { name: "Dell", logo: "/brands/dell.svg" },
-    { name: "HP", logo: "/brands/hp.svg" },
-    { name: "Lenovo", logo: "/brands/lenovo.svg" },
-    { name: "Apple", logo: "/brands/apple.svg" },
-    { name: "MSI", logo: "/brands/msi.svg" },
-    { name: "Acer", logo: "/brands/acer.svg" },
-    { name: "Razer", logo: "/brands/razer.svg" },
+    { name: 'Asus', logo: '/brands/asus.svg' },
+    { name: 'Dell', logo: '/brands/dell.svg' },
+    { name: 'HP', logo: '/brands/hp.svg' },
+    { name: 'Lenovo', logo: '/brands/lenovo.svg' },
+    { name: 'Apple', logo: '/brands/apple.svg' },
+    { name: 'MSI', logo: '/brands/msi.svg' },
+    { name: 'Acer', logo: '/brands/acer.svg' },
+    { name: 'Razer', logo: '/brands/razer.svg' },
   ];
   return (
-    <section className="bg-neutral-900 py-12">
-      <div className="container mx-auto px-4">
+    <section className="bg-neutral-900 px-2 py-12">
+      <div className="container mx-auto">
         <h2 className="mb-2 text-center text-3xl font-bold text-white">
           Shop by Brand
         </h2>

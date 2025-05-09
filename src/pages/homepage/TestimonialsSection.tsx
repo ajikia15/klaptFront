@@ -1,16 +1,16 @@
 const TestimonialsSection = () => {
   return (
-    <section className="py-12 bg-neutral-800">
-      <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold text-white mb-8 text-center">
+    <section className="bg-neutral-800 px-2 py-12">
+      <div className="container mx-auto">
+        <h2 className="mb-8 text-center text-3xl font-bold text-white">
           What Our Customers Say
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="bg-neutral-900 rounded-lg p-6 shadow-lg">
+            <div key={i} className="rounded-lg bg-neutral-900 p-6 shadow-lg">
               {/* Stars */}
-              <div className="flex mb-4">
+              <div className="mb-4 flex">
                 {Array(5)
                   .fill(0)
                   .map((_, j) => (
@@ -25,28 +25,28 @@ const TestimonialsSection = () => {
                     </svg>
                   ))}
               </div>
-              <p className="text-neutral-300 mb-4 italic">
+              <p className="mb-4 italic text-neutral-300">
                 "
                 {
                   [
-                    "Amazing selection of gaming laptops with competitive prices.",
-                    "The support team was incredibly helpful in helping me choose the right laptop for my needs.",
-                    "Fast shipping and the laptop was exactly as described. Highly recommend!",
+                    'Amazing selection of gaming laptops with competitive prices.',
+                    'The support team was incredibly helpful in helping me choose the right laptop for my needs.',
+                    'Fast shipping and the laptop was exactly as described. Highly recommend!',
                   ][i - 1]
                 }
                 "
               </p>
               <div className="flex items-center">
-                <div className="w-10 h-10 rounded-full bg-neutral-700 flex items-center justify-center text-white font-bold">
-                  {["JD", "AM", "RK"][i - 1]}
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-neutral-700 font-bold text-white">
+                  {['JD', 'AM', 'RK'][i - 1]}
                 </div>
                 <div className="ml-3">
-                  <p className="text-white font-medium">
-                    {["John D.", "Alex M.", "Rachel K."][i - 1]}
+                  <p className="font-medium text-white">
+                    {['John D.', 'Alex M.', 'Rachel K.'][i - 1]}
                   </p>
-                  <p className="text-neutral-500 text-sm">
+                  <p className="text-sm text-neutral-500">
                     {
-                      ["Gaming Enthusiast", "Designer", "Software Developer"][
+                      ['Gaming Enthusiast', 'Designer', 'Software Developer'][
                         i - 1
                       ]
                     }

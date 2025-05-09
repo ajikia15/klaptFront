@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { Check, Shield, Clock, HeartHandshake, ThumbsUp } from "lucide-react";
+import { useEffect, useRef, useState } from 'react';
+import { Check, Shield, Clock, HeartHandshake, ThumbsUp } from 'lucide-react';
 
 const AnimatedStatsSection = () => {
   // For animated stats
@@ -49,7 +49,7 @@ const AnimatedStatsSection = () => {
           observer.disconnect();
         }
       },
-      { threshold: 0.3 }
+      { threshold: 0.3 },
     );
 
     if (statsRef.current) {
@@ -62,21 +62,21 @@ const AnimatedStatsSection = () => {
   }, []);
 
   return (
-    <section className="py-10 bg-neutral-800">
-      <h2 className="text-3xl font-bold text-white text-center mb-8">
+    <section className="bg-neutral-800 px-2 py-10">
+      <h2 className="mb-8 text-center text-3xl font-bold text-white">
         But, why Kaido?
       </h2>
       <div ref={statsRef} className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           <div
             className={`text-center transition-all duration-1000 ${
               statsVisible
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-10"
+                ? 'opacity-100 translate-y-0'
+                : 'opacity-0 translate-y-10'
             }`}
           >
             <div className="text-5xl font-bold text-white">
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary-400 to-secondary-400">
+              <span className="bg-gradient-to-r from-primary-400 to-secondary-400 bg-clip-text text-transparent">
                 {animatedStats.customers.toLocaleString()}+
               </span>
             </div>
@@ -86,12 +86,12 @@ const AnimatedStatsSection = () => {
           <div
             className={`text-center transition-all duration-1000 delay-200 ${
               statsVisible
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-10"
+                ? 'opacity-100 translate-y-0'
+                : 'opacity-0 translate-y-10'
             }`}
           >
-            <div className="text-5xl font-bold text-white ">
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-secondary-400 to-primary-400">
+            <div className="text-5xl font-bold text-white">
+              <span className="bg-gradient-to-r from-secondary-400 to-primary-400 bg-clip-text text-transparent">
                 {animatedStats.laptops.toLocaleString()}+
               </span>
             </div>
@@ -101,12 +101,12 @@ const AnimatedStatsSection = () => {
           <div
             className={`text-center transition-all duration-1000 delay-400 ${
               statsVisible
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-10"
+                ? 'opacity-100 translate-y-0'
+                : 'opacity-0 translate-y-10'
             }`}
           >
             <div className="text-5xl font-bold text-white">
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-blue-400">
+              <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
                 {animatedStats.brands}+
               </span>
             </div>
@@ -114,64 +114,64 @@ const AnimatedStatsSection = () => {
           </div>
         </div>
 
-        <div className="mt-12 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-            <div className="bg-neutral-900 p-8 rounded-lg shadow-lg hover:bg-neutral-850 hover:scale-105 hover:shadow-xl group transition-all duration-300 ease-in-out">
-              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-primary-500/20 text-primary-400 mb-6 mx-auto group-hover:bg-primary-500/30 group-hover:text-primary-300 transform group-hover:scale-110 transition-all duration-300">
+        <div className="mb-8 mt-12">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-5">
+            <div className="hover:bg-neutral-850 group rounded-lg bg-neutral-900 p-8 shadow-lg transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
+              <div className="bg-primary-500/20 group-hover:bg-primary-500/30 mx-auto mb-6 flex h-12 w-12 transform items-center justify-center rounded-full text-primary-400 transition-all duration-300 group-hover:scale-110 group-hover:text-primary-300">
                 <Check size={24} />
               </div>
-              <h3 className="text-lg font-semibold text-white text-center mb-3 group-hover:text-primary-300 transition-colors duration-300">
+              <h3 className="mb-3 text-center text-lg font-semibold text-white transition-colors duration-300 group-hover:text-primary-300">
                 Quality Guaranteed
               </h3>
-              <p className="text-neutral-400 text-center text-sm">
+              <p className="text-center text-sm text-neutral-400">
                 Every laptop is thoroughly tested before shipping
               </p>
             </div>
 
-            <div className="bg-neutral-900 p-8 rounded-lg shadow-lg hover:bg-neutral-850 hover:scale-105 hover:shadow-xl group transition-all duration-300 ease-in-out">
-              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-secondary-500/20 text-secondary-400 mb-6 mx-auto group-hover:bg-secondary-500/30 group-hover:text-secondary-300 transform group-hover:scale-110 transition-all duration-300">
+            <div className="hover:bg-neutral-850 group rounded-lg bg-neutral-900 p-8 shadow-lg transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
+              <div className="bg-secondary-500/20 group-hover:bg-secondary-500/30 mx-auto mb-6 flex h-12 w-12 transform items-center justify-center rounded-full text-secondary-400 transition-all duration-300 group-hover:scale-110 group-hover:text-secondary-300">
                 <Shield size={24} />
               </div>
-              <h3 className="text-lg font-semibold text-white text-center mb-3 group-hover:text-secondary-300 transition-colors duration-300">
+              <h3 className="mb-3 text-center text-lg font-semibold text-white transition-colors duration-300 group-hover:text-secondary-300">
                 Extended Warranty
               </h3>
-              <p className="text-neutral-400 text-center text-sm">
+              <p className="text-center text-sm text-neutral-400">
                 Get peace of mind with our industry-leading warranty coverage
               </p>
             </div>
 
-            <div className="bg-neutral-900 p-8 rounded-lg shadow-lg hover:bg-neutral-850 hover:scale-105 hover:shadow-xl group transition-all duration-300 ease-in-out">
-              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 mb-6 mx-auto group-hover:bg-purple-500/30 group-hover:text-purple-300 transform group-hover:scale-110 transition-all duration-300">
+            <div className="hover:bg-neutral-850 group rounded-lg bg-neutral-900 p-8 shadow-lg transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
+              <div className="mx-auto mb-6 flex h-12 w-12 transform items-center justify-center rounded-full bg-purple-500/20 text-purple-400 transition-all duration-300 group-hover:scale-110 group-hover:bg-purple-500/30 group-hover:text-purple-300">
                 <Clock size={24} />
               </div>
-              <h3 className="text-lg font-semibold text-white text-center mb-3 group-hover:text-purple-300 transition-colors duration-300">
+              <h3 className="mb-3 text-center text-lg font-semibold text-white transition-colors duration-300 group-hover:text-purple-300">
                 Fast Delivery
               </h3>
-              <p className="text-neutral-400 text-center text-sm">
+              <p className="text-center text-sm text-neutral-400">
                 Most orders ship within 24 hours of purchase
               </p>
             </div>
 
-            <div className="bg-neutral-900 p-8 rounded-lg shadow-lg hover:bg-neutral-850 hover:scale-105 hover:shadow-xl group transition-all duration-300 ease-in-out">
-              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 mb-6 mx-auto group-hover:bg-blue-500/30 group-hover:text-blue-300 transform group-hover:scale-110 transition-all duration-300">
+            <div className="hover:bg-neutral-850 group rounded-lg bg-neutral-900 p-8 shadow-lg transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
+              <div className="mx-auto mb-6 flex h-12 w-12 transform items-center justify-center rounded-full bg-blue-500/20 text-blue-400 transition-all duration-300 group-hover:scale-110 group-hover:bg-blue-500/30 group-hover:text-blue-300">
                 <HeartHandshake size={24} />
               </div>
-              <h3 className="text-lg font-semibold text-white text-center mb-3 group-hover:text-blue-300 transition-colors duration-300">
+              <h3 className="mb-3 text-center text-lg font-semibold text-white transition-colors duration-300 group-hover:text-blue-300">
                 Expert Support
               </h3>
-              <p className="text-neutral-400 text-center text-sm">
+              <p className="text-center text-sm text-neutral-400">
                 Our tech specialists are available 24/7 for assistance
               </p>
             </div>
 
-            <div className="bg-neutral-900 p-8 rounded-lg shadow-lg hover:bg-neutral-850 hover:scale-105 hover:shadow-xl group transition-all duration-300 ease-in-out">
-              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-green-500/20 text-green-400 mb-6 mx-auto group-hover:bg-green-500/30 group-hover:text-green-300 transform group-hover:scale-110 transition-all duration-300">
+            <div className="hover:bg-neutral-850 group rounded-lg bg-neutral-900 p-8 shadow-lg transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
+              <div className="mx-auto mb-6 flex h-12 w-12 transform items-center justify-center rounded-full bg-green-500/20 text-green-400 transition-all duration-300 group-hover:scale-110 group-hover:bg-green-500/30 group-hover:text-green-300">
                 <ThumbsUp size={24} />
               </div>
-              <h3 className="text-lg font-semibold text-white text-center mb-3 group-hover:text-green-300 transition-colors duration-300">
+              <h3 className="mb-3 text-center text-lg font-semibold text-white transition-colors duration-300 group-hover:text-green-300">
                 Satisfaction Guarantee
               </h3>
-              <p className="text-neutral-400 text-center text-sm">
+              <p className="text-center text-sm text-neutral-400">
                 30-day money-back guarantee on all purchases
               </p>
             </div>
