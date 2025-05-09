@@ -36,6 +36,7 @@ export default function LaptopDetailPage() {
   const [animationParent] = useAutoAnimate();
   const [selectedImage, setSelectedImage] = useState(0);
   const isMobile = useMediaQuery("(max-width: 1023px)");
+  const [showFullDescription, setShowFullDescription] = useState(false);
 
   const {
     data: laptop,
@@ -336,7 +337,7 @@ export default function LaptopDetailPage() {
 
           {/* Details section - Now appears second on mobile */}
           <div className="order-2">
-            <div className="border-neutral-700/50 bg-neutral-800/90 relative flex h-full flex-col overflow-hidden rounded-2xl border p-8 shadow-lg backdrop-blur-sm">
+            <div className="border-neutral-700/50 bg-neutral-800/90 relative mx-auto flex w-full max-w-xl flex-col overflow-hidden rounded-2xl border p-8 shadow-lg backdrop-blur-sm lg:mx-0 lg:w-auto">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(124,58,237,0.07),transparent_70%)]"></div>
               <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] opacity-5"></div>
 
@@ -382,81 +383,64 @@ export default function LaptopDetailPage() {
 
                 {/* Description */}
                 <div className="prose prose-invert prose-sm mb-8 max-w-none">
-                  <p className="leading-relaxed text-neutral-300">
+                  <p
+                    className={`leading-relaxed text-neutral-300 transition-all duration-300 ${
+                      showFullDescription ? "" : "line-clamp-5"
+                    }`}
+                    style={{
+                      WebkitLineClamp: showFullDescription ? "unset" : 5,
+                    }}
+                  >
                     {laptop.description}
                   </p>
+                  {laptop.description && laptop.description.length > 300 && (
+                    <button
+                      className="mt-2 text-sm font-medium text-secondary-400 hover:underline focus:outline-none"
+                      onClick={() => setShowFullDescription((v) => !v)}
+                    >
+                      {showFullDescription ? "See less" : "...see more"}
+                    </button>
+                  )}
                 </div>
 
-                {/* Key Highlights as Accordion */}
-                <div className="mb-8">
-                  <Accordion
-                    type="single"
-                    defaultValue={isMobile ? "key-highlights" : undefined}
-                    collapsible
-                    className="bg-transparent"
-                  >
-                    <AccordionItem
-                      value="key-highlights"
-                      className="border-none"
-                    >
-                      <AccordionPrimitive.Trigger className="flex w-full items-center px-0 py-2 text-lg font-semibold text-white hover:no-underline">
-                        <div className="flex items-center gap-2">
-                          <div className="h-1 w-5 rounded-full bg-secondary-500"></div>
-                          <span>Key Highlights</span>
-                        </div>
-                      </AccordionPrimitive.Trigger>
-                      <AccordionContent className="pt-4">
-                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                          <div className="border-neutral-700/30 bg-neutral-700/20 rounded-lg border p-3">
-                            <div className="flex items-center gap-2">
-                              <CpuIcon
-                                size={18}
-                                className="text-secondary-400"
-                              />
-                              <span className="text-neutral-200">
-                                {laptop.processorBrand} {laptop.processorModel}
-                              </span>
-                            </div>
-                          </div>
-                          <div className="border-neutral-700/30 bg-neutral-700/20 rounded-lg border p-3">
-                            <div className="flex items-center gap-2">
-                              <RamIcon
-                                size={18}
-                                className="text-secondary-400"
-                              />
-                              <span className="text-neutral-200">
-                                {laptop.ram} {laptop.ramType} RAM
-                              </span>
-                            </div>
-                          </div>
-                          <div className="border-neutral-700/30 bg-neutral-700/20 rounded-lg border p-3">
-                            <div className="flex items-center gap-2">
-                              <GpuIcon
-                                size={18}
-                                className="text-secondary-400"
-                              />
-                              <span className="text-neutral-200">
-                                {laptop.gpuBrand} {laptop.gpuModel}
-                              </span>
-                            </div>
-                          </div>
-                          <div className="border-neutral-700/30 bg-neutral-700/20 rounded-lg border p-3">
-                            <div className="flex items-center gap-2">
-                              <DisplayIcon
-                                size={18}
-                                className="text-secondary-400"
-                              />
-                              <span className="text-neutral-200">
-                                {laptop.screenSize} {laptop.refreshRate}
-                                Display
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      </AccordionContent>
-                    </AccordionItem>
-                  </Accordion>
-                </div>
+                {/* Key Highlights - only show on mobile/tablet */}
+                {isMobile && (
+                  <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <div className="border-neutral-700/30 bg-neutral-700/20 rounded-lg border p-3">
+                      <div className="flex items-center gap-2">
+                        <CpuIcon size={18} className="text-secondary-400" />
+                        <span className="text-neutral-200">
+                          {laptop.processorBrand} {laptop.processorModel}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="border-neutral-700/30 bg-neutral-700/20 rounded-lg border p-3">
+                      <div className="flex items-center gap-2">
+                        <RamIcon size={18} className="text-secondary-400" />
+                        <span className="text-neutral-200">
+                          {laptop.ram} {laptop.ramType} RAM
+                        </span>
+                      </div>
+                    </div>
+                    <div className="border-neutral-700/30 bg-neutral-700/20 rounded-lg border p-3">
+                      <div className="flex items-center gap-2">
+                        <GpuIcon size={18} className="text-secondary-400" />
+                        <span className="text-neutral-200">
+                          {laptop.gpuBrand} {laptop.gpuModel}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="border-neutral-700/30 bg-neutral-700/20 rounded-lg border p-3">
+                      <div className="flex items-center gap-2">
+                        <DisplayIcon size={18} className="text-secondary-400" />
+                        <span className="text-neutral-200">
+                          {laptop.screenSize} {laptop.refreshRate} Display
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                {/* End Key Highlights */}
 
                 <Button className="flex w-full cursor-pointer items-center justify-center gap-3 rounded-lg bg-secondary-600 p-6 text-xl font-semibold text-white shadow-md transition-all duration-300 hover:bg-secondary-700">
                   <PhoneIcon size={72} />
