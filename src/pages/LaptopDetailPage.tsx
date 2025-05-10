@@ -30,7 +30,6 @@ import { Button } from '@/components/ui/button';
 export default function LaptopDetailPage() {
   const { t } = useTranslation();
   const { laptopId } = useParams({ from: '/laptop/$laptopId' });
-  const [animationParent] = useAutoAnimate();
   const isMobile = useMediaQuery('(max-width: 1023px)');
   const [showFullDescription, setShowFullDescription] = useState(false);
 
