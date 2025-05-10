@@ -1,17 +1,17 @@
-import { Heart, Menu } from '@deemlol/next-icons';
-import { Link, useNavigate } from '@tanstack/react-router';
-import { useAuth } from '../../context/AuthContext';
-import { useListFavorites } from '@/hooks/useFavorites';
-import Searchbar from './Searchbar';
-import { SpinnerSVG } from '@/assets/SpinnerSVG';
+import { Heart, Menu } from "@deemlol/next-icons";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useAuth } from "../../context/AuthContext";
+import { useListFavorites } from "@/hooks/useFavorites";
+import Searchbar from "./Searchbar";
+import { SpinnerSVG } from "@/assets/SpinnerSVG";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { useToasts } from '@/assets/Toasts';
+} from "@/components/ui/dropdown-menu";
+import { useToasts } from "@/assets/Toasts";
 import {
   Drawer,
   DrawerClose,
@@ -21,18 +21,18 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerDescription,
-} from '@/components/ui/drawer';
-import { Button } from '../ui/button';
-import { Plus, User, Globe } from 'lucide-react';
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import i18n from '@/i18n';
+} from "@/components/ui/drawer";
+import { Button } from "../ui/button";
+import { Plus, User, Globe } from "lucide-react";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import i18n from "@/i18n";
 
 // Language options
 const LANGUAGES = [
-  { code: 'ka', label: 'Georgian', emoji: '🇬🇪' },
-  { code: 'en', label: 'English', emoji: '🇬🇧' },
-  { code: 'ru', label: 'Russian', emoji: '🇷🇺' },
+  { code: "ka", label: "Georgian", emoji: "🇬🇪" },
+  { code: "en", label: "English", emoji: "🇬🇧" },
+  { code: "ru", label: "Russian", emoji: "🇷🇺" },
 ];
 
 export default function Navbar() {
@@ -41,14 +41,14 @@ export default function Navbar() {
   const { unauthorizedToast } = useToasts();
 
   // Placeholder for language state (to be replaced with i18n logic)
-  const [lang, setLang] = useState('en');
+  const [lang, setLang] = useState("en");
 
   const handleLogout = async () => {
     try {
       await logout();
-      navigate({ to: '/' });
+      navigate({ to: "/" });
     } catch (error) {
-      console.error('Logout failed:', error);
+      console.error("Logout failed:", error);
     }
   };
   const { data: favorites, isLoading } = useListFavorites();
@@ -94,7 +94,9 @@ export default function Navbar() {
                     setLang(l.code);
                     i18n.changeLanguage(l.code);
                   }}
-                  className={`cursor-pointer focus:bg-neutral-700 focus:text-white ${lang === l.code ? 'font-bold' : ''}`}
+                  className={`cursor-pointer focus:bg-neutral-700 focus:text-white ${
+                    lang === l.code ? "font-bold" : ""
+                  }`}
                 >
                   <span className="mr-2">{l.emoji}</span>
                   {l.label}
@@ -104,16 +106,16 @@ export default function Navbar() {
           </DropdownMenu>
 
           <Link
-            to={isAuthenticated ? '/add-listing' : '/'}
+            to={isAuthenticated ? "/add-listing" : "/"}
             onClick={isAuthenticated ? undefined : () => unauthorizedToast()}
             className=""
             aria-label={
-              isAuthenticated ? 'Create Post' : 'Login to create a post'
+              isAuthenticated ? "Create Post" : "Login to create a post"
             }
-            title={isAuthenticated ? 'Create Post' : 'Login to create a post'}
+            title={isAuthenticated ? "Create Post" : "Login to create a post"}
           >
-            <Button className="" variant={'outline'}>
-              {t('createPost')}
+            <Button className="" variant={"outline"}>
+              {t("createPost")}
               <Plus />
             </Button>
           </Link>
@@ -121,12 +123,12 @@ export default function Navbar() {
           {isAuthenticated ? (
             <>
               <Link to="/favorites" title="Favorites">
-                <Button className="relative aspect-square" variant={'outline'}>
+                <Button className="relative aspect-square" variant={"outline"}>
                   Favorites
                   <Heart size={20} />
                   {favorites && favorites.length > 0 && (
                     <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-secondary-400 text-xs text-neutral-100">
-                      {isLoading ? <SpinnerSVG /> : (favorites?.length ?? 0)}
+                      {isLoading ? <SpinnerSVG /> : favorites?.length ?? 0}
                     </span>
                   )}
                 </Button>
@@ -138,7 +140,7 @@ export default function Navbar() {
                     className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-gradient-to-r from-purple-600 to-primary-600 font-medium text-white transition-transform hover:scale-105"
                     title={user?.username}
                   >
-                    {user?.username ? user.username[0].toUpperCase() : '?'}
+                    {user?.username ? user.username[0].toUpperCase() : "?"}
                   </div>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="min-w-52 border-neutral-700 bg-neutral-800 text-white">
@@ -166,7 +168,7 @@ export default function Navbar() {
           ) : (
             <>
               <Link to="/login">
-                <Button variant={'outline'} className="">
+                <Button variant={"outline"} className="">
                   Sign In
                 </Button>
               </Link>
@@ -179,7 +181,6 @@ export default function Navbar() {
 
         {/* Mobile Language Switcher + Hamburger */}
         <div className="flex items-center gap-2 md:hidden">
-          {/* Language Switcher Mobile */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
@@ -194,7 +195,9 @@ export default function Navbar() {
                 <DropdownMenuItem
                   key={l.code}
                   onClick={() => setLang(l.code)}
-                  className={`cursor-pointer focus:bg-neutral-700 focus:text-white ${lang === l.code ? 'font-bold' : ''}`}
+                  className={`cursor-pointer focus:bg-neutral-700 focus:text-white ${
+                    lang === l.code ? "font-bold" : ""
+                  }`}
                 >
                   <span className="mr-2">{l.emoji}</span>
                   {l.label}
@@ -204,7 +207,7 @@ export default function Navbar() {
           </DropdownMenu>
           {/* Hamburger Menu */}
           <Drawer>
-            <DrawerTrigger>
+            <DrawerTrigger asChild>
               <Button variant="outline" className="h-10 w-10 rounded-full p-0">
                 <Menu size={20} className="text-neutral-100" />
               </Button>
@@ -218,7 +221,7 @@ export default function Navbar() {
                 {isAuthenticated && (
                   <div className="mb-6 flex items-center space-x-3">
                     <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-purple-600 to-primary-600 font-medium text-white">
-                      {user?.username ? user.username[0].toUpperCase() : '?'}
+                      {user?.username ? user.username[0].toUpperCase() : "?"}
                     </div>
                     <div>
                       <div className="text-lg font-medium text-white">
