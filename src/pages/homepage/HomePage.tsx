@@ -79,12 +79,12 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-neutral-900">
       {/* Hero Section */}
-      <div className="container mx-auto px-2">
+      <div className="container mx-auto px-4">
         <Landing />
       </div>
 
       {/* Featured Laptops Section */}
-      <section className="container relative mx-auto px-2 py-10">
+      <section className="container relative mx-auto px-4 py-10">
         <div className="bg-primary-500/5 absolute right-0 top-0 -z-10 h-1/2 w-1/3 rounded-full blur-[100px]"></div>
         <div className="mb-6 flex items-center justify-between">
           <h2 className="flex items-center text-2xl font-bold text-white md:text-3xl">
@@ -125,7 +125,7 @@ export default function HomePage() {
 
       <CategorySection categories={categories} />
 
-      <section className="container relative mx-auto mt-4 px-2 py-10">
+      <section className="container relative mx-auto mt-4 px-4 py-10">
         <div className="mb-6 flex items-center justify-between">
           <h2 className="flex items-center text-2xl font-bold text-white md:text-3xl">
             <Trophy className="mr-3 text-amber-400" size={28} />
@@ -172,7 +172,7 @@ export default function HomePage() {
       <AnimatedStatsSection />
 
       {/* New Arrivals */}
-      <section className="bg-neutral-900 px-2 py-12">
+      <section className="bg-neutral-900 px-4 py-12">
         <div className="container mx-auto">
           <div className="mb-6 flex items-center justify-between">
             <h2 className="flex items-center text-2xl font-bold text-white md:text-3xl">

@@ -1,6 +1,6 @@
-import { Link } from '@tanstack/react-router';
-import { ArrowRight } from 'lucide-react';
-import { JSX } from 'react';
+import { Link } from "@tanstack/react-router";
+import { ArrowRight } from "lucide-react";
+import { JSX } from "react";
 
 export interface CategoryItem {
   title: string;
@@ -16,7 +16,7 @@ interface CategorySectionProps {
 
 const CategorySection = ({ categories }: CategorySectionProps) => {
   return (
-    <section className="bg-neutral-800 px-2 py-16">
+    <section className="bg-neutral-800 px-4 py-16">
       <div className="container mx-auto px-4">
         <div className="mb-8 text-center">
           <h2 className="relative mb-2 inline-block text-3xl font-bold text-white">

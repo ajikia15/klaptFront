@@ -55,7 +55,7 @@ export default function Navbar() {
   const { t } = useTranslation();
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-neutral-900 px-2 shadow-lg">
+    <nav className="sticky top-0 z-50 w-full bg-neutral-900 px-4 shadow-lg">
       <div className="container mx-auto flex items-center justify-between py-3">
         {/* Logo */}
         <Link

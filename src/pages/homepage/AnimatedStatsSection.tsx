@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { Check, Shield, Clock, HeartHandshake, ThumbsUp } from 'lucide-react';
+import { useEffect, useRef, useState } from "react";
+import { Check, Shield, Clock, HeartHandshake, ThumbsUp } from "lucide-react";
 
 const AnimatedStatsSection = () => {
   // For animated stats
@@ -49,7 +49,7 @@ const AnimatedStatsSection = () => {
           observer.disconnect();
         }
       },
-      { threshold: 0.3 },
+      { threshold: 0.3 }
     );
 
     if (statsRef.current) {
@@ -62,7 +62,7 @@ const AnimatedStatsSection = () => {
   }, []);
 
   return (
-    <section className="bg-neutral-800 px-2 py-10">
+    <section className="bg-neutral-800 px-4 py-10">
       <h2 className="mb-8 text-center text-3xl font-bold text-white">
         But, why Kaido?
       </h2>
@@ -71,8 +71,8 @@ const AnimatedStatsSection = () => {
           <div
             className={`text-center transition-all duration-1000 ${
               statsVisible
-                ? 'opacity-100 translate-y-0'
-                : 'opacity-0 translate-y-10'
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-10"
             }`}
           >
             <div className="text-5xl font-bold text-white">
@@ -86,8 +86,8 @@ const AnimatedStatsSection = () => {
           <div
             className={`text-center transition-all duration-1000 delay-200 ${
               statsVisible
-                ? 'opacity-100 translate-y-0'
-                : 'opacity-0 translate-y-10'
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-10"
             }`}
           >
             <div className="text-5xl font-bold text-white">
@@ -101,8 +101,8 @@ const AnimatedStatsSection = () => {
           <div
             className={`text-center transition-all duration-1000 delay-400 ${
               statsVisible
-                ? 'opacity-100 translate-y-0'
-                : 'opacity-0 translate-y-10'
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-10"
             }`}
           >
             <div className="text-5xl font-bold text-white">

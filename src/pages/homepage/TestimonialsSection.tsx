@@ -1,12 +1,12 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 const TestimonialsSection = () => {
   const { t } = useTranslation();
   return (
-    <section className="bg-neutral-800 px-2 py-12">
+    <section className="bg-neutral-800 px-4 py-12">
       <div className="container mx-auto">
         <h2 className="mb-8 text-center text-3xl font-bold text-white">
-          {t('testimonials.heading')}
+          {t("testimonials.heading")}
         </h2>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">

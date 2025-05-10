@@ -1,9 +1,9 @@
-import { Link } from '@tanstack/react-router';
-import { ArrowRight } from 'lucide-react';
+import { Link } from "@tanstack/react-router";
+import { ArrowRight } from "lucide-react";
 
 const SpecialDealsSection = () => {
   return (
-    <section className="bg-neutral-900 px-2 py-12">
+    <section className="bg-neutral-900 px-4 py-12">
       <div className="container mx-auto">
         <div className="flex flex-col items-center justify-between gap-8 lg:flex-row">
           <div className="lg:w-1/2">
