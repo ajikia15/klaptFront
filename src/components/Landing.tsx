@@ -1,4 +1,4 @@
-import { Button } from './ui/button';
+import { Button } from "./ui/button";
 import {
   ShieldCheck,
   Cpu,
@@ -8,12 +8,12 @@ import {
   Wifi,
   HardDrive,
   Headphones,
-} from 'lucide-react';
-import { Link } from '@tanstack/react-router';
-import { useMemo } from 'react';
-import './Landing.css';
-import { useMediaQuery } from '@/hooks/useMediaQuery';
-import { useTranslation } from 'react-i18next';
+} from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { useMemo } from "react";
+import "./Landing.css";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { useTranslation } from "react-i18next";
 
 // Define proper TypeScript interface for features
 interface FeatureCard {
@@ -43,7 +43,7 @@ function MarqueeColumn({
   features,
   duration = 25,
   reverse = false,
-  perspective = 'rotateX(-30deg) rotateY(-30deg) rotateZ(0deg)',
+  perspective = "rotateX(-30deg) rotateY(-30deg) rotateZ(0deg)",
   scale = 1,
 }: MarqueeColumnProps & {
   perspective?: string;
@@ -55,16 +55,16 @@ function MarqueeColumn({
   return (
     <div
       className={`marquee marquee--vertical relative ${
-        reverse ? 'marquee--reverse' : ''
+        reverse ? "marquee--reverse" : ""
       }`}
       style={
         {
-          '--duration': `${duration}s`,
-          height: '420px',
-          width: '120px',
-          perspective: '1200px',
-          transformStyle: 'preserve-3d', // Added transform-style
-          backgroundColor: 'transparent', // Ensure transparent background
+          "--duration": `${duration}s`,
+          height: "420px",
+          width: "120px",
+          perspective: "1200px",
+          transformStyle: "preserve-3d", // Added transform-style
+          backgroundColor: "transparent", // Ensure transparent background
         } as React.CSSProperties
       }
     >
@@ -77,7 +77,7 @@ function MarqueeColumn({
               className="feature-card bg-neutral-900/80 relative flex h-[120px] min-w-[90px] flex-col items-center justify-center rounded-2xl border border-neutral-700 px-4 py-4 shadow-xl"
               style={{
                 transform:
-                  perspective + (scale !== 1 ? ` scale(${scale})` : ''),
+                  perspective + (scale !== 1 ? ` scale(${scale})` : ""),
               }}
             >
               <div className="mb-2 flex items-center justify-center">
@@ -100,7 +100,7 @@ function MarqueeColumn({
               className="feature-card bg-neutral-900/80 relative flex h-[120px] min-w-[90px] flex-col items-center justify-center rounded-2xl border border-neutral-700 px-4 py-4 shadow-xl"
               style={{
                 transform:
-                  perspective + (scale !== 1 ? ` scale(${scale})` : ''),
+                  perspective + (scale !== 1 ? ` scale(${scale})` : ""),
               }}
             >
               <div className="mb-2 flex items-center justify-center">
@@ -122,49 +122,49 @@ function MarqueeColumn({
 
 export default function Landing() {
   const { t } = useTranslation();
-  const isMobile = useMediaQuery('(max-width: 768px)');
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   // Move features array here so t is in scope
   const features: FeatureCard[] = [
     {
       icon: <Zap size={32} className="text-purple-400" />,
-      label: t('rtx4090'),
-      color: 'from-purple-500 to-blue-500',
+      label: t("rtx4090"),
+      color: "from-purple-500 to-blue-500",
     },
     {
       icon: <Monitor size={32} className="text-blue-400" />,
-      label: t('display240hz'),
-      color: 'from-blue-500 to-cyan-400',
+      label: t("display240hz"),
+      color: "from-blue-500 to-cyan-400",
     },
     {
       icon: <ShieldCheck size={32} className="text-green-400" />,
-      label: t('warranty2year'),
-      color: 'from-green-500 to-emerald-400',
+      label: t("warranty2year"),
+      color: "from-green-500 to-emerald-400",
     },
     {
       icon: <Cpu size={32} className="text-orange-400" />,
-      label: t('intelI9'),
-      color: 'from-orange-500 to-yellow-500',
+      label: t("intelI9"),
+      color: "from-orange-500 to-yellow-500",
     },
     {
       icon: <Battery size={32} className="text-yellow-400" />,
-      label: t('battery6h'),
-      color: 'from-yellow-400 to-amber-500',
+      label: t("battery6h"),
+      color: "from-yellow-400 to-amber-500",
     },
     {
       icon: <Wifi size={32} className="text-sky-400" />,
-      label: t('wifi6e'),
-      color: 'from-sky-400 to-blue-500',
+      label: t("wifi6e"),
+      color: "from-sky-400 to-blue-500",
     },
     {
       icon: <HardDrive size={32} className="text-emerald-400" />,
-      label: t('ssd2tb'),
-      color: 'from-emerald-500 to-green-400',
+      label: t("ssd2tb"),
+      color: "from-emerald-500 to-green-400",
     },
     {
       icon: <Headphones size={32} className="text-indigo-400" />,
-      label: t('hifiAudio'),
-      color: 'from-indigo-500 to-purple-400',
+      label: t("hifiAudio"),
+      color: "from-indigo-500 to-purple-400",
     },
   ];
 
@@ -172,23 +172,21 @@ export default function Landing() {
     <section className="relative flex min-h-[420px] w-full flex-col items-center justify-center overflow-hidden px-0">
       <div className="relative z-20 mx-auto flex w-full flex-col-reverse items-center gap-8 md:flex-row md:items-start md:gap-0">
         <div className="flex flex-1 flex-col items-center py-24 md:items-start">
-          <h1 className="relative mb-4 text-center text-5xl font-black leading-[1.05] tracking-tight md:text-left md:text-5xl lg:text-6xl">
-            <span className="block font-light">{t('unlock')}</span>
+          {/* <img src="/logo-white.svg" className="h-20 w-20" alt="" /> */}
+          <h1 className="relative mb-4 text-center text-xl font-black leading-[1.05] tracking-tight sm:text-2xl md:text-left md:text-5xl">
+            <span className="block font-light">{t("unlock")}</span>
             <span className="glitch layers" data-text="UNPARALLELED">
-              {' '}
-              {t('unparalleled')}{' '}
+              {t("unparalleled")}{" "}
             </span>
             <span className="glitch layers" data-text="PERFORMANCE">
-              <span>{t('performance')}</span>
+              <span>{t("performance")}</span>
             </span>
           </h1>
           <p className="mb-8 mt-6 max-w-lg text-center text-lg text-neutral-200 md:text-left">
-            {t('landingDesc')}
+            {t("landingDesc")}
           </p>
           <Link to="/search">
-            <Button className="relative z-20">
-              <span className="relative z-10">{t('shopNow')}</span>
-            </Button>
+            <Button className="relative z-20 text-lg">{t("getStarted")}</Button>
           </Link>
         </div>
         {!isMobile && (

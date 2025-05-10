@@ -109,7 +109,7 @@ const resources = {
       performance: "PERFORMANCE",
       landingDesc:
         "Experience gaming and creation like never before. Power, style, and speed—beyond ordinary.",
-      shopNow: "SHOP NOW",
+      getStarted: "Get Started",
       workstationLaptops: "Workstation Laptops",
       creativeWorkstations: "Creative Workstations",
       scrollPrev: "Scroll Previous",
@@ -222,7 +222,7 @@ const resources = {
       performance: "წარმადობა",
       landingDesc:
         "გამოცადე გეიმინგი და კრეატიულობა როგორც არასდროს. ძალა, სტილი და სიჩქარე — ჩვეულებრივზე მეტი.",
-      shopNow: "იყიდე ახლავე",
+      getStarted: "დავიწყოთ",
       workstationLaptops: "სამუშაო ლეპტოპები",
       creativeWorkstations: "კრეატიული სამუშაო სადგურები",
       scrollPrev: "წინა სლაიდი",
@@ -333,7 +333,7 @@ const resources = {
       performance: "ПРОИЗВОДИТЕЛЬНОСТЬ",
       landingDesc:
         "Ощути гейминг и творчество как никогда раньше. Мощь, стиль и скорость — за пределами обычного.",
-      shopNow: "КУПИТЬ СЕЙЧАС",
+      getStarted: "КУПИТЬ СЕЙЧАС",
       workstationLaptops: "Рабочие ноутбуки",
       creativeWorkstations: "Креативные рабочие станции",
       scrollPrev: "Прокрутить назад",
