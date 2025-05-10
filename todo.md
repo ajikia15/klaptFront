@@ -1,58 +1,60 @@
-- [ ] Key highlights in accordion, opened on mobile, closed on pc?
+# TODO
 
-- [ ] Kaido verified
-- [ ] Move away from sqlite
+## Features
 
-- [ ] Chart for price ranges shadcn https://ui.shadcn.com/docs/components/chart
-
-- [ ] tooltips in content moderation
-
-- move to postgress
+- SOLD LAPTOPS ADD MORE CONTENT
+- USER PAGES / SHOP PAGEs
+- REPLACE TEXT WITH LOGO ON LANDING MOBILE
 - site statistics
+- view count
+- autotagging (rtx? gaming. price <2.5k? budget.)
+
+## Improvements
+
+- GEORGIAN FONT
+- tooltips in content moderation
 - system settings (define front page laptops)
+- Chart for price ranges shadcn https://ui.shadcn.com/docs/components/chart
+- slider step forms for registering initially, then for posting the laptop.
 
-- [ ] slider step forms for registering initially, then for posting the laptop.
+## Backend
 
-- [ ] usable admin dashboard
+- [ ] Move away from sqlite
+- move to postgress
+- many to many fix
 
-  - [x] content moderation
-  - [ ] user moderation
-  - [ ] laptop updating
-    - [ ] update from form
-    - [ ] inline updating on the page
+## Frontend
 
 - [ ] profile settings
 
-- [ ] user model + registration changes
+## User Model & Registration
 
-  - [x] username
-  - [ ] joindate
-  - [ ] email verification (email must be verified to be able to post)
+- [x] username
+- [ ] joindate
+- [ ] email verification (email must be verified to be able to post)
+- [ ] facebook auth
 
-- [ ] view count
-- [ ] many to many fix
+## Admin
 
-- [ ] autotagging (rtx? gaming. price <2.5k? budget.)
+- [x] usable admin dashboard
 
-Completed
+  - [x] content moderation
+  - [x] user moderation
+  - [ ] laptop updating
+    - [x] update from form
+    - [ ] inline updating on the page
+
+- [ ] Kaido verified
+
+## Completed
 
 - [x] Filtering
 - [x] Favorites
-
-- [x] tags
-
 - [x] Get distinct parts
 - [x] Get amount of favorited items by user
-
 - [x] turn key highlihgts into accordion
 - [x] IsAdmin
 - [x] profile page
-
 - [x] approve in frontend as well
 - [x] ux improvements in content moderation
-- [x] delete all laptop entries command
-
-- SOLD LAPTOPS ADD MORE CONTENT
-- GEORGIAN FONT
-- USER PAGES / SHOP PAGEs
-- REPLACE TEXT WITH LOGO ON LANDING MOBILE
+- [x] tags
