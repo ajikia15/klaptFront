@@ -179,32 +179,46 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Mobile Language Switcher + Hamburger */}
+        {/* Mobile Language Switcher (Drawer) + Hamburger */}
         <div className="flex items-center gap-2 md:hidden">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+          {/* Language Drawer Trigger */}
+          <Drawer>
+            <DrawerTrigger asChild>
               <Button
                 variant="outline"
                 className="flex h-10 w-10 items-center justify-center rounded-full p-0"
+                aria-label="Change language"
               >
                 <Globe size={20} className="text-neutral-100" />
               </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="min-w-36 border-neutral-700 bg-neutral-800 text-white">
-              {LANGUAGES.map((l) => (
-                <DropdownMenuItem
-                  key={l.code}
-                  onClick={() => setLang(l.code)}
-                  className={`cursor-pointer focus:bg-neutral-700 focus:text-white ${
-                    lang === l.code ? "font-bold" : ""
-                  }`}
-                >
-                  <span className="mr-2">{l.emoji}</span>
-                  {l.label}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+            </DrawerTrigger>
+            <DrawerContent className="border-t border-neutral-800 bg-neutral-900">
+              <DrawerHeader>
+                <DrawerTitle>Choose Language</DrawerTitle>
+              </DrawerHeader>
+              <div className="flex flex-col gap-2 px-6 pb-4">
+                {LANGUAGES.map((l) => (
+                  <Button
+                    key={l.code}
+                    variant={lang === l.code ? "secondary" : "outline"}
+                    className="flex items-center justify-start"
+                    onClick={() => {
+                      setLang(l.code);
+                      i18n.changeLanguage(l.code);
+                    }}
+                  >
+                    <span className="mr-2">{l.emoji}</span>
+                    {l.label}
+                  </Button>
+                ))}
+              </div>
+              <DrawerFooter className="border-t border-neutral-800 px-6 py-4">
+                <DrawerClose className="w-full rounded-lg bg-neutral-800 px-4 py-3 text-center text-sm text-neutral-300">
+                  Close
+                </DrawerClose>
+              </DrawerFooter>
+            </DrawerContent>
+          </Drawer>
           {/* Hamburger Menu */}
           <Drawer>
             <DrawerTrigger asChild>

@@ -1,11 +1,11 @@
-import { FC } from 'react';
-import { Link } from '@tanstack/react-router';
-import { ArrowRight, Maximize2 } from '@deemlol/next-icons';
-import { Badge } from '@/components/ui/badge';
-import HeartBtn from './HeartBtn';
-import { LaptopT } from '@/interfaces/laptopT';
-import { Button } from './ui/button';
-import { useTranslation } from 'react-i18next';
+import { FC } from "react";
+import { Link } from "@tanstack/react-router";
+import { ArrowRight, Maximize2 } from "@deemlol/next-icons";
+import { Badge } from "@/components/ui/badge";
+import HeartBtn from "./HeartBtn";
+import { LaptopT } from "@/interfaces/laptopT";
+import { Button } from "./ui/button";
+import { useTranslation } from "react-i18next";
 
 interface LaptopCardProps extends LaptopT {
   isAuthenticated: boolean;
@@ -34,7 +34,7 @@ export const LaptopCard: FC<LaptopCardProps> = (laptop) => {
           </div>
         ) : (
           <div className="flex h-36 w-full items-center justify-center rounded-lg border border-dashed border-neutral-700 text-neutral-500">
-            <span>{t('noImageAvailable')}</span>
+            <span>{t("noImageAvailable")}</span>
           </div>
         )}
 
@@ -72,21 +72,21 @@ export const LaptopCard: FC<LaptopCardProps> = (laptop) => {
           </Link>
 
           <div className="mb-4 line-clamp-2 space-x-2 space-y-1">
-            {laptop.gpuBrand.toLowerCase().includes('nvidia') && (
+            {laptop.gpuBrand.toLowerCase().includes("nvidia") && (
               <Badge className="border-neutral-700/20 cursor-pointer border bg-neutral-800 font-bold text-neutral-200 shadow-sm transition-all hover:bg-green-600/80 hover:text-neutral-100">
                 <Link to="/search" search={{ gpuModel: [laptop.gpuModel] }}>
                   {laptop.gpuModel}
                 </Link>
               </Badge>
             )}
-            {laptop.gpuBrand.toLowerCase().includes('AMD') && (
+            {laptop.gpuBrand.toLowerCase().includes("AMD") && (
               <Badge className="border-neutral-700/20 cursor-pointer border bg-neutral-800 font-bold text-neutral-200 shadow-sm transition-all hover:bg-red-500/80 hover:text-neutral-100">
                 <Link to="/search" search={{ gpuModel: [laptop.gpuModel] }}>
                   {laptop.gpuModel}
                 </Link>
               </Badge>
             )}
-            {laptop.processorBrand.includes('Intel') && (
+            {laptop.processorBrand.includes("Intel") && (
               <Badge className="border-neutral-700/20 cursor-pointer border bg-neutral-800 font-bold text-neutral-200 shadow-sm transition-all hover:bg-blue-500/80 hover:text-neutral-100">
                 <Link
                   to="/search"
@@ -96,7 +96,7 @@ export const LaptopCard: FC<LaptopCardProps> = (laptop) => {
                 </Link>
               </Badge>
             )}
-            {laptop.processorBrand.toLowerCase().includes('amd') && (
+            {laptop.processorBrand.toLowerCase().includes("amd") && (
               <Badge className="border-neutral-700/20 cursor-pointer border bg-neutral-800 font-bold text-neutral-200 shadow-sm transition-all hover:bg-red-500/80 hover:text-neutral-100">
                 <Link
                   to="/search"
@@ -149,7 +149,7 @@ export const LaptopCard: FC<LaptopCardProps> = (laptop) => {
           <div className="border-neutral-700/50 mt-auto flex items-center justify-between border-t pt-3">
             <div className="font-bold text-purple-300">
               <span className="block text-sm text-neutral-400">
-                {t('price')}
+                {t("price")}
               </span>
               ${laptop.price.toLocaleString()}
             </div>
@@ -158,8 +158,8 @@ export const LaptopCard: FC<LaptopCardProps> = (laptop) => {
               to="/laptop/$laptopId"
               params={{ laptopId: laptop.id.toString() }}
             >
-              <Button variant={'secondary'} className="group/btn font-bold">
-                {t('details')}
+              <Button variant={"secondary"} className="group/btn font-bold">
+                {t("details")}
                 <ArrowRight
                   size={16}
                   className="relative z-10 transition-all duration-300 group-hover/btn:translate-x-1"
