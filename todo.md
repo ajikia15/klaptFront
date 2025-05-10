@@ -51,3 +51,8 @@ Completed
 - [x] approve in frontend as well
 - [x] ux improvements in content moderation
 - [x] delete all laptop entries command
+
+- SOLD LAPTOPS ADD MORE CONTENT
+- GEORGIAN FONT
+- USER PAGES / SHOP PAGEs
+- REPLACE TEXT WITH LOGO ON LANDING MOBILE
