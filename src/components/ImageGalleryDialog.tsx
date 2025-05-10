@@ -197,6 +197,7 @@ export const ImageGalleryDialog: React.FC<ImageGalleryDialogProps> = ({
                   e.stopPropagation();
                   emblaApi && emblaApi.scrollTo(idx);
                 }}
+                onMouseEnter={() => emblaApi && emblaApi.scrollTo(idx)}
                 className={`border-2 rounded-md overflow-hidden transition-all duration-200 focus:outline-none ${selectedIndex === idx ? 'border-purple-400 shadow-lg' : 'border-transparent opacity-70 hover:opacity-100'}`}
                 style={{ width: 48, height: 36 }}
                 aria-label={`Thumbnail ${idx + 1}`}
