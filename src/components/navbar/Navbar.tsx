@@ -109,10 +109,8 @@ export default function Navbar() {
             to={isAuthenticated ? "/add-listing" : "/"}
             onClick={isAuthenticated ? undefined : () => unauthorizedToast()}
             className=""
-            aria-label={
-              isAuthenticated ? "Create Post" : "Login to create a post"
-            }
-            title={isAuthenticated ? "Create Post" : "Login to create a post"}
+            aria-label={isAuthenticated ? t("createPost") : t("signIn")}
+            title={isAuthenticated ? t("createPost") : t("signIn")}
           >
             <Button className="" variant={"outline"}>
               {t("createPost")}
@@ -122,9 +120,9 @@ export default function Navbar() {
 
           {isAuthenticated ? (
             <>
-              <Link to="/favorites" title="Favorites">
+              <Link to="/favorites" title={t("navbar.favorites")}>
                 <Button className="relative aspect-square" variant={"outline"}>
-                  Favorites
+                  {t("navbar.favorites")}
                   <Heart size={20} />
                   {favorites && favorites.length > 0 && (
                     <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-secondary-400 text-xs text-neutral-100">
@@ -153,14 +151,14 @@ export default function Navbar() {
                     className="cursor-pointer focus:bg-neutral-700 focus:text-white"
                   >
                     <Link to="/profile" className="w-full">
-                      Profile
+                      {t("navbar.profile")}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={handleLogout}
                     className="cursor-pointer focus:bg-neutral-700 focus:text-white"
                   >
-                    Logout
+                    {t("navbar.logout")}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -169,11 +167,13 @@ export default function Navbar() {
             <>
               <Link to="/login">
                 <Button variant={"outline"} className="">
-                  Sign In
+                  {t("navbar.signIn")}
                 </Button>
               </Link>
               <Link to="/register">
-                <Button className="font-bold">Create Account</Button>
+                <Button className="font-bold">
+                  {t("navbar.createAccount")}
+                </Button>
               </Link>
             </>
           )}
@@ -187,14 +187,14 @@ export default function Navbar() {
               <Button
                 variant="outline"
                 className="flex h-10 w-10 items-center justify-center rounded-full p-0"
-                aria-label="Change language"
+                aria-label={t("navbar.chooseLanguage")}
               >
                 <Globe size={20} className="text-neutral-100" />
               </Button>
             </DrawerTrigger>
             <DrawerContent className="border-t border-neutral-800 bg-neutral-900">
               <DrawerHeader>
-                <DrawerTitle>Choose Language</DrawerTitle>
+                <DrawerTitle>{t("navbar.chooseLanguage")}</DrawerTitle>
               </DrawerHeader>
               <div className="flex flex-col gap-2 px-6 pb-4">
                 {LANGUAGES.map((l) => (
@@ -214,7 +214,7 @@ export default function Navbar() {
               </div>
               <DrawerFooter className="border-t border-neutral-800 px-6 py-4">
                 <DrawerClose className="w-full rounded-lg bg-neutral-800 px-4 py-3 text-center text-sm text-neutral-300">
-                  Close
+                  {t("navbar.close")}
                 </DrawerClose>
               </DrawerFooter>
             </DrawerContent>
@@ -255,7 +255,7 @@ export default function Navbar() {
                           className="flex items-center rounded-lg bg-neutral-800 px-4 py-3.5 text-white"
                         >
                           <Plus size={18} className="mr-3" />
-                          Create Post
+                          {t("createPost")}
                         </Link>
                       </DrawerClose>
 
@@ -265,7 +265,7 @@ export default function Navbar() {
                           className="flex items-center rounded-lg bg-neutral-800 px-4 py-3.5 text-white"
                         >
                           <User size={18} className="mr-3" />
-                          Profile
+                          {t("navbar.profile")}
                         </Link>
                       </DrawerClose>
 
@@ -275,7 +275,7 @@ export default function Navbar() {
                           className="flex items-center rounded-lg bg-neutral-800 px-4 py-3.5 text-white"
                         >
                           <Heart size={18} className="mr-3" />
-                          Favorites
+                          {t("navbar.favorites")}
                           {favorites && favorites.length > 0 && (
                             <span className="ml-auto rounded-full bg-secondary-400 px-2 py-0.5 text-xs text-neutral-100">
                               {isLoading ? <SpinnerSVG /> : favorites?.length}
@@ -304,7 +304,7 @@ export default function Navbar() {
                           <polyline points="16 17 21 12 16 7"></polyline>
                           <line x1="21" y1="12" x2="9" y2="12"></line>
                         </svg>
-                        Logout
+                        {t("navbar.logout")}
                       </Button>
                     </>
                   ) : (
@@ -330,7 +330,7 @@ export default function Navbar() {
                             <polyline points="10 17 15 12 10 7"></polyline>
                             <line x1="15" y1="12" x2="3" y2="12"></line>
                           </svg>
-                          Sign In
+                          {t("navbar.signIn")}
                         </Link>
                       </DrawerClose>
 
@@ -356,7 +356,7 @@ export default function Navbar() {
                             <line x1="20" y1="8" x2="20" y2="14"></line>
                             <line x1="23" y1="11" x2="17" y2="11"></line>
                           </svg>
-                          Create Account
+                          {t("navbar.createAccount")}
                         </Link>
                       </DrawerClose>
                     </>
@@ -365,7 +365,7 @@ export default function Navbar() {
               </div>
               <DrawerFooter className="border-t border-neutral-800 px-6 py-4">
                 <DrawerClose className="w-full rounded-lg bg-neutral-800 px-4 py-3 text-center text-sm text-neutral-300">
-                  Close Menu
+                  {t("navbar.closeMenu")}
                 </DrawerClose>
               </DrawerFooter>
             </DrawerContent>
