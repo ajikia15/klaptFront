@@ -2,7 +2,6 @@ import { useQuery } from '@tanstack/react-query';
 import { Link, useParams } from '@tanstack/react-router';
 import { LaptopT } from '../interfaces/laptopT';
 import { useState, useCallback, useEffect } from 'react';
-import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { CpuIcon } from '../assets/Icons';
 import { GpuIcon } from '../assets/Icons';
 import { RamIcon } from '../assets/Icons';
