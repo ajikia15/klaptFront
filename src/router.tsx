@@ -25,6 +25,7 @@ import ProfileMain from "./pages/profile/ProfileMain";
 import ProfilePosts from "./pages/profile/ProfilePosts";
 import ProfileAdmin from "./pages/profile/ProfileAdmin";
 import ProfileSettings from "./pages/profile/ProfileSettings";
+import UserPage from "./pages/UserPage";
 
 // Protected route wrapper component
 function ProtectedRoute({ children }: { children: ReactNode }) {
@@ -319,6 +320,12 @@ const adminSystemSettingsRoute = createRoute({
   ),
 });
 
+const userPageRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/user/$userId",
+  component: UserPage,
+});
+
 // Create the route tree using your routes
 const routeTree = rootRoute.addChildren([
   indexRoute,
@@ -340,6 +347,7 @@ const routeTree = rootRoute.addChildren([
   adminContentModerationRoute,
   adminStatisticsRoute,
   adminSystemSettingsRoute,
+  userPageRoute, // <-- Add here
 ]);
 
 // Create the router using the route tree
