@@ -26,7 +26,7 @@ export function ApproveDialog({
 }: ActionDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-neutral-800 border border-neutral-700 text-neutral-200">
+      <DialogContent className="border border-neutral-700 bg-neutral-800 text-neutral-200">
         <DialogHeader>
           <DialogTitle>Approve Listing</DialogTitle>
           <DialogDescription className="text-neutral-400">
@@ -44,7 +44,7 @@ export function ApproveDialog({
           </Button>
           <Button
             onClick={() => laptopId && onAction(laptopId)}
-            className="bg-green-600 hover:bg-green-700 text-white"
+            className="bg-green-600 text-white hover:bg-green-700"
           >
             Approve
           </Button>
@@ -62,7 +62,7 @@ export function RejectDialog({
 }: ActionDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-neutral-800 border border-neutral-700 text-neutral-200">
+      <DialogContent className="border border-neutral-700 bg-neutral-800 text-neutral-200">
         <DialogHeader>
           <DialogTitle>Reject Listing</DialogTitle>
           <DialogDescription className="text-neutral-400">
@@ -80,7 +80,7 @@ export function RejectDialog({
           </Button>
           <Button
             onClick={() => laptopId && onAction(laptopId)}
-            className="bg-red-600 hover:bg-red-700 text-white"
+            className="bg-red-600 text-white hover:bg-red-700"
           >
             Reject
           </Button>
@@ -98,7 +98,7 @@ export function DeleteDialog({
 }: ActionDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-neutral-800 border border-neutral-700 text-neutral-200">
+      <DialogContent className="border border-neutral-700 bg-neutral-800 text-neutral-200">
         <DialogHeader>
           <DialogTitle>Delete Listing</DialogTitle>
           <DialogDescription className="text-neutral-400">
@@ -116,50 +116,9 @@ export function DeleteDialog({
           </Button>
           <Button
             onClick={() => laptopId && onAction(laptopId)}
-            className="bg-red-600 hover:bg-red-700 text-white"
+            className="bg-red-600 text-white hover:bg-red-700"
           >
             Delete
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
-}
-
-interface NukeDialogProps extends DialogProps {
-  onAction: () => void;
-}
-
-export function NukeAllDialog({
-  open,
-  onOpenChange,
-  onAction,
-}: NukeDialogProps) {
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-neutral-800 border border-neutral-700 text-neutral-200">
-        <DialogHeader>
-          <DialogTitle className="text-red-500">
-            ⚠️ DANGER: Delete ALL Listings
-          </DialogTitle>
-          <DialogDescription className="text-neutral-400">
-            This will DELETE ALL LISTINGS from the database. This action CANNOT
-            be undone! Are you absolutely sure?
-          </DialogDescription>
-        </DialogHeader>
-        <DialogFooter>
-          <Button
-            variant="outline"
-            onClick={() => onOpenChange(false)}
-            className="bg-neutral-700 text-neutral-200 hover:bg-neutral-600"
-          >
-            Cancel
-          </Button>
-          <Button
-            onClick={onAction}
-            className="bg-red-600 hover:bg-red-700 text-white"
-          >
-            Delete Everything
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -179,7 +138,7 @@ export function ArchiveDialog({
 }: ArchiveUserDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-neutral-800 border border-neutral-700 text-neutral-200">
+      <DialogContent className="border border-neutral-700 bg-neutral-800 text-neutral-200">
         <DialogHeader>
           <DialogTitle>Archive User</DialogTitle>
           <DialogDescription className="text-neutral-400">
@@ -197,7 +156,7 @@ export function ArchiveDialog({
           </Button>
           <Button
             onClick={() => laptopId && onAction(laptopId)}
-            className="bg-red-600 hover:bg-red-700 text-white"
+            className="bg-red-600 text-white hover:bg-red-700"
           >
             Archive
           </Button>

@@ -152,7 +152,6 @@ export default function EditListingPage() {
           stockStatus: laptop.stockStatus || "in stock",
         }
       : {
-          // Default empty values
           title: "",
           price: "",
           brand: "",

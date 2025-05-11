@@ -23,7 +23,7 @@ interface Laptop {
   userId: string | number;
   status: "pending" | "approved" | "rejected" | "archived";
   images?: string[];
-  // Add isCertified and update description
+
   isCertified: boolean;
   description: {
     en?: string;

@@ -15,13 +15,6 @@ interface MyPostLaptopProps {
   status?: "pending" | "approved" | "rejected" | "archived";
   images?: string[];
   onDelete: (id: number) => void;
-  // Add isCertified and update description
-  isCertified: boolean;
-  description: {
-    en?: string;
-    ka?: string;
-    ru?: string;
-  };
 }
 
 export function MyPostsLaptopCard({
@@ -32,7 +25,6 @@ export function MyPostsLaptopCard({
   images,
   onDelete,
 }: MyPostLaptopProps) {
-  // Status specific styling - borrowed from ContentLaptopCard
   const getStatusStyle = (status: string) => {
     switch (status) {
       case "approved":

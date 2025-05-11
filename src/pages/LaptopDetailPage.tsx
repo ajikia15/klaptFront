@@ -106,8 +106,10 @@ export default function LaptopDetailPage() {
   }
 
   const getDisplayDescription = () => {
-    if (!laptop.description) return t("noDescriptionAvailable"); // Or some other placeholder
-    const lang = i18n.language; // get current language
+    if (!laptop.description) return t("noDescriptionAvailable");
+    const lang = i18n.language;
+    console.log("Current language:", lang);
+    console.log("Laptop description:", laptop.description);
     if (lang === "ka" && laptop.description.ka) return laptop.description.ka;
     if (lang === "ru" && laptop.description.ru) return laptop.description.ru;
     if (laptop.description.en) return laptop.description.en;
@@ -381,7 +383,6 @@ export default function LaptopDetailPage() {
               <div className="relative z-10">
                 <div className="mb-6 flex flex-wrap items-center gap-3">
                   {" "}
-                  {/* Added items-center */}
                   <span
                     className={`px-3 py-1 text-xs font-medium rounded-full border ${getStockStatusColor(
                       laptop.stockStatus

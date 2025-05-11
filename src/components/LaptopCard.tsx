@@ -9,9 +9,7 @@ import { useTranslation } from "react-i18next";
 import ImageGalleryDialog from "./ImageGalleryDialog";
 
 interface LaptopCardProps extends LaptopT {
-  // LaptopT is already updated
   isAuthenticated: boolean;
-  // tags?: string[]; // This was already in LaptopT as tag
 }
 
 export const LaptopCard: FC<LaptopCardProps> = (laptop) => {

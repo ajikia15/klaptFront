@@ -3,7 +3,7 @@ import { SpinnerSVG } from "@/assets/SpinnerSVG";
 import { Button } from "@/components/ui/button";
 import { useAddListing } from "@/hooks/useAddListing";
 import { useImageManagement } from "@/hooks/useImageManagement";
-import { useTranslation } from "react-i18next"; // Import useTranslation
+import { useTranslation } from "react-i18next";
 
 const LAPTOP_BRANDS = [
   "ASUS",
