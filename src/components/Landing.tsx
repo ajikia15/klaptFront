@@ -172,16 +172,23 @@ export default function Landing() {
     <section className="relative flex min-h-[420px] w-full flex-col items-center justify-center overflow-hidden px-0">
       <div className="relative z-20 mx-auto flex w-full flex-col-reverse items-center gap-8 md:flex-row md:items-start md:gap-0">
         <div className="flex flex-1 flex-col items-center py-24 md:items-start">
-          {/* <img src="/logo-white.svg" className="h-20 w-20" alt="" /> */}
-          <h1 className="relative mb-4 text-center text-xl font-black leading-[1.05] tracking-tight sm:text-2xl md:text-left md:text-5xl">
-            <span className="block font-light">{t("unlock")}</span>
-            <span className="glitch layers" data-text="UNPARALLELED">
-              {t("unparalleled")}{" "}
-            </span>
-            <span className="glitch layers" data-text="PERFORMANCE">
-              <span>{t("performance")}</span>
-            </span>
-          </h1>
+          {!isMobile ? (
+            <>
+              <h1 className="relative mb-4 text-center text-xl font-black leading-[1.05] tracking-tight sm:text-2xl md:text-left md:text-5xl">
+                <span className="block font-light">{t("unlock")}</span>
+                <span className="glitch layers" data-text="UNPARALLELED">
+                  {t("unparalleled")}
+                </span>
+                <span className="glitch layers" data-text="PERFORMANCE">
+                  <span>{t("performance")}</span>
+                </span>
+              </h1>
+            </>
+          ) : (
+            <>
+              <img src="/logo-white.svg" className="h-20 w-20" alt="" />
+            </>
+          )}
           <p className="mb-8 mt-6 max-w-lg text-center text-lg text-neutral-200 md:text-left">
             {t("landingDesc")}
           </p>

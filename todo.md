@@ -5,6 +5,9 @@
 - SOLD LAPTOPS ADD MORE CONTENT
 - USER PAGES / SHOP PAGEs
 - REPLACE TEXT WITH LOGO ON LANDING MOBILE
+- Kaidoverified etc
+- Optimistic updates (hearting)
+- Backend multiple language support
 - site statistics
 - view count
 - autotagging (rtx? gaming. price <2.5k? budget.)
