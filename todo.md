@@ -4,7 +4,7 @@
 
 - SOLD LAPTOPS ADD MORE CONTENT
 - USER PAGES / SHOP PAGEs
-- REPLACE TEXT WITH LOGO ON LANDING MOBILE
+- [x] REPLACE TEXT WITH LOGO ON LANDING MOBILE
 - Kaidoverified etc
 - Optimistic updates (hearting)
 - Backend multiple language support

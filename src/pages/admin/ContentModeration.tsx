@@ -40,7 +40,6 @@ export default function ContentModeration() {
   const [rejectDialogOpen, setRejectDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [archiveDialogOpen, setArchiveDialogOpen] = useState(false);
-  const [nukeDialogOpen, setNukeDialogOpen] = useState(false);
 
   const [contentTable] = useAutoAnimate();
 
@@ -95,13 +94,6 @@ export default function ContentModeration() {
     setArchiveDialogOpen(true);
   }
 
-  const handleNukeAll = () => {
-    alert(
-      "NUKE command initiated! All listings would be deleted if this was connected to the backend."
-    );
-    setNukeDialogOpen(false);
-  };
-
   return (
     <div className="min-h-screen bg-neutral-900 py-10 text-neutral-200">
       <div className="container mx-auto px-4">
@@ -116,31 +108,37 @@ export default function ContentModeration() {
           <div className="mb-6 flex flex-wrap gap-2">
             {["all", "pending", "approved", "rejected", "archived"].map(
               (status) => {
-                let activeClass = ""; let inactiveClass ="";
+                let activeClass = "";
+                let inactiveClass = "";
 
                 switch (status) {
                   case "approved":
-                    activeClass = "bg-green-600 text-white";
+                    activeClass =
+                      "bg-green-600 text-white hover:bg-green-700 hover:text-white";
                     inactiveClass =
                       "border border-green-800/30 bg-green-900/20 text-green-400 hover:bg-green-900/40 hover:text-green-300";
                     break;
                   case "rejected":
-                    activeClass = "bg-red-600 text-white";
+                    activeClass =
+                      "bg-red-600 text-white hover:bg-red-700 hover:text-white";
                     inactiveClass =
                       "border border-red-800/30 bg-red-900/20 text-red-400 hover:bg-red-900/40 hover:text-red-300";
                     break;
                   case "pending":
-                    activeClass = "bg-amber-600 text-white";
+                    activeClass =
+                      "bg-amber-600 text-white hover:bg-amber-700 hover:text-white";
                     inactiveClass =
                       "border border-amber-800/30 bg-amber-900/20 text-amber-400 hover:bg-amber-900/40 hover:text-amber-300";
                     break;
                   case "archived":
-                    activeClass = "bg-neutral-600 text-white";
+                    activeClass =
+                      "bg-neutral-600 text-white hover:bg-neutral-700 hover:text-white";
                     inactiveClass =
                       "bg-neutral-800/70 border-neutral-700/30 border text-neutral-400 hover:bg-neutral-700 hover:text-neutral-300";
                     break;
                   default: // "all"
-                    activeClass = "bg-blue-600 text-white";
+                    activeClass =
+                      "bg-blue-600 text-white hover:bg-blue-700 hover:text-white";
                     inactiveClass =
                       "border border-blue-800/30 bg-blue-900/20 text-blue-400 hover:bg-blue-900/40 hover:text-blue-300";
                 }
@@ -148,6 +146,7 @@ export default function ContentModeration() {
                 return (
                   <Button
                     key={status}
+                    variant="ghost"
                     onClick={() => setStatusFilter(status)}
                     className={`${
                       statusFilter === status ? activeClass : inactiveClass
@@ -162,17 +161,6 @@ export default function ContentModeration() {
                 );
               }
             )}
-          </div>
-
-          {/* NUKE Button Section */}
-          <div className="mb-6 flex justify-end">
-            <Button
-              onClick={() => setNukeDialogOpen(true)}
-              className="flex items-center gap-2 rounded-lg border border-red-800/30 bg-red-900/20 px-3 py-1.5 text-xs text-red-400 transition-colors hover:bg-red-900/40 hover:text-red-300 sm:px-4 sm:py-2 sm:text-sm"
-            >
-              <AlertTriangle size={16} />
-              Delete All Listings
-            </Button>
           </div>
 
           <div className="border-neutral-700/30 overflow-x-auto rounded-lg border">
@@ -307,11 +295,6 @@ export default function ContentModeration() {
         onAction={deleteListing}
       />
 
-      <NukeAllDialog
-        open={nukeDialogOpen}
-        onOpenChange={setNukeDialogOpen}
-        onAction={handleNukeAll}
-      />
       <ArchiveDialog
         open={archiveDialogOpen}
         onOpenChange={setArchiveDialogOpen}
