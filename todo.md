@@ -1,5 +1,14 @@
 # TODO
 
+Description should save different language results. for example
+ka: "გეიმინგ ლეპტოპი"
+en: "gaming laptop"
+ru: "..."
+
+it will be ok if not all of them are filled, most important is for at least one of them to have value.
+
+add column isCertified which is false by default
+
 ## Features
 
 - SOLD LAPTOPS ADD MORE CONTENT

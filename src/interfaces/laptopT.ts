@@ -1,3 +1,9 @@
+export type Description = {
+  en: string;
+  ka: string;
+  ru: string;
+};
+
 export type LaptopT = {
   id: number;
   title: string;
@@ -23,11 +29,12 @@ export type LaptopT = {
   refreshRate: string;
   weight?: string;
   year: number;
-  description: string;
+  description: Description;
   images: string[];
   tag?: string[];
   stockStatus: "reserved" | "sold" | "in stock";
   status: "approved" | "pending" | "rejected" | "archived";
   userId: number;
   condition: "new" | "used" | "refurbished";
+  isCertified: boolean;
 };

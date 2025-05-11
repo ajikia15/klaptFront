@@ -6,7 +6,8 @@ import { useParams } from "@tanstack/react-router";
 import { useImageManagement } from "@/hooks/useImageManagement";
 import { useUpdateListing } from "@/hooks/useUpdateListing";
 import { LaptopDetailSkeleton } from "./LaptopDetailSkeleton";
-import type { LaptopT } from "@/interfaces/laptopT";
+import type { LaptopT, Description } from "@/interfaces/laptopT";
+import { useTranslation } from "react-i18next";
 
 // Constants remain unchanged
 const LAPTOP_BRANDS = [
@@ -86,6 +87,7 @@ const SCREEN_SIZE_OPTIONS = [
 ];
 
 export default function EditListingPage() {
+  const { t } = useTranslation();
   const { laptopId } = useParams({ from: "/edit-listing/$laptopId" });
 
   // Use the hook instead of creating your own mutation
@@ -143,7 +145,8 @@ export default function EditListingPage() {
           refreshRate: laptop.refreshRate || "",
           weight: laptop.weight || "",
           year: laptop.year?.toString() || new Date().getFullYear().toString(),
-          description: laptop.description || "",
+          description:
+            laptop.description || ({ en: "", ka: "", ru: "" } as Description),
           tag: laptop.tag || [],
           condition: laptop.condition || "",
           stockStatus: laptop.stockStatus || "in stock",
@@ -173,13 +176,22 @@ export default function EditListingPage() {
           refreshRate: "",
           weight: "",
           year: new Date().getFullYear().toString(),
-          description: "",
+          description: { en: "", ka: "", ru: "" } as Description,
           tag: [] as string[],
           condition: "",
           stockStatus: "in stock",
         },
     onSubmit: async ({ value }) => {
       try {
+        // Ensure at least one description is provided
+        if (
+          !value.description.en &&
+          !value.description.ka &&
+          !value.description.ru
+        ) {
+          alert(t("error.atLeastOneDescriptionRequired"));
+          return;
+        }
         // Add images to the form data
         const formDataWithImages = {
           ...value,
@@ -229,11 +241,9 @@ export default function EditListingPage() {
     <div className="min-h-screen bg-neutral-900 py-10 text-neutral-200">
       <div className="container mx-auto px-4">
         <h1 className="mb-2 text-3xl font-bold text-white md:text-4xl">
-          Edit Laptop Listing
+          {t("editListing.title")}
         </h1>
-        <p className="mb-8 text-neutral-400">
-          Fields marked <span className="text-red-400">*</span> are required.
-        </p>
+        <p className="mb-8 text-neutral-400">{t("fieldsMarkedRequired")}</p>
         <div className="border-neutral-700/50 from-neutral-800/70 to-neutral-900/90 relative mb-6 overflow-hidden rounded-2xl border bg-gradient-to-br p-8">
           <form
             onSubmit={(e) => {
@@ -400,9 +410,9 @@ export default function EditListingPage() {
                 validators={{
                   onChange: ({ value }) =>
                     !value
-                      ? "Required"
+                      ? t("error.required")
                       : value.length > 100
-                      ? "Max 100 chars"
+                      ? t("error.maxLength100")
                       : undefined,
                 }}
               >
@@ -412,7 +422,8 @@ export default function EditListingPage() {
                       htmlFor="shortDesc"
                       className="mb-1 block text-sm font-medium text-neutral-200"
                     >
-                      Short Description <span className="text-red-400">*</span>
+                      {t("shortDescription")}{" "}
+                      <span className="text-red-400">*</span>
                     </label>
                     <input
                       id="shortDesc"
@@ -431,37 +442,119 @@ export default function EditListingPage() {
                 )}
               </form.Field>
 
-              {/* Full Description (required) */}
-              <form.Field
-                name="description"
-                validators={{
-                  onChange: ({ value }) => (!value ? "Required" : undefined),
-                }}
-              >
-                {(field) => (
-                  <div className="md:col-span-2">
-                    <label
-                      htmlFor="description"
-                      className="mb-1 block text-sm font-medium text-neutral-200"
-                    >
-                      Full Description <span className="text-red-400">*</span>
-                    </label>
-                    <textarea
-                      id="description"
-                      rows={4}
-                      className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
-                      value={field.state.value}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={isUpdating}
-                    />
-                    {field.state.meta.errors && (
-                      <div className="mt-1 text-sm text-red-300">
-                        {field.state.meta.errors.join(", ")}
-                      </div>
-                    )}
-                  </div>
-                )}
-              </form.Field>
+              {/* Description Fields */}
+              <div className="grid grid-cols-1 gap-6 md:col-span-2">
+                {/* English Description */}
+                <form.Field
+                  name="description.en"
+                  validators={{
+                    onChange: ({ value }) =>
+                      form.state.values.description?.ka ||
+                      form.state.values.description?.ru ||
+                      value
+                        ? undefined
+                        : t("error.atLeastOneDescriptionRequired"),
+                  }}
+                >
+                  {(field) => (
+                    <div>
+                      <label
+                        htmlFor="description.en"
+                        className="mb-1 block text-sm font-medium text-neutral-200"
+                      >
+                        {t("descriptionEn")} ({t("optional")})
+                      </label>
+                      <textarea
+                        id="description.en"
+                        rows={3}
+                        className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
+                        value={field.state.value}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                        disabled={isUpdating}
+                      />
+                      {field.state.meta.errors && (
+                        <div className="mt-1 text-sm text-red-300">
+                          {field.state.meta.errors.join(", ")}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </form.Field>
+
+                {/* Georgian Description */}
+                <form.Field
+                  name="description.ka"
+                  validators={{
+                    onChange: ({ value }) =>
+                      form.state.values.description?.en ||
+                      form.state.values.description?.ru ||
+                      value
+                        ? undefined
+                        : t("error.atLeastOneDescriptionRequired"),
+                  }}
+                >
+                  {(field) => (
+                    <div>
+                      <label
+                        htmlFor="description.ka"
+                        className="mb-1 block text-sm font-medium text-neutral-200"
+                      >
+                        {t("descriptionKa")} ({t("optional")})
+                      </label>
+                      <textarea
+                        id="description.ka"
+                        rows={3}
+                        className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
+                        value={field.state.value}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                        disabled={isUpdating}
+                      />
+                      {field.state.meta.errors && (
+                        <div className="mt-1 text-sm text-red-300">
+                          {field.state.meta.errors.join(", ")}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </form.Field>
+
+                {/* Russian Description */}
+                <form.Field
+                  name="description.ru"
+                  validators={{
+                    onChange: ({ value }) =>
+                      form.state.values.description?.en ||
+                      form.state.values.description?.ka ||
+                      value
+                        ? undefined
+                        : t("error.atLeastOneDescriptionRequired"),
+                  }}
+                >
+                  {(field) => (
+                    <div>
+                      <label
+                        htmlFor="description.ru"
+                        className="mb-1 block text-sm font-medium text-neutral-200"
+                      >
+                        {t("descriptionRu")} ({t("optional")})
+                      </label>
+                      <textarea
+                        id="description.ru"
+                        rows={3}
+                        className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
+                        value={field.state.value}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                        disabled={isUpdating}
+                      />
+                      {field.state.meta.errors && (
+                        <div className="mt-1 text-sm text-red-300">
+                          {field.state.meta.errors.join(", ")}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </form.Field>
+              </div>
 
               {/* Year (required) */}
               <form.Field

@@ -3,6 +3,7 @@ import { SpinnerSVG } from "@/assets/SpinnerSVG";
 import { Button } from "@/components/ui/button";
 import { useAddListing } from "@/hooks/useAddListing";
 import { useImageManagement } from "@/hooks/useImageManagement";
+import { useTranslation } from "react-i18next"; // Import useTranslation
 
 const LAPTOP_BRANDS = [
   "ASUS",
@@ -81,6 +82,7 @@ const SCREEN_SIZE_OPTIONS = [
 ];
 
 export default function AddListingPage() {
+  const { t } = useTranslation(); // Initialize useTranslation
   const { formStatus, errorMessage, addListing } = useAddListing();
   const {
     uploadedImages,
@@ -118,13 +120,28 @@ export default function AddListingPage() {
       refreshRate: "",
       weight: "",
       year: new Date().getFullYear().toString(),
-      description: "",
+      description: {
+        // Changed to object
+        en: "",
+        ka: "",
+        ru: "",
+      },
       tag: [] as string[],
       condition: "",
       stockStatus: "in stock",
     },
     onSubmit: async ({ value }) => {
       try {
+        // Ensure at least one description is provided
+        if (
+          !value.description.en &&
+          !value.description.ka &&
+          !value.description.ru
+        ) {
+          // This validation should ideally be part of the form's validation logic
+          alert(t("error.atLeastOneDescriptionRequired"));
+          return;
+        }
         await addListing({
           ...value,
           images: uploadedImages,
@@ -143,8 +160,12 @@ export default function AddListingPage() {
       model: "Predator Helios 16",
       shortDesc:
         "High-performance gaming laptop with RTX 4080 and 13th Gen Intel Core i9",
-      description:
-        "Experience unrivaled gaming performance with the latest Acer Predator Helios 16, featuring NVIDIA GeForce RTX 4080 graphics and a powerful Intel Core i9-13900HX processor. Mini-LED display with 250Hz refresh rate provides stunning visuals.",
+      description: {
+        // Changed to object
+        en: "Experience unrivaled gaming performance with the latest Acer Predator Helios 16, featuring NVIDIA GeForce RTX 4080 graphics and a powerful Intel Core i9-13900HX processor. Mini-LED display with 250Hz refresh rate provides stunning visuals.",
+        ka: "განიცადეთ შეუდარებელი სათამაშო წარმადობა უახლესი Acer Predator Helios 16-ით, NVIDIA GeForce RTX 4080 გრაფიკითა და მძლავრი Intel Core i9-13900HX პროცესორით. Mini-LED ეკრანი 250Hz განახლების სიხშირით უზრუნველყოფს განსაცვიფრებელ ვიზუალს.",
+        ru: "Испытайте непревзойденную игровую производительность с новейшим Acer Predator Helios 16, оснащенным графикой NVIDIA GeForce RTX 4080 и мощным процессором Intel Core i9-13900HX. Mini-LED дисплей с частотой обновления 250 Гц обеспечивает потрясающее изображение.",
+      },
       year: "2023",
       stockStatus: "in stock",
       condition: "new",
@@ -181,7 +202,8 @@ export default function AddListingPage() {
           Add New Laptop Listing
         </h1>
         <p className="mb-8 text-neutral-400">
-          Fields marked <span className="text-red-400">*</span> are required.
+          {t("fieldsMarkedRequired")}{" "}
+          {/* Example of using t for existing text */}
         </p>
         <div className="border-neutral-700/50 from-neutral-800/70 to-neutral-900/90 relative mb-6 overflow-hidden rounded-2xl border bg-gradient-to-br p-8">
           <form
@@ -359,7 +381,8 @@ export default function AddListingPage() {
                       htmlFor="shortDesc"
                       className="mb-1 block text-sm font-medium text-neutral-200"
                     >
-                      Short Description <span className="text-red-400">*</span>
+                      {t("shortDescription")}{" "}
+                      <span className="text-red-400">*</span>
                     </label>
                     <input
                       id="shortDesc"
@@ -378,37 +401,119 @@ export default function AddListingPage() {
                 )}
               </form.Field>
 
-              {/* Full Description (required) */}
-              <form.Field
-                name="description"
-                validators={{
-                  onChange: ({ value }) => (!value ? "Required" : undefined),
-                }}
-              >
-                {(field) => (
-                  <div className="md:col-span-2">
-                    <label
-                      htmlFor="description"
-                      className="mb-1 block text-sm font-medium text-neutral-200"
-                    >
-                      Full Description <span className="text-red-400">*</span>
-                    </label>
-                    <textarea
-                      id="description"
-                      rows={4}
-                      className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
-                      value={field.state.value}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      disabled={formStatus === "submitting"}
-                    />
-                    {field.state.meta.errors && (
-                      <div className="mt-1 text-sm text-red-300">
-                        {field.state.meta.errors.join(", ")}
-                      </div>
-                    )}
-                  </div>
-                )}
-              </form.Field>
+              {/* Description Fields */}
+              <div className="grid grid-cols-1 gap-6 md:col-span-2">
+                {/* English Description */}
+                <form.Field
+                  name="description.en"
+                  validators={{
+                    onChange: ({ value }) =>
+                      form.state.values.description?.ka ||
+                      form.state.values.description?.ru ||
+                      value
+                        ? undefined
+                        : t("error.atLeastOneDescriptionRequired"),
+                  }}
+                >
+                  {(field) => (
+                    <div>
+                      <label
+                        htmlFor="description.en"
+                        className="mb-1 block text-sm font-medium text-neutral-200"
+                      >
+                        {t("descriptionEn")} ({t("optional")})
+                      </label>
+                      <textarea
+                        id="description.en"
+                        rows={3}
+                        className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
+                        value={field.state.value}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                        disabled={formStatus === "submitting"}
+                      />
+                      {field.state.meta.errors && (
+                        <div className="mt-1 text-sm text-red-300">
+                          {field.state.meta.errors.join(", ")}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </form.Field>
+
+                {/* Georgian Description */}
+                <form.Field
+                  name="description.ka"
+                  validators={{
+                    onChange: ({ value }) =>
+                      form.state.values.description?.en ||
+                      form.state.values.description?.ru ||
+                      value
+                        ? undefined
+                        : t("error.atLeastOneDescriptionRequired"),
+                  }}
+                >
+                  {(field) => (
+                    <div>
+                      <label
+                        htmlFor="description.ka"
+                        className="mb-1 block text-sm font-medium text-neutral-200"
+                      >
+                        {t("descriptionKa")} ({t("optional")})
+                      </label>
+                      <textarea
+                        id="description.ka"
+                        rows={3}
+                        className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
+                        value={field.state.value}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                        disabled={formStatus === "submitting"}
+                      />
+                      {field.state.meta.errors && (
+                        <div className="mt-1 text-sm text-red-300">
+                          {field.state.meta.errors.join(", ")}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </form.Field>
+
+                {/* Russian Description */}
+                <form.Field
+                  name="description.ru"
+                  validators={{
+                    onChange: ({ value }) =>
+                      form.state.values.description?.en ||
+                      form.state.values.description?.ka ||
+                      value
+                        ? undefined
+                        : t("error.atLeastOneDescriptionRequired"),
+                  }}
+                >
+                  {(field) => (
+                    <div>
+                      <label
+                        htmlFor="description.ru"
+                        className="mb-1 block text-sm font-medium text-neutral-200"
+                      >
+                        {t("descriptionRu")} ({t("optional")})
+                      </label>
+                      <textarea
+                        id="description.ru"
+                        rows={3}
+                        className="w-full rounded-md border border-neutral-600 bg-neutral-700 px-4 py-3 text-white"
+                        value={field.state.value}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                        disabled={formStatus === "submitting"}
+                      />
+                      {field.state.meta.errors && (
+                        <div className="mt-1 text-sm text-red-300">
+                          {field.state.meta.errors.join(", ")}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </form.Field>
+              </div>
 
               {/* Year (required) */}
               <form.Field

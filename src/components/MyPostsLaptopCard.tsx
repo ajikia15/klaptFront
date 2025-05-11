@@ -15,6 +15,13 @@ interface MyPostLaptopProps {
   status?: "pending" | "approved" | "rejected" | "archived";
   images?: string[];
   onDelete: (id: number) => void;
+  // Add isCertified and update description
+  isCertified: boolean;
+  description: {
+    en?: string;
+    ka?: string;
+    ru?: string;
+  };
 }
 
 export function MyPostsLaptopCard({
