@@ -287,12 +287,19 @@ export const RegistrationForm = () => {
             </>
           )}
         </Button>
-        <div className="mt-4 flex flex-col items-center gap-2">
-          <span className="text-xs text-neutral-400">or</span>
+        <div className="relative mt-6 flex items-center justify-center">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-neutral-600"></div>
+          </div>
+          <div className="relative bg-neutral-900 px-2 text-sm text-neutral-400">
+            Or continue with:
+          </div>
+        </div>
+        <div className="mt-4 flex justify-center">
           <Button
             type="button"
             variant="outline"
-            className="flex w-full items-center justify-center gap-2 border border-neutral-600 bg-white py-2 font-semibold text-neutral-900 hover:bg-neutral-100"
+            className="flex w-full items-center justify-center gap-2 rounded-lg py-3 font-medium text-white"
             onClick={() => {
               const backend =
                 import.meta.env.VITE_API_URL || "http://localhost:3000";
@@ -300,7 +307,7 @@ export const RegistrationForm = () => {
             }}
           >
             <GoogleIcon size={20} />
-            Sign up with Google
+            <span>Google</span>
           </Button>
         </div>
       </div>
