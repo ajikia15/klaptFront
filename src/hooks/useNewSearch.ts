@@ -61,7 +61,9 @@ type FilterCategory =
   | "maxPrice";
 
 export function useNewSearch(userId?: number) {
-  const search = useSearch({ from: searchRoute.id });
+  const search = useSearch({ from: searchRoute.id }) as {
+    term?: string;
+  } & Record<string, any>;
   const navigate = useNavigate({ from: searchRoute.id });
 
   const [page, setPage] = useState(1);
