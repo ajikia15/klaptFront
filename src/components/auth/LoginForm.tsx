@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "@tanstack/react-router";
 import { Button } from "../ui/button";
+import { GoogleIcon } from "../../assets/Icons";
 
 export const LoginForm = () => {
   const [formStatus, setFormStatus] = useState<
@@ -204,6 +205,22 @@ export const LoginForm = () => {
             </>
           )}
         </Button>
+        <div className="mt-4 flex flex-col items-center gap-2">
+          <span className="text-xs text-neutral-400">or</span>
+          <Button
+            type="button"
+            variant="outline"
+            className="flex w-full items-center justify-center gap-2 border border-neutral-600 bg-white py-2 font-semibold text-neutral-900 hover:bg-neutral-100"
+            onClick={() => {
+              const backend =
+                import.meta.env.VITE_API_URL || "http://localhost:3000";
+              window.location.href = `${backend}/auth/google`;
+            }}
+          >
+            <GoogleIcon size={20} />
+            Sign in with Google
+          </Button>
+        </div>
       </div>
     </form>
   );

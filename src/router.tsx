@@ -26,6 +26,9 @@ import ProfilePosts from "./pages/profile/ProfilePosts";
 import ProfileAdmin from "./pages/profile/ProfileAdmin";
 import ProfileSettings from "./pages/profile/ProfileSettings";
 import UserPage from "./pages/UserPage";
+import GoogleAuthHandler, {
+  googleAuthHandlerLoader,
+} from "./pages/GoogleAuthHandler";
 
 // Protected route wrapper component
 function ProtectedRoute({ children }: { children: ReactNode }) {
@@ -326,6 +329,13 @@ const userPageRoute = createRoute({
   component: UserPage,
 });
 
+const googleAuthHandlerRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/auth/google/callback",
+  component: GoogleAuthHandler,
+  loader: googleAuthHandlerLoader,
+});
+
 // Create the route tree using your routes
 const routeTree = rootRoute.addChildren([
   indexRoute,
@@ -348,6 +358,7 @@ const routeTree = rootRoute.addChildren([
   adminStatisticsRoute,
   adminSystemSettingsRoute,
   userPageRoute, // <-- Add here
+  googleAuthHandlerRoute,
 ]);
 
 // Create the router using the route tree
