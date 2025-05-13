@@ -186,7 +186,16 @@ export default function Landing() {
             </>
           ) : (
             <>
-              <img src="/logo-white.svg" className="h-20 w-20" alt="" />
+              <div className="logo-container relative">
+                <img
+                  src="/logo-white.svg"
+                  className="floating-logo h-20 w-20"
+                  alt="Kaido Logo"
+                />
+                <div className="logo-glow">
+                  <div className="beam"></div>
+                </div>
+              </div>
             </>
           )}
           <p className="mb-8 mt-6 max-w-lg text-center text-lg text-neutral-200 md:text-left">
