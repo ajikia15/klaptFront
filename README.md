@@ -1,65 +1,70 @@
-# Kaido Laptops: Modern React Frontend
+# DG Peaks Laptop Marketplace
 
-**Kaido Laptops** is a modern React + TypeScript frontend for the [Kaido Laptop Marketplace API](https://github.com/ajikia15/klaptBack). This project provides a beautiful, responsive UI for browsing, filtering, and managing laptops, with advanced admin and user features. Built with [React](https://react.dev/), [TanStack Router](https://tanstack.com/router), and [Tailwind CSS](https://tailwindcss.com/).
+A full-stack laptop marketplace application currently in development for a tourism company client. The project demonstrates modern web development practices with React and NestJS, featuring complex search functionality, role-based authentication, and a comprehensive admin system.
 
----
+**Live Demo:** [dgpeaks.netlify.app](https://dgpeaks.netlify.app/)  
+**Backend Repository:** [github.com/ajikia15/klaptBack](https://github.com/ajikia15/klaptBack)
 
-## 🚀 Features
+## Technical Architecture
 
-### 1. **User Experience**
+This React frontend showcases several advanced patterns and architectural decisions:
 
-- **Modern UI:** Clean, responsive design with dark mode and smooth animations.
-- **Authentication:** Secure login, signup, and session management using JWT.
-- **Profile Management:** Edit profile, view your listings, and manage favorites.
-- **Favorites:** Easily favorite/unfavorite laptops and view your collection.
-- **Toasts & Feedback:** Instant feedback for actions, errors, and successes.
+### Advanced Search & Filtering System
 
-### 2. **Laptop Marketplace**
+The application implements a sophisticated search interface with real-time filtering capabilities:
 
-- **Advanced Search & Filtering:** Filter laptops by brand, price, CPU, GPU, RAM, storage, year, and more.
-- **Dynamic Filter Options:** Filter panel updates options based on current selections for a seamless experience.
-- **Detailed Listings:** View all key specs—GPU, CPU, VRAM, refresh rate, and more.
-- **Add/Edit Listings:** Authenticated users can create and manage their own laptop listings.
-- **Image Uploads:** Upload multiple images per listing.
+- **Type-safe URL-based filters** using TanStack Router's search parameter validation
+- **Dynamic filter options** that update based on current selections to prevent dead-end searches
+- **Optimized query management** with React Query for efficient data fetching and caching
+- **20+ filterable attributes** including technical specs (GPU, CPU, RAM, storage), price ranges, and custom tags
 
-### 3. **Admin Dashboard**
+The search system demonstrates complex state synchronization between URL parameters, React state, and backend APIs, with debounced inputs and pagination.
 
-- **Content Moderation:** Approve, reject, archive, or delete laptop listings.
-- **User Management:** Promote, ban, or manage users (admin only).
-- **Site Statistics:** View analytics and site usage (coming soon).
+### Authentication & Authorization
 
-### 4. **Developer Experience**
+Built with JWT-based authentication featuring:
 
-- **TypeScript First:** Strong typing and interfaces throughout.
-- **Hooks & Context:** Modern React patterns for state and data fetching.
-- **Modular Components:** Reusable, well-structured component library.
-- **Easy Theming:** Customizable via Tailwind CSS variables.
+- **Role-based access control** with admin/user permissions
+- **Protected route components** with automatic redirects
+- **Google OAuth integration** for streamlined user onboarding
+- **Context-based auth state** management across the application
 
----
+### Content Management System
 
-## 🛠️ Getting Started
+Comprehensive admin dashboard including:
 
-```bash
-npm install
-npm run dev
-```
+- **Content moderation workflows** for approving/rejecting user submissions
+- **User management system** with role promotion and account controls
+- **Batch operations** for efficient content administration
 
-- The app runs on `http://localhost:5173` by default.
-- Make sure the [backend API](https://github.com/ajikia15/klaptBack) is running for full functionality.
+### Frontend Engineering Highlights
 
-## 🧩 Tech Stack
+- **TanStack Router** implementation with type-safe routing and search parameters
+- **Custom React hooks** for search, authentication, and data management
+- **Optimistic UI updates** for improved perceived performance
+- **Responsive design** with mobile-first approach using Tailwind CSS
+- **Component composition** with Radix UI primitives and custom implementations
 
-- **React** (with hooks & context)
-- **TypeScript**
-- **Vite**
-- **Tailwind CSS**
-- **TanStack Router & Query**
-- **ShadcnUI & Lucide Icons**
+## Tech Stack
 
----
+**Frontend:**
 
-## 📄 License
+- React 19 + TypeScript
+- TanStack Router & Query
+- Tailwind CSS + Radix UI
+- Vite build system
+- i18next for internationalization
 
-MIT
+**Backend:**
 
----
+- NestJS + TypeScript
+- JWT authentication with Passport
+- TypeORM with SQLite
+- Class-validator for request validation
+- Google OAuth integration
+
+## Project Context
+
+This is a freelance project being developed for a Georgian tourism company. The application will serve as their laptop marketplace platform, handling inventory management, user transactions, and content moderation at scale.
+
+The current implementation focuses on building a robust foundation with clean architecture patterns that can accommodate future feature expansion and increased user load.
