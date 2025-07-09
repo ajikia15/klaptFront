@@ -62,9 +62,3 @@ Comprehensive admin dashboard including:
 - TypeORM with SQLite
 - Class-validator for request validation
 - Google OAuth integration
-
-## Project Context
-
-This is a freelance project being developed for a Georgian tourism company. The application will serve as their laptop marketplace platform, handling inventory management, user transactions, and content moderation at scale.
-
-The current implementation focuses on building a robust foundation with clean architecture patterns that can accommodate future feature expansion and increased user load.
