@@ -2,7 +2,7 @@
 
 A full-stack laptop marketplace application currently in development for a private business. The project demonstrates modern web development practices with React and NestJS, featuring complex search functionality, role-based authentication, and a comprehensive admin system.
 
-**Live Demo:** [dgpeaks.netlify.app](https://dgpeaks.netlify.app/)  
+**Live Demo:** [Kaido.netlify.app](https://Kaido.netlify.app/)  
 **Backend Repository:** [github.com/ajikia15/klaptBack](https://github.com/ajikia15/klaptBack)
 
 ## Technical Architecture

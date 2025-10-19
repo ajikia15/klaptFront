@@ -63,7 +63,7 @@ export default function Navbar() {
           className="flex flex-row items-center gap-2 text-2xl font-bold text-neutral-100"
         >
           <img src="/logo-white.svg" className="h-10 w-10 fill-black" alt="" />
-          <p className="logo-text hidden font-medium md:block">Dgpeaks</p>
+          <p className="logo-text hidden font-medium md:block">Kaido</p>
           {/* <Book className="inline-block h-8 w-8 animate-spin text-primary-600" /> */}
         </Link>
 
