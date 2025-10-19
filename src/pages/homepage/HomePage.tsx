@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { LaptopCard } from "../../components/LaptopCard";
-import Landing from "../../components/Landing";
 import { useAuth } from "@/context/AuthContext";
 import { Link } from "@tanstack/react-router";
 import {
@@ -21,6 +20,7 @@ import BrandShowcaseSection from "@/pages/homepage/BrandShowcaseSection";
 import TestimonialsSection from "@/pages/homepage/TestimonialsSection";
 import { PaginatedLaptops } from "@/interfaces/PaginatedLaptops";
 import { useTranslation } from "react-i18next";
+import Hero from "./hero/Hero";
 
 export default function HomePage() {
   const { t } = useTranslation();
@@ -80,7 +80,8 @@ export default function HomePage() {
     <div className="min-h-screen bg-neutral-900">
       {/* Hero Section */}
       <div className="container mx-auto px-4">
-        <Landing />
+        {/* <Landing /> */}
+        <Hero />
       </div>
 
       {/* Featured Laptops Section */}
