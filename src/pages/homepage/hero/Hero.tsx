@@ -1,7 +1,12 @@
-import LaptopSlide from "./HeroLaptopSlide";
+import LaptopSlide from "./HeroLaptopSlider";
 import HeroMarquee from "./HeroMarqueeSection";
+import { LaptopT } from "@/interfaces/laptopT";
+import { useAuth } from "@/context/AuthContext";
 
-export default function Hero() {
+type Props = { laptops: LaptopT[] };
+
+export default function Hero({ laptops }: Props) {
+  const { isAuthenticated } = useAuth();
   return (
     <div className="my-4 grid grid-cols-2 gap-5">
       <div className="flex flex-col gap-5">
@@ -25,7 +30,7 @@ export default function Hero() {
             </li>
           </ul>
         </div>
-        <LaptopSlide />
+        <LaptopSlide laptops={laptops} isAuthenticated={isAuthenticated} />
       </div>
       <div className="min-h-0 min-w-0">
         <HeroMarquee />

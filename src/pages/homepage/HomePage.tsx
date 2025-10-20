@@ -81,7 +81,7 @@ export default function HomePage() {
       {/* Hero Section */}
       <div className="container mx-auto px-4">
         {/* <Landing /> */}
-        <Hero />
+        <Hero laptops={laptops} />
       </div>
 
       {/* Featured Laptops Section */}
