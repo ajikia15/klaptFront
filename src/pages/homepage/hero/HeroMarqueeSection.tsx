@@ -34,14 +34,14 @@ export default function HeroMarqueeSection() {
       style={{ perspective: "1200px" }}
     >
       <div
-        className="absolute inset-0 mr-5 flex origin-center flex-row items-center justify-end space-x-4 p-5 will-change-transform"
+        className="absolute inset-0 mr-5 flex origin-center flex-row items-center justify-end space-x-8 p-5 will-change-transform"
         style={{
-          transform: "rotateX(-15deg) rotateY(-30deg)",
+          transform: "rotateX(-20deg) rotateY(-30deg)",
           transformStyle: "preserve-3d",
         }}
       >
         <SimpleMarquee
-          className="scale-85 h-full"
+          className="h-full"
           baseVelocity={10}
           repeat={4}
           easing={easeFn}
@@ -55,7 +55,7 @@ export default function HeroMarqueeSection() {
         </SimpleMarquee>
 
         <SimpleMarquee
-          className="scale-85 h-full"
+          className="h-full"
           baseVelocity={10}
           repeat={4}
           easing={easeFn}
@@ -69,7 +69,7 @@ export default function HeroMarqueeSection() {
         </SimpleMarquee>
 
         <SimpleMarquee
-          className="scale-85 h-full"
+          className="h-full"
           baseVelocity={10}
           repeat={4}
           easing={easeFn}
