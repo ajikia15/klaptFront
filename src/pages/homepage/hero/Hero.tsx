@@ -27,7 +27,7 @@ export default function Hero() {
         </div>
         <LaptopSlide />
       </div>
-      <div className="min-w-0 min-h-0 overflow-hidden">
+      <div className="min-h-0 min-w-0">
         <HeroMarquee />
       </div>
       <div className="grid grid-cols-2 gap-5">
