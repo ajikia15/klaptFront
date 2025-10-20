@@ -69,7 +69,7 @@ export const FeatureCard = ({ feature }: FeatureCardProps) => {
   const firstSpaceIndex = label.indexOf(" ");
   const hasTwoWords = firstSpaceIndex !== -1;
   return (
-    <div className="bg-neutral-900/80 relative isolate flex aspect-square w-24 flex-col items-center justify-center rounded-2xl border border-neutral-700 px-2.5 py-2.5 shadow-xl sm:w-28 md:w-32">
+    <div className="bg-neutral-900/70 relative isolate flex aspect-square w-24 flex-col items-center justify-center rounded-2xl border border-neutral-700 px-2.5 py-2.5 shadow-xl sm:w-28 md:w-32">
       <div className="z-10 mb-2 flex items-center justify-center">
         {feature.icon}
       </div>

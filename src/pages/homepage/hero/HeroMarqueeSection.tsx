@@ -3,7 +3,7 @@ import SimpleMarquee from "@/components/fancy/blocks/simple-marquee";
 import { FeatureCard, featuresData } from "./FeatureCard";
 
 const MarqueeItem = ({ children }: { children: React.ReactNode }) => (
-  <div className="mb-4 cursor-pointer overflow-hidden rounded duration-300 ease-in-out hover:scale-105">
+  <div className="mb-8 cursor-pointer overflow-hidden rounded duration-300 ease-in-out hover:scale-105">
     {children}
   </div>
 );
@@ -34,14 +34,14 @@ export default function HeroMarqueeSection() {
       style={{ perspective: "1200px" }}
     >
       <div
-        className="absolute inset-0 flex origin-center flex-row items-center justify-center space-x-4 p-5 will-change-transform"
+        className="absolute inset-0 mr-5 flex origin-center flex-row items-center justify-end space-x-4 p-5 will-change-transform"
         style={{
           transform: "rotateX(-15deg) rotateY(-30deg)",
           transformStyle: "preserve-3d",
         }}
       >
         <SimpleMarquee
-          className="scale-85h-full"
+          className="scale-85 h-full"
           baseVelocity={10}
           repeat={4}
           easing={easeFn}
@@ -55,7 +55,7 @@ export default function HeroMarqueeSection() {
         </SimpleMarquee>
 
         <SimpleMarquee
-          className="scale-92 h-full"
+          className="scale-85 h-full"
           baseVelocity={10}
           repeat={4}
           easing={easeFn}
@@ -69,7 +69,7 @@ export default function HeroMarqueeSection() {
         </SimpleMarquee>
 
         <SimpleMarquee
-          className="h-full scale-100"
+          className="scale-85 h-full"
           baseVelocity={10}
           repeat={4}
           easing={easeFn}
