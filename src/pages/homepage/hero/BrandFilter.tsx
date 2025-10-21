@@ -60,7 +60,7 @@ export default function BrandFilter() {
                 search={{ brand: [brand.name] }}
                 className="flex aspect-square cursor-pointer items-center justify-center rounded-full bg-neutral-800 p-2 transition hover:bg-neutral-700"
               >
-                <img src={brand.logo} alt={brand.name} className="h-12 w-12" />
+                <img src={brand.logo} alt={brand.name} className="h-16 w-16" />
               </Link>
             </div>
           ))}
