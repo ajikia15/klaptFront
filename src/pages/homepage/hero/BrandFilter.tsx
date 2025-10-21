@@ -7,10 +7,10 @@ import type { EmblaCarouselType } from "embla-carousel";
 export default function BrandFilter() {
   const brandLogos = [
     { name: "Asus", logo: "/brands/asus.svg" },
-    { name: "Dell", logo: "/brands/dell.svg" },
+    // { name: "Dell", logo: "/brands/dell.svg" },
     { name: "HP", logo: "/brands/hp.svg" },
     { name: "Lenovo", logo: "/brands/lenovo.svg" },
-    { name: "Apple", logo: "/brands/apple.svg" },
+    // { name: "Apple", logo: "/brands/apple.svg" },
     { name: "MSI", logo: "/brands/msi.svg" },
     { name: "Acer", logo: "/brands/acer.svg" },
     { name: "Razer", logo: "/brands/razer.svg" },
@@ -47,22 +47,18 @@ export default function BrandFilter() {
   }, [emblaApi, onSelect]);
 
   return (
-    <div className="relative">
+    <div className="flex flex-col">
       <h2 className="mb-4 font-semibold">Featured Brands</h2>
       <div className="overflow-hidden" ref={emblaRef}>
-        <div className="flex">
+        <div className="flex justify-center">
           {brandLogos.map((brand) => (
             <div key={brand.name} className="min-w-0 flex-[0_0_20%] px-2.5">
               <Link
                 to="/search"
                 search={{ brand: [brand.name] }}
-                className="block aspect-square cursor-pointer place-items-center rounded-full bg-neutral-800 p-2 transition hover:bg-neutral-700"
+                className="flex aspect-square cursor-pointer items-center justify-center rounded-full bg-neutral-800 p-2 transition hover:bg-neutral-700"
               >
-                <img
-                  src={brand.logo}
-                  alt={brand.name}
-                  className="mx-auto h-8 w-8"
-                />
+                <img src={brand.logo} alt={brand.name} className="h-12 w-12" />
               </Link>
             </div>
           ))}
@@ -70,7 +66,7 @@ export default function BrandFilter() {
       </div>
 
       {/* Navigation arrows in bottom right */}
-      <div className="absolute bottom-0 right-0 flex gap-2">
+      <div className="mt-4 flex justify-end gap-2">
         <button
           onClick={scrollPrev}
           disabled={prevBtnDisabled}
