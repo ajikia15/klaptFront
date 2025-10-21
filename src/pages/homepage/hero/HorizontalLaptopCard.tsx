@@ -24,12 +24,12 @@ export default function HorizontalCard(laptop: Props) {
           </div>
         )}
       </Link>
-      <div className="flex min-w-0 flex-col justify-between py-6 pr-1">
+      <div className="flex min-w-0 flex-col justify-center">
         <div className="min-w-0">
           <Link
             to="/laptop/$laptopId"
             params={{ laptopId: laptop.id.toString() }}
-            className="flex flex-col gap-2"
+            className="mb-4 flex flex-col gap-1"
           >
             <h2 className="line-clamp-2 text-xl font-semibold text-white">
               {laptop.title.toUpperCase()}
@@ -37,9 +37,11 @@ export default function HorizontalCard(laptop: Props) {
             <h3 className="text-sm font-light text-neutral-400">
               Gaming | Rendering | Workstation
             </h3>
-            <p></p>
+            <p className="font-bold text-purple-300">
+              ${laptop.price.toLocaleString()}
+            </p>
           </Link>
-          <div className="mb-4 line-clamp-2 space-x-2 space-y-1">
+          <div className="mb-4 line-clamp-2 space-x-2 space-y-3">
             <PartBadge
               label={laptop.gpuModel}
               searchParam="gpuModel"
@@ -84,10 +86,7 @@ export default function HorizontalCard(laptop: Props) {
             />
           </div>
         </div>
-        <div className="mt-2 flex items-center justify-between">
-          <div className="font-bold text-purple-300">
-            ${laptop.price.toLocaleString()}
-          </div>
+        <div className="flex items-center justify-between">
           <Link
             to="/laptop/$laptopId"
             params={{ laptopId: laptop.id.toString() }}
