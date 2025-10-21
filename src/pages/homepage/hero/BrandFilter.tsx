@@ -19,7 +19,9 @@ export default function BrandFilter() {
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: "start",
     containScroll: "trimSnaps",
-    slidesToScroll: 2,
+    slidesToScroll: 1,
+    dragFree: false,
+    skipSnaps: false,
   });
 
   const [prevBtnDisabled, setPrevBtnDisabled] = useState(true);
@@ -50,7 +52,7 @@ export default function BrandFilter() {
     <div className="flex flex-col">
       <h2 className="mb-4 font-semibold">Featured Brands</h2>
       <div className="overflow-hidden" ref={emblaRef}>
-        <div className="flex justify-center">
+        <div className="flex">
           {brandLogos.map((brand) => (
             <div key={brand.name} className="min-w-0 flex-[0_0_20%] px-2.5">
               <Link
