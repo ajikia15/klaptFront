@@ -2,6 +2,7 @@ import LaptopSlide from "./HeroLaptopSlider";
 import HeroMarquee from "./HeroMarqueeSection";
 import { LaptopT } from "@/interfaces/laptopT";
 import { useAuth } from "@/context/AuthContext";
+import BrandFilter from "./BrandFilter";
 
 type Props = { laptops: LaptopT[] };
 
@@ -10,26 +11,7 @@ export default function Hero({ laptops }: Props) {
   return (
     <div className="my-4 grid grid-cols-2 gap-5">
       <div className="flex flex-col gap-5">
-        <div>
-          <h2 className="font-semibold">Featured Brands</h2>
-          <ul className="grid grid-cols-5 gap-5">
-            <li className="text grid aspect-square cursor-pointer place-items-center rounded-full bg-neutral-800 p-2 transition hover:bg-neutral-700">
-              Asus
-            </li>
-            <li className="text grid aspect-square cursor-pointer place-items-center rounded-full bg-neutral-800 p-2 transition hover:bg-neutral-700">
-              Lenovo
-            </li>
-            <li className="text grid aspect-square cursor-pointer place-items-center rounded-full bg-neutral-800 p-2 transition hover:bg-neutral-700">
-              MSI
-            </li>
-            <li className="text grid aspect-square cursor-pointer place-items-center rounded-full bg-neutral-800 p-2 transition hover:bg-neutral-700">
-              Gigabyte
-            </li>
-            <li className="text grid aspect-square cursor-pointer place-items-center rounded-full bg-neutral-800 p-2 transition hover:bg-neutral-700">
-              HP
-            </li>
-          </ul>
-        </div>
+        <BrandFilter />
         <LaptopSlide laptops={laptops} isAuthenticated={isAuthenticated} />
       </div>
       <div className="min-h-0 min-w-0">
