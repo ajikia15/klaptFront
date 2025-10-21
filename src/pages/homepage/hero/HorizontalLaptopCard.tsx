@@ -1,5 +1,6 @@
 import { LaptopT } from "@/interfaces/laptopT";
 import { Link } from "@tanstack/react-router";
+import { PartBadge } from "@/components/PartBadge";
 
 type Props = LaptopT & { isAuthenticated: boolean };
 
@@ -23,38 +24,64 @@ export default function HorizontalCard(laptop: Props) {
           </div>
         )}
       </Link>
-      <div className="flex min-w-0 flex-col justify-between py-2 pr-1">
+      <div className="flex min-w-0 flex-col justify-between py-6 pr-1">
         <div className="min-w-0">
           <Link
             to="/laptop/$laptopId"
             params={{ laptopId: laptop.id.toString() }}
-            className="block"
+            className="flex flex-col gap-2"
           >
-            <h3 className="line-clamp-2 font-semibold text-white">
-              {laptop.title}
+            <h2 className="line-clamp-2 text-xl font-semibold text-white">
+              {laptop.title.toUpperCase()}
+            </h2>
+            <h3 className="text-sm font-light text-neutral-400">
+              Gaming | Rendering | Workstation
             </h3>
+            <p></p>
           </Link>
-          <div className="mt-1 flex flex-wrap gap-1 text-xs text-neutral-300">
-            {laptop.processorModel && (
-              <span className="rounded-md border border-neutral-700 bg-neutral-900 px-2 py-0.5">
-                {laptop.processorModel}
-              </span>
-            )}
-            {laptop.gpuModel && (
-              <span className="rounded-md border border-neutral-700 bg-neutral-900 px-2 py-0.5">
-                {laptop.gpuModel}
-              </span>
-            )}
-            {laptop.ram && (
-              <span className="rounded-md border border-neutral-700 bg-neutral-900 px-2 py-0.5">
-                {laptop.ram}
-              </span>
-            )}
-            {laptop.storageCapacity && (
-              <span className="rounded-md border border-neutral-700 bg-neutral-900 px-2 py-0.5">
-                {laptop.storageCapacity}
-              </span>
-            )}
+          <div className="mb-4 line-clamp-2 space-x-2 space-y-1">
+            <PartBadge
+              label={laptop.gpuModel}
+              searchParam="gpuModel"
+              searchValue={laptop.gpuModel}
+              className="rounded-full border-neutral-700 p-3"
+            />
+            <PartBadge
+              label={laptop.processorModel}
+              searchParam="processorModel"
+              searchValue={laptop.processorModel}
+              className="rounded-full border-neutral-700 p-3"
+            />
+            <PartBadge
+              label={laptop.refreshRate}
+              searchParam="refreshRate"
+              searchValue={laptop.refreshRate}
+              className="rounded-full border-neutral-700 p-3"
+            />
+            <PartBadge
+              label={laptop.storageCapacity}
+              searchParam="storageCapacity"
+              searchValue={laptop.storageCapacity}
+              className="rounded-full border-neutral-700 p-3"
+            />
+            <PartBadge
+              label={laptop.ram}
+              searchParam="ram"
+              searchValue={laptop.ram}
+              className="rounded-full border-neutral-700 p-3"
+            />
+            <PartBadge
+              label={laptop.ramType}
+              searchParam="ramType"
+              searchValue={laptop.ramType}
+              className="rounded-full border-neutral-700 p-3"
+            />
+            <PartBadge
+              label={laptop.screenResolution}
+              searchParam="screenResolution"
+              searchValue={laptop.screenResolution}
+              className="rounded-full border-neutral-700 p-3"
+            />
           </div>
         </div>
         <div className="mt-2 flex items-center justify-between">
@@ -64,7 +91,7 @@ export default function HorizontalCard(laptop: Props) {
           <Link
             to="/laptop/$laptopId"
             params={{ laptopId: laptop.id.toString() }}
-            className="rounded-md bg-secondary-500/20 px-3 py-1 text-sm text-secondary-300 transition hover:bg-secondary-500/30"
+            className="bg-secondary-500/20 hover:bg-secondary-500/30 rounded-md px-3 py-1 text-sm text-secondary-300 transition"
           >
             Details
           </Link>
