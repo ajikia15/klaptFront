@@ -8,12 +8,12 @@ export default function BrandFilter() {
   const brandLogos = [
     { name: "Asus", logo: "/brands/asus.svg" },
     // { name: "Dell", logo: "/brands/dell.svg" },
-    { name: "HP", logo: "/brands/hp.svg" },
     { name: "Lenovo", logo: "/brands/lenovo.svg" },
     // { name: "Apple", logo: "/brands/apple.svg" },
     { name: "MSI", logo: "/brands/msi.svg" },
     { name: "Acer", logo: "/brands/acer.svg" },
     { name: "Razer", logo: "/brands/razer.svg" },
+    { name: "HP", logo: "/brands/hp.svg" },
   ];
 
   const [emblaRef, emblaApi] = useEmblaCarousel({
@@ -67,8 +67,8 @@ export default function BrandFilter() {
         </div>
       </div>
 
-      {/* Navigation arrows in bottom right */}
-      <div className="mt-4 flex justify-end gap-2">
+      {/* Navigation arrows in bottom right flex temporarilyt disabled*/}
+      <div className="mt-4 hidden justify-end gap-2">
         <button
           onClick={scrollPrev}
           disabled={prevBtnDisabled}

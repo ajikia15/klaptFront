@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import HorizontalCard from "./HorizontalLaptopCard";
 import useEmblaCarousel from "embla-carousel-react";
 import { useCallback, useEffect, useState } from "react";
@@ -40,10 +40,7 @@ export default function LaptopSlide({ laptops, isAuthenticated }: Props) {
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex gap-3">
           {laptops.map((laptop) => (
-            <div
-              key={laptop.id}
-              className="min-w-0 flex-[0_0_100%]"
-            >
+            <div key={laptop.id} className="min-w-0 flex-[0_0_100%]">
               <HorizontalCard {...laptop} isAuthenticated={isAuthenticated} />
             </div>
           ))}
@@ -56,7 +53,7 @@ export default function LaptopSlide({ laptops, isAuthenticated }: Props) {
           onClick={scrollPrev}
           aria-label="Previous"
         >
-          <ArrowLeft size={18} />
+          <ChevronLeft size={18} />
         </button>
       )}
       {nextBtnEnabled && (
@@ -65,7 +62,7 @@ export default function LaptopSlide({ laptops, isAuthenticated }: Props) {
           onClick={scrollNext}
           aria-label="Next"
         >
-          <ArrowRight size={18} />
+          <ChevronRight className="h-4 w-4" />
         </button>
       )}
     </div>
