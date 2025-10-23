@@ -3,7 +3,7 @@ import SimpleMarquee from "@/components/fancy/blocks/simple-marquee";
 import { FeatureCard, featuresData } from "./FeatureCard";
 
 const MarqueeItem = ({ children }: { children: React.ReactNode }) => (
-  <div className="mb-8 cursor-pointer overflow-hidden rounded duration-300 ease-in-out hover:scale-105">
+  <div className="mb-2 cursor-pointer overflow-hidden rounded duration-300 ease-in-out hover:scale-105">
     {children}
   </div>
 );
@@ -31,12 +31,12 @@ export default function HeroMarqueeSection() {
   return (
     <div
       className="relative h-full w-full overflow-hidden rounded-xl bg-neutral-800"
-      style={{ perspective: "1200px" }}
+      // style={{ perspective: "1200px" }}
     >
       <div
-        className="absolute inset-0 mr-5 flex origin-center flex-row items-center justify-end space-x-8 p-5 will-change-transform"
+        className="absolute inset-0 mr-5 flex origin-center flex-row items-center justify-end space-x-4 p-5 will-change-transform"
         style={{
-          transform: "rotateX(-20deg) rotateY(-30deg)",
+          // transform: "rotateX(-20deg) rotateY(-30deg)",
           transformStyle: "preserve-3d",
         }}
       >
