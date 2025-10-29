@@ -1,5 +1,5 @@
 import LaptopSlide from "./HeroLaptopSlider";
-import HeroMarquee from "./HeroMarqueeSection";
+import HeroMarquee from "@/components/hero/HeroMarquee";
 import { LaptopT } from "@/interfaces/laptopT";
 import { useAuth } from "@/context/AuthContext";
 import BrandFilter from "./BrandFilter";
