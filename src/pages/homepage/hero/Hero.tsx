@@ -1,5 +1,5 @@
 import LaptopSlide from "./HeroLaptopSlider";
-import HeroMarquee from "@/components/hero/HeroMarquee";
+import HeroTestimonial from "@/components/hero/HeroTestimonial";
 import { LaptopT } from "@/interfaces/laptopT";
 import { useAuth } from "@/context/AuthContext";
 import BrandFilter from "./BrandFilter";
@@ -15,7 +15,7 @@ export default function Hero({ laptops }: Props) {
         <LaptopSlide laptops={laptops} isAuthenticated={isAuthenticated} />
       </div>
       <div className="min-h-0 min-w-0">
-        <HeroMarquee />
+        <HeroTestimonial />
       </div>
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         <div className="aspect-square rounded-xl bg-neutral-800"></div>
