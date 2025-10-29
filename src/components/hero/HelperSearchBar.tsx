@@ -6,7 +6,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function HelperSearchBar() {
@@ -198,6 +198,16 @@ export default function HelperSearchBar() {
               </div>
             </PopoverContent>
           </Popover>
+
+          {/* Search Button */}
+          <div className="flex items-center px-8">
+            <button
+              className="flex h-12 w-12 items-center justify-center rounded-full bg-primary-600 text-white transition-colors hover:bg-primary-500"
+              aria-label="Search"
+            >
+              <Search className="h-5 w-5" />
+            </button>
+          </div>
         </div>
       </Card>
     </div>
