@@ -3,7 +3,7 @@ import ServiceCard from "./ServiceCard";
 export default function HeroTestimonial() {
   return (
     <div className="relative flex h-full w-full flex-col justify-around overflow-hidden rounded-xl bg-neutral-800 p-6">
-      <h2 className="logo-text text-3xl font-semibold">Kaido's Services</h2>
+      <h2 className="logo-text text-2xl font-semibold">Kaido's Services</h2>
       <div className="flex flex-row gap-2 overflow-x-hidden rounded-xl">
         <ServiceCard />
         <ServiceCard />
