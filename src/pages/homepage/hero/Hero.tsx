@@ -17,11 +17,11 @@ export default function Hero({ laptops }: Props) {
       <div className="min-h-0 min-w-0">
         <HeroTestimonial />
       </div>
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+      {/* <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         <div className="aspect-square rounded-xl bg-neutral-800"></div>
         <div className="aspect-square rounded-xl bg-neutral-800"></div>
       </div>
-      <div className="flex flex-col rounded-xl bg-neutral-800">Our Sevices</div>
+      <div className="flex flex-col rounded-xl bg-neutral-800">Our Sevices</div> */}
     </div>
   );
 }

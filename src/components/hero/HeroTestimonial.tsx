@@ -5,10 +5,26 @@ export default function HeroTestimonial() {
     <div className="relative flex h-full w-full flex-col justify-around overflow-hidden rounded-xl bg-neutral-800 p-6">
       <h2 className="logo-text text-2xl font-semibold">Kaido's Services</h2>
       <div className="flex flex-row gap-2 overflow-x-hidden rounded-xl">
-        <ServiceCard />
-        <ServiceCard />
-        <ServiceCard />
-        <ServiceCard />
+        <ServiceCard
+          title="Testing"
+          description="Kaido offers on-site testing of the verified and unverified systems. We provide free support on the Kaido verified items. For unverified systems, you can arrange a visit from our technicians - ANYWHERE in Tbilisi."
+          image="/static/repair.jpg"
+        />
+        <ServiceCard
+          title="Repair"
+          description="Our qualified technicians are ready to help you with any hardware or software issues you may have."
+          image="/static/upgrade.jpg"
+        />
+        <ServiceCard
+          title="Upgrade"
+          description="You may request upgrade of your an item for more RAM and SSD storage, at the best prices."
+          image="/static/maintenance.jpg"
+        />
+        <ServiceCard
+          title="Software Installation"
+          description="Our qualified technicians are ready to set up systems with any software/games you want. You can also bring your own hardware and we will install it for you."
+          image="/static/maintenance.jpg"
+        />
       </div>
       <HelperSearchBar />
       {/* <div className="absolute bottom-0 left-0 right-0 flex items-center justify-evenly gap-2 border-t border-neutral-600 bg-neutral-800 px-5 py-3">
