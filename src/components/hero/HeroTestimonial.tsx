@@ -8,22 +8,22 @@ export default function HeroTestimonial() {
         <ServiceCard
           title="Testing"
           description="Kaido offers on-site testing of the verified and unverified systems. We provide free support on the Kaido verified items. For unverified systems, you can arrange a visit from our technicians - ANYWHERE in Tbilisi."
-          image="/static/repair.jpg"
+          image="/static/testing2.jpg"
         />
         <ServiceCard
           title="Repair"
           description="Our qualified technicians are ready to help you with any hardware or software issues you may have."
-          image="/static/upgrade.jpg"
-        />
-        <ServiceCard
-          title="Upgrade"
-          description="You may request upgrade of your an item for more RAM and SSD storage, at the best prices."
-          image="/static/maintenance.jpg"
+          image="/static/repairv1.png"
         />
         <ServiceCard
           title="Software Installation"
           description="Our qualified technicians are ready to set up systems with any software/games you want. You can also bring your own hardware and we will install it for you."
-          image="/static/maintenance.jpg"
+          image="/static/software1.png"
+        />
+        <ServiceCard
+          title="Upgrade"
+          description="You may request upgrade of your an item for more RAM and SSD storage, at the best prices."
+          image="/static/ram.png"
         />
       </div>
       <HelperSearchBar />
