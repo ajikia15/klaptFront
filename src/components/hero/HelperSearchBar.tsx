@@ -137,7 +137,8 @@ export default function HelperSearchBar() {
             <PopoverTrigger asChild>
               <button
                 className={cn(
-                  "flex-1 pl-6 pr-4 py-3 text-left transition-colors hover:bg-neutral-800 cursor-pointer text-white bg-neutral-900"
+                  "flex-1 pl-6 pr-4 py-3 text-left transition-colors hover:bg-neutral-800 cursor-pointer text-white bg-neutral-900",
+                  openPopover === "brands" && "bg-neutral-800"
                 )}
               >
                 <div className="mb-1 flex items-center gap-2">
@@ -199,7 +200,8 @@ export default function HelperSearchBar() {
             <PopoverTrigger asChild>
               <button
                 className={cn(
-                  "flex-1 pl-6 pr-4 py-3 text-left transition-colors hover:bg-neutral-800 cursor-pointer text-white bg-neutral-900"
+                  "flex-1 pl-6 pr-4 py-3 text-left transition-colors hover:bg-neutral-800 cursor-pointer text-white bg-neutral-900",
+                  openPopover === "type" && "bg-neutral-800"
                 )}
               >
                 <div className="mb-1 flex items-center gap-2">
@@ -260,7 +262,8 @@ export default function HelperSearchBar() {
             <PopoverTrigger asChild>
               <button
                 className={cn(
-                  "flex-1 pl-6 pr-4 py-3 text-left transition-colors hover:bg-neutral-800 cursor-pointer text-white bg-neutral-900"
+                  "flex-1 pl-6 pr-4 py-3 text-left transition-colors hover:bg-neutral-800 cursor-pointer text-white bg-neutral-900",
+                  openPopover === "price" && "bg-neutral-800"
                 )}
               >
                 <div className="mb-1 flex items-center gap-2">
