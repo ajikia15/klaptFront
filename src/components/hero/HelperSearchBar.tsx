@@ -145,7 +145,14 @@ export default function HelperSearchBar() {
                   <span className="text-sm font-medium text-neutral-100">
                     Brands
                   </span>
-                  <ChevronDown className="ml-auto h-4 w-4 text-neutral-300" />
+                  <ChevronDown
+                    className={cn(
+                      "ml-auto h-4 w-4 text-neutral-300 transition-transform",
+                      {
+                        "rotate-180": openPopover === "brands",
+                      }
+                    )}
+                  />
                 </div>
                 <div className="truncate text-xs text-neutral-300">
                   {getBrandDisplay()}
@@ -208,7 +215,14 @@ export default function HelperSearchBar() {
                   <span className="text-sm font-medium text-neutral-100">
                     Type
                   </span>
-                  <ChevronDown className="ml-auto h-4 w-4 text-neutral-300" />
+                  <ChevronDown
+                    className={cn(
+                      "ml-auto h-4 w-4 text-neutral-300 transition-transform",
+                      {
+                        "rotate-180": openPopover === "type",
+                      }
+                    )}
+                  />
                 </div>
                 <div className="truncate text-xs text-neutral-300">
                   {getTypeDisplay()}
@@ -270,7 +284,14 @@ export default function HelperSearchBar() {
                   <span className="text-sm font-medium text-neutral-100">
                     Price
                   </span>
-                  <ChevronDown className="ml-auto h-4 w-4 text-neutral-300" />
+                  <ChevronDown
+                    className={cn(
+                      "ml-auto h-4 w-4 text-neutral-300 transition-transform",
+                      {
+                        "rotate-180": openPopover === "price",
+                      }
+                    )}
+                  />
                 </div>
                 <div className="truncate text-xs text-neutral-300">
                   {getPriceDisplay()}
