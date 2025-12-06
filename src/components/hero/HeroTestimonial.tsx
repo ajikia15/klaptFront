@@ -20,7 +20,7 @@ export default function HeroTestimonial() {
   );
 
   return (
-    <div className="relative flex h-full w-full flex-col justify-around overflow-hidden rounded-xl bg-neutral-800 p-6">
+    <div className="relative flex h-full w-full flex-col justify-around gap-4 overflow-hidden rounded-xl bg-neutral-800 p-6">
       <div className="mb-1 flex items-center justify-between">
         <h2 className="logo-text text-2xl font-semibold">Kaido's Services</h2>
         <div className="flex items-center gap-2">
@@ -44,7 +44,7 @@ export default function HeroTestimonial() {
       </div>
 
       <div className="overflow-hidden rounded-xl" ref={emblaRef}>
-        <div className="flex flex-row gap-2">
+        <div className="flex flex-row gap-4">
           <div className="min-w-64 flex-[0_0_auto]">
             <ServiceCard
               title="Testing"

@@ -8,7 +8,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { ChevronDown, Search } from "lucide-react";
+import {
+  ChevronDown,
+  Search,
+  Gamepad2,
+  Box,
+  PenTool,
+  Globe,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useNavigate } from "@tanstack/react-router";
 
@@ -37,7 +44,12 @@ export default function HelperSearchBar() {
     "MSI",
     "Razer",
   ];
-  const types = ["Gaming", "Rendering", "Design", "Browsing"];
+  const types = [
+    { name: "Gaming", icon: Gamepad2 },
+    { name: "Rendering", icon: Box },
+    { name: "Design", icon: PenTool },
+    { name: "Browsing", icon: Globe },
+  ];
 
   const toggleBrand = (brand: string) => {
     setSelectedBrands((prev) => {
@@ -211,23 +223,24 @@ export default function HelperSearchBar() {
                 </div>
                 <div className="max-h-60 space-y-2 overflow-y-auto">
                   <div className="space-y-2">
-                    {types.map((type) => (
+                    {types.map(({ name, icon: Icon }) => (
                       <label
-                        key={type}
+                        key={name}
                         className="flex cursor-pointer items-center justify-between space-x-2 rounded border border-neutral-700 bg-neutral-800 p-2 hover:bg-neutral-700"
                       >
                         <span
-                          className={`text-sm flex-1 ${
-                            selectedTypes.has(type)
+                          className={`text-sm flex-1 flex items-center gap-2 ${
+                            selectedTypes.has(name)
                               ? "text-primary-400"
                               : "text-neutral-200"
                           }`}
                         >
-                          {type}
+                          <Icon className="h-4 w-4" />
+                          {name}
                         </span>
                         <Checkbox
-                          checked={selectedTypes.has(type)}
-                          onCheckedChange={() => toggleType(type)}
+                          checked={selectedTypes.has(name)}
+                          onCheckedChange={() => toggleType(name)}
                         />
                       </label>
                     ))}
