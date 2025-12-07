@@ -6,17 +6,17 @@ type Props = LaptopT & { isAuthenticated: boolean };
 
 export default function HorizontalCard(laptop: Props) {
   return (
-    <div className="min-h-56 relative grid aspect-[2/1] w-full grid-cols-2 gap-2 rounded-xl bg-neutral-800 p-3">
+    <div className="relative grid aspect-[2/1] w-full grid-cols-2 gap-2 rounded-xl bg-neutral-800 p-3">
       <Link
         to="/laptop/$laptopId"
         params={{ laptopId: laptop.id.toString() }}
-        className="flex items-center justify-center overflow-hidden"
+        className="flex min-w-0 min-h-0 items-center justify-center overflow-hidden rounded-lg"
       >
         {laptop.images?.length ? (
           <img
             src={laptop.images[0]}
             alt={laptop.title}
-            className="h-full w-full object-contain"
+            className="h-auto w-auto max-h-full max-w-full object-contain"
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center rounded-lg border border-dashed border-neutral-700 text-neutral-500">
@@ -31,7 +31,7 @@ export default function HorizontalCard(laptop: Props) {
             params={{ laptopId: laptop.id.toString() }}
             className="mb-4 flex flex-col gap-1"
           >
-            <h2 className="line-clamp-2 text-xl font-semibold text-white">
+            <h2 className="line-clamp-1 text-xl font-semibold text-white">
               {laptop.title.toUpperCase()}
             </h2>
             <h3 className="text-sm font-light text-neutral-400">
