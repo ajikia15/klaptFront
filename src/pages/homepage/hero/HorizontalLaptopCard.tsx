@@ -10,13 +10,13 @@ export default function HorizontalCard(laptop: Props) {
       <Link
         to="/laptop/$laptopId"
         params={{ laptopId: laptop.id.toString() }}
-        className="flex min-w-0 min-h-0 items-center justify-center overflow-hidden rounded-lg"
+        className="flex min-h-0 min-w-0 items-center justify-center overflow-hidden rounded-lg"
       >
         {laptop.images?.length ? (
           <img
             src={laptop.images[0]}
             alt={laptop.title}
-            className="h-auto w-auto max-h-full max-w-full object-contain"
+            className="h-auto max-h-full w-auto max-w-full object-contain"
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center rounded-lg border border-dashed border-neutral-700 text-neutral-500">
